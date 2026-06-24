@@ -436,10 +436,12 @@
 // ========================================
 // Password Gate — session-level auth
 // ========================================
-(function() {
+document.addEventListener('DOMContentLoaded', function() {
     var PW_KEY = 'hnft_monthly_auth';
     var CORRECT_PW = 'hnft';
     var gate = document.getElementById('password-gate');
+
+    if (!gate) return; // safety check
 
     // Already authenticated this session → skip gate
     if (sessionStorage.getItem(PW_KEY) === '1') {
@@ -502,7 +504,7 @@
     document.getElementById('pw-input').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') verifyPassword();
     });
-})();
+});
 </script>
 
 <!-- Breadcrumb -->
