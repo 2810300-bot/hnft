@@ -396,9 +396,32 @@
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
+        /* ===== TOP BAR (breadcrumb) ===== */
+        .top-bar {
+            background: var(--bg-card);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .top-bar a { color: #3b82f6; text-decoration: none; font-weight: 500; }
+        .top-bar a:hover { text-decoration: underline; }
+        .top-bar .sep { color: #cbd5e1; margin: 0 8px; }
     </style>
 </head>
 <body>
+    <!-- Breadcrumb -->
+    <div class="top-bar">
+        <div>
+            <a href="../">🏠 看板中心</a>
+            <span class="sep">/</span>
+            <span>收运量数据看板</span>
+        </div>
+    </div>
+
     <div class="dashboard-container">
         <!-- Header -->
         <header class="dashboard-header">

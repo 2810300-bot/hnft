@@ -258,6 +258,21 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
+        /* ===== TOP BAR (breadcrumb) ===== */
+        .top-bar {
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #6b7280;
+        }
+        .top-bar a { color: #3b82f6; text-decoration: none; font-weight: 500; }
+        .top-bar a:hover { text-decoration: underline; }
+        .top-bar .sep { color: #cbd5e1; margin: 0 8px; }
+
         /* Responsive */
         @media (max-width: 768px) {
             .metric-value { font-size: 28px !important; }
@@ -265,6 +280,15 @@
     </style>
 </head>
 <body>
+
+<!-- Breadcrumb -->
+<div class="top-bar">
+    <div>
+        <a href="../">🏠 看板中心</a>
+        <span class="sep">/</span>
+        <span>月度数据报告</span>
+    </div>
+</div>
 
 <!-- Loading Overlay -->
 <div id="loading-overlay">
