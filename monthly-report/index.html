@@ -273,6 +273,27 @@
         .top-bar a:hover { text-decoration: underline; }
         .top-bar .sep { color: #cbd5e1; margin: 0 8px; }
 
+        /* Unified refresh badge */
+        .refresh-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(51,65,85,0.09);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #475569;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        .refresh-dot {
+            width: 8px; height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
         /* Responsive */
         @media (max-width: 768px) {
             .metric-value { font-size: 28px !important; }
@@ -743,9 +764,9 @@
     <footer class="bg-white border-t border-slate-200 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-sm text-slate-400">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-clock"></i>
-                    <span>最后更新：<span id="footer-updated" class="text-slate-500 font-medium"></span></span>
+                <div class="refresh-badge">
+                    <span class="refresh-dot"></span>
+                    数据更新: <span id="footer-updated"></span>
                 </div>
                 <div class="flex items-center gap-2">
                     <i class="fas fa-sync-alt"></i>

@@ -56,6 +56,32 @@ body {
 .top-bar .sep { margin: 0 8px; color: #cbd5e1; }
 .top-bar .current { color: var(--text); font-weight: 500; }
 
+/* Unified refresh badge */
+.refresh-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(51,65,85,0.09);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #475569;
+    white-space: nowrap;
+    font-weight: 500;
+}
+.refresh-dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+.refresh-dot.warn { background: #fbbf24; animation: none; }
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
 /* Header */
 header {
     background: linear-gradient(135deg, #0f766e 0%, #0d9488 40%, #14b8a6 100%);
@@ -80,23 +106,8 @@ header .subtitle {
     position: relative;
     z-index: 1;
 }
-header .sync-info {
-    font-size: 12px;
-    opacity: .65;
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: relative;
-    z-index: 1;
-}
-.status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-}
-.status-dot.online { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
-.status-dot.warn { background: #fbbf24; }
+/* (sync-info removed — using unified refresh-badge) */
+/* (status-dot removed — using unified refresh-badge) */
 
 /* Container */
 .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
@@ -373,14 +384,15 @@ header .sync-info {
         <span class="sep">/</span>
         <span class="current">工作任务跟踪</span>
     </div>
+    <div class="refresh-badge" id="syncBadge" style="display:none;">
+        <span class="refresh-dot"></span>
+        数据更新: <span id="syncTime">--</span>
+    </div>
 </div>
 
 <header>
     <h1>📋 工作任务跟踪系统</h1>
     <div class="subtitle">数据源：IMA 知识库「岳阳餐厨垃圾项目 · 待办事项跟踪」· 自动同步</div>
-    <div class="sync-info" id="syncInfo">
-        <span class="status-dot online"></span> 数据最新 · 加载中...
-    </div>
 </header>
 
 <div class="container">
@@ -460,7 +472,8 @@ function loadData() {
 
 function render(data) {
     allTasks = data.tasks;
-    document.getElementById('syncInfo').innerHTML = `<span class="status-dot online"></span> 最后同步：${data.last_updated} · 来源：${data.source}`;
+    document.getElementById('syncBadge').style.display = 'inline-flex';
+    document.getElementById('syncTime').textContent = `${data.last_updated} · ${data.source}`;
 
     // Stats
     const completed = allTasks.filter(t => t.status === 'completed').length;
@@ -659,7 +672,9 @@ function renderTable() {
 loadData().then(data => {
     render(data);
 }).catch(err => {
-    document.getElementById('syncInfo').innerHTML = `<span class="status-dot warn"></span> 数据加载失败：${err.message}`;
+    document.getElementById('syncBadge').style.display = 'inline-flex';
+    document.getElementById('syncTime').textContent = '加载失败';
+    document.querySelector('#syncBadge .refresh-dot').classList.add('warn');
 });
 </script>
 

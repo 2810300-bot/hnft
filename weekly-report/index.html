@@ -46,18 +46,26 @@
         .top-bar a { color: var(--accent-blue); text-decoration: none; font-weight: 500; }
         .top-bar a:hover { text-decoration: underline; }
         .top-bar .sep { color: #cbd5e1; margin: 0 8px; }
-        .live-indicator {
-            display: flex;
+        /* Unified refresh badge */
+        .refresh-badge {
+            display: inline-flex;
             align-items: center;
             gap: 6px;
+            background: rgba(51,65,85,0.09);
+            padding: 5px 14px;
+            border-radius: 20px;
             font-size: 12px;
+            color: #475569;
+            white-space: nowrap;
+            font-weight: 500;
         }
-        .live-dot {
+        .refresh-dot {
             width: 8px; height: 8px;
             border-radius: 50%;
             background: #22c55e;
+            animation: pulse 2s infinite;
         }
-        .live-dot.stale { background: #f59e0b; animation: pulse 2s infinite; }
+        .refresh-dot.stale { background: #f59e0b; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
         /* ===== HEADER ===== */
@@ -439,10 +447,9 @@
         <span class="sep">/</span>
         <span>周报驾驶舱</span>
     </div>
-    <div class="live-indicator">
-        <span class="live-dot" id="live-dot"></span>
-        <span id="live-text">实时监控中</span>
-        <span style="margin-left: 12px; color: var(--text-light);">上次刷新: <span id="top-refresh-time">--</span></span>
+    <div class="refresh-badge">
+        <span class="refresh-dot" id="live-dot"></span>
+        数据更新: <span id="top-refresh-time">--</span>
     </div>
 </div>
 
@@ -508,8 +515,8 @@
 </div>
 
 <footer class="site-footer">
-    <p>湖南伏泰环境科技有限责任公司 · 自动化生成 · <span id="last-updated"></span></p>
-    <p style="margin-top:4px;">数据来源：钉钉日志收件箱 → 智能汇总 → 多渠道推送 → GitHub Pages 驾驶舱</p>
+    <p>湖南伏泰环境科技有限责任公司 · 自动化生成</p>
+    <p style="margin-top:4px;">数据来源：钉钉日志收件箱 → 智能汇总 → GitHub Pages 驾驶舱</p>
 </footer>
 
 <script>
@@ -897,15 +904,13 @@ function renderAll() {
     renderMissing();
     renderWeeklyList();
     renderMonitoring();
-    document.getElementById('last-updated').textContent = weeklyData.last_updated || '暂无数据';
     updateLiveIndicator();
 }
 
 function updateLiveIndicator() {
     var dot = document.getElementById('live-dot');
     var execStatus = (weeklyData.monitoring || {}).execution_status || 'pending';
-    dot.className = 'live-dot' + (execStatus !== 'success' ? ' stale' : '');
-    document.getElementById('live-text').textContent = execStatus === 'success' ? '实时监控中' : '等待更新';
+    dot.className = 'refresh-dot' + (execStatus !== 'success' ? ' stale' : '');
     document.getElementById('top-refresh-time').textContent = new Date().toLocaleTimeString('zh-CN', {hour12: false});
 }
 
