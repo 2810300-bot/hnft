@@ -17,7 +17,14 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SITE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO_URL="${GITHUB_PAGES_REPO:-git@github.com:2810300-bot/hnft.git}"
+# 优先用 env 指定，其次检测本地 git remote，最后用 HTTPS+token 兜底
+if [ -n "${GITHUB_PAGES_REPO:-}" ]; then
+    REPO_URL="$GITHUB_PAGES_REPO"
+elif git remote get-url origin 2>/dev/null | grep -q '@\|https'; then
+    REPO_URL="$(git remote get-url origin)"
+else
+    REPO_URL="https://github.com/2810300-bot/hnft.git"
+fi
 BRANCH="${GITHUB_PAGES_BRANCH:-main}"
 COMMIT_MSG="auto: dashboard refresh $(date '+%Y-%m-%d %H:%M:%S')"
 DRY_RUN=false
