@@ -277,9 +277,212 @@
         @media (max-width: 768px) {
             .metric-value { font-size: 28px !important; }
         }
+
+        /* ===== PASSWORD GATE ===== */
+        #password-gate {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 50%, #ecfeff 100%);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        #password-gate.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .pw-gate-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 10px 32px rgba(0,0,0,0.08);
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .pw-gate-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #16a34a 0%, #0891b2 100%);
+        }
+        .pw-gate-icon {
+            width: 64px; height: 64px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #16a34a, #0891b2);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #fff;
+        }
+        .pw-gate-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .pw-gate-subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+        .pw-input-group {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        .pw-input-group input {
+            width: 100%;
+            padding: 14px 48px 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #1e293b;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background: #f8fafc;
+            letter-spacing: 2px;
+        }
+        .pw-input-group input:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+            background: #fff;
+        }
+        .pw-input-group input::placeholder {
+            letter-spacing: 0;
+            color: #cbd5e1;
+        }
+        .pw-input-group .pw-eye {
+            position: absolute;
+            right: 14px; top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 16px;
+            padding: 4px;
+            transition: color 0.2s ease;
+        }
+        .pw-input-group .pw-eye:hover { color: #475569; }
+        .pw-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #16a34a, #0891b2);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            letter-spacing: 1px;
+        }
+        .pw-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(22, 163, 74, 0.3);
+        }
+        .pw-submit:active { transform: translateY(0); }
+        .pw-error {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 12px;
+            min-height: 20px;
+            transition: opacity 0.2s ease;
+        }
+        .pw-shake {
+            animation: pwShake 0.4s ease;
+        }
+        @keyframes pwShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+        }
     </style>
 </head>
 <body>
+
+<script>
+// ========================================
+// Password Gate — session-level auth
+// ========================================
+(function() {
+    var PW_KEY = 'hnft_monthly_auth';
+    var CORRECT_PW = 'hnft';
+    var gate = document.getElementById('password-gate');
+
+    // Already authenticated this session → skip gate
+    if (sessionStorage.getItem(PW_KEY) === '1') {
+        return; // gate stays display:none
+    }
+
+    // Show the gate
+    gate.style.display = 'flex';
+
+    // Auto-focus input after gate becomes visible
+    setTimeout(function() {
+        var inp = document.getElementById('pw-input');
+        if (inp) inp.focus();
+    }, 400);
+
+    window.verifyPassword = function() {
+        var input = document.getElementById('pw-input');
+        var error = document.getElementById('pw-error');
+        var card  = document.getElementById('pw-card');
+        var val   = input.value.trim();
+
+        if (!val) {
+            error.textContent = '请输入访问密码';
+            card.classList.add('pw-shake');
+            setTimeout(function() { card.classList.remove('pw-shake'); }, 400);
+            return;
+        }
+
+        if (val !== CORRECT_PW) {
+            error.textContent = '密码错误，请重试';
+            input.value = '';
+            input.focus();
+            card.classList.add('pw-shake');
+            setTimeout(function() { card.classList.remove('pw-shake'); }, 400);
+            return;
+        }
+
+        // Success
+        sessionStorage.setItem(PW_KEY, '1');
+        error.textContent = '';
+        gate.classList.add('hidden');  // CSS fade-out
+        setTimeout(function() {
+            if (gate.parentNode) gate.style.display = 'none';
+        }, 450);
+    };
+
+    window.togglePwVisibility = function() {
+        var input = document.getElementById('pw-input');
+        var eye   = document.getElementById('pw-eye');
+        if (input.type === 'password') {
+            input.type = 'text';
+            eye.textContent = '🙈';
+        } else {
+            input.type = 'password';
+            eye.textContent = '👁️';
+        }
+    };
+
+    // Enter key submits
+    document.getElementById('pw-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') verifyPassword();
+    });
+})();
+</script>
 
 <!-- Breadcrumb -->
 <div class="top-bar">
@@ -287,6 +490,21 @@
         <a href="../">🏠 看板中心</a>
         <span class="sep">/</span>
         <span>月度数据报告</span>
+    </div>
+</div>
+
+<!-- Password Gate -->
+<div id="password-gate" style="display:none">
+    <div class="pw-gate-card" id="pw-card">
+        <div class="pw-gate-icon">🔒</div>
+        <div class="pw-gate-title">月度经营总结报告</div>
+        <div class="pw-gate-subtitle">此报告包含公司经营核心数据<br>请输入访问密码以继续查看</div>
+        <div class="pw-input-group">
+            <input type="password" id="pw-input" placeholder="请输入访问密码" maxlength="20" autocomplete="off">
+            <span class="pw-eye" id="pw-eye" onclick="togglePwVisibility()" title="显示/隐藏密码">👁️</span>
+        </div>
+        <button class="pw-submit" onclick="verifyPassword()">验证访问</button>
+        <div class="pw-error" id="pw-error"></div>
     </div>
 </div>
 
