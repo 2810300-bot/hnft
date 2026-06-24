@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>湖南伏泰 · 周报总结看板</title>
+    <style>
+        :root {
+            --bg: #f0f2f5;
+            --card-bg: #ffffff;
+            --header-bg: #1a1a2e;
+            --header-bg2: #16213e;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #e2e8f0;
+            --accent-green: #16a34a;
+            --accent-blue: #4C72B0;
+            --accent-cyan: #0891b2;
+            --accent-orange: #DD8452;
+            --accent-purple: #7c3aed;
+            --accent-red: #dc2626;
+            --radius: 14px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .top-bar {
+            background: var(--card-bg);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .top-bar a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .top-bar a:hover { text-decoration: underline; }
+        .top-bar .sep { color: #cbd5e1; }
+
+        .site-header {
+            background: linear-gradient(135deg, #5b21b6, #7c3aed);
+            color: #fff;
+            padding: 36px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .site-header::after {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -5%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .header-content h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .header-content .subtitle {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+        }
+        .header-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .header-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+        }
+        .header-meta-item .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+        .header-meta-item .dot.warn {
+            background: #f59e0b;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 28px 24px 48px;
+        }
+
+        /* Status summary cards */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--accent-purple);
+        }
+        .stat-card .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .stat-card .stat-time {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+
+        /* Weekly report cards */
+        .section-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .weekly-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 36px;
+        }
+        .week-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border-left: 4px solid var(--accent-purple);
+            transition: box-shadow 0.2s;
+        }
+        .week-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .week-card .card-header {
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+        .week-card .week-label {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .week-card .week-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .week-card .week-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge.done { background: #dcfce7; color: #16a34a; }
+        .badge.pending { background: #fef3c7; color: #92400e; }
+        .badge.missed { background: #fee2e2; color: #dc2626; }
+        .week-card .expand-icon {
+            font-size: 14px;
+            color: #94a3b8;
+            transition: transform 0.3s;
+        }
+        .week-card.open .expand-icon { transform: rotate(180deg); }
+
+        .week-card .card-body {
+            display: none;
+            padding: 0 24px 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .week-card.open .card-body { display: block; }
+
+        .card-body .overview {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0 12px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text);
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-body .person-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .person-item {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 14px 16px;
+            border: 1px solid #e2e8f0;
+        }
+        .person-item .person-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            margin-bottom: 6px;
+        }
+        .person-item .person-section {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+        .person-item .person-section strong {
+            color: var(--text);
+        }
+
+        .card-body .links {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .card-body .link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .link-btn:hover { opacity: 0.85; }
+        .link-btn.ima { background: #ede9fe; color: #7c3aed; }
+        .link-btn.docs { background: #dbeafe; color: #4C72B0; }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-secondary);
+        }
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .empty-state h3 {
+            font-size: 16px;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .empty-state p {
+            font-size: 13px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Refresh banner */
+        .refresh-banner {
+            display: none;
+            background: #dcfce7;
+            color: #16a34a;
+            text-align: center;
+            padding: 10px 24px;
+            font-size: 13px;
+            font-weight: 500;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid #bbf7d0;
+        }
+        .refresh-banner.show { display: block; animation: fadeInOut 3s forwards; }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-10px); }
+            20% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .site-footer {
+            text-align: center;
+            padding: 28px 24px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 32px;
+        }
+
+        .loading { text-align: center; padding: 32px; color: var(--text-secondary); }
+
+        @media (max-width: 768px) {
+            .site-header { padding: 24px 18px; }
+            .header-content h1 { font-size: 20px; }
+            .person-grid { grid-template-columns: 1fr; }
+            .status-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="refresh-banner" id="refresh-banner">🔄 检测到新数据，正在刷新...</div>
+
+<div class="top-bar">
+    <a href="../">🏠 看板中心</a>
+    <span class="sep">/</span>
+    <span>周报总结合集</span>
+</div>
+
+<header class="site-header">
+    <div class="header-content">
+        <h1>📝 湖南伏泰 · 周报总结看板</h1>
+        <div class="subtitle">员工周报智能汇总 — 团队工作全景一览</div>
+        <div class="header-meta">
+            <div class="header-meta-item">
+                <span class="dot" id="status-dot"></span>
+                <span id="status-text">加载中...</span>
+            </div>
+            <div class="header-meta-item">
+                📅 每周六 18:00 自动生成
+            </div>
+            <div class="header-meta-item">
+                📡 每 5 分钟自动检查更新
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="main-container">
+
+    <!-- Status Summary -->
+    <div class="status-grid" id="status-grid">
+        <div class="loading">加载中...</div>
+    </div>
+
+    <!-- Weekly Reports -->
+    <div class="section-title">
+        <span>📋</span> 近期周报总结合集
+    </div>
+    <div class="weekly-list" id="weekly-list">
+        <div class="loading">加载中...</div>
+    </div>
+
+    <!-- Monitoring -->
+    <div class="section-title">
+        <span>📡</span> 执行监控
+    </div>
+    <div class="status-grid" id="monitor-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+        <div class="loading">加载中...</div>
+    </div>
+
+</div>
+
+<footer class="site-footer">
+    <p>湖南伏泰环境科技有限责任公司 · 自动化生成 · <span id="last-updated"></span></p>
+    <p style="margin-top:4px;">数据来源：钉钉日志收件箱 → 智能汇总 → 多渠道推送</p>
+</footer>
+
+<script>
+// Data structure: loaded from data.json or inline fallback
+var weeklyData = null;
+
+// Default empty data
+var DEFAULT_DATA = {
+    last_updated: '',
+    total_weeks: 0,
+    total_persons: 0,
+    consecutive_weeks: 0,
+    latest_week: '',
+    reports: [],
+    monitoring: {
+        last_execution: '',
+        next_execution: '',
+        execution_status: 'pending',
+        push_destinations: {
+            dingtalk: false,
+            tencent_docs: false,
+            ima: false
+        }
+    }
+};
+
+function loadData(data) {
+    weeklyData = data || DEFAULT_DATA;
+    renderAll();
+}
+
+function renderAll() {
+    renderStatusCards();
+    renderWeeklyList();
+    renderMonitoring();
+    document.getElementById('last-updated').textContent = weeklyData.last_updated || '暂无数据';
+    updateHeaderStatus();
+}
+
+function updateHeaderStatus() {
+    var dot = document.getElementById('status-dot');
+    var text = document.getElementById('status-text');
+    var execStatus = (weeklyData.monitoring || {}).execution_status || 'pending';
+
+    if (execStatus === 'success') {
+        dot.className = 'dot';
+        text.textContent = '系统正常 · 最新: ' + (weeklyData.latest_week || '--');
+    } else if (execStatus === 'failed') {
+        dot.className = 'dot warn';
+        text.textContent = '⚠️ 上次执行异常';
+    } else {
+        dot.className = 'dot warn';
+        text.textContent = '等待首次执行';
+    }
+}
+
+function renderStatusCards() {
+    var grid = document.getElementById('status-grid');
+    var html = '';
+    html += '<div class="stat-card"><div class="stat-value">' + (weeklyData.total_weeks || 0) + '</div><div class="stat-label">已生成周数</div><div class="stat-time">累计周报总结</div></div>';
+    html += '<div class="stat-card"><div class="stat-value">' + (weeklyData.consecutive_weeks || 0) + '</div><div class="stat-label">连续执行周数</div><div class="stat-time">不间断运行</div></div>';
+    html += '<div class="stat-card"><div class="stat-value">' + (weeklyData.total_persons || 0) + '</div><div class="stat-label">覆盖人员</div><div class="stat-time">本周报提交人数</div></div>';
+    html += '<div class="stat-card"><div class="stat-value">' + (weeklyData.latest_week || '--') + '</div><div class="stat-label">最新报告周期</div><div class="stat-time">' + (weeklyData.reports && weeklyData.reports.length > 0 ? weeklyData.reports[0].date : '--') + '</div></div>';
+    grid.innerHTML = html;
+}
+
+function renderWeeklyList() {
+    var list = document.getElementById('weekly-list');
+    var reports = weeklyData.reports || [];
+
+    if (reports.length === 0) {
+        list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><h3>暂无周报数据</h3><p>每周六 18:00 自动从钉钉日志汇总生成，首次执行后将在这里展示。请确保自动化任务"湖南伏泰周报总结"已启用并正常运行。</p></div>';
+        return;
+    }
+
+    var html = '';
+    reports.forEach(function(r, i) {
+        html += renderWeekCard(r, i === 0);
+    });
+    list.innerHTML = html;
+}
+
+function renderWeekCard(r, isOpen) {
+    var statusClass = r.status === 'generated' ? 'done' : (r.status === 'failed' ? 'missed' : 'pending');
+    var statusText = r.status === 'generated' ? '✅ 已生成' : (r.status === 'failed' ? '❌ 生成失败' : '⏳ 待生成');
+    var overview = r.overview || '暂无概况摘要';
+
+    var personsHtml = '';
+    if (r.persons && r.persons.length > 0) {
+        personsHtml = '<div class="person-grid">';
+        r.persons.forEach(function(p) {
+            personsHtml += '<div class="person-item">';
+            personsHtml += '<div class="person-name">👤 ' + (p.name || '未知') + '</div>';
+            if (p.work) personsHtml += '<div class="person-section"><strong>📋 工作进展：</strong>' + p.work + '</div>';
+            if (p.issues) personsHtml += '<div class="person-section"><strong>⚠️ 问题风险：</strong>' + p.issues + '</div>';
+            if (p.plan) personsHtml += '<div class="person-section"><strong>📅 下周计划：</strong>' + p.plan + '</div>';
+            personsHtml += '</div>';
+        });
+        personsHtml += '</div>';
+    }
+
+    var linksHtml = '';
+    if (r.ima_url) {
+        linksHtml += '<a class="link-btn ima" href="' + r.ima_url + '" target="_blank" rel="noopener">📚 IMA 知识库查看</a>';
+    }
+    if (r.docs_url) {
+        linksHtml += '<a class="link-btn docs" href="' + r.docs_url + '" target="_blank" rel="noopener">📄 腾讯文档查看</a>';
+    }
+
+    return '' +
+    '<div class="week-card' + (isOpen ? ' open' : '') + '" onclick="toggleCard(this)">' +
+        '<div class="card-header">' +
+            '<div>' +
+                '<div class="week-label">' + (r.week_label || r.date || '--') + '</div>' +
+                '<div class="week-date">生成时间: ' + (r.date || '--') + '</div>' +
+            '</div>' +
+            '<div class="week-status">' +
+                '<span class="badge ' + statusClass + '">' + statusText + '</span>' +
+                '<span class="expand-icon">▼</span>' +
+            '</div>' +
+        '</div>' +
+        '<div class="card-body" onclick="event.stopPropagation()">' +
+            '<div class="overview">' + overview + '</div>' +
+            personsHtml +
+            (linksHtml ? '<div class="links">' + linksHtml + '</div>' : '') +
+        '</div>' +
+    '</div>';
+}
+
+function renderMonitoring() {
+    var grid = document.getElementById('monitor-grid');
+    var m = weeklyData.monitoring || {};
+    var push = m.push_destinations || {};
+
+    var execStatus = m.execution_status || 'pending';
+    var execBadge = execStatus === 'success' ? '<span class="badge done">✅ 成功</span>' :
+                    (execStatus === 'failed' ? '<span class="badge missed">❌ 失败</span>' :
+                     '<span class="badge pending">⏳ 等待</span>');
+
+    var html = '';
+    html += '<div class="stat-card"><div class="stat-label">上次执行</div><div class="stat-time" style="font-size:14px;font-weight:600;">' + (m.last_execution || '--') + '</div><div style="margin-top:6px;">' + execBadge + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">下次执行</div><div class="stat-time" style="font-size:14px;font-weight:600;">' + (m.next_execution || '周六 18:00') + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">钉钉推送</div><div class="stat-time" style="font-size:14px;font-weight:600;">' + (push.dingtalk ? '✅' : '⏳') + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">腾讯文档</div><div class="stat-time" style="font-size:14px;font-weight:600;">' + (push.tencent_docs ? '✅' : '⏳') + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">IMA 知识库</div><div class="stat-time" style="font-size:14px;font-weight:600;">' + (push.ima ? '✅' : '⏳') + '</div></div>';
+    grid.innerHTML = html;
+}
+
+function toggleCard(card) {
+    card.classList.toggle('open');
+}
+
+// Auto-refresh: poll data.json every 5 minutes
+(function pollData() {
+    var cacheBuster = '?t=' + Date.now();
+    fetch('weekly_data.json' + cacheBuster)
+        .then(function(resp) {
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            return resp.json();
+        })
+        .then(function(fresh) {
+            var oldHash = JSON.stringify(weeklyData);
+            var newHash = JSON.stringify(fresh);
+            if (oldHash !== newHash) {
+                var banner = document.getElementById('refresh-banner');
+                banner.classList.add('show');
+                setTimeout(function() {
+                    loadData(fresh);
+                    setTimeout(function() { banner.classList.remove('show'); }, 100);
+                }, 1200);
+            }
+        })
+        .catch(function() {
+            // Silent fail - use existing data
+        });
+    setTimeout(pollData, 300000); // 5 min
+})();
+
+// Initial load: try data.json first, fall back to inline
+(function init() {
+    fetch('weekly_data.json?t=' + Date.now())
+        .then(function(resp) { return resp.json(); })
+        .then(function(data) { loadData(data); })
+        .catch(function() {
+            // Fallback to inline empty data
+            loadData(DEFAULT_DATA);
+        });
+})();
+</script>
+</body>
+</html>
