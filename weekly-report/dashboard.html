@@ -106,6 +106,44 @@
     .badge.high { background: rgba(239,68,68,0.18); color: #fca5a5; }
     .badge.med { background: rgba(245,158,11,0.18); color: #fcd34d; }
     .badge.low { background: rgba(56,189,248,0.15); color: #7dd3fc; }
+    .badge.submitted { background: rgba(34,197,94,0.15); color: #4ade80; }
+    .badge.missing { background: rgba(239,68,68,0.15); color: #f87171; }
+    /* Missing persons section */
+    .missing-section { margin-bottom: 24px; }
+    .missing-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+    .missing-header h2 { font-size: 18px; }
+    .missing-tools { display: flex; gap: 8px; align-items: center; }
+    .missing-filter { padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--text); font-size: 13px; }
+    .missing-btn { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all .2s; }
+    .missing-btn.export { background: rgba(167,139,250,0.18); color: #c4b5fd; }
+    .missing-btn.export:hover { background: rgba(167,139,250,0.3); }
+    .missing-btn.export:disabled { opacity: .4; cursor: not-allowed; }
+    .missing-btn.refresh { background: rgba(56,189,248,0.12); color: #7dd3fc; }
+    .missing-btn.refresh:hover { background: rgba(56,189,248,0.2); }
+    .missing-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .missing-table th { color: var(--text-dim); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; border-bottom: 2px solid var(--border); background: var(--bg-soft); padding: 10px 12px; }
+    .missing-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+    .missing-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .person-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #fff; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
+    .person-badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+    .dept-tag-light { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; background: rgba(56,189,248,0.12); color: #7dd3fc; }
+    .severity-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .severity-badge.high { background: rgba(239,68,68,0.18); color: #fca5a5; }
+    .severity-badge.medium { background: rgba(245,158,11,0.18); color: #fcd34d; }
+    .severity-badge.low { background: rgba(56,189,248,0.15); color: #7dd3fc; }
+    .range-text { color: #f87171; font-weight: 500; }
+    .empty-missing { text-align: center; padding: 32px 24px; }
+    .empty-missing .icon { font-size: 40px; }
+    .empty-missing h3 { font-size: 16px; color: #4ade80; margin-top: 8px; }
+    .empty-missing p { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
+    /* Execution monitoring */
+    .monitor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+    .monitor-item { text-align: center; padding: 14px 12px; background: var(--bg-soft); border-radius: 10px; border: 1px solid var(--border); }
+    .monitor-item .mon-label { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; }
+    .monitor-item .mon-value { font-size: 14px; font-weight: 700; }
+    .monitor-item .mon-value.ok { color: #4ade80; }
+    .monitor-item .mon-value.pending { color: #fbbf24; }
+    .monitor-item .mon-value.fail { color: #f87171; }
     /* Department cards */
     .dept-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
     .dept-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
@@ -150,6 +188,28 @@
 
     <!-- KPI -->
     <div class="kpi-grid" id="kpi-grid"></div>
+
+    <!-- Submission KPI -->
+    <div class="kpi-grid" id="submission-kpi-grid" style="margin-bottom:16px;"></div>
+
+    <!-- Missing Persons Tracking -->
+    <div class="missing-section card" id="missing-section">
+      <div class="missing-header">
+        <h2>未提交人员追踪</h2>
+        <div class="missing-tools">
+          <select class="missing-filter" id="dept-filter" onchange="filterMissing()"><option value="all">全部部门</option></select>
+          <button class="missing-btn export" id="btn-export-csv" onclick="exportMissingCSV()" disabled>导出 CSV</button>
+        </div>
+      </div>
+      <div id="missing-content"><div style="text-align:center;padding:20px;color:var(--text-dim);">加载提交数据中...</div></div>
+    </div>
+
+    <!-- Execution Monitoring -->
+    <div class="card" style="margin-bottom:24px;">
+      <h3>执行监控</h3>
+      <div class="desc">自动化运行状态</div>
+      <div class="monitor-grid" id="monitor-grid"></div>
+    </div>
 
     <!-- Charts Row 1 -->
     <div class="grid cols-2">
@@ -218,22 +278,34 @@
   <script>
     // ---- Data loading & auto-refresh ----
     let cache = null;
+    let weeklyCache = null;
     let charts = {};
     const REFRESH_MS = 60_000;
     const REMOTE_URL = "https://2810300-bot.github.io/hnft/weekly-report/dashboard_data.json";
+    const WEEKLY_URL = "https://2810300-bot.github.io/hnft/weekly-report/weekly_data.json";
 
     async function fetchData() {
-      // 优先从 GitHub Pages 获取最新数据
       try {
         const res = await fetch(`${REMOTE_URL}?ts=${Date.now()}`);
         if (res.ok) return res.json();
       } catch (e) {
         console.warn("GitHub Pages 不可用，回退到本地数据", e);
       }
-      // 离线/故障回退
       const res = await fetch(`data.json?ts=${Date.now()}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
+    }
+
+    async function fetchWeeklyData() {
+      try {
+        const res = await fetch(`${WEEKLY_URL}?ts=${Date.now()}`);
+        if (res.ok) return res.json();
+      } catch (e) { console.warn("weekly_data.json 远程获取失败", e); }
+      try {
+        const res = await fetch(`weekly_data.json?ts=${Date.now()}`);
+        if (res.ok) return res.json();
+      } catch (e) { console.warn("weekly_data.json 本地也不可用", e); }
+      return null;
     }
 
     function fmtNum(n, d=0) {
@@ -483,6 +555,162 @@
       document.getElementById("next-focus").innerHTML = html;
     }
 
+    // ---- Submission statistics (from weekly_data.json) ----
+    function computeMissing(report, roster) {
+      var submitted = (report.persons || []).map(function(p) { return p.name; });
+      var missing = [];
+      roster.forEach(function(person) {
+        if (submitted.indexOf(person.name) === -1) {
+          missing.push({ name: person.name, dept: person.dept, week_label: report.week_label });
+        }
+      });
+      return missing;
+    }
+
+    function computeAllTimeMissing() {
+      if (!weeklyCache) return [];
+      var reports = weeklyCache.reports || [];
+      var roster = weeklyCache.roster || [];
+      if (roster.length === 0 || reports.length === 0) return [];
+      var personWeeks = {};
+      roster.forEach(function(p) { personWeeks[p.name] = { dept: p.dept, missedWeeks: [] }; });
+      reports.forEach(function(r) {
+        var submittedNames = (r.persons || []).map(function(p) { return p.name; });
+        roster.forEach(function(p) {
+          if (submittedNames.indexOf(p.name) === -1 && personWeeks[p.name]) {
+            personWeeks[p.name].missedWeeks.push({
+              week_label: r.week_label,
+              week_num: parseInt((r.week_label.match(/第(\d+)周/) || [0,0])[1])
+            });
+          }
+        });
+      });
+      var result = [];
+      Object.keys(personWeeks).forEach(function(name) {
+        var entry = personWeeks[name];
+        if (entry.missedWeeks.length === 0) return;
+        entry.missedWeeks.sort(function(a, b) { return b.week_num - a.week_num; });
+        var consecutive = 1;
+        for (var i = 1; i < entry.missedWeeks.length; i++) {
+          if (entry.missedWeeks[i].week_num === entry.missedWeeks[i-1].week_num - 1) consecutive++;
+          else break;
+        }
+        var weeksSorted = entry.missedWeeks.slice().sort(function(a, b) { return a.week_num - b.week_num; });
+        var rangeMatch = weeksSorted[0].week_label.match(/\((.+?)-(.+?)\)/);
+        var rangeStart = rangeMatch ? rangeMatch[1] : '?';
+        var rangeEndMatch = weeksSorted[weeksSorted.length-1].week_label.match(/\((.+?)-(.+?)\)/);
+        var rangeEnd = rangeEndMatch ? rangeEndMatch[2] : '?';
+        result.push({ name: name, dept: entry.dept, date_range: rangeStart + ' - ' + rangeEnd, consecutive_weeks: consecutive, total_missed: entry.missedWeeks.length });
+      });
+      result.sort(function(a, b) { return b.consecutive_weeks - a.consecutive_weeks; });
+      return result;
+    }
+
+    function renderSubmissionKPI() {
+      var grid = document.getElementById("submission-kpi-grid");
+      if (!weeklyCache) { grid.innerHTML = ""; return; }
+      var reports = weeklyCache.reports || [];
+      var latest = reports[0] || {};
+      var subCount = latest.submitted_count || (latest.persons || []).length;
+      var expCount = latest.expected_count || weeklyCache.roster.length || subCount;
+      var missingCount = (latest.missing_persons || []).length;
+      var rate = expCount > 0 ? Math.round((subCount / expCount) * 100) : 0;
+      var totalWeeks = weeklyCache.total_weeks || reports.length;
+      var consecutive = weeklyCache.consecutive_weeks || 0;
+      grid.innerHTML = [
+        { cls: "blue", label: "提交率", value: rate + "%", unit: "", delta: subCount + "/" + expCount + " 人已提交", deltaCls: rate >= 100 ? "up" : "down" },
+        { cls: rate >= 100 ? "green" : (missingCount <= 2 ? "orange" : "purple"), label: "未提交人数", value: missingCount, unit: "人", delta: missingCount === 0 ? "全员提交" : "需跟进", deltaCls: missingCount === 0 ? "up" : "down" },
+        { cls: "purple", label: "已生成周数", value: totalWeeks, unit: "周", delta: "累计周报总结", deltaCls: "up" },
+        { cls: "blue", label: "连续执行", value: consecutive, unit: "周", delta: "不间断运行", deltaCls: "up" }
+      ].map(c => `
+        <div class="kpi ${c.cls}">
+          <div class="label">${c.label}</div>
+          <div class="value">${c.value}<span class="unit">${c.unit}</span></div>
+          <div class="delta ${c.deltaCls}">${c.delta}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderMissing() {
+      var container = document.getElementById("missing-content");
+      var btnExport = document.getElementById("btn-export-csv");
+      if (!weeklyCache) {
+        container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-dim);">提交数据暂不可用</div>';
+        btnExport.disabled = true;
+        return;
+      }
+      var roster = weeklyCache.roster || [];
+      var allMissing = computeAllTimeMissing();
+      // Populate dept filter
+      var deptFilter = document.getElementById("dept-filter");
+      var depts = [];
+      roster.forEach(function(p) { if (depts.indexOf(p.dept) === -1) depts.push(p.dept); });
+      deptFilter.innerHTML = '<option value="all">全部部门 (' + depts.length + ')</option>' + depts.map(d => '<option value="' + d + '">' + d + '</option>').join("");
+      btnExport.disabled = allMissing.length === 0;
+      if (allMissing.length === 0) {
+        container.innerHTML = '<div class="empty-missing"><div class="icon">✅</div><h3>全员已提交，无缺失</h3><p>所有 ' + roster.length + ' 位成员均已按时提交周报</p></div>';
+        return;
+      }
+      var html = '<table class="missing-table"><thead><tr><th>#</th><th>姓名</th><th>部门</th><th>缺失日期范围</th><th>连续缺失</th><th>累计缺失</th><th>状态</th></tr></thead><tbody>';
+      allMissing.forEach(function(m, i) {
+        var sevClass = m.consecutive_weeks >= 3 ? "high" : (m.consecutive_weeks >= 2 ? "medium" : "low");
+        var lastName = m.name.charAt(m.name.length - 1);
+        html += '<tr class="missing-row" data-dept="' + m.dept + '">';
+        html += '<td style="color:var(--text-dim);">' + (i+1) + '</td>';
+        html += '<td><span class="person-badge"><span class="person-avatar">' + lastName + '</span>' + m.name + '</span></td>';
+        html += '<td><span class="dept-tag-light">' + m.dept + '</span></td>';
+        html += '<td><span class="range-text">' + m.date_range + '</span></td>';
+        html += '<td><span class="severity-badge ' + sevClass + '">' + m.consecutive_weeks + ' 周</span></td>';
+        html += '<td>' + m.total_missed + ' 次</td>';
+        html += '<td><span class="badge ' + (m.consecutive_weeks >= 2 ? 'missing' : 'med') + '">' + (m.consecutive_weeks >= 2 ? '需跟进' : '关注') + '</span></td>';
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+      html += '<div style="font-size:11px;color:var(--text-dim);margin-top:8px;">共 ' + allMissing.length + ' 人存在周报缺失，按连续缺失周数降序排列</div>';
+      container.innerHTML = html;
+    }
+
+    function filterMissing() {
+      var dept = document.getElementById("dept-filter").value;
+      document.querySelectorAll(".missing-row").forEach(function(row) {
+        row.style.display = (dept === "all" || row.getAttribute("data-dept") === dept) ? "" : "none";
+      });
+    }
+
+    function exportMissingCSV() {
+      var allMissing = computeAllTimeMissing();
+      if (allMissing.length === 0) { alert("当前无缺失人员"); return; }
+      var BOM = '\uFEFF';
+      var header = ['序号','姓名','所属部门','缺失日期范围','连续缺失周数','累计缺失次数'];
+      var rows = [header.join(',')];
+      allMissing.forEach(function(m, i) {
+        rows.push([i+1, '"' + m.name + '"', '"' + m.dept + '"', '"' + m.date_range + '"', m.consecutive_weeks, m.total_missed].join(','));
+      });
+      var now = new Date();
+      var dateStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+      var blob = new Blob([BOM + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      link.href = url; link.download = '未提交周报人员_' + dateStr + '.csv';
+      document.body.appendChild(link); link.click(); document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function renderMonitoring() {
+      var grid = document.getElementById("monitor-grid");
+      if (!weeklyCache) { grid.innerHTML = ""; return; }
+      var m = weeklyCache.monitoring || {};
+      var push = m.push_destinations || {};
+      grid.innerHTML = [
+        { label: "上次执行", value: m.last_execution || "--", cls: "ok" },
+        { label: "下次执行", value: m.next_execution || "周六 18:00", cls: "" },
+        { label: "执行状态", value: m.execution_status === "success" ? "✅ 成功" : (m.execution_status === "failed" ? "❌ 失败" : "⏳ 等待"), cls: m.execution_status === "success" ? "ok" : (m.execution_status === "failed" ? "fail" : "pending") },
+        { label: "钉钉推送", value: push.dingtalk ? "✅" : "⏳", cls: push.dingtalk ? "ok" : "pending" },
+        { label: "腾讯文档", value: push.tencent_docs ? "✅" : "⏳", cls: push.tencent_docs ? "ok" : "pending" },
+        { label: "IMA 知识库", value: push.ima ? "✅" : "⏳", cls: push.ima ? "ok" : "pending" }
+      ].map(item => '<div class="monitor-item"><div class="mon-label">' + item.label + '</div><div class="mon-value ' + item.cls + '">' + item.value + '</div></div>').join("");
+    }
+
     // ---- Boot ----
     async function refresh() {
       try {
@@ -499,6 +727,20 @@
         renderEquipmentTable(data);
         renderDepartments(data);
         renderNextFocus(data);
+        // Fetch submission data
+        const wData = await fetchWeeklyData();
+        if (wData) {
+          weeklyCache = wData;
+          if (!weeklyCache.roster) weeklyCache.roster = [];
+          weeklyCache.reports.forEach(function(r) {
+            if (!r.submitted_count) r.submitted_count = (r.persons || []).length;
+            if (!r.expected_count) r.expected_count = weeklyCache.roster.length || r.submitted_count;
+            if (!r.missing_persons) r.missing_persons = computeMissing(r, weeklyCache.roster);
+          });
+          renderSubmissionKPI();
+          renderMissing();
+          renderMonitoring();
+        }
         renderLastUpdate();
       } catch (e) {
         console.error("刷新失败", e);
