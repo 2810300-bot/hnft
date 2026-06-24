@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>湖南伏泰 周报驾驶舱</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E" />
+  <!-- ECharts 5 -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --bg-soft: #273449;
+      --border: #334155;
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --primary: #38bdf8;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --purple: #a78bfa;
+      --gradient-1: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+      --gradient-2: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+      --gradient-3: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    .app { max-width: 1400px; margin: 0 auto; padding: 24px; }
+    /* Header */
+    .header {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      gap: 16px; margin-bottom: 24px; padding: 20px 24px;
+      background: var(--gradient-1); border-radius: 16px; box-shadow: var(--shadow);
+    }
+    .header h1 { font-size: 24px; font-weight: 700; }
+    .header .sub { font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 4px; }
+    .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 13px; }
+    .header-right .pill {
+      background: rgba(0,0,0,0.25); padding: 4px 10px; border-radius: 999px;
+      font-size: 12px; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .pulse { width: 8px; height: 8px; border-radius: 50%; background: #4ade80;
+      box-shadow: 0 0 0 0 rgba(74,222,128,0.7); animation: pulse 1.6s infinite; }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+      100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+    }
+    /* KPI grid */
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px; margin-bottom: 24px;
+    }
+    .kpi {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px; position: relative; overflow: hidden; transition: transform .2s;
+    }
+    .kpi:hover { transform: translateY(-2px); }
+    .kpi::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .kpi.blue::before { background: var(--gradient-1); }
+    .kpi.green::before { background: var(--gradient-3); }
+    .kpi.orange::before { background: var(--gradient-2); }
+    .kpi.purple::before { background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%); }
+    .kpi .label { font-size: 13px; color: var(--text-dim); }
+    .kpi .value { font-size: 32px; font-weight: 700; margin-top: 6px; line-height: 1.1; }
+    .kpi .unit { font-size: 14px; color: var(--text-dim); margin-left: 4px; }
+    .kpi .delta { font-size: 12px; margin-top: 8px; display: inline-block; padding: 2px 8px; border-radius: 6px; }
+    .delta.up { color: #4ade80; background: rgba(74,222,128,0.12); }
+    .delta.down { color: #f87171; background: rgba(248,113,113,0.12); }
+    /* Charts grid */
+    .grid { display: grid; gap: 16px; margin-bottom: 24px; }
+    .grid.cols-2 { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px; box-shadow: var(--shadow);
+    }
+    .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+    .card .desc { font-size: 12px; color: var(--text-dim); margin-bottom: 12px; }
+    .chart { width: 100%; height: 320px; }
+    .chart.small { height: 260px; }
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { color: var(--text-dim); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    /* Progress bar */
+    .progress { position: relative; height: 8px; background: var(--bg-soft); border-radius: 4px; overflow: hidden; }
+    .progress > span { position: absolute; top: 0; left: 0; bottom: 0; background: var(--gradient-3); border-radius: 4px; transition: width 1s ease; }
+    .progress.yellow > span { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); }
+    .progress.red > span { background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); }
+    /* Badges */
+    .badge { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .badge.completed { background: rgba(34,197,94,0.15); color: #4ade80; }
+    .badge.pending { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .badge.tracking { background: rgba(167,139,250,0.15); color: #c4b5fd; }
+    .badge.waiting_parts { background: rgba(239,68,68,0.15); color: #f87171; }
+    .badge.high { background: rgba(239,68,68,0.18); color: #fca5a5; }
+    .badge.med { background: rgba(245,158,11,0.18); color: #fcd34d; }
+    .badge.low { background: rgba(56,189,248,0.15); color: #7dd3fc; }
+    /* Department cards */
+    .dept-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+    .dept-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+    .dept-header h3 { font-size: 16px; }
+    .dept-header .meta { font-size: 12px; color: var(--text-dim); }
+    .dept-section { margin-top: 14px; }
+    .dept-section .title { font-size: 12px; color: var(--primary); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .dept-section ul { list-style: none; padding-left: 0; }
+    .dept-section li { font-size: 13px; padding: 4px 0 4px 18px; position: relative; color: var(--text); }
+    .dept-section li::before { content: "•"; position: absolute; left: 6px; color: var(--primary); }
+    .dept-section.issues li::before { color: var(--yellow); }
+    .dept-section.next li::before { color: var(--green); }
+    .dept-section.next li::before { content: "→"; }
+    /* Footer */
+    .footer { text-align: center; font-size: 12px; color: var(--text-dim); padding: 20px 0; }
+    .footer a { color: var(--primary); text-decoration: none; }
+    /* Mobile */
+    @media (max-width: 640px) {
+      .app { padding: 12px; }
+      .header { padding: 16px; }
+      .header h1 { font-size: 18px; }
+      .kpi .value { font-size: 24px; }
+      .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
+      .chart { height: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <div class="header">
+      <div>
+        <h1 id="company-name">湖南伏泰环境科技 周报驾驶舱</h1>
+        <div class="sub" id="report-period">报告周期：加载中…</div>
+      </div>
+      <div class="header-right">
+        <span class="pill"><span class="pulse"></span> 数据已就绪</span>
+        <span class="pill" id="generated-at">生成时间：加载中…</span>
+        <span class="pill" id="last-update">最后更新：加载中…</span>
+      </div>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-grid" id="kpi-grid"></div>
+
+    <!-- Charts Row 1 -->
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>餐厨收运量进度</h3>
+        <div class="desc">6 月累计 vs 目标（6140 吨）</div>
+        <div id="chart-collection" class="chart"></div>
+      </div>
+      <div class="card">
+        <h3>岳阳楼区专项进度</h3>
+        <div class="desc">摸排 / 新签转化 / 有效收运 三阶段</div>
+        <div id="chart-loulei" class="chart"></div>
+      </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="grid cols-3">
+      <div class="card">
+        <h3>油脂业务</h3>
+        <div class="desc">地沟油 / 煎炸油 完成率</div>
+        <div id="chart-oil" class="chart small"></div>
+      </div>
+      <div class="card">
+        <h3>本周新签转化</h3>
+        <div class="desc">本周 vs 6 月累计 vs 目标</div>
+        <div id="chart-sign" class="chart small"></div>
+      </div>
+      <div class="card">
+        <h3>风险等级分布</h3>
+        <div class="desc">高 / 中 / 低</div>
+        <div id="chart-risk" class="chart small"></div>
+      </div>
+    </div>
+
+    <!-- Revenue / Equipment -->
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>财务回款进度</h3>
+        <div class="desc">签字盖章 / 资料提交节点</div>
+        <div id="revenue-table"></div>
+      </div>
+      <div class="card">
+        <h3>设备状态</h3>
+        <div class="desc">已完成 / 进行中 / 等配件</div>
+        <div id="equipment-table"></div>
+      </div>
+    </div>
+
+    <!-- Department Cards -->
+    <h2 style="margin: 16px 0 12px; font-size: 18px;">部门周报详情</h2>
+    <div class="grid cols-2" id="dept-grid"></div>
+
+    <!-- Next focus -->
+    <div class="card" style="margin-top: 16px;">
+      <h3>下周重点关注</h3>
+      <div class="desc">按优先级排序</div>
+      <div id="next-focus"></div>
+    </div>
+
+    <div class="footer">
+      <div>数据来源：<span id="data-source">钉钉 OA 周报</span> · 自动部署至 GitHub Pages · 无需手动同步</div>
+      <div style="margin-top: 4px;">本页面每 60 秒自动刷新（优先从 GitHub Pages 获取）</div>
+    </div>
+  </div>
+
+  <script>
+    // ---- Data loading & auto-refresh ----
+    let cache = null;
+    let charts = {};
+    const REFRESH_MS = 60_000;
+    const REMOTE_URL = "https://2810300-bot.github.io/hnft/weekly-report/dashboard_data.json";
+
+    async function fetchData() {
+      // 优先从 GitHub Pages 获取最新数据
+      try {
+        const res = await fetch(`${REMOTE_URL}?ts=${Date.now()}`);
+        if (res.ok) return res.json();
+      } catch (e) {
+        console.warn("GitHub Pages 不可用，回退到本地数据", e);
+      }
+      // 离线/故障回退
+      const res = await fetch(`data.json?ts=${Date.now()}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    }
+
+    function fmtNum(n, d=0) {
+      if (n === null || n === undefined) return "-";
+      return Number(n).toLocaleString("zh-CN", { maximumFractionDigits: d });
+    }
+    function fmtPct(n) { return (Number(n).toFixed(2)) + "%"; }
+
+    function setText(id, txt) { document.getElementById(id).textContent = txt; }
+
+    function renderHeader(meta) {
+      setText("company-name", meta.company + " 周报驾驶舱");
+      setText("report-period", `报告周期：${meta.report_period_short} · 收件人：${meta.recipient}`);
+      setText("generated-at", "生成：" + meta.generated_at);
+      setText("data-source", meta.report_source);
+    }
+
+    function renderLastUpdate() {
+      const now = new Date();
+      const s = now.toLocaleString("zh-CN", { hour12: false });
+      setText("last-update", "页面刷新：" + s);
+    }
+
+    // ---- KPI cards ----
+    function renderKPI(k) {
+      const grid = document.getElementById("kpi-grid");
+      const cards = [
+        { cls: "blue",   label: "本周收运量",         value: fmtNum(k.weekly_collection_tons, 2), unit: "吨", delta: `${k.weekly_decline_tons > 0 ? "+" : ""}${k.weekly_decline_tons} 吨 周环比`, deltaCls: k.weekly_decline_tons < 0 ? "down" : "up" },
+        { cls: "green",  label: "6 月累计 / 目标",     value: fmtNum(k.monthly_cumulative_tons), unit: `/${fmtNum(k.monthly_target_tons)} 吨`, delta: `完成率 ${fmtPct(k.monthly_completion_rate)}`, deltaCls: "up" },
+        { cls: "orange", label: "本周新签转化",         value: fmtNum(k.new_signed_this_week), unit: "家", delta: `6 月累计 ${k.new_signed_month} 家 (完成率 ${k.new_signed_completion_rate}%)`, deltaCls: "up" },
+        { cls: "purple", label: "岳阳楼区专项",         value: fmtPct(k.loulei_investigation_rate), unit: "摸排", delta: `新签转化 ${fmtPct(k.loulei_conversion_rate)} · 有效收运 ${fmtPct(k.loulei_active_rate)}`, deltaCls: "up" }
+      ];
+      grid.innerHTML = cards.map(c => `
+        <div class="kpi ${c.cls}">
+          <div class="label">${c.label}</div>
+          <div class="value">${c.value}<span class="unit">${c.unit}</span></div>
+          <div class="delta ${c.deltaCls}">${c.delta}</div>
+        </div>
+      `).join("");
+    }
+
+    // ---- Charts ----
+    const baseChart = {
+      textStyle: { color: "#e2e8f0", fontFamily: "PingFang SC, Microsoft YaHei, sans-serif" },
+      grid: { left: 50, right: 24, top: 36, bottom: 40, containLabel: true },
+      tooltip: { backgroundColor: "rgba(15,23,42,0.92)", borderColor: "#334155", textStyle: { color: "#e2e8f0" } }
+    };
+
+    function renderCollectionChart(k) {
+      const chart = echarts.init(document.getElementById("chart-collection"));
+      charts.collection = chart;
+      chart.setOption({
+        ...baseChart,
+        title: { text: `${fmtNum(k.monthly_cumulative_tons)} / ${fmtNum(k.monthly_target_tons)} 吨`, left: "right", textStyle: { fontSize: 14, color: "#94a3b8" } },
+        xAxis: {
+          type: "category",
+          data: ["6/1—6/18 累计", "6 月目标", "差额 (待冲)"],
+          axisLine: { lineStyle: { color: "#334155" } },
+          axisLabel: { color: "#94a3b8", fontSize: 11 }
+        },
+        yAxis: { type: "value", name: "吨", axisLine: { lineStyle: { color: "#334155" } },
+                 splitLine: { lineStyle: { color: "#273449" } }, axisLabel: { color: "#94a3b8" } },
+        series: [{
+          type: "bar",
+          data: [
+            { value: k.monthly_cumulative_tons, itemStyle: { color: "#22c55e" } },
+            { value: k.monthly_target_tons,     itemStyle: { color: "#38bdf8" } },
+            { value: k.monthly_target_tons - k.monthly_cumulative_tons, itemStyle: { color: "#f59e0b" } }
+          ],
+          barWidth: 60,
+          label: { show: true, position: "top", color: "#e2e8f0", formatter: "{c} 吨" }
+        }]
+      });
+    }
+
+    function renderLouleiChart(k) {
+      const chart = echarts.init(document.getElementById("chart-loulei"));
+      charts.loulei = chart;
+      chart.setOption({
+        ...baseChart,
+        tooltip: { ...baseChart.tooltip, trigger: "item" },
+        legend: { bottom: 0, textStyle: { color: "#94a3b8" } },
+        series: [{
+          type: "pie",
+          radius: ["45%", "70%"],
+          center: ["50%", "45%"],
+          avoidLabelOverlap: true,
+          label: { color: "#e2e8f0", formatter: "{b}\n{c} 家 ({d}%)" },
+          data: [
+            { value: k.loulei_investigated, name: "已摸排",   itemStyle: { color: "#38bdf8" } },
+            { value: k.loulei_signed,        name: "新签/转化", itemStyle: { color: "#22c55e" } },
+            { value: k.loulei_active,         name: "有效收运",  itemStyle: { color: "#a78bfa" } }
+          ]
+        }]
+      });
+    }
+
+    function renderOilChart(k) {
+      const chart = echarts.init(document.getElementById("chart-oil"));
+      charts.oil = chart;
+      chart.setOption({
+        ...baseChart,
+        radar: {
+          indicator: [
+            { name: "地沟油完成率", max: 120 },
+            { name: "煎炸油完成率", max: 120 },
+            { name: "本周外售",     max: Math.max(50, k.oil_sales_tons * 1.2) }
+          ],
+          center: ["50%", "55%"],
+          radius: 90,
+          splitLine: { lineStyle: { color: "#334155" } },
+          splitArea: { areaStyle: { color: ["rgba(56,189,248,0.04)", "rgba(56,189,248,0.01)"] } },
+          axisLine: { lineStyle: { color: "#334155" } },
+          name: { textStyle: { color: "#94a3b8", fontSize: 11 } }
+        },
+        tooltip: { ...baseChart.tooltip },
+        series: [{
+          type: "radar",
+          data: [{
+            value: [k.trench_oil_rate, k.fry_oil_rate, k.oil_sales_tons],
+            name: "油脂业务",
+            areaStyle: { color: "rgba(56,189,248,0.35)" },
+            lineStyle: { color: "#38bdf8", width: 2 },
+            itemStyle: { color: "#38bdf8" }
+          }]
+        }]
+      });
+    }
+
+    function renderSignChart(k) {
+      const chart = echarts.init(document.getElementById("chart-sign"));
+      charts.sign = chart;
+      chart.setOption({
+        ...baseChart,
+        tooltip: { ...baseChart.tooltip, trigger: "axis" },
+        xAxis: { type: "category", data: ["本周", "6 月累计", "6 月目标 (按周×4)"], axisLine: { lineStyle: { color: "#334155" } }, axisLabel: { color: "#94a3b8" } },
+        yAxis: { type: "value", name: "家", axisLine: { lineStyle: { color: "#334155" } }, splitLine: { lineStyle: { color: "#273449" } }, axisLabel: { color: "#94a3b8" } },
+        series: [{
+          type: "bar",
+          data: [
+            { value: k.new_signed_this_week, itemStyle: { color: "#22c55e" } },
+            { value: k.new_signed_month,     itemStyle: { color: "#38bdf8" } },
+            { value: 96, itemStyle: { color: "#f59e0b" } }
+          ],
+          barWidth: 50,
+          label: { show: true, position: "top", color: "#e2e8f0", formatter: "{c} 家" }
+        }]
+      });
+    }
+
+    function renderRiskChart(d) {
+      const chart = echarts.init(document.getElementById("chart-risk"));
+      charts.risk = chart;
+      const counts = { high: 0, med: 0, low: 0 };
+      d.risks.forEach(r => counts[r.level]++);
+      chart.setOption({
+        ...baseChart,
+        tooltip: { ...baseChart.tooltip, trigger: "item" },
+        legend: { bottom: 0, textStyle: { color: "#94a3b8" } },
+        series: [{
+          type: "pie",
+          radius: ["50%", "75%"],
+          center: ["50%", "45%"],
+          label: { color: "#e2e8f0", formatter: "{b}\n{c} 项" },
+          data: [
+            { value: counts.high, name: "高", itemStyle: { color: "#ef4444" } },
+            { value: counts.med,  name: "中", itemStyle: { color: "#f59e0b" } },
+            { value: counts.low,  name: "低", itemStyle: { color: "#38bdf8" } }
+          ]
+        }]
+      });
+    }
+
+    // ---- Tables ----
+    function renderRevenueTable(d) {
+      const html = `
+        <table>
+          <thead><tr><th>项目</th><th>状态</th><th>负责人</th><th style="width:140px">进度</th></tr></thead>
+          <tbody>
+            ${d.revenue.map(r => {
+              const cls = r.progress >= 80 ? "" : (r.progress >= 60 ? "yellow" : "red");
+              return `<tr>
+                <td>${r.item}</td>
+                <td>${r.status}</td>
+                <td>${r.owner}</td>
+                <td><div class="progress ${cls}"><span style="width:${r.progress}%"></span></div></td>
+              </tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+      `;
+      document.getElementById("revenue-table").innerHTML = html;
+    }
+
+    function renderEquipmentTable(d) {
+      const html = `
+        <table>
+          <thead><tr><th>设备/项目</th><th>状态</th></tr></thead>
+          <tbody>
+            ${d.equipment.map(e => `
+              <tr>
+                <td>${e.name}</td>
+                <td><span class="badge ${e.status}">${e.label}</span></td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+      document.getElementById("equipment-table").innerHTML = html;
+    }
+
+    // ---- Dept cards ----
+    function renderDepartments(d) {
+      const html = d.departments.map(dep => `
+        <div class="dept-card">
+          <div class="dept-header">
+            <h3>${dep.name} <span style="font-size:12px;color:#94a3b8;font-weight:400">· ${dep.dept}</span></h3>
+            <div class="meta">${dep.period}</div>
+          </div>
+          <div class="dept-section">
+            <div class="title">📌 关键进展</div>
+            <ul>${dep.highlights.map(s => `<li>${s}</li>`).join("")}</ul>
+          </div>
+          ${dep.completed.length ? `<div class="dept-section">
+            <div class="title">✅ 完成事项</div>
+            <ul>${dep.completed.map(s => `<li>${s}</li>`).join("")}</ul>
+          </div>` : ""}
+          ${dep.issues.length ? `<div class="dept-section issues">
+            <div class="title">⚠️ 遇到问题</div>
+            <ul>${dep.issues.map(s => `<li>${s}</li>`).join("")}</ul>
+          </div>` : ""}
+          <div class="dept-section next">
+            <div class="title">🎯 下周计划</div>
+            <ul>${dep.next_week.map(s => `<li>${s}</li>`).join("")}</ul>
+          </div>
+        </div>
+      `).join("");
+      document.getElementById("dept-grid").innerHTML = html;
+    }
+
+    function renderNextFocus(d) {
+      const html = `
+        <ol style="padding-left: 24px; line-height: 1.9;">
+          ${d.next_focus.map(n => `<li style="margin-bottom: 4px;"><span class="badge ${n.priority <= 2 ? 'high' : (n.priority <= 4 ? 'med' : 'low')}" style="margin-right:8px">P${n.priority}</span>${n.text}</li>`).join("")}
+        </ol>
+      `;
+      document.getElementById("next-focus").innerHTML = html;
+    }
+
+    // ---- Boot ----
+    async function refresh() {
+      try {
+        const data = await fetchData();
+        cache = data;
+        renderHeader(data.meta);
+        renderKPI(data.kpi);
+        renderCollectionChart(data.kpi);
+        renderLouleiChart(data.kpi);
+        renderOilChart(data.kpi);
+        renderSignChart(data.kpi);
+        renderRiskChart(data);
+        renderRevenueTable(data);
+        renderEquipmentTable(data);
+        renderDepartments(data);
+        renderNextFocus(data);
+        renderLastUpdate();
+      } catch (e) {
+        console.error("刷新失败", e);
+        setText("last-update", "刷新失败：" + e.message);
+      }
+    }
+
+    window.addEventListener("resize", () => {
+      Object.values(charts).forEach(c => c && c.resize());
+    });
+
+    refresh();
+    setInterval(refresh, REFRESH_MS);
+  </script>
+</body>
+</html>
