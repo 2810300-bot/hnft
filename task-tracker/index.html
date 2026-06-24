@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工作任务跟踪 · 湖南伏泰</title>
+<style>
+:root {
+    --bg: #f0f4f8;
+    --card-bg: #ffffff;
+    --text: #1a2332;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --blue: #2563eb;
+    --green: #16a34a;
+    --orange: #ea580c;
+    --red: #dc2626;
+    --purple: #7c3aed;
+    --teal: #0d9488;
+    --amber: #d97706;
+    --gray-bg: #f8fafc;
+    --shadow: 0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', 'PingFang SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Top Bar */
+.top-bar {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.top-bar a {
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+.top-bar a:hover { text-decoration: underline; }
+.top-bar .sep { margin: 0 8px; color: #cbd5e1; }
+.top-bar .current { color: var(--text); font-weight: 500; }
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #0f766e 0%, #0d9488 40%, #14b8a6 100%);
+    color: #fff;
+    padding: 32px 32px 28px;
+    position: relative;
+    overflow: hidden;
+}
+header::after {
+    content: '';
+    position: absolute;
+    top: -40%; right: -10%;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,.06);
+    border-radius: 50%;
+}
+header h1 { font-size: 26px; font-weight: 700; position: relative; z-index: 1; }
+header .subtitle {
+    font-size: 14px;
+    opacity: .85;
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
+}
+header .sync-info {
+    font-size: 12px;
+    opacity: .65;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+.status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.status-dot.online { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+.status-dot.warn { background: #fbbf24; }
+
+/* Container */
+.container { max-width: 1280px; margin: 0 auto; padding: 24px; }
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.stat-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all .2s;
+    border: 2px solid transparent;
+}
+.stat-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+.stat-card.active {
+    border-color: var(--teal);
+    background: #f0fdfa;
+}
+.stat-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+.stat-icon.total { background: #e0f2fe; color: #0284c7; }
+.stat-icon.completed { background: #dcfce7; color: #16a34a; }
+.stat-icon.in-progress { background: #fef3c7; color: #d97706; }
+.stat-icon.overdue { background: #fee2e2; color: #dc2626; }
+.stat-info { flex: 1; }
+.stat-label { font-size: 13px; color: var(--text-secondary); }
+.stat-value { font-size: 28px; font-weight: 700; color: var(--text); line-height: 1.2; }
+.stat-sub { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+/* Filters Bar */
+.filters-bar {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.filters-bar select, .filters-bar input {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    background: #fff;
+    color: var(--text);
+    outline: none;
+    transition: border-color .2s;
+    font-family: inherit;
+}
+.filters-bar select:focus, .filters-bar input:focus { border-color: var(--teal); }
+.filter-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; }
+.btn-reset {
+    margin-left: auto;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 13px;
+    transition: all .2s;
+    font-family: inherit;
+}
+.btn-reset:hover { background: #f1f5f9; color: var(--text); }
+
+/* Progress bar section */
+.progress-section {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+}
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.progress-header h3 { font-size: 15px; font-weight: 600; }
+.progress-header .pct { font-size: 24px; font-weight: 700; color: var(--teal); }
+.progress-bar-wrap {
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0d9488, #14b8a6);
+    border-radius: 5px;
+    transition: width .6s ease;
+    position: relative;
+}
+.progress-bar-fill.overdue {
+    background: linear-gradient(90deg, #dc2626, #f87171);
+    position: absolute;
+    right: 0;
+    opacity: .25;
+}
+.progress-legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+.progress-legend span { display: flex; align-items: center; gap: 4px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.legend-dot.complete { background: var(--teal); }
+.legend-dot.overdue-dot { background: var(--red); opacity: .4; }
+.legend-dot.remaining { background: #e2e8f0; }
+
+/* Task Table */
+.task-section {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+.task-section-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.task-section-header h3 { font-size: 15px; font-weight: 600; }
+.task-section-header .count { font-size: 13px; color: var(--text-secondary); }
+.task-table { width: 100%; border-collapse: collapse; }
+.task-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    background: var(--gray-bg);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+.task-table td {
+    padding: 14px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+.task-table tr:last-child td { border-bottom: none; }
+.task-table tr:hover { background: #f8fafc; }
+.task-table tr.overdue-row { background: #fef2f2; }
+.task-table tr.overdue-row:hover { background: #fee2e2; }
+.task-table tr.due-soon { background: #fff7ed; }
+
+/* Status badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+.badge.completed { background: #dcfce7; color: #15803d; }
+.badge.in_progress { background: #fef3c7; color: #b45309; }
+.badge.pending { background: #f1f5f9; color: #64748b; }
+
+/* Priority badges */
+.priority {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+.priority.critical { background: #fee2e2; color: #dc2626; }
+.priority.high { background: #ffedd5; color: #ea580c; }
+.priority.medium { background: #e0f2fe; color: #0284c7; }
+
+/* Deadline */
+.deadline { font-size: 13px; white-space: nowrap; }
+.deadline.urgent { color: #dc2626; font-weight: 600; }
+.deadline.warning { color: #ea580c; font-weight: 500; }
+.deadline.normal { color: var(--text-secondary); }
+.deadline.done { color: #16a34a; font-weight: 500; }
+.deadline-tag {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+.deadline-tag.overdue-tag { background: #fee2e2; color: #dc2626; }
+.deadline-tag.soon-tag { background: #ffedd5; color: #ea580c; }
+.days-left { font-size: 11px; color: var(--text-secondary); display: block; }
+
+/* Person chips */
+.person-chip {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    background: #f1f5f9;
+    color: var(--text-secondary);
+    margin: 1px 2px;
+    white-space: nowrap;
+}
+.person-chip.me { background: #dbeafe; color: #1d4ed8; }
+
+/* Category tag */
+.cat-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+}
+.cat-tag.temp { background: #ede9fe; color: #7c3aed; }
+.cat-tag.regular { background: #fce7f3; color: #be185d; }
+
+/* Empty state */
+.empty-state {
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .filters-bar { flex-direction: column; align-items: stretch; }
+    .btn-reset { margin-left: 0; }
+    .task-table { font-size: 12px; }
+    .task-table th, .task-table td { padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div>
+        <a href="../">🏠 看板中心</a>
+        <span class="sep">/</span>
+        <span class="current">工作任务跟踪</span>
+    </div>
+</div>
+
+<header>
+    <h1>📋 工作任务跟踪系统</h1>
+    <div class="subtitle">数据源：IMA 知识库「岳阳餐厨垃圾项目 · 待办事项跟踪」· 自动同步</div>
+    <div class="sync-info" id="syncInfo">
+        <span class="status-dot online"></span> 数据最新 · 加载中...
+    </div>
+</header>
+
+<div class="container">
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <!-- Progress -->
+    <div class="progress-section" id="progressSection"></div>
+
+    <!-- Filters -->
+    <div class="filters-bar" id="filtersBar"></div>
+
+    <!-- Task Table -->
+    <div class="task-section" id="taskSection"></div>
+</div>
+
+<script>
+const PERIOD = 24 * 60 * 60 * 1000; // 24h (today = 6/24/2026)
+
+function parseDeadline(d) {
+    if (!d) return null;
+    // Handle "6月30日" and "6/30/2026" formats
+    let m = d.match(/(\d+)\/(\d+)\/(\d+)/);
+    if (m) return new Date(+m[3], +m[1]-1, +m[2]);
+    m = d.match(/(\d+)月(\d+)日/);
+    if (m) return new Date(2026, +m[1]-1, +m[2]);
+    return null;
+}
+
+function formatDeadline(d) {
+    if (!d) return '长期';
+    const dt = parseDeadline(d);
+    if (!dt) return d;
+    return `${dt.getMonth()+1}月${dt.getDate()}日`;
+}
+
+function getDeadlineStatus(d, status) {
+    if (status === 'completed') return 'done';
+    if (!d) return 'normal';
+    const dt = parseDeadline(d);
+    if (!dt) return 'normal';
+    const today = new Date(2026, 5, 24); // June 24, 2026
+    const diffDays = Math.floor((dt - today) / (1000*60*60*24));
+    if (diffDays < 0) return 'urgent'; // overdue
+    if (diffDays <= 3) return 'warning'; // due within 3 days
+    return 'normal';
+}
+
+function getDaysLeft(d) {
+    if (!d) return '';
+    const dt = parseDeadline(d);
+    if (!dt) return '';
+    const today = new Date(2026, 5, 24);
+    const diff = Math.floor((dt - today) / (1000*60*60*24));
+    if (diff < 0) return `已逾期${Math.abs(diff)}天`;
+    if (diff === 0) return '今天截止';
+    if (diff === 1) return '明天截止';
+    return `剩余${diff}天`;
+}
+
+const STATUS_MAP = {
+    'completed': '已完成',
+    'in_progress': '进行中',
+    'pending': '待启动'
+};
+const PRIORITY_ORDER = { 'critical': 0, 'high': 1, 'medium': 2, 'low': 3 };
+const PRIORITY_LABELS = { 'critical': '🔴 紧急', 'high': '🟠 高', 'medium': '🟡 中', 'low': '🟢 低' };
+
+let allTasks = [];
+let currentFilter = 'all';
+let currentPerson = 'all';
+let currentCategory = 'all';
+
+function loadData() {
+    return fetch('task_data.json?v=2').then(r => r.json());
+}
+
+function render(data) {
+    allTasks = data.tasks;
+    document.getElementById('syncInfo').innerHTML = `<span class="status-dot online"></span> 最后同步：${data.last_updated} · 来源：${data.source}`;
+
+    // Stats
+    const completed = allTasks.filter(t => t.status === 'completed').length;
+    const inProgress = allTasks.filter(t => t.status === 'in_progress').length;
+    const overdue = allTasks.filter(t => {
+        if (t.status === 'completed') return false;
+        const ds = getDeadlineStatus(t.deadline, t.status);
+        return ds === 'urgent';
+    }).length;
+    const total = allTasks.length;
+
+    document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card" onclick="setFilter('all')" id="statAll">
+            <div class="stat-icon total">📊</div>
+            <div class="stat-info"><div class="stat-label">总任务数</div><div class="stat-value">${total}</div></div>
+        </div>
+        <div class="stat-card" onclick="setFilter('completed')" id="statCompleted">
+            <div class="stat-icon completed">✅</div>
+            <div class="stat-info"><div class="stat-label">已完成</div><div class="stat-value">${completed}</div><div class="stat-sub">${Math.round(completed/total*100)}% 完成率</div></div>
+        </div>
+        <div class="stat-card" onclick="setFilter('in_progress')" id="statInProgress">
+            <div class="stat-icon in-progress">🔄</div>
+            <div class="stat-info"><div class="stat-label">进行中</div><div class="stat-value">${inProgress}</div></div>
+        </div>
+        <div class="stat-card ${overdue>0?'active':''}" onclick="setFilter('overdue')" id="statOverdue">
+            <div class="stat-icon overdue">⚠️</div>
+            <div class="stat-info"><div class="stat-label">已逾期</div><div class="stat-value">${overdue}</div><div class="stat-sub">需立即关注</div></div>
+        </div>`;
+
+    // Progress bar
+    const activeTotal = completed + inProgress + allTasks.filter(t => t.status === 'pending').length;
+    const pct = Math.round(completed / Math.max(activeTotal, 1) * 100);
+    document.getElementById('progressSection').innerHTML = `
+        <div class="progress-header">
+            <h3>整体完成进度</h3>
+            <div class="pct">${pct}%</div>
+        </div>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width:${pct}%"></div>
+            ${overdue > 0 ? `<div class="progress-bar-fill overdue" style="width:${Math.round(overdue/total*100)}%"></div>` : ''}
+        </div>
+        <div class="progress-legend">
+            <span><span class="legend-dot complete"></span> 已完成 ${completed}</span>
+            <span><span class="legend-dot remaining"></span> 进行中 ${inProgress}</span>
+            ${overdue > 0 ? `<span><span class="legend-dot overdue-dot"></span> 已逾期 ${overdue}</span>` : ''}
+        </div>`;
+
+    // Filters
+    const persons = [...new Set(allTasks.flatMap(t => t.responsible))].sort();
+    document.getElementById('filtersBar').innerHTML = `
+        <span class="filter-label">筛选</span>
+        <select id="filterStatus" onchange="applyFilters()">
+            <option value="all">全部状态</option>
+            <option value="completed">已完成</option>
+            <option value="in_progress">进行中</option>
+            <option value="overdue">已逾期</option>
+        </select>
+        <select id="filterPerson" onchange="applyFilters()">
+            <option value="all">全部人员</option>
+            ${persons.map(p => `<option value="${p}">${p}</option>`).join('')}
+        </select>
+        <select id="filterCategory" onchange="applyFilters()">
+            <option value="all">全部类别</option>
+            <option value="临时重点工作">临时重点工作</option>
+            <option value="常态化工作">常态化工作</option>
+        </select>
+        <button class="btn-reset" onclick="resetFilters()">🔄 重置筛选</button>`;
+
+    // Restore filter state
+    if (currentFilter !== 'all') document.getElementById('filterStatus').value = currentFilter;
+    if (currentPerson !== 'all') document.getElementById('filterPerson').value = currentPerson;
+    if (currentCategory !== 'all') document.getElementById('filterCategory').value = currentCategory;
+
+    renderTable();
+}
+
+function setFilter(f) {
+    currentFilter = f;
+    currentPerson = 'all';
+    currentCategory = 'all';
+    document.getElementById('filterStatus').value = f;
+    document.getElementById('filterPerson').value = 'all';
+    document.getElementById('filterCategory').value = 'all';
+    renderTable();
+}
+
+function applyFilters() {
+    currentFilter = document.getElementById('filterStatus').value;
+    currentPerson = document.getElementById('filterPerson').value;
+    currentCategory = document.getElementById('filterCategory').value;
+    renderTable();
+}
+
+function resetFilters() {
+    currentFilter = 'all';
+    currentPerson = 'all';
+    currentCategory = 'all';
+    document.getElementById('filterStatus').value = 'all';
+    document.getElementById('filterPerson').value = 'all';
+    document.getElementById('filterCategory').value = 'all';
+    renderTable();
+}
+
+function renderTable() {
+    let tasks = [...allTasks];
+
+    // Filter
+    if (currentFilter === 'overdue') {
+        tasks = tasks.filter(t => t.status !== 'completed' && getDeadlineStatus(t.deadline, t.status) === 'urgent');
+    } else if (currentFilter !== 'all') {
+        tasks = tasks.filter(t => t.status === currentFilter);
+    }
+    if (currentPerson !== 'all') {
+        tasks = tasks.filter(t => t.responsible.includes(currentPerson));
+    }
+    if (currentCategory !== 'all') {
+        tasks = tasks.filter(t => t.category === currentCategory);
+    }
+
+    // Sort by priority, then by deadline urgency
+    tasks.sort((a, b) => {
+        const pa = PRIORITY_ORDER[a.priority] ?? 99;
+        const pb = PRIORITY_ORDER[b.priority] ?? 99;
+        if (pa !== pb) return pa - pb;
+
+        // Then sort by status (in_progress first, then pending, then completed)
+        const so = { 'in_progress': 0, 'pending': 1, 'completed': 2 };
+        const sa = so[a.status] ?? 99;
+        const sb = so[b.status] ?? 99;
+        if (sa !== sb) return sa - sb;
+
+        // Then by deadline (most urgent first)
+        const da = parseDeadline(a.deadline);
+        const db = parseDeadline(b.deadline);
+        if (da && db) return da - db;
+        if (da) return -1;
+        if (db) return 1;
+        return 0;
+    });
+
+    const count = tasks.length;
+    const tableId = 'task-table';
+
+    if (tasks.length === 0) {
+        document.getElementById('taskSection').innerHTML = `
+            <div class="task-section-header"><h3>任务清单</h3><span class="count">0 项</span></div>
+            <div class="empty-state"><div class="icon">📭</div>暂无匹配任务</div>`;
+        return;
+    }
+
+    let html = `
+    <div class="task-section-header"><h3>任务清单</h3><span class="count">${count} 项</span></div>
+    <div style="overflow-x:auto">
+    <table class="task-table"><thead><tr>
+        <th style="width:32px">#</th>
+        <th style="width:50px">优先级</th>
+        <th>工作任务</th>
+        <th style="width:100px">类别</th>
+        <th style="width:140px">责任人</th>
+        <th style="width:110px">截止日期</th>
+        <th style="width:80px">状态</th>
+    </tr></thead><tbody>`;
+
+    tasks.forEach((t, i) => {
+        const ds = getDeadlineStatus(t.deadline, t.status);
+        const rowClass = ds === 'urgent' ? 'overdue-row' : (ds === 'warning' ? 'due-soon' : '');
+        const daysLeft = t.status !== 'completed' ? getDaysLeft(t.deadline) : '';
+        const statusLabel = STATUS_MAP[t.status] || t.status;
+        const prioLabel = PRIORITY_LABELS[t.priority] || t.priority;
+
+        html += `
+        <tr class="${rowClass}">
+            <td style="color:var(--text-secondary);font-size:12px">${i+1}</td>
+            <td><span class="priority ${t.priority}">${prioLabel}</span></td>
+            <td>
+                <div style="font-weight:500">${t.content}</div>
+                ${t.notes ? `<div style="font-size:11px;color:var(--text-secondary);margin-top:2px">💬 ${t.notes}</div>` : ''}
+            </td>
+            <td><span class="cat-tag ${t.category==='常态化工作'?'regular':'temp'}">${t.category}</span></td>
+            <td>${t.responsible.map(p => `<span class="person-chip${p==='颜一亩'?' me':''}">${p}</span>`).join(' ')}</td>
+            <td>
+                <span class="deadline ${ds}">${formatDeadline(t.deadline)}</span>
+                ${ds==='urgent'?'<span class="deadline-tag overdue-tag">逾期</span>':''}
+                ${ds==='warning'?'<span class="deadline-tag soon-tag">临近</span>':''}
+                ${daysLeft && ds!=='done'?`<span class="days-left">${daysLeft}</span>`:''}
+            </td>
+            <td><span class="badge ${t.status}">${t.status==='completed'?'✅ ':'🔄 '}${statusLabel}</span></td>
+        </tr>`;
+    });
+
+    html += '</tbody></table></div>';
+    document.getElementById('taskSection').innerHTML = html;
+}
+
+// Init
+loadData().then(data => {
+    render(data);
+}).catch(err => {
+    document.getElementById('syncInfo').innerHTML = `<span class="status-dot warn"></span> 数据加载失败：${err.message}`;
+});
+</script>
+
+</body>
+</html>
