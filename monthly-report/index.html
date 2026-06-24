@@ -692,12 +692,6 @@
                         <div id="hdr-period" class="text-sm text-slate-600"></div>
                         <div id="hdr-date" class="text-xs text-slate-400"></div>
                     </div>
-                    <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
-                        <span class="w-2 h-2 rounded-full bg-brand-green pulse-dot"></span>
-                        <i class="fas fa-sync-alt text-brand-green text-xs"></i>
-                        <span class="text-xs text-slate-500">刷新</span>
-                        <span id="refresh-countdown" class="text-xs font-mono font-bold text-brand-green">5:00</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -769,8 +763,8 @@
                     数据更新: <span id="footer-updated"></span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>页面每5分钟自动刷新</span>
+                    <i class="fas fa-clock"></i>
+                    <span>每月15日更新</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <i class="fas fa-copyright"></i>
@@ -1133,89 +1127,6 @@
             }
         }
     });
-
-    // ========================================
-    // 6. Smart Data Refresh — poll data.json for changes
-    // ========================================
-    const REFRESH_INTERVAL = 5 * 60 * 1000; // re-check every 5 minutes
-    let countdown = REFRESH_INTERVAL / 1000;
-    let lastDataHash = '';
-
-    // Compute a simple hash of the embedded JSON for change detection
-    function computeDataHash() {
-        let s = '';
-        s += JSON.stringify(reportData.key_metrics);
-        s += JSON.stringify(reportData.monthly_trend);
-        s += reportData.last_updated;
-        return s.length + '_' + s.replace(/[^a-z0-9]/gi, '').substring(0, 50);
-    }
-    lastDataHash = computeDataHash();
-
-    function updateCountdown() {
-        const minutes = Math.floor(countdown / 60);
-        const seconds = countdown % 60;
-        const el = document.getElementById('refresh-countdown');
-        if (el) {
-            el.textContent = minutes + ':' + seconds.toString().padStart(2, '0');
-        }
-        countdown--;
-        if (countdown < 0) {
-            checkForUpdates();
-            countdown = REFRESH_INTERVAL / 1000; // reset countdown
-        }
-    }
-
-    function checkForUpdates() {
-        // Fetch data.json with cache-busting to detect changes
-        fetch('data.json?t=' + Date.now(), { cache: 'no-store' })
-            .then(function(resp) {
-                if (!resp.ok) throw new Error('HTTP ' + resp.status);
-                return resp.json();
-            })
-            .then(function(newData) {
-                // Compute hash of new data
-                let s = '';
-                s += JSON.stringify(newData.key_metrics);
-                s += JSON.stringify(newData.monthly_trend);
-                s += newData.last_updated;
-                var newHash = s.length + '_' + s.replace(/[^a-z0-9]/gi, '').substring(0, 50);
-
-                if (newHash !== lastDataHash) {
-                    // Data has been updated! Show notification then reload.
-                    showUpdateNotification(newData.last_updated);
-                }
-            })
-            .catch(function(err) {
-                // data.json not available or fetch failed — just reload page as fallback
-                console.log('Data check skipped:', err.message);
-                location.reload();
-            });
-    }
-
-    function showUpdateNotification(newTime) {
-        // Show a toast/banner before reloading
-        var banner = document.createElement('div');
-        banner.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:10000;' +
-            'background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;' +
-            'box-shadow:0 4px 16px rgba(22,163,74,0.4);display:flex;align-items:center;gap:8px;animation:slideDown 0.4s ease;';
-        banner.innerHTML = '<i class="fas fa-check-circle"></i> 检测到数据更新，正在刷新...';
-        document.body.appendChild(banner);
-
-        // Add slideDown animation if not exists
-        if (!document.getElementById('anim-slide-down')) {
-            var style = document.createElement('style');
-            style.id = 'anim-slide-down';
-            style.textContent = '@keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-20px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}';
-            document.head.appendChild(style);
-        }
-
-        setTimeout(function() {
-            location.reload();
-        }, 1500);
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
 
     // ========================================
     // 7. Show App, Hide Loading
