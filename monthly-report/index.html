@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>湖南伏泰环境科技 - 2026年5月总结报告</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-green': '#16a34a',
+                        'brand-cyan': '#0891b2',
+                        'brand-bg': '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.7;
+        }
+
+        /* Loading Skeleton */
+        #loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #f8fafc;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        #loading-overlay.hidden { opacity: 0; pointer-events: none; }
+        .loader {
+            width: 56px; height: 56px;
+            border: 5px solid #e2e8f0;
+            border-top-color: #16a34a;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader-text {
+            margin-top: 16px;
+            color: #16a34a;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Header gradient line */
+        .header-gradient-line {
+            height: 4px;
+            background: linear-gradient(90deg, #16a34a 0%, #0891b2 100%);
+        }
+
+        /* Metric card */
+        .metric-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+            padding: 24px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08), 0 10px 24px rgba(0,0,0,0.06);
+        }
+        .metric-card.alert {
+            border: 2px solid #ef4444;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 40%);
+        }
+        .metric-card .alert-badge {
+            position: absolute;
+            top: 12px; right: 12px;
+            background: #ef4444;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Circular progress */
+        .circular-progress {
+            position: relative;
+            width: 64px; height: 64px;
+        }
+        .circular-progress svg { transform: rotate(-90deg); }
+        .circular-progress .progress-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            font-weight: 700;
+            color: #16a34a;
+        }
+        .circular-progress.warning .progress-text { color: #f59e0b; }
+
+        /* Chapter accordion */
+        .chapter {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            padding: 20px 24px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.15s ease;
+        }
+        .chapter-header:hover { background-color: #f1f5f9; }
+        .chapter-title {
+            flex: 1;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .chapter-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .chapter-toggle {
+            color: #94a3b8;
+            transition: transform 0.3s ease;
+            font-size: 14px;
+        }
+        .chapter.collapsed .chapter-toggle { transform: rotate(-90deg); }
+        .chapter-body {
+            padding: 0 24px 24px 24px;
+            max-height: 5000px;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+        .chapter.collapsed .chapter-body {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .chapter-summary {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #166534;
+            line-height: 1.8;
+        }
+        .chapter-summary:empty { display: none; }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-left: 12px;
+            border-left: 3px solid #0891b2;
+        }
+        .section-title:first-child { margin-top: 0; }
+
+        .item-list { list-style: none; padding-left: 0; }
+        .item-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #334155;
+            line-height: 1.8;
+        }
+        .item-list li::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 11px;
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #16a34a;
+        }
+        .item-list li.highlight {
+            color: #dc2626;
+            font-weight: 600;
+            background: #fef2f2;
+            border-radius: 6px;
+            padding: 8px 12px 8px 28px;
+            margin-left: -8px;
+        }
+        .item-list li.highlight::before {
+            background: #ef4444;
+            top: 16px;
+            left: 12px;
+        }
+
+        /* Chart container */
+        .chart-container {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+            padding: 24px;
+        }
+
+        /* Trend badge */
+        .trend-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+        .trend-badge.up { color: #16a34a; background: #f0fdf4; }
+        .trend-badge.down { color: #ef4444; background: #fef2f2; }
+
+        /* Refresh indicator pulse */
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .pulse-dot {
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .metric-value { font-size: 28px !important; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div id="loading-overlay">
+    <div class="loader"></div>
+    <div class="loader-text">正在加载月度总结报告...</div>
+</div>
+
+<!-- Report Data JSON -->
+<script id="report-data" type="application/json">
+{
+  "company": "湖南伏泰环境科技有限责任公司",
+  "report_title": "2026年5月总结报告",
+  "report_period": "2026年5月",
+  "compile_date": "2026年6月17日",
+  "last_updated": "2026-06-23T11:00:00",
+  "key_metrics": [
+    {"label": "实际收运量", "value": "6,354.8", "unit": "吨", "target": "6,200", "achievement": "102.5%", "trend": "up", "trend_value": "7.3%"},
+    {"label": "售油金额", "value": "151.7", "unit": "万元", "target": "155", "achievement": "97.9%", "trend": "down", "trend_value": "12.1%"},
+    {"label": "提油率", "value": "4.44", "unit": "%", "target": "5.16%", "achievement": "86.0%", "trend": "down", "trend_value": "0.18pp", "alert": true},
+    {"label": "综合吨成本", "value": "234", "unit": "元/吨", "target": "245.60", "achievement": "95.3%", "trend": "down", "trend_value": "0.96%"}
+  ],
+  "chapters": [
+    {
+      "title": "一、核心经营指标完成情况",
+      "summary": "5月份，公司收运量持续超额完成月度目标，但提油率出现异常下降，油脂销售收入虽达标但较上月有所回落，需高度关注提油率与处置中心成本优化。",
+      "sections": [
+        {
+          "title": "垃圾收运与处置",
+          "items": [
+            "目标收运量：6,200吨",
+            "实际收运量：6,354.8吨（达成率102.5%，环比4月5,920.66吨增长7.3%，日均收运量持续上升）",
+            "餐厨垃圾处置量（不含易腐）：4,222.55吨（环比4月3,880.48吨增长8.7%）",
+            "易腐垃圾处置量：1,219.38吨（环比4月1,169.64吨增长4.3%）",
+            "实际总处置量：5,441.93吨"
+          ]
+        },
+        {
+          "title": "油脂提取与销售",
+          "items": [
+            "目标售油金额：155万元",
+            "实际售油金额：151.7万元（达成率97.9%，环比4月171.36万元下降12.1%）",
+            "售油吨数：约225吨（工业油出库164.92吨，环比4月234.22吨有所回落）",
+            "煎炸油量：约22吨（售卖约22吨）",
+            "地沟油量：约28吨（毛油）",
+            "提油率：实际提油率4.44%，未达到目标值5.16%，较4月（4.62%）明显下降，为1-5月最低值，需格外重视，专项排查分析原因。"
+          ]
+        },
+        {
+          "title": "能源消耗与副产品",
+          "items": [
+            "生产用水：约1,950吨",
+            "生产用电：215,359 kw.h；发电上网：约13,000 kw.h，补贴收入：约5,850元。",
+            "废渣处置：479.09吨，污泥处置：169.44吨，有机渣售卖：约400吨。"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "二、成本管控分析",
+      "summary": "5月份收运量维持高位增长，处置中心吨成本有所优化但仍有下降空间。提油率异常下降直接影响油脂收益，需同步关注提油率提升与吨成本管控。",
+      "sections": [
+        {
+          "title": "综合成本",
+          "items": [
+            "综合计划吨成本：245.60元/吨",
+            "综合实际吨成本：约234元/吨（较4月236.27元/吨下降约2.27元/吨，降幅0.96%）"
+          ]
+        },
+        {
+          "title": "各部门吨成本表现",
+          "items": [
+            "收运部门：实际约80元/吨（计划82.00元/吨，达标）。收运量持续高位增长，摊薄吨成本效应明显。",
+            "综合部门：实际约31元/吨（计划31.40元/吨，达标）。支出基本稳定，仍在预算范围之内。",
+            "市场运维：实际约6元/吨（计划7.20元/吨，达标）。",
+            "处置中心：实际119.45元/吨（计划125.00元/吨，达标；按厂区过磅计算约140元/吨）。药剂成本进一步降低，吨成本达标，但电费开支偏高、提油率异常下降直接冲击资源化收益，需持续精细化管控并专项排查提油率根因。"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "三、重点项目与财务概览",
+      "summary": "",
+      "sections": [
+        {
+          "title": "油脂分成结算稳定、财政补贴收入持续提升",
+          "items": [
+            "依据5月油脂分成表数据，伏泰与环境公司按55%：45%比例进行油脂分成。5月工业油出库164.92吨，伏泰侧分成约60.68万元。财政补贴方面，根据5月实际完成垃圾收运量6,354.8吨，应确认获得财政补贴约205万元，较4月约195万元进一步提升，收运量稳定增长带动补贴规模持续上涨。"
+          ]
+        },
+        {
+          "title": "历史项目回款推进",
+          "items": [
+            "正重点推进的财政补贴回款工作，固废中心已于5月中旬将财政补贴申请资料上交财政部门，持续跟进资金拨付进度，保障公司现金流健康。"
+          ]
+        },
+        {
+          "title": "厂区整改与设备维保",
+          "items": [
+            "厂区生化系统技改扫尾工作已完成，已通知施工方带资料进行验收。污水系统浓水池/膜池清洗池库存水管道及水泵就位，库存水量清理推进中。预处理关键主机设备（19号螺旋轴材质脆化）新轴采购催促到货中，临时焊接修复不可持续，存在生产风险。多种设备维保（锅炉房燃烧机、沼气增压风机、地沟油管道清理等）本月已完成。"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "四、重大管理事项",
+      "summary": "",
+      "sections": [
+        {
+          "title": "绩效考核体系优化改革",
+          "items": [
+            "针对5月绩效考核暴露的「分数通胀」问题（全员平均89分，与提油率持续不达标、药剂库存告急等运营短板严重不匹配），公司对绩效考核体系进行了系统性优化改革：①提油率指标权重大幅提升（从2分提升至8~10分），作为核心利润指标；②新增「递进加重扣分」机制，同一指标连续2月不达标扣分×1.5，连续3月×2.0，连续4月绩效降档；③新增「天花板制度」，若提油率/药剂保供/安全事故任一触发红线，当月全部附加加分项无效；④新增物资保供考核指标（采购岗25分专项指标）；⑤阶段性任务完成率直接挂钩任务清单，不再由主观评分判定。6月起按优化后体系执行。"
+          ]
+        },
+        {
+          "title": "提油率异常下降专项排查与药剂采购保供整改",
+          "items": [
+            "5月提油率降至4.44%（低于1-5月均值4.66%），已启动专项排查核查车载秤与过磅数据差异、含油率及COD等指标，研判提油率下降根因。同时，5月暴露多种药剂库存告急（聚丙烯酰胺、聚铁、碳源、氯化镁库存低于安全线），新聚丙烯酰胺脱泥效果不佳，已更换采购专员并优化采购制度流程，6月重点推动药剂采购到货确保生产连续性。"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "五、总结与展望",
+      "summary": "2026年5月，公司在垃圾收运量上持续超额完成目标，日均收运量稳步上升，财政补贴收入随收运量增长持续提升，综合运营成本得到进一步有效压缩。但提油率异常下降成为当前最突出的运营短板，直接影响油脂销售收入和资源化收益，需6月专项排查根因并采取针对性改善措施。6月份，公司需重点攻坚提油率恢复达标、推动药剂采购保供到位确保生产连续性、严格落实优化后的绩效考核体系、持续跟踪推动财政补贴回款资金拨付、加快推进污水技改验收及预处理关键设备维保，巩固上半年良好经营态势的同时着力解决核心运营问题。",
+      "sections": []
+    }
+  ],
+  "cost_data": {
+    "labels": ["收运部门", "综合部门", "市场运维", "处置中心"],
+    "actual": [80, 31, 6, 119.45],
+    "planned": [82, 31.40, 7.20, 125]
+  },
+  "monthly_trend": {
+    "labels": ["1月", "2月", "3月", "4月", "5月"],
+    "collection": [5600, 5750, 5850, 5920.66, 6354.8],
+    "oil_rate": [4.85, 4.72, 4.68, 4.62, 4.44],
+    "target_oil_rate": 5.16
+  }
+}
+</script>
+
+<!-- Main App Container -->
+<div id="app" style="display:none;">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <!-- Left: Company + Title -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-green to-brand-cyan flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-leaf text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 id="hdr-company" class="text-sm text-slate-500 font-medium"></h1>
+                        <h2 id="hdr-title" class="text-lg md:text-xl font-bold text-slate-800"></h2>
+                    </div>
+                </div>
+                <!-- Right: Period + Date + Refresh -->
+                <div class="flex flex-wrap items-center gap-3 md:gap-4">
+                    <div class="text-right">
+                        <div id="hdr-period" class="text-sm text-slate-600"></div>
+                        <div id="hdr-date" class="text-xs text-slate-400"></div>
+                    </div>
+                    <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+                        <span class="w-2 h-2 rounded-full bg-brand-green pulse-dot"></span>
+                        <i class="fas fa-sync-alt text-brand-green text-xs"></i>
+                        <span class="text-xs text-slate-500">刷新</span>
+                        <span id="refresh-countdown" class="text-xs font-mono font-bold text-brand-green">5:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-gradient-line"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Key Metrics Cards -->
+        <section class="mb-8">
+            <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+                <i class="fas fa-chart-line text-brand-green"></i>
+                核心经营指标
+            </h3>
+            <div id="metrics-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Metric cards rendered by JS -->
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="mb-8">
+            <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+                <i class="fas fa-chart-bar text-brand-cyan"></i>
+                数据趋势分析
+            </h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="chart-container">
+                    <h4 class="text-base font-semibold text-slate-700 mb-4">月度收运量趋势</h4>
+                    <div style="position:relative; height:300px;">
+                        <canvas id="collectionChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h4 class="text-base font-semibold text-slate-700 mb-4">提油率趋势</h4>
+                    <div style="position:relative; height:300px;">
+                        <canvas id="oilRateChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- Cost comparison chart -->
+            <div class="chart-container">
+                <h4 class="text-base font-semibold text-slate-700 mb-4">各部门吨成本对比（实际 vs 计划）</h4>
+                <div style="position:relative; height:320px;">
+                    <canvas id="costChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Report Chapters -->
+        <section class="mb-8">
+            <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+                <i class="fas fa-file-alt text-brand-green"></i>
+                报告正文
+            </h3>
+            <div id="chapters-container">
+                <!-- Chapters rendered by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-sm text-slate-400">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-clock"></i>
+                    <span>最后更新：<span id="footer-updated" class="text-slate-500 font-medium"></span></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>页面每5分钟自动刷新</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-copyright"></i>
+                    <span id="footer-company"></span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+<script>
+(function() {
+    'use strict';
+
+    // ========================================
+    // 0. Error Recovery
+    // ========================================
+    function showError(msg) {
+        document.getElementById('loading-overlay').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        document.getElementById('app').innerHTML = `
+            <div style="max-width:600px;margin:80px auto;text-align:center;padding:40px;background:#fff;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+                <div style="font-size:48px;margin-bottom:16px;">⚠️</div>
+                <h2 style="color:#dc2626;margin-bottom:12px;">数据加载失败</h2>
+                <p style="color:#64748b;margin-bottom:8px;">${msg}</p>
+                <p style="color:#94a3b8;font-size:13px;">请稍后刷新页面重试，或联系管理员检查数据源。</p>
+                <div id="error-countdown" style="margin-top:20px;color:#16a34a;font-size:14px;"></div>
+            </div>`;
+        // Auto-retry after 30 seconds
+        let retrySec = 30;
+        const cd = document.getElementById('error-countdown');
+        const timer = setInterval(function() {
+            retrySec--;
+            if (cd) cd.textContent = retrySec + ' 秒后自动重试...';
+            if (retrySec <= 0) { clearInterval(timer); location.reload(); }
+        }, 1000);
+    }
+
+    // ========================================
+    // 1. Parse Report Data (with error handling)
+    // ========================================
+    let reportData;
+    try {
+        const dataEl = document.getElementById('report-data');
+        if (!dataEl) throw new Error('缺少数据块元素');
+        reportData = JSON.parse(dataEl.textContent);
+    } catch(e) {
+        showError('报告数据解析异常：' + e.message);
+        return;
+    }
+
+    // ========================================
+    // 2. Render Header
+    // ========================================
+    document.getElementById('hdr-company').textContent = reportData.company;
+    document.getElementById('hdr-title').textContent = reportData.report_title;
+    document.getElementById('hdr-period').textContent = '报告期：' + reportData.report_period;
+    document.getElementById('hdr-date').textContent = '编制日期：' + reportData.compile_date;
+    document.getElementById('footer-company').textContent = reportData.company;
+    document.getElementById('footer-updated').textContent = formatDateTime(reportData.last_updated);
+
+    function formatDateTime(dtStr) {
+        const d = new Date(dtStr);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mi = String(d.getMinutes()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+    }
+
+    // ========================================
+    // 3. Render Key Metric Cards
+    // ========================================
+    const chapterIcons = [
+        { bg: 'bg-brand-green', icon: 'fa-chart-line' },
+        { bg: 'bg-brand-cyan', icon: 'fa-coins' },
+        { bg: 'bg-amber-500', icon: 'fa-exclamation-triangle' },
+        { bg: 'bg-slate-600', icon: 'fa-yen-sign' }
+    ];
+
+    const metricsGrid = document.getElementById('metrics-grid');
+    reportData.key_metrics.forEach((metric, idx) => {
+        const isAlert = metric.alert === true;
+        const trendUp = metric.trend === 'up';
+        // For cost metrics, "down" is good — but we display based on the trend direction data
+        const achievementNum = parseFloat(metric.achievement);
+        const isWarning = achievementNum < 95;
+
+        const card = document.createElement('div');
+        card.className = 'metric-card' + (isAlert ? ' alert' : '');
+
+        const circumference = 2 * Math.PI * 28;
+        const progress = Math.min(achievementNum / 100, 1);
+        const dashOffset = circumference * (1 - progress);
+        const progressColor = isAlert ? '#ef4444' : (isWarning ? '#f59e0b' : '#16a34a');
+
+        card.innerHTML = `
+            ${isAlert ? '<div class="alert-badge"><i class="fas fa-exclamation-circle"></i> 预警</div>' : ''}
+            <div class="flex items-start justify-between mb-3">
+                <div class="text-sm font-medium text-slate-500">${metric.label}</div>
+            </div>
+            <div class="flex items-end justify-between">
+                <div>
+                    <div class="flex items-baseline gap-1">
+                        <span class="metric-value text-4xl font-extrabold text-slate-800">${metric.value}</span>
+                        <span class="text-sm text-slate-400 font-medium">${metric.unit}</span>
+                    </div>
+                    <div class="mt-2 text-xs text-slate-400">
+                        目标：<span class="font-semibold text-slate-500">${metric.target}</span>
+                    </div>
+                    <div class="mt-1">
+                        <span class="trend-badge ${trendUp ? 'up' : 'down'}">
+                            <i class="fas fa-arrow-${trendUp ? 'up' : 'down'}"></i>
+                            ${metric.trend_value}
+                        </span>
+                    </div>
+                </div>
+                <div class="circular-progress ${isWarning ? 'warning' : ''}">
+                    <svg width="64" height="64">
+                        <circle cx="32" cy="32" r="28" fill="none" stroke="#e2e8f0" stroke-width="5"/>
+                        <circle cx="32" cy="32" r="28" fill="none" stroke="${progressColor}" stroke-width="5"
+                            stroke-linecap="round"
+                            stroke-dasharray="${circumference}"
+                            stroke-dashoffset="${dashOffset}"
+                            style="transition: stroke-dashoffset 1s ease;"/>
+                    </svg>
+                    <div class="progress-text" style="color:${progressColor}">${metric.achievement}</div>
+                </div>
+            </div>
+        `;
+        metricsGrid.appendChild(card);
+    });
+
+    // ========================================
+    // 4. Render Chapters (Accordion)
+    // ========================================
+    const chaptersContainer = document.getElementById('chapters-container');
+    const chapterIconList = [
+        { bg: '#16a34a', icon: 'fa-chart-line' },
+        { bg: '#0891b2', icon: 'fa-coins' },
+        { bg: '#f59e0b', icon: 'fa-project-diagram' },
+        { bg: '#8b5cf6', icon: 'fa-clipboard-list' },
+        { bg: '#0ea5e9', icon: 'fa-flag-checkered' }
+    ];
+
+    reportData.chapters.forEach((chapter, idx) => {
+        const iconInfo = chapterIconList[idx % chapterIconList.length];
+        const chapterEl = document.createElement('div');
+        chapterEl.className = 'chapter';
+
+        let sectionsHTML = '';
+        if (chapter.summary) {
+            sectionsHTML += `<div class="chapter-summary">${chapter.summary}</div>`;
+        }
+        chapter.sections.forEach(section => {
+            sectionsHTML += `<div class="section-title">${section.title}</div>`;
+            sectionsHTML += '<ul class="item-list">';
+            section.items.forEach(item => {
+                // Highlight items mentioning 提油率 anomaly
+                const isHighlight = item.includes('提油率') && (item.includes('下降') || item.includes('最低') || item.includes('未达到') || item.includes('异常'));
+                sectionsHTML += `<li ${isHighlight ? 'class="highlight"' : ''}>${item}</li>`;
+            });
+            sectionsHTML += '</ul>';
+        });
+        if (chapter.sections.length === 0 && !chapter.summary) {
+            sectionsHTML += '<div class="text-sm text-slate-400 italic">本章节无详细分项内容。</div>';
+        }
+
+        chapterEl.innerHTML = `
+            <div class="chapter-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                <div class="chapter-title">
+                    <div class="chapter-icon" style="background-color:${iconInfo.bg}">
+                        <i class="fas ${iconInfo.icon}"></i>
+                    </div>
+                    <span>${chapter.title}</span>
+                </div>
+                <i class="fas fa-chevron-down chapter-toggle"></i>
+            </div>
+            <div class="chapter-body">
+                ${sectionsHTML}
+            </div>
+        `;
+        chaptersContainer.appendChild(chapterEl);
+    });
+
+    // ========================================
+    // 5. Charts (Chart.js)
+    // ========================================
+    const chartFont = {
+        family: "'PingFang SC', 'Microsoft YaHei', sans-serif",
+        size: 12
+    };
+
+    // Chart 1: Monthly Collection Volume (Bar)
+    const collectionCtx = document.getElementById('collectionChart').getContext('2d');
+    new Chart(collectionCtx, {
+        type: 'bar',
+        data: {
+            labels: reportData.monthly_trend.labels,
+            datasets: [{
+                label: '实际收运量（吨）',
+                data: reportData.monthly_trend.collection,
+                backgroundColor: 'rgba(22, 163, 74, 0.7)',
+                borderColor: '#16a34a',
+                borderWidth: 2,
+                borderRadius: 6,
+                barPercentage: 0.6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: { font: chartFont, color: '#475569' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            return '收运量: ' + ctx.parsed.y.toLocaleString() + ' 吨';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: chartFont, color: '#64748b' }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' },
+                    ticks: { font: chartFont, color: '#64748b' }
+                }
+            }
+        }
+    });
+
+    // Chart 2: Oil Rate Trend (Line)
+    const oilRateCtx = document.getElementById('oilRateChart').getContext('2d');
+    new Chart(oilRateCtx, {
+        type: 'line',
+        data: {
+            labels: reportData.monthly_trend.labels,
+            datasets: [{
+                label: '实际提油率（%）',
+                data: reportData.monthly_trend.oil_rate,
+                borderColor: '#0891b2',
+                backgroundColor: 'rgba(8, 145, 178, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.3,
+                pointBackgroundColor: '#0891b2',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }, {
+                label: '目标提油率（%）',
+                data: Array(reportData.monthly_trend.labels.length).fill(reportData.monthly_trend.target_oil_rate),
+                borderColor: '#ef4444',
+                borderWidth: 2,
+                borderDash: [6, 4],
+                fill: false,
+                pointRadius: 0,
+                pointHoverRadius: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: { font: chartFont, color: '#475569' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            return ctx.dataset.label + ': ' + ctx.parsed.y + '%';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: chartFont, color: '#64748b' }
+                },
+                y: {
+                    grid: { color: '#f1f5f9' },
+                    ticks: {
+                        font: chartFont,
+                        color: '#64748b',
+                        callback: function(val) { return val + '%'; }
+                    }
+                }
+            }
+        }
+    });
+
+    // Chart 3: Cost Comparison (Grouped Bar)
+    const costCtx = document.getElementById('costChart').getContext('2d');
+    new Chart(costCtx, {
+        type: 'bar',
+        data: {
+            labels: reportData.cost_data.labels,
+            datasets: [{
+                label: '实际吨成本（元/吨）',
+                data: reportData.cost_data.actual,
+                backgroundColor: 'rgba(22, 163, 74, 0.7)',
+                borderColor: '#16a34a',
+                borderWidth: 2,
+                borderRadius: 6
+            }, {
+                label: '计划吨成本（元/吨）',
+                data: reportData.cost_data.planned,
+                backgroundColor: 'rgba(8, 145, 178, 0.5)',
+                borderColor: '#0891b2',
+                borderWidth: 2,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: { font: chartFont, color: '#475569' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            return ctx.dataset.label + ': ' + ctx.parsed.y + ' 元/吨';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: chartFont, color: '#64748b' }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' },
+                    ticks: {
+                        font: chartFont,
+                        color: '#64748b',
+                        callback: function(val) { return val + '元'; }
+                    }
+                }
+            }
+        }
+    });
+
+    // ========================================
+    // 6. Smart Data Refresh — poll data.json for changes
+    // ========================================
+    const REFRESH_INTERVAL = 5 * 60 * 1000; // re-check every 5 minutes
+    let countdown = REFRESH_INTERVAL / 1000;
+    let lastDataHash = '';
+
+    // Compute a simple hash of the embedded JSON for change detection
+    function computeDataHash() {
+        let s = '';
+        s += JSON.stringify(reportData.key_metrics);
+        s += JSON.stringify(reportData.monthly_trend);
+        s += reportData.last_updated;
+        return s.length + '_' + s.replace(/[^a-z0-9]/gi, '').substring(0, 50);
+    }
+    lastDataHash = computeDataHash();
+
+    function updateCountdown() {
+        const minutes = Math.floor(countdown / 60);
+        const seconds = countdown % 60;
+        const el = document.getElementById('refresh-countdown');
+        if (el) {
+            el.textContent = minutes + ':' + seconds.toString().padStart(2, '0');
+        }
+        countdown--;
+        if (countdown < 0) {
+            checkForUpdates();
+            countdown = REFRESH_INTERVAL / 1000; // reset countdown
+        }
+    }
+
+    function checkForUpdates() {
+        // Fetch data.json with cache-busting to detect changes
+        fetch('data.json?t=' + Date.now(), { cache: 'no-store' })
+            .then(function(resp) {
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                return resp.json();
+            })
+            .then(function(newData) {
+                // Compute hash of new data
+                let s = '';
+                s += JSON.stringify(newData.key_metrics);
+                s += JSON.stringify(newData.monthly_trend);
+                s += newData.last_updated;
+                var newHash = s.length + '_' + s.replace(/[^a-z0-9]/gi, '').substring(0, 50);
+
+                if (newHash !== lastDataHash) {
+                    // Data has been updated! Show notification then reload.
+                    showUpdateNotification(newData.last_updated);
+                }
+            })
+            .catch(function(err) {
+                // data.json not available or fetch failed — just reload page as fallback
+                console.log('Data check skipped:', err.message);
+                location.reload();
+            });
+    }
+
+    function showUpdateNotification(newTime) {
+        // Show a toast/banner before reloading
+        var banner = document.createElement('div');
+        banner.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:10000;' +
+            'background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;' +
+            'box-shadow:0 4px 16px rgba(22,163,74,0.4);display:flex;align-items:center;gap:8px;animation:slideDown 0.4s ease;';
+        banner.innerHTML = '<i class="fas fa-check-circle"></i> 检测到数据更新，正在刷新...';
+        document.body.appendChild(banner);
+
+        // Add slideDown animation if not exists
+        if (!document.getElementById('anim-slide-down')) {
+            var style = document.createElement('style');
+            style.id = 'anim-slide-down';
+            style.textContent = '@keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-20px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}';
+            document.head.appendChild(style);
+        }
+
+        setTimeout(function() {
+            location.reload();
+        }, 1500);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ========================================
+    // 7. Show App, Hide Loading
+    // ========================================
+    document.getElementById('app').style.display = 'block';
+    setTimeout(function() {
+        var overlay = document.getElementById('loading-overlay');
+        if (overlay) {
+            overlay.classList.add('hidden');
+            setTimeout(function() {
+                overlay.style.display = 'none';
+            }, 500);
+        }
+    }, 300);
+
+})();
+</script>
+
+</body>
+</html>

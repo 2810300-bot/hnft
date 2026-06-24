@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>湖南伏泰合同管理系统</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <!-- 侧边栏 -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">&#9881;</span>
+        <span class="logo-text">伏泰合同管理</span>
+      </div>
+      <div class="org-tag">湖南伏泰环境科技</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-module="dashboard" onclick="switchModule('dashboard')">
+        <span class="nav-icon">&#9632;</span><span class="nav-label">总览仪表盘</span>
+      </a>
+      <a class="nav-item" data-module="lifecycle" onclick="switchModule('lifecycle')">
+        <span class="nav-icon">&#8635;</span><span class="nav-label">合同全生命周期</span>
+      </a>
+      <a class="nav-item" data-module="template" onclick="switchModule('template')">
+        <span class="nav-icon">&#9998;</span><span class="nav-label">合同模板库</span>
+      </a>
+      <a class="nav-item" data-module="ledger" onclick="switchModule('ledger')">
+        <span class="nav-icon">&#9783;</span><span class="nav-label">台账与报表</span>
+      </a>
+      <a class="nav-item" data-module="warning" onclick="switchModule('warning')">
+        <span class="nav-icon">&#9888;</span><span class="nav-label">到期预警</span>
+      </a>
+      <a class="nav-item" data-module="storage" onclick="switchModule('storage')">
+        <span class="nav-icon">&#128193;</span><span class="nav-label">文件与检索</span>
+      </a>
+      <a class="nav-item" data-module="automation" onclick="switchModule('automation')">
+        <span class="nav-icon">&#9881;</span><span class="nav-label">自动化监控</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="avatar">颜</div>
+        <div class="user-detail">
+          <span class="user-name">颜一亩</span>
+          <span class="user-role">总经理</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 主内容区 -->
+  <main class="main-content">
+    <!-- 顶栏 -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" onclick="toggleSidebar()">&#9776;</button>
+        <h1 id="module-title">总览仪表盘</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <input type="text" placeholder="搜索合同、模板、文件..." id="globalSearch" onkeyup="handleGlobalSearch(event)">
+          <button onclick="doGlobalSearch()">&#128269;</button>
+        </div>
+        <div class="notification-bell" onclick="showNotifications()">
+          &#128276;<span class="notif-count" id="notifCount">3</span>
+        </div>
+        <div class="ima-status" onclick="showIMAStatus()">
+          <span class="ima-dot connected"></span>IMA 已连接
+        </div>
+      </div>
+    </header>
+
+    <!-- 模块内容容器 -->
+    <div class="module-container" id="moduleContainer">
+
+      <!-- ========== 总览仪表盘 ========== -->
+      <div class="module-panel active" id="panel-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon stat-blue">&#128196;</div>
+            <div class="stat-info">
+              <span class="stat-value" id="totalContracts">69</span>
+              <span class="stat-label">合同总数</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-green">&#10003;</div>
+            <div class="stat-info">
+              <span class="stat-value" id="activeContracts">0</span>
+              <span class="stat-label">履行中</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-orange">&#9888;</div>
+            <div class="stat-info">
+              <span class="stat-value" id="warningContracts">5</span>
+              <span class="stat-label">即将到期</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-red">&#128176;</div>
+            <div class="stat-info">
+              <span class="stat-value" id="totalAmount">¥440.5万</span>
+              <span class="stat-label">已确认合同总金额</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-row">
+          <div class="card card-wide">
+            <div class="card-header"><h3>合同类型分布</h3></div>
+            <div class="card-body chart-container-small">
+              <canvas id="chartTypePie"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>最近动态</h3></div>
+            <div class="card-body">
+              <div class="timeline-list">
+                <div class="timeline-item">
+                  <span class="tl-date">06-22</span>
+                  <span class="tl-text">钉钉商务套件合同（一年）签署生效</span>
+                </div>
+                <div class="timeline-item">
+                  <span class="tl-date">06-18</span>
+                  <span class="tl-text">IMA知识库「岳阳餐厨垃圾项目-合同管理」同步完成（70份文件，69份合同已映射）</span>
+                </div>
+                <div class="timeline-item">
+                  <span class="tl-date">06-17</span>
+                  <span class="tl-text">换热器采购合同（中城院）¥27万履行中</span>
+                </div>
+                <div class="timeline-item">
+                  <span class="tl-date">06-10</span>
+                  <span class="tl-text">汽车定点维修合同（通违汽修）待续签</span>
+                </div>
+                <div class="timeline-item">
+                  <span class="tl-date">05-28</span>
+                  <span class="tl-text">MBR膜组件购销合同 ¥12.2万签署</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-row">
+          <div class="card card-wide">
+            <div class="card-header"><h3>月度合同签署趋势</h3></div>
+            <div class="card-body chart-container-small">
+              <canvas id="chartTrend"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>金额分布</h3></div>
+            <div class="card-body chart-container-small">
+              <canvas id="chartAmount"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-row">
+          <div class="card card-wide">
+            <div class="card-header"><h3>IMA 知识库状态</h3></div>
+            <div class="card-body">
+              <div class="kb-status-list">
+                <div class="kb-item"><span class="kb-icon">&#128218;</span><span class="kb-name">岳阳餐厨垃圾项目 <small>(513条目)</small></span><span class="kb-badge ready">已连接</span></div>
+                <div class="kb-item"><span class="kb-icon">&#128193;</span><span class="kb-name">合同管理文件夹 <small>(8个子目录)</small></span><span class="kb-badge ready">就绪</span></div>
+                <div class="kb-item"><span class="kb-icon">&#128195;</span><span class="kb-name">合同模板库</span><span class="kb-badge pending">待创建</span></div>
+                <div class="kb-item"><span class="kb-icon">&#9878;</span><span class="kb-name">法律法规库</span><span class="kb-badge pending">待创建</span></div>
+                <div class="kb-item"><span class="kb-icon">&#128203;</span><span class="kb-name">合同审查标准</span><span class="kb-badge pending">待创建</span></div>
+              </div>
+              <p class="kb-hint">数据来源: IMA知识库「岳阳餐厨垃圾项目-合同管理」 | 最后同步: <span id="imaLastSync">2026-06-22</span> | 自动同步: 每周一08:00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 合同全生命周期 ========== -->
+      <div class="module-panel" id="panel-lifecycle">
+        <div class="lifecycle-header">
+          <div class="lifecycle-flow">
+            <div class="lc-step active" data-step="draft"><span class="lc-num">1</span><span class="lc-text">起草</span></div>
+            <div class="lc-arrow">&#8594;</div>
+            <div class="lc-step" data-step="review"><span class="lc-num">2</span><span class="lc-text">审核</span></div>
+            <div class="lc-arrow">&#8594;</div>
+            <div class="lc-step" data-step="approve"><span class="lc-num">3</span><span class="lc-text">审批</span></div>
+            <div class="lc-arrow">&#8594;</div>
+            <div class="lc-step" data-step="sign"><span class="lc-num">4</span><span class="lc-text">签署</span></div>
+            <div class="lc-arrow">&#8594;</div>
+            <div class="lc-step" data-step="execute"><span class="lc-num">5</span><span class="lc-text">执行</span></div>
+            <div class="lc-arrow">&#8594;</div>
+            <div class="lc-step" data-step="archive"><span class="lc-num">6</span><span class="lc-text">归档</span></div>
+          </div>
+          <button class="btn btn-primary" onclick="showNewContractForm()">+ 新建合同</button>
+        </div>
+
+        <div class="contract-list-header">
+          <div class="filter-group">
+            <select id="filterType" onchange="filterContracts()">
+              <option value="">全部类型</option>
+              <option value="物资采购">物资采购</option>
+              <option value="技术服务">技术服务</option>
+              <option value="环保处理">环保处理</option>
+              <option value="维修维保">维修维保</option>
+              <option value="设备采购">设备采购</option>
+              <option value="软件/信息服务">软件/信息服务</option>
+              <option value="能源">能源</option>
+              <option value="工程建设">工程建设</option>
+              <option value="运输服务">运输服务</option>
+              <option value="租赁">租赁</option>
+              <option value="其他">其他</option>
+            </select>
+            <select id="filterStatus" onchange="filterContracts()">
+              <option value="">全部状态</option>
+              <option value="履行中">履行中</option>
+              <option value="待续签">待续签</option>
+              <option value="履行完毕">履行完毕</option>
+              <option value="已到期">已到期</option>
+              <option value="待核实">待核实</option>
+              <option value="起草中">起草中</option>
+              <option value="审核中">审核中</option>
+              <option value="审批中">审批中</option>
+              <option value="待签署">待签署</option>
+              <option value="已归档">已归档</option>
+            </select>
+            <select id="filterYear" onchange="filterContracts()">
+              <option value="">全部年份</option>
+              <option value="2026">2026</option>
+              <option value="2025">2025</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="contract-table" id="contractTable">
+          <table>
+            <thead>
+              <tr><th>合同编号</th><th>合同名称</th><th>类型</th><th>签约方</th><th>金额</th><th>当前状态</th><th>到期日期</th><th>数据来源</th><th>操作</th></tr>
+            </thead>
+            <tbody id="contractTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ========== 合同模板库 ========== -->
+      <div class="module-panel" id="panel-template">
+        <div class="template-header">
+          <h3>合同模板库</h3>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="showNewTemplate()">+ 新建模板</button>
+            <button class="btn btn-outline" onclick="syncIMA()">从 IMA 同步模板</button>
+          </div>
+        </div>
+
+        <div class="template-categories">
+          <div class="template-group">
+            <h4 class="tg-title">&#128230; 采购合同模板</h4>
+            <div class="template-items">
+              <div class="template-card" onclick="openTemplate('设备采购合同')">
+                <span class="tpl-name">设备采购合同_标准模板</span>
+                <span class="tpl-version">v2.1</span>
+                <span class="tpl-fields">12个动态字段</span>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();useTemplate('设备采购合同')">使用此模板</button>
+              </div>
+              <div class="template-card" onclick="openTemplate('原材料采购合同')">
+                <span class="tpl-name">原材料采购合同_标准模板</span>
+                <span class="tpl-version">v1.3</span>
+                <span class="tpl-fields">10个动态字段</span>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();useTemplate('原材料采购合同')">使用此模板</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="template-group">
+            <h4 class="tg-title">&#128188; 服务合同模板</h4>
+            <div class="template-items">
+              <div class="template-card" onclick="openTemplate('环卫运营服务合同')">
+                <span class="tpl-name">环卫运营服务合同_标准模板</span>
+                <span class="tpl-version">v1.5</span>
+                <span class="tpl-fields">9个动态字段</span>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();useTemplate('环卫运营服务合同')">使用此模板</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="template-group">
+            <h4 class="tg-title">&#9986; 伏泰业务专属模板</h4>
+            <div class="template-items">
+              <div class="template-card highlight" onclick="openTemplate('BOT特许经营协议')">
+                <span class="tpl-name">BOT特许经营协议模板</span>
+                <span class="tpl-version">v3.0</span>
+                <span class="tpl-fields">12个动态字段</span>
+                <span class="tpl-badge">核心</span>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();useTemplate('BOT特许经营协议')">使用此模板</button>
+              </div>
+              <div class="template-card highlight" onclick="openTemplate('餐厨收运服务合同')">
+                <span class="tpl-name">餐厨收运服务合同模板</span>
+                <span class="tpl-version">v2.2</span>
+                <span class="tpl-fields">10个动态字段</span>
+                <span class="tpl-badge">核心</span>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();useTemplate('餐厨收运服务合同')">使用此模板</button>
+              </div>
+              <div class="template-card highlight" onclick="openTemplate('油脂销售合同')">
+                <span class="tpl-name">废弃油脂销售合同模板</span>
+                <span class="tpl-version">v2.1</span>
+                <span class="tpl-fields">10个动态字段</span>
+                <span class="tpl-badge">核心</span>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();useTemplate('油脂销售合同')">使用此模板</button>
+              </div>
+              <div class="template-card" onclick="openTemplate('分包经营补充协议')">
+                <span class="tpl-name">包干经营补充协议模板</span>
+                <span class="tpl-version">v1.2</span>
+                <span class="tpl-fields">6个动态字段</span>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();useTemplate('分包经营补充协议')">使用此模板</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 台账与报表 ========== -->
+      <div class="module-panel" id="panel-ledger">
+        <div class="ledger-header">
+          <h3>合同台账与统计报表</h3>
+          <div class="ledger-actions">
+            <button class="btn btn-outline" onclick="exportLedger()">导出台账</button>
+            <button class="btn btn-outline" onclick="generateReport()">生成报表</button>
+          </div>
+        </div>
+
+        <div class="ledger-tabs">
+          <button class="ledger-tab active" onclick="switchLedgerTab('summary')">分类汇总</button>
+          <button class="ledger-tab" onclick="switchLedgerTab('execution')">执行跟踪</button>
+          <button class="ledger-tab" onclick="switchLedgerTab('payment')">付款节点</button>
+        </div>
+
+        <div class="ledger-content" id="ledgerSummary">
+          <div class="ledger-summary-grid">
+            <div class="ledger-category"><h4>采购类</h4><div class="ledger-amount"><span class="la-total">¥1,280万</span><span class="la-count">16份</span></div><div class="ledger-progress"><div class="lp-bar"><div class="lp-fill" style="width:72%;background:#4a90d9"></div></div><span class="lp-text">已付款72%</span></div></div>
+            <div class="ledger-category"><h4>服务类</h4><div class="ledger-amount"><span class="la-total">¥860万</span><span class="la-count">12份</span></div><div class="ledger-progress"><div class="lp-bar"><div class="lp-fill" style="width:55%;background:#5cb85c"></div></div><span class="lp-text">已付款55%</span></div></div>
+            <div class="ledger-category"><h4>工程类</h4><div class="ledger-amount"><span class="la-total">¥460万</span><span class="la-count">7份</span></div><div class="ledger-progress"><div class="lp-bar"><div class="lp-fill" style="width:30%;background:#f0ad4e"></div></div><span class="lp-text">已付款30%</span></div></div>
+            <div class="ledger-category"><h4>油脂销售</h4><div class="ledger-amount"><span class="la-total">¥260万</span><span class="la-count">5份</span></div><div class="ledger-progress"><div class="lp-bar"><div class="lp-fill" style="width:80%;background:#d9534f"></div></div><span class="lp-text">已回款80%</span></div></div>
+          </div>
+
+          <div class="card-header"><h3>年度合同台账明细</h3></div>
+          <table class="data-table full-width">
+            <thead><tr><th>编号</th><th>合同名称</th><th>类型</th><th>签约方</th><th>合同金额</th><th>已付/已收</th><th>余额</th><th>状态</th></tr></thead>
+            <tbody id="ledgerTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="ledger-content" id="ledgerExecution" style="display:none">
+          <div class="execution-board">
+            <div class="exec-column">
+              <h4>起草中 (3)</h4>
+              <div class="exec-item"><span class="exec-name">厌氧发酵罐采购合同</span><span class="exec-tag draft">起草</span></div>
+              <div class="exec-item"><span class="exec-name">港区环卫服务续签合同</span><span class="exec-tag draft">起草</span></div>
+              <div class="exec-item"><span class="exec-name">技术咨询合同（技改项目）</span><span class="exec-tag draft">起草</span></div>
+            </div>
+            <div class="exec-column">
+              <h4>审核/审批中 (4)</h4>
+              <div class="exec-item"><span class="exec-name">三相分离器采购合同</span><span class="exec-tag review">法务审核</span></div>
+              <div class="exec-item"><span class="exec-name">除臭设备采购合同</span><span class="exec-tag approve">财务审批</span></div>
+            </div>
+            <div class="exec-column">
+              <h4>执行中 (5)</h4>
+              <div class="exec-item"><span class="exec-name">油脂销售合同(2026)</span><span class="exec-tag active">执行</span></div>
+              <div class="exec-item"><span class="exec-name">BOT特许经营协议</span><span class="exec-tag active">执行</span></div>
+            </div>
+            <div class="exec-column">
+              <h4>已归档 (2)</h4>
+              <div class="exec-item"><span class="exec-name">2025年油脂销售合同</span><span class="exec-tag archived">归档</span></div>
+              <div class="exec-item"><span class="exec-name">2025年餐厨收运合同</span><span class="exec-tag archived">归档</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ledger-content" id="ledgerPayment" style="display:none">
+          <div class="card-header"><h3>付款节点跟踪</h3></div>
+          <table class="data-table full-width">
+            <thead><tr><th>合同名称</th><th>付款节点</th><th>条件</th><th>金额</th><th>截止日期</th><th>状态</th></tr></thead>
+            <tbody id="paymentTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ========== 到期预警 ========== -->
+      <div class="module-panel" id="panel-warning">
+        <div class="warning-header">
+          <h3>到期预警与提醒</h3>
+          <div class="warning-config">
+            <button class="btn btn-outline" onclick="configWarningRules()">预警规则设置</button>
+            <button class="btn btn-primary" onclick="runWarningScan()">立即扫描</button>
+          </div>
+        </div>
+
+        <div class="warning-summary">
+          <div class="warning-stat urgent"><span class="ws-icon">&#128308;</span><span class="ws-count">2</span><span class="ws-label">7天内到期</span></div>
+          <div class="warning-stat caution"><span class="ws-icon">&#128992;</span><span class="ws-count">3</span><span class="ws-label">30天内到期</span></div>
+          <div class="warning-stat notice"><span class="ws-icon">&#128994;</span><span class="ws-count">5</span><span class="ws-label">90天内到期</span></div>
+        </div>
+
+        <div class="warning-list" id="warningDynamicList"></div>
+
+        <div class="warning-auto-config">
+          <div class="card-header"><h3>自动化预警配置</h3></div>
+          <div class="auto-config-grid">
+            <div class="ac-item"><span class="ac-label">每周一到期扫描</span><span class="ac-status enabled">已启用</span><span class="ac-channel">IMA + 钉钉</span></div>
+            <div class="ac-item"><span class="ac-label">7天到期紧急提醒</span><span class="ac-status enabled">已启用</span><span class="ac-channel">钉钉DING + 短信</span></div>
+            <div class="ac-item"><span class="ac-label">付款节点提前5天提醒</span><span class="ac-status enabled">已启用</span><span class="ac-channel">钉钉审批</span></div>
+            <div class="ac-item"><span class="ac-label">季度合同台账报告</span><span class="ac-status pending">待配置</span><span class="ac-channel">IMA知识库</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 文件与检索 ========== -->
+      <div class="module-panel" id="panel-storage">
+        <div class="storage-header">
+          <h3>文件存储与检索</h3>
+          <div class="storage-actions">
+            <button class="btn btn-primary" onclick="uploadFile()">+ 上传文件</button>
+            <button class="btn btn-outline" onclick="syncIMAStorage()">同步 IMA 归档</button>
+          </div>
+        </div>
+
+        <div class="storage-stats-bar" id="storageStats"></div>
+
+        <div class="storage-search">
+          <input type="text" placeholder="全文检索：输入合同内容关键词..." class="search-input" id="storageSearch" onkeyup="searchStorage(event)">
+          <button class="btn btn-primary" onclick="doStorageSearch()">&#128269; 搜索</button>
+        </div>
+
+        <div id="searchResultsPanel" style="display:none" class="search-results-panel">
+          <div class="card-header">
+            <h3 id="searchResultsTitle">搜索结果</h3>
+            <button class="btn btn-sm" onclick="closeSearchResults()">&#10005;</button>
+          </div>
+          <div id="searchResultsList" class="search-results-list"></div>
+        </div>
+
+        <div class="storage-tree">
+          <div class="tree-folder open">
+            <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>岳阳餐厨垃圾项目<span class="tf-count">513条目</span></div>
+            <div class="tf-content">
+              <div class="tree-folder open">
+                <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>合同管理<span class="tf-count">69份合同</span></div>
+                <div class="tf-content">
+                  <div class="tree-folder">
+                    <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>设备采购合同<span class="tf-count">8份</span></div>
+                    <div class="tf-content">
+                      <div class="tree-file" onclick="openFile('换热器采购合同')">&#128196; 换热器采购合同（中城院）.pdf</div>
+                      <div class="tree-file" onclick="openFile('仪表购销合同')">&#128196; 仪表产品购销合同（杭州美仪）.pdf</div>
+                      <div class="tree-file" onclick="openFile('MBR膜采购合同')">&#128196; MBR膜组件购销合同.pdf</div>
+                    </div>
+                  </div>
+                  <div class="tree-folder">
+                    <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>药剂物料采购合同<span class="tf-count">6份</span></div>
+                    <div class="tf-content">
+                      <div class="tree-file">&#128196; 阳离子聚丙烯酰胺购销合同（优创环保）.pdf</div>
+                      <div class="tree-file">&#128196; 药剂购销合同（优创环保-2025）.pdf</div>
+                      <div class="tree-file">&#128196; 药剂采购合同（无锡隧蓝）.pdf</div>
+                    </div>
+                  </div>
+                  <div class="tree-folder">
+                    <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>服务维保合同<span class="tf-count">9份</span></div>
+                    <div class="tf-content">
+                      <div class="tree-file">&#128196; 燃气发电机组检修合同（南宁科动）.pdf</div>
+                      <div class="tree-file">&#128196; 污染源在线监控系统运维合同（湘恩）.pdf</div>
+                      <div class="tree-file">&#128196; 汽车定点维修服务合同（通违汽修）.pdf</div>
+                    </div>
+                  </div>
+                  <div class="tree-folder">
+                    <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>工程技改合同<span class="tf-count">4份</span></div>
+                    <div class="tf-content">
+                      <div class="tree-file">&#128196; 岳阳餐厨项目污水技改工程合同.pdf</div>
+                      <div class="tree-file">&#128196; 均质罐保温施工合同（威明）.pdf</div>
+                    </div>
+                  </div>
+                  <div class="tree-folder">
+                    <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>信息系统平台合同<span class="tf-count">5份</span></div>
+                    <div class="tf-content">
+                      <div class="tree-file">&#128196; 餐厨垃圾智慧平台项目合同.pdf</div>
+                      <div class="tree-file">&#128196; 餐厨平台云服务器合同.pdf</div>
+                    </div>
+                  </div>
+                  <div class="tree-folder">
+                    <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>处置运输协议<span class="tf-count">5份</span></div>
+                    <div class="tf-content">
+                      <div class="tree-file">&#128196; 锦能（易腐）垃圾处置合同.pdf</div>
+                      <div class="tree-file">&#128196; 危险品运输合同（骏德物流）.pdf</div>
+                    </div>
+                  </div>
+                  <div class="tree-folder">
+                    <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>租赁合同<span class="tf-count">2份</span></div>
+                    <div class="tf-content">
+                      <div class="tree-file">&#128196; 交投租赁合同（云溪办公楼）.pdf</div>
+                    </div>
+                  </div>
+                  <div class="tree-folder">
+                    <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>补充协议<span class="tf-count">待补充</span></div>
+                    <div class="tf-content">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tree-folder">
+                <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>重要合同资料<span class="tf-count">若干</span></div>
+                <div class="tf-content">
+                  <div class="tree-file">&#128196; 运营团队服务合同-最终稿.pdf</div>
+                  <div class="tree-file">&#128196; 浏阳市餐厨垃圾无害化收运处置项目合同.pdf</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="version-compare" id="versionCompare" style="display:none">
+          <div class="card-header"><h3>版本对比</h3><button class="btn btn-sm" onclick="closeVersionCompare()">&#10005;</button></div>
+          <div class="compare-container" id="compareContainer"></div>
+        </div>
+      </div>
+
+      <!-- ========== 自动化监控 ========== -->
+      <div class="module-panel" id="panel-automation">
+        <div class="automation-header">
+          <h3>自动化监控中心</h3>
+          <div class="automation-actions">
+            <button class="btn btn-primary" onclick="runAutomationNow()">立即执行扫描</button>
+            <button class="btn btn-outline" onclick="viewAutomationConfig()">调度配置</button>
+          </div>
+        </div>
+
+        <!-- 任务状态总览 -->
+        <div class="auto-status-grid">
+          <div class="auto-stat-card">
+            <div class="as-icon as-green">&#9881;</div>
+            <div class="as-info">
+              <span class="as-value" id="autoTaskStatus">运行中</span>
+              <span class="as-label">调度器状态</span>
+            </div>
+          </div>
+          <div class="auto-stat-card">
+            <div class="as-icon as-blue">&#128197;</div>
+            <div class="as-info">
+              <span class="as-value" id="autoLastRun">2026-06-22 08:00</span>
+              <span class="as-label">上次执行</span>
+            </div>
+          </div>
+          <div class="auto-stat-card">
+            <div class="as-icon as-orange">&#128338;</div>
+            <div class="as-info">
+              <span class="as-value" id="autoNextRun">2026-06-29 08:00</span>
+              <span class="as-label">下次执行</span>
+            </div>
+          </div>
+          <div class="auto-stat-card">
+            <div class="as-icon as-purple">&#10003;</div>
+            <div class="as-info">
+              <span class="as-value" id="autoSuccessCount">0</span>
+              <span class="as-label">连续成功次数</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 知识库变更检测 -->
+        <div class="card">
+          <div class="card-header">
+            <h3>&#128270; 知识库变更检测</h3>
+            <span class="kb-badge ready" id="imaChangeStatus">已连接</span>
+          </div>
+          <div class="card-body">
+            <div class="change-summary-grid">
+              <div class="cs-item cs-added"><span class="cs-icon">&#10133;</span><span class="cs-value" id="changeAddedCount">0</span><span class="cs-label">新增条目</span></div>
+              <div class="cs-item cs-modified"><span class="cs-icon">&#9998;</span><span class="cs-value" id="changeModifiedCount">0</span><span class="cs-label">修改条目</span></div>
+              <div class="cs-item cs-deleted"><span class="cs-icon">&#10134;</span><span class="cs-value" id="changeDeletedCount">0</span><span class="cs-label">删除条目</span></div>
+              <div class="cs-item cs-total"><span class="cs-icon">&#128202;</span><span class="cs-value" id="changeTotalItems">0</span><span class="cs-label">当前总条目</span></div>
+            </div>
+            <div class="change-detail-list" id="changeDetailList">
+              <div class="cd-empty">等待首次扫描结果...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 到期预警扫描结果 -->
+        <div class="card">
+          <div class="card-header"><h3>&#9888; 到期预警扫描结果</h3></div>
+          <div class="card-body">
+            <div class="auto-warning-grid">
+              <div class="aw-item aw-urgent"><span class="aw-icon">&#128308;</span><span class="aw-value" id="autoWarnUrgent">0</span><span class="aw-label">7天内</span></div>
+              <div class="aw-item aw-caution"><span class="aw-icon">&#128992;</span><span class="aw-value" id="autoWarnCaution">0</span><span class="aw-label">30天内</span></div>
+              <div class="aw-item aw-notice"><span class="aw-icon">&#128994;</span><span class="aw-value" id="autoWarnNotice">0</span><span class="aw-label">90天内</span></div>
+            </div>
+            <div class="auto-warning-list" id="autoWarningList">
+              <div class="cd-empty">等待扫描结果...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 消息推送记录 -->
+        <div class="card">
+          <div class="card-header"><h3>&#128232; 消息推送记录</h3></div>
+          <div class="card-body">
+            <div class="push-record-list" id="pushRecordList">
+              <div class="push-item">
+                <span class="pr-channel">&#128172; 钉钉</span>
+                <span class="pr-content">合同到期预警 — 紧急2份, 注意3份</span>
+                <span class="pr-time">2026-06-22 08:05</span>
+                <span class="pr-status success">已推送</span>
+              </div>
+              <div class="push-item">
+                <span class="pr-channel">&#128218; IMA</span>
+                <span class="pr-content">自动化执行报告已保存到知识库</span>
+                <span class="pr-time">2026-06-22 08:06</span>
+                <span class="pr-status success">已保存</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 执行日志 -->
+        <div class="card">
+          <div class="card-header"><h3>&#128203; 执行日志</h3></div>
+          <div class="card-body">
+            <div class="execution-log-table">
+              <table class="data-table full-width">
+                <thead><tr><th>执行ID</th><th>执行时间</th><th>耗时</th><th>状态</th><th>新增</th><th>修改</th><th>删除</th><th>预警</th><th>推送</th><th>详情</th></tr></thead>
+                <tbody id="executionLogTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 自动化流程图 -->
+        <div class="card">
+          <div class="card-header"><h3>&#128260; 自动化流程</h3></div>
+          <div class="card-body">
+            <div class="auto-flow-visual">
+              <div class="af-step">
+                <div class="af-icon af-trigger">&#128197;</div>
+                <div class="af-label">每周一 8:00<br>定时触发</div>
+              </div>
+              <div class="af-connector">&#8594;</div>
+              <div class="af-step">
+                <div class="af-icon af-scan">&#128270;</div>
+                <div class="af-label">IMA 知识库<br>条目扫描</div>
+              </div>
+              <div class="af-connector">&#8594;</div>
+              <div class="af-step">
+                <div class="af-icon af-detect">&#128202;</div>
+                <div class="af-label">变更检测<br>新增/修改/删除</div>
+              </div>
+              <div class="af-connector">&#8594;</div>
+              <div class="af-step">
+                <div class="af-icon af-sync">&#128260;</div>
+                <div class="af-label">数据同步<br>更新HTML页面</div>
+              </div>
+              <div class="af-connector">&#8594;</div>
+              <div class="af-step">
+                <div class="af-icon af-warn">&#9888;</div>
+                <div class="af-label">到期预警<br>7/30/90天</div>
+              </div>
+              <div class="af-connector">&#8594;</div>
+              <div class="af-step">
+                <div class="af-icon af-push">&#128232;</div>
+                <div class="af-label">钉钉/IMA<br>消息推送</div>
+              </div>
+            </div>
+            <div class="auto-flow-sub-steps">
+              <div class="afs-item">&#128196; 快照保存</div>
+              <div class="afs-item">&#128203; 日志记录</div>
+              <div class="afs-item">&#128202; 状态更新</div>
+              <div class="afs-item">&#128218; 报告生成</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- 合同详情侧滑面板 -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-panel-header">
+      <h3>合同详情</h3>
+      <button class="btn btn-sm" onclick="closeDetailPanel()">&#10005;</button>
+    </div>
+    <div class="detail-panel-body" id="detailContent"></div>
+  </div>
+
+  <!-- Toast 通知容器 -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- 新建合同弹窗 -->
+  <div class="modal-overlay" id="newContractModal" style="display:none">
+    <div class="modal-box modal-large">
+      <div class="modal-header"><h3>新建合同</h3><button class="modal-close" onclick="closeModal('newContractModal')">&#10005;</button></div>
+      <div class="modal-body">
+        <div class="form-row"><label>合同名称</label><input type="text" id="newContractName" placeholder="输入合同名称"></div>
+        <div class="form-row"><label>合同类型</label><select id="newContractType"><option value="">请选择</option><option value="物资采购">物资采购</option><option value="技术服务">技术服务</option><option value="环保处理">环保处理</option><option value="维修维保">维修维保</option><option value="设备采购">设备采购</option><option value="软件/信息服务">软件/信息服务</option><option value="能源">能源</option><option value="工程建设">工程建设</option><option value="运输服务">运输服务</option><option value="租赁">租赁</option><option value="其他">其他</option></select></div>
+        <div class="form-row"><label>签约方（乙方）</label><input type="text" id="newContractParty" placeholder="合作方名称"></div>
+        <div class="form-row"><label>合同金额（万元）</label><input type="number" id="newContractAmount" placeholder="0"></div>
+        <div class="form-row"><label>合同期限</label><div class="date-range"><input type="date" id="newContractStart"><span>至</span><input type="date" id="newContractEnd"></div></div>
+        <div class="form-row"><label>使用模板</label><select id="newContractTemplate"><option value="">不使用模板（自由起草）</option><option value="设备采购合同">设备采购合同_标准模板</option><option value="环卫运营服务合同">环卫运营服务合同_标准模板</option><option value="BOT特许经营协议">BOT特许经营协议模板</option><option value="餐厨收运服务合同">餐厨收运服务合同模板</option><option value="油脂销售合同">废弃油脂销售合同模板</option><option value="分包经营补充协议">包干经营补充协议模板</option></select></div>
+        <div class="form-row"><label>合同摘要</label><textarea id="newContractSummary" rows="3" placeholder="简要描述合同核心内容"></textarea></div>
+        <div class="form-row"><label>附件上传</label><input type="file" id="newContractFile" multiple></div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('newContractModal')">取消</button><button class="btn btn-primary" onclick="createContract()">保存并提交起草</button></div>
+    </div>
+  </div>
+
+  <!-- 模板使用弹窗 -->
+  <div class="modal-overlay" id="templateUseModal" style="display:none">
+    <div class="modal-box modal-large">
+      <div class="modal-header"><h3 id="templateUseTitle">使用模板生成合同</h3><button class="modal-close" onclick="closeModal('templateUseModal')">&#10005;</button></div>
+      <div class="modal-body" id="templateUseBody"></div>
+      <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('templateUseModal')">取消</button><button class="btn btn-primary" onclick="generateFromTemplate()">生成合同</button></div>
+    </div>
+  </div>
+
+  <!-- 预警规则配置弹窗 -->
+  <div class="modal-overlay" id="warningConfigModal" style="display:none">
+    <div class="modal-box modal-large">
+      <div class="modal-header"><h3>预警规则设置</h3><button class="modal-close" onclick="closeModal('warningConfigModal')">&#10005;</button></div>
+      <div class="modal-body">
+        <div class="form-row"><label>7天内到期预警</label><div class="toggle-row"><input type="checkbox" checked id="warn7day"><span>红色紧急预警 + 钉钉DING</span></div></div>
+        <div class="form-row"><label>30天内到期预警</label><div class="toggle-row"><input type="checkbox" checked id="warn30day"><span>黄色提醒 + IMA推送</span></div></div>
+        <div class="form-row"><label>90天内到期预警</label><div class="toggle-row"><input type="checkbox" checked id="warn90day"><span>绿色通知 + 月度汇总</span></div></div>
+        <div class="form-row"><label>付款节点提前提醒</label><div class="toggle-row"><input type="checkbox" checked id="warnPay"><span>提前5天钉钉审批提醒</span></div></div>
+        <div class="form-row"><label>预警扫描周期</label><select><option>每周一 9:00</option><option>每日 8:00</option><option>每月1日</option></select></div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('warningConfigModal')">取消</button><button class="btn btn-primary" onclick="closeModal('warningConfigModal');Toast.show('预警规则已保存','success')">保存</button></div>
+    </div>
+  </div>
+
+  <!-- 文件上传弹窗 -->
+  <div class="modal-overlay" id="uploadFileModal" style="display:none">
+    <div class="modal-box">
+      <div class="modal-header"><h3>上传文件</h3><button class="modal-close" onclick="closeModal('uploadFileModal')">&#10005;</button></div>
+      <div class="modal-body">
+        <div class="upload-area">
+          <div class="upload-icon">&#128196;</div>
+          <p>拖拽文件到此处或点击选择</p>
+          <p class="upload-hint">支持格式: PDF、Word、Excel、图片、Markdown</p>
+          <input type="file" id="uploadFileInput" multiple style="display:none">
+          <button class="btn btn-outline" onclick="document.getElementById('uploadFileInput').click()">选择文件</button>
+        </div>
+        <div class="form-row"><label>关联合同</label><select id="uploadContractSelect"><option value="">不关联</option>${contracts.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}</select></div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('uploadFileModal')">取消</button><button class="btn btn-primary" onclick="doFileUpload()">上传</button></div>
+    </div>
+  </div>
+
+  <!-- IMA 状态弹窗 -->
+  <div class="modal-overlay" id="imaStatusModal" style="display:none">
+    <div class="modal-box">
+      <div class="modal-header"><h3>IMA 知识库连接状态</h3><button class="modal-close" onclick="closeModal('imaStatusModal')">&#10005;</button></div>
+      <div class="modal-body">
+        <div class="ima-status-detail" id="imaStatusContent">
+          <div class="ima-conn-row"><span class="ima-conn-label">连接状态</span><span class="ima-conn-value connected">已连接 ✓</span></div>
+          <div class="ima-conn-row"><span class="ima-conn-label">已授权知识库</span><span class="ima-conn-value">岳阳餐厨垃圾项目 (513条目)</span></div>
+          <div class="ima-conn-row"><span class="ima-conn-label">合同管理文件夹</span><span class="ima-conn-value">8个子目录</span></div>
+          <div class="ima-conn-row"><span class="ima-conn-label">最后同步</span><span class="ima-conn-value">2026-06-18</span></div>
+          <div class="ima-kb-list">
+            <div class="ima-kb-item ready"><span>岳阳餐厨垃圾项目 — 合同管理</span><span class="kb-badge ready">已连接</span></div>
+            <div class="ima-kb-item pending"><span>伏泰-合同模板库</span><span class="kb-badge pending">待创建</span></div>
+            <div class="ima-kb-item pending"><span>伏泰-法律法规库</span><span class="kb-badge pending">待创建</span></div>
+            <div class="ima-kb-item pending"><span>伏泰-合同审查标准</span><span class="kb-badge pending">待创建</span></div>
+          </div>
+          <p class="ima-hint">数据来源: IMA知识库「岳阳餐厨垃圾项目-合同管理」（70份文件，69份合同已映射），自动化引擎每周一08:00扫描更新。</p>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('imaStatusModal')">关闭</button></div>
+    </div>
+  </div>
+
+  <!-- 通知面板 -->
+  <div class="notification-panel" id="notifPanel" style="display:none">
+    <div class="notif-header"><h3>通知与提醒</h3><button onclick="closeNotifications()">&#10005;</button></div>
+    <div class="notif-list">
+      <div class="notif-item urgent"><span class="ni-dot red"></span><span class="ni-text">包干经营补充协议将于6月28日到期</span><span class="ni-time">刚刚</span></div>
+      <div class="notif-item caution"><span class="ni-dot orange"></span><span class="ni-text">除臭设备维保合同付款节点（6月25日）</span><span class="ni-time">1小时前</span></div>
+      <div class="notif-item info"><span class="ni-dot blue"></span><span class="ni-text">三相分离器采购合同法务审核已通过</span><span class="ni-time">3小时前</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
