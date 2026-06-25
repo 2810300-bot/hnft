@@ -202,7 +202,7 @@
         <div class="sub" id="report-period">报告周期：加载中…</div>
       </div>
       <div class="header-right">
-        <span class="refresh-badge"><span class="pulse"></span>数据刷新：<span id="generated-at">加载中…</span></span>
+        <span class="refresh-badge"><span class="pulse"></span>数据更新：<span id="generated-at">加载中…</span></span>
       </div>
     </div>
 
@@ -351,7 +351,7 @@
     function renderHeader(meta) {
       setText("company-name", "📊 周报驾驶舱");
       setText("report-period", "报告周期：" + computeNaturalWeek(meta.generated_at));
-      setText("generated-at", meta.generated_at);
+      setText("generated-at", (meta.generated_at || "").replace(/\s*（.*$/, ""));
       setText("data-source", meta.report_source);
     }
 
