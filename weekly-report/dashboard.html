@@ -57,6 +57,9 @@
       background: rgba(0,0,0,0.25); padding: 4px 10px; border-radius: 999px;
       font-size: 12px; display: inline-flex; align-items: center; gap: 6px;
     }
+    .refresh-badge {
+      font-size: 13px; color: var(--text-dim); display: inline-flex; align-items: center; gap: 6px;
+    }
     .pulse { width: 8px; height: 8px; border-radius: 50%; background: #4ade80;
       box-shadow: 0 0 0 0 rgba(74,222,128,0.7); animation: pulse 1.6s infinite; }
     @keyframes pulse {
@@ -195,12 +198,11 @@
     <!-- Header -->
     <div class="header">
       <div>
-        <h1 id="company-name">周报驾驶舱</h1>
+        <h1 id="company-name">📊 周报驾驶舱</h1>
         <div class="sub" id="report-period">报告周期：加载中…</div>
       </div>
       <div class="header-right">
-        <span class="pill" id="generated-at">数据刷新：加载中…</span>
-        <span class="pill" id="last-update">数据更新：加载中…</span>
+        <span class="refresh-badge"><span class="pulse"></span>数据刷新：<span id="generated-at">加载中…</span></span>
       </div>
     </div>
 
@@ -347,15 +349,10 @@
     function setText(id, txt) { document.getElementById(id).textContent = txt; }
 
     function renderHeader(meta) {
-      setText("company-name", "周报驾驶舱");
+      setText("company-name", "📊 周报驾驶舱");
       setText("report-period", "报告周期：" + computeNaturalWeek(meta.generated_at));
-      setText("generated-at", "数据刷新：" + meta.generated_at);
+      setText("generated-at", meta.generated_at);
       setText("data-source", meta.report_source);
-    }
-
-    function renderLastUpdate() {
-      const t = cache.meta && cache.meta.last_updated;
-      setText("last-update", t ? "数据更新：" + t : "数据更新：未知");
     }
 
     // ---- KPI cards ----
@@ -770,10 +767,9 @@
           renderMissing();
           renderMonitoring();
         }
-        renderLastUpdate();
       } catch (e) {
         console.error("刷新失败", e);
-        setText("last-update", "数据加载失败：" + e.message);
+        setText("generated-at", "加载失败");
       }
     }
 
