@@ -199,7 +199,7 @@
         <div class="sub" id="report-period">报告周期：加载中…</div>
       </div>
       <div class="header-right">
-        <span class="pill" id="generated-at">生成时间：加载中…</span>
+        <span class="pill" id="generated-at">数据刷新：加载中…</span>
         <span class="pill" id="last-update">数据更新：加载中…</span>
       </div>
     </div>
@@ -331,12 +331,25 @@
     }
     function fmtPct(n) { return (Number(n).toFixed(2)) + "%"; }
 
+    // 计算自然周（周一至周日）
+    function computeNaturalWeek(dateStr) {
+      var d = dateStr ? new Date(dateStr) : new Date();
+      if (isNaN(d.getTime())) { d = new Date(); }
+      var day = d.getDay(); // 0=周日, 1=周一, ...
+      var monday = new Date(d);
+      monday.setDate(d.getDate() - ((day + 6) % 7)); // 回退到周一
+      var sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6); // 周日
+      function fmt(dt) { return dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日'; }
+      return fmt(monday) + ' — ' + fmt(sunday);
+    }
+
     function setText(id, txt) { document.getElementById(id).textContent = txt; }
 
     function renderHeader(meta) {
       setText("company-name", "周报驾驶舱");
-      setText("report-period", `报告周期：${meta.report_period_short}`);
-      setText("generated-at", "生成：" + meta.generated_at);
+      setText("report-period", "报告周期：" + computeNaturalWeek(meta.generated_at));
+      setText("generated-at", "数据刷新：" + meta.generated_at);
       setText("data-source", meta.report_source);
     }
 
