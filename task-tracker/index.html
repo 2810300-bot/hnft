@@ -434,10 +434,10 @@ function getDeadlineStatus(d, status) {
     if (!d) return 'normal';
     const dt = parseDeadline(d);
     if (!dt) return 'normal';
-    const today = new Date(2026, 5, 24); // June 24, 2026
+    const today = new Date();
     const diffDays = Math.floor((dt - today) / (1000*60*60*24));
-    if (diffDays < 0) return 'urgent'; // overdue
-    if (diffDays <= 3) return 'warning'; // due within 3 days
+    if (diffDays < 0) return 'urgent';
+    if (diffDays <= 3) return 'warning';
     return 'normal';
 }
 
@@ -445,7 +445,7 @@ function getDaysLeft(d) {
     if (!d) return '';
     const dt = parseDeadline(d);
     if (!dt) return '';
-    const today = new Date(2026, 5, 24);
+    const today = new Date();
     const diff = Math.floor((dt - today) / (1000*60*60*24));
     if (diff < 0) return `已逾期${Math.abs(diff)}天`;
     if (diff === 0) return '今天截止';
@@ -467,7 +467,7 @@ let currentPerson = 'all';
 let currentCategory = 'all';
 
 function loadData() {
-    return fetch('task_data.json?v=2').then(r => r.json());
+    return fetch('task_data.json?v=3').then(r => r.json());
 }
 
 function render(data) {
