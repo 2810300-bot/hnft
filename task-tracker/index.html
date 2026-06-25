@@ -470,7 +470,12 @@ let currentPerson = 'all';
 let currentCategory = 'all';
 
 function loadData() {
-    return fetch('task_data.json?v=4').then(r => r.json());
+    // 直接从GitHub源获取，绕过Pages CDN缓存
+    const ts = Date.now();
+    const jsonUrl = window.location.hostname.includes('github.io')
+        ? `https://raw.githubusercontent.com/2810300-bot/hnft/main/task-tracker/task_data.json?t=${ts}`
+        : `task_data.json?v=4&t=${ts}`;
+    return fetch(jsonUrl).then(r => r.json());
 }
 
 function render(data) {
