@@ -377,6 +377,17 @@ header .subtitle {
     .task-table { font-size: 12px; }
     .task-table th, .task-table td { padding: 8px 10px; }
 }
+
+/* Footer */
+.site-footer {
+    text-align: center;
+    padding: 32px 24px 28px;
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 13px;
+    letter-spacing: .02em;
+}
 </style>
 </head>
 <body>
@@ -685,6 +696,8 @@ loadData().then(data => {
     document.querySelector('#syncBadge .refresh-dot').classList.add('warn');
 });
 </script>
+
+<footer class="site-footer">&copy; 2026 湖南伏泰环境科技有限责任公司</footer>
 
 </body>
 </html>
