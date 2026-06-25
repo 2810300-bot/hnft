@@ -1,6 +1,6 @@
 /* ================================================
    湖南伏泰合同管理系统 - 数据层 v4.0
-   数据来源：IMA 知识库「岳阳餐厨垃圾项目-合同管理」
+   数据来源：IMA 知识库「岳阳市厨余垃圾项目-合同管理」
    同步日期：2026-06-22 | 共70份合同文件（含2份图片）
    数据自动同步：自动化引擎每周一08:00执行IMA扫描更新
    ================================================ */
@@ -95,9 +95,9 @@ const contracts = [
   { id: 'FT-2026-069', name: '互联网专线业务协议 补充协议', type: '软件/信息服务', party: '待提取', amount: 0, status: '履行中', endDate: '长期有效', paid: 0, balance: 0, dataQuality: 'IMA文件名解析', source: 'IMA知识库', imaMediaId: 'pdf_5466ec66752d38169003699aa971cb1e_69a644a053c508986929b4f877dff3047424059205752436', imaFolder: '补充协议' },
 ];
 
-// IMA知识库文件夹结构（来源于岳阳餐厨垃圾项目-合同管理）
+// IMA知识库文件夹结构（来源于岳阳市厨余垃圾项目-合同管理）
 const imaFolderStructure = {
-  name: '岳阳餐厨垃圾项目',
+  name: '岳阳市厨余垃圾项目',
   id: '7424059205752436',
   children: [
     { name: '合同管理', id: 'folder_7474652100181775', children: [
@@ -136,7 +136,7 @@ const overviewStats = {
   filenameParsed: 33,
   confirmedTotalAmount: 440.785, // 万元（含新增打印机0.316万）
   dataDate: '2026-06-22',
-  dataSource: 'IMA知识库「岳阳餐厨垃圾项目-合同管理」',
+  dataSource: 'IMA知识库「岳阳市厨余垃圾项目-合同管理」',
   imaSyncEnabled: true,
 };
 
@@ -239,7 +239,7 @@ const paymentNodes = [
 // IMA知识库连接信息
 const imaConnectionInfo = {
   status: '已连接',
-  kbName: '岳阳餐厨垃圾项目',
+  kbName: '岳阳市厨余垃圾项目',
   kbId: 'rpjY-P_h9OTpvV05usKihwJFx1ini69GhCxY-83pEvo=',
   totalItems: 513,
   contractFolder: '合同管理',
@@ -247,7 +247,7 @@ const imaConnectionInfo = {
   contractSubfolders: ['设备采购合同', '药剂物料采购合同', '服务维保合同', '工程技改合同', '租赁合同', '信息系统平台合同', '处置运输协议', '补充协议'],
   contractFileCount: 70,
   lastSync: '2026-06-22',
-  dataSource: 'IMA知识库「岳阳餐厨垃圾项目-合同管理」',
+  dataSource: 'IMA知识库「岳阳市厨余垃圾项目-合同管理」',
   syncMethod: 'IMA OpenAPI 自动扫描',
   autoSync: true,
 };

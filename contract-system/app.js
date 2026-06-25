@@ -420,7 +420,7 @@ function showNewTemplate() {
 }
 
 function syncIMA() {
-  Toast.show('IMA知识库同步完成 — 「岳阳餐厨垃圾项目-合同管理」共70份文件，69份合同已映射，新增1份（打印机购销合同）', 'success');
+  Toast.show('IMA知识库同步完成 — 「岳阳市厨余垃圾项目-合同管理」共70份文件，69份合同已映射，新增1份（打印机购销合同）', 'success');
 }
 
 // ========== 台账 ==========
@@ -579,7 +579,7 @@ function doFileUpload() {
 }
 
 function syncIMAStorage() {
-  Toast.show('IMA 知识库同步完成 — 「岳阳餐厨垃圾项目」共' + imaConnectionInfo.totalItems + '个条目，' + overviewStats.totalContracts + '份合同已映射', 'success');
+  Toast.show('IMA 知识库同步完成 — 「岳阳市厨余垃圾项目」共' + imaConnectionInfo.totalItems + '个条目，' + overviewStats.totalContracts + '份合同已映射', 'success');
 }
 
 function toggleFolder(el) {
@@ -1009,7 +1009,7 @@ function renderAutomationMonitor() {
 }
 
 function runAutomationNow() {
-  Toast.show('自动化引擎已触发 — 正在扫描IMA知识库「岳阳餐厨垃圾项目-合同管理」...', 'info');
+  Toast.show('自动化引擎已触发 — 正在扫描IMA知识库「岳阳市厨余垃圾项目-合同管理」...', 'info');
   setTimeout(() => {
     Toast.show('扫描完成: 70份文件已检测，69份合同已映射，1份新增。到期预警: 紧急2份，注意3份', 'success');
   }, 2000);

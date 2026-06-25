@@ -33,7 +33,7 @@ STATUS_FILE = SNAPSHOT_DIR / "task_status.json"
 
 IMA_BASE_URL = "https://ima.qq.com/openapi/wiki/v1"
 IMA_KB_ID = "rpjY-P_h9OTpvV05usKihwJFx1ini69GhCxY-83pEvo="
-IMA_KB_NAME = "岳阳餐厨垃圾项目"
+IMA_KB_NAME = "岳阳市厨余垃圾项目"
 IMA_CONTRACT_FOLDER_ID = "folder_7474652100181775"
 
 # 预警阈值（天数）
