@@ -364,11 +364,165 @@ header .subtitle {
 
 /* Responsive */
 @media (max-width: 768px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .filters-bar { flex-direction: column; align-items: stretch; }
-    .btn-reset { margin-left: 0; }
+    /* Breadcrumb — tighter */
+    .breadcrumb-bar {
+        padding: 8px 16px;
+        font-size: 12px;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .breadcrumb-bar .sep { margin: 0 5px; }
+
+    /* Header — smaller */
+    header {
+        padding: 24px 20px 20px;
+    }
+    header h1 {
+        font-size: 20px;
+    }
+    header .subtitle {
+        font-size: 12px;
+    }
+    header::after {
+        width: 180px; height: 180px;
+        top: -30%;
+    }
+
+    /* Container */
+    .container {
+        padding: 16px;
+    }
+
+    /* Stats — 2-col + tighter */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+    .stat-card {
+        padding: 14px 16px;
+        gap: 10px;
+    }
+    .stat-icon {
+        width: 40px; height: 40px;
+        font-size: 18px;
+        border-radius: 10px;
+    }
+    .stat-value {
+        font-size: 22px;
+    }
+    .stat-label {
+        font-size: 12px;
+    }
+
+    /* Progress section */
+    .progress-section {
+        padding: 16px 18px;
+        margin-bottom: 14px;
+    }
+    .progress-header h3 { font-size: 14px; }
+    .progress-header .pct { font-size: 20px; }
+    .progress-legend { flex-wrap: wrap; gap: 12px; }
+
+    /* Filters — full-width */
+    .filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 14px 16px;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+    .filters-bar select,
+    .filters-bar input {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+    .btn-reset {
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+    }
+
+    /* Table — tighter + horizontal scroll */
+    .task-section-header {
+        padding: 12px 16px;
+    }
+    .task-section-header h3 { font-size: 14px; }
     .task-table { font-size: 12px; }
-    .task-table th, .task-table td { padding: 8px 10px; }
+    .task-table th, .task-table td {
+        padding: 10px 8px;
+    }
+    .task-table th {
+        font-size: 11px;
+    }
+
+    /* FIX: ensure table scrolls on mobile */
+    .task-section > div:last-child {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Person chips smaller */
+    .person-chip { font-size: 10px; padding: 2px 6px; }
+
+    /* Footer */
+    .site-footer {
+        padding: 20px 16px 18px;
+        font-size: 12px;
+        margin-top: 24px;
+    }
+}
+
+/* Extra small phones */
+@media (max-width: 480px) {
+    .breadcrumb-bar {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+
+    header {
+        padding: 18px 14px 14px;
+    }
+    header h1 { font-size: 18px; }
+    header .subtitle { font-size: 11px; }
+    header::after { width: 120px; height: 120px; top: -20%; }
+
+    .container { padding: 10px; }
+
+    .stats-grid { gap: 8px; margin-bottom: 12px; }
+    .stat-card { padding: 12px 12px; gap: 8px; }
+    .stat-icon { width: 36px; height: 36px; font-size: 16px; border-radius: 8px; }
+    .stat-value { font-size: 20px; }
+    .stat-label { font-size: 11px; }
+    .stat-sub { font-size: 10px; }
+
+    .progress-section { padding: 14px 14px; margin-bottom: 12px; }
+    .progress-header h3 { font-size: 13px; }
+    .progress-header .pct { font-size: 18px; }
+    .progress-legend { font-size: 11px; gap: 10px; }
+
+    .filters-bar { padding: 12px 12px; gap: 8px; }
+    .filters-bar select,
+    .filters-bar input { font-size: 13px; padding: 8px 12px; }
+
+    .task-section-header { padding: 10px 12px; }
+    .task-table { font-size: 11px; }
+    .task-table th, .task-table td { padding: 8px 6px; }
+    .task-table th { font-size: 10px; }
+
+    .refresh-badge { padding: 4px 10px; font-size: 11px; }
+    .badge { padding: 2px 8px; font-size: 11px; }
+    .priority { font-size: 11px; padding: 2px 6px; }
+    .deadline { font-size: 11px; }
+    .cat-tag { font-size: 10px; }
+    .person-chip { font-size: 10px; padding: 1px 5px; }
+
+    .site-footer {
+        padding: 16px 14px 14px;
+        font-size: 11px;
+        margin-top: 20px;
+    }
 }
 
 /* Footer */
