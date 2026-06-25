@@ -770,7 +770,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="flex items-center gap-2">
                     <i class="fas fa-copyright"></i>
-                    <span id="footer-company"></span>
+                    <span id="footer-company">&copy; 2026 湖南伏泰环境科技有限责任公司</span>
                 </div>
             </div>
         </div>
@@ -826,7 +826,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('hdr-title').textContent = reportData.report_title;
     document.getElementById('hdr-period').textContent = '报告期：' + reportData.report_period;
     document.getElementById('hdr-date').textContent = '编制日期：' + reportData.compile_date;
-    document.getElementById('footer-company').textContent = reportData.company;
     document.getElementById('footer-updated').textContent = formatDateTime(reportData.last_updated);
 
     function formatDateTime(dtStr) {
