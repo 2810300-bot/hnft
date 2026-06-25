@@ -94,16 +94,26 @@ header::after {
     background: rgba(255,255,255,.06);
     border-radius: 50%;
 }
-header h1 { font-size: 26px; font-weight: 700; position: relative; z-index: 1; }
+header .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    z-index: 1;
+}
+header h1 { font-size: 26px; font-weight: 700; }
 header .subtitle {
     font-size: 14px;
     opacity: .85;
     margin-top: 4px;
-    position: relative;
-    z-index: 1;
 }
-/* (sync-info removed — using unified refresh-badge) */
-/* (status-dot removed — using unified refresh-badge) */
+/* Refresh badge inside teal header */
+header .refresh-badge {
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.88);
+    flex-shrink: 0;
+    margin-left: 16px;
+}
 
 /* Container */
 .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
@@ -383,6 +393,14 @@ header .subtitle {
     header .subtitle {
         font-size: 12px;
     }
+    header .header-top {
+        flex-direction: column;
+        gap: 10px;
+    }
+    header .refresh-badge {
+        margin-left: 0;
+        align-self: flex-start;
+    }
     header::after {
         width: 180px; height: 180px;
         top: -30%;
@@ -486,6 +504,8 @@ header .subtitle {
     }
     header h1 { font-size: 18px; }
     header .subtitle { font-size: 11px; }
+    header .header-top { flex-direction: column; gap: 8px; }
+    header .refresh-badge { margin-left: 0; align-self: flex-start; }
     header::after { width: 120px; height: 120px; top: -20%; }
 
     .container { padding: 10px; }
@@ -545,15 +565,19 @@ header .subtitle {
         <span class="sep">/</span>
         <span class="current">工作任务跟踪</span>
     </div>
-    <div class="refresh-badge" id="syncBadge" style="display:none;">
-        <span class="refresh-dot"></span>
-        数据更新: <span id="syncTime">--</span>
-    </div>
 </div>
 
 <header>
-    <h1>📋 工作任务跟踪系统</h1>
-    <div class="subtitle">岳阳市厨余垃圾资源化利用和无害化处置项目</div>
+    <div class="header-top">
+        <div>
+            <h1>📋 工作任务跟踪系统</h1>
+            <div class="subtitle">岳阳市厨余垃圾资源化利用和无害化处置项目</div>
+        </div>
+        <div class="refresh-badge" id="syncBadge" style="display:none;">
+            <span class="refresh-dot"></span>
+            数据更新: <span id="syncTime">--</span>
+        </div>
+    </div>
 </header>
 
 <div class="container">
