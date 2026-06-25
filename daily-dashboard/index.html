@@ -386,6 +386,20 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 3px; }
 
+        /* Breadcrumb */
+        .breadcrumb-bar {
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #6b7280;
+        }
+        .breadcrumb-bar a { color: #3b82f6; text-decoration: none; font-weight: 500; }
+        .breadcrumb-bar a:hover { text-decoration: underline; }
+        .breadcrumb-bar .sep { color: #cbd5e1; margin: 0 8px; }
+
         /* Loading shimmer */
         .shimmer {
             animation: shimmer 1.5s infinite;
@@ -399,6 +413,15 @@
     </style>
 </head>
 <body>
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar">
+        <div>
+            <a href="../">🏠 看板中心</a>
+            <span class="sep">/</span>
+            <span>厨余垃圾收运量数据可视化看板</span>
+        </div>
+    </div>
+
     <div class="dashboard-container">
         <!-- Header -->
         <header class="dashboard-header">
