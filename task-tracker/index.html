@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>工作任务跟踪 · 湖南伏泰</title>
 <style>
 :root {
@@ -467,7 +470,7 @@ let currentPerson = 'all';
 let currentCategory = 'all';
 
 function loadData() {
-    return fetch('task_data.json?v=3').then(r => r.json());
+    return fetch('task_data.json?v=4').then(r => r.json());
 }
 
 function render(data) {
