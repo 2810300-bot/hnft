@@ -36,28 +36,21 @@ body {
     min-height: 100vh;
 }
 
-/* Top Bar */
-.top-bar {
+/* Breadcrumb */
+.breadcrumb-bar {
     background: #fff;
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    height: 48px;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 10px 24px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     font-size: 13px;
-    color: var(--text-secondary);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    color: #6b7280;
 }
-.top-bar a {
-    color: var(--blue);
-    text-decoration: none;
-    font-weight: 500;
-}
-.top-bar a:hover { text-decoration: underline; }
-.top-bar .sep { margin: 0 8px; color: #cbd5e1; }
-.top-bar .current { color: var(--text); font-weight: 500; }
+.breadcrumb-bar a { color: #3b82f6; text-decoration: none; font-weight: 500; }
+.breadcrumb-bar a:hover { text-decoration: underline; }
+.breadcrumb-bar .sep { color: #cbd5e1; margin: 0 8px; }
+.breadcrumb-bar .current { color: #1a2332; font-weight: 500; }
 
 /* Unified refresh badge */
 .refresh-badge {
@@ -392,7 +385,7 @@ header .subtitle {
 </head>
 <body>
 
-<div class="top-bar">
+<div class="breadcrumb-bar">
     <div>
         <a href="../">🏠 看板中心</a>
         <span class="sep">/</span>
