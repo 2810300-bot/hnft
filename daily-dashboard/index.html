@@ -82,24 +82,15 @@
             color: rgba(255,255,255,0.6);
             margin-top: 4px;
         }
-        .nav-back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(255,255,255,0.1);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            white-space: nowrap;
-            transition: background 0.2s;
-            border: 1px solid rgba(255,255,255,0.15);
+        /* Breadcrumb */
+        .breadcrumb-bar {
+            background: var(--bg-card, #fff); border-bottom: 1px solid var(--border, #e2e8f0);
+            padding: 10px 20px; display: flex; align-items: center;
+            font-size: 13px; color: #64748b;
         }
-        .nav-back-btn:hover {
-            background: rgba(255,255,255,0.2);
-            color: #fff;
-        }
+        .breadcrumb-bar a { color: var(--primary, #4C72B0); text-decoration: none; font-weight: 500; }
+        .breadcrumb-bar a:hover { text-decoration: underline; }
+        .breadcrumb-bar .sep { color: #94a3b8; margin: 0 8px; }
         .refresh-badge {
             display: inline-flex;
             align-items: center;
@@ -417,19 +408,27 @@
     </style>
 </head>
 <body>
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar">
+        <div>
+            <a href="../">🏠 看板中心</a>
+            <span class="sep">/</span>
+            <span>餐厨垃圾收运量数据可视化看板</span>
+        </div>
+    </div>
+
     <div class="dashboard-container">
         <!-- Header -->
         <header class="dashboard-header">
             <div class="header-top">
                 <div>
                     <h1>📊 餐厨垃圾收运量数据可视化看板</h1>
-                    <div class="header-meta">湖南伏泰环境科技 · 岳阳市厨余垃圾资源化利用和无害化处置项目</div>
+                    <div class="header-meta">岳阳市厨余垃圾资源化利用和无害化处置项目</div>
                 </div>
                 <div class="header-actions">
-                    <a href="../" class="nav-back-btn" title="返回数据看板中心">◀ 返回看板中心</a>
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-06-26 11:37</span>
+                    数据更新: <span id="data-date">2026-06-26 11:53</span>
                 </div>
             </div>
             </div>
