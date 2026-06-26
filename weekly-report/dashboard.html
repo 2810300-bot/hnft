@@ -173,6 +173,110 @@
     /* Footer */
     .footer { text-align: center; font-size: 12px; color: var(--text-dim); padding: 20px 0; }
     .footer a { color: var(--primary); text-decoration: none; }
+    /* Summary KPI grid (new horizontal row) */
+    .summary-kpi-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 14px; margin-bottom: 20px;
+    }
+    .summary-kpi-card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px 18px; text-align: center; transition: transform .2s;
+    }
+    .summary-kpi-card:hover { transform: translateY(-2px); }
+    .summary-kpi-card .sk-label { font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
+    .summary-kpi-card .sk-value { font-size: 28px; font-weight: 700; }
+    .summary-kpi-card .sk-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+    .summary-kpi-card.completed .sk-value { color: #4ade80; }
+    .summary-kpi-card.plans .sk-value { color: #38bdf8; }
+    .summary-kpi-card.risks .sk-value { color: #fbbf24; }
+    .summary-kpi-card.docs .sk-value { color: #a78bfa; }
+
+    /* Section divider */
+    .section-header-bar {
+      display: flex; align-items: center; gap: 12px;
+      margin: 28px 0 16px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-header-bar h2 { font-size: 17px; font-weight: 700; white-space: nowrap; }
+    .section-header-bar .section-stats { font-size: 12px; color: var(--text-dim); }
+    .section-header-bar .section-stats span { color: var(--primary); font-weight: 600; }
+
+    /* Member cards grid */
+    .member-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 14px; margin-bottom: 16px;
+    }
+    .member-card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 18px; transition: transform .2s, box-shadow .2s;
+    }
+    .member-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
+    .member-card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+    }
+    .member-card-name {
+      font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;
+    }
+    .member-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #818cf8);
+      color: #fff; font-size: 14px; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .member-dept-tag {
+      font-size: 11px; padding: 2px 8px; border-radius: 10px;
+      background: rgba(56,189,248,0.12); color: #7dd3fc; font-weight: 500;
+    }
+    .member-risk-badges { display: flex; gap: 4px; }
+    .risk-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .risk-dot.high { background: #ef4444; }
+    .risk-dot.med { background: #f59e0b; }
+    .risk-dot.low { background: #22c55e; }
+    .member-section { margin-top: 10px; }
+    .member-section-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 6px;
+    }
+    .member-section-title.completed { color: #4ade80; }
+    .member-section-title.plans { color: #38bdf8; }
+    .member-section-title.issues { color: #fbbf24; }
+    .member-section ul {
+      list-style: none; padding-left: 0; margin: 0;
+    }
+    .member-section li {
+      font-size: 12px; padding: 3px 0 3px 16px; position: relative;
+      color: var(--text); line-height: 1.5;
+    }
+    .member-section li::before { content: "•"; position: absolute; left: 4px; }
+    .member-section.completed li::before { color: #4ade80; }
+    .member-section.plans li::before { color: #38bdf8; }
+    .member-section.issues li::before { color: #fbbf24; }
+
+    /* Pagination */
+    .pagination-bar {
+      display: flex; justify-content: center; align-items: center;
+      gap: 8px; padding: 16px 0; flex-wrap: wrap;
+    }
+    .pagination-bar .page-btn {
+      width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--bg-card); color: var(--text); font-size: 13px;
+      font-weight: 600; cursor: pointer; transition: all .2s;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .pagination-bar .page-btn:hover { background: var(--bg-soft); border-color: var(--primary); }
+    .pagination-bar .page-btn.active { background: var(--primary); color: #0f172a; border-color: var(--primary); }
+    .pagination-bar .page-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .pagination-bar .page-info { font-size: 12px; color: var(--text-dim); padding: 0 8px; }
+    .loading-placeholder {
+      text-align: center; padding: 40px 20px; color: var(--text-dim);
+    }
+    .loading-placeholder .spinner {
+      display: inline-block; width: 28px; height: 28px; border: 3px solid var(--border);
+      border-top-color: var(--primary); border-radius: 50%; animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     /* Mobile */
     @media (max-width: 640px) {
       .app { padding: 12px; }
@@ -180,6 +284,8 @@
       .header h1 { font-size: 18px; }
       .kpi .value { font-size: 24px; }
       .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
+      .summary-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .member-grid { grid-template-columns: 1fr; }
       .chart { height: 260px; }
     }
   </style>
@@ -209,6 +315,9 @@
 
     <!-- KPI -->
     <div class="kpi-grid" id="kpi-grid"></div>
+
+    <!-- Summary KPI (new: 任务完成/下周计划/风险项/协作文档) -->
+    <div class="summary-kpi-grid" id="summary-kpi-grid"></div>
 
     <!-- Submission KPI -->
     <div class="kpi-grid" id="submission-kpi-grid" style="margin-bottom:16px;"></div>
@@ -282,6 +391,16 @@
     <!-- Department Cards -->
     <h2 style="margin: 16px 0 12px; font-size: 18px;">部门周报详情</h2>
     <div class="grid cols-2" id="dept-grid"></div>
+
+    <!-- Member Cards (new: 双列网格 + 分页懒加载) -->
+    <div class="section-header-bar">
+      <h2>👥 团队成员周报摘要</h2>
+      <div class="section-stats" id="member-stats">加载中…</div>
+    </div>
+    <div id="member-grid-container">
+      <div class="loading-placeholder"><div class="spinner"></div><p style="margin-top:12px;">加载成员周报数据...</p></div>
+    </div>
+    <div class="pagination-bar" id="member-pagination"></div>
 
     <!-- Next focus -->
     <div class="card" style="margin-top: 16px;">
@@ -582,6 +701,160 @@
       document.getElementById("next-focus").innerHTML = html;
     }
 
+    // ---- Summary KPI (new) ----
+    function computeSummaryKPI(d) {
+      var totalCompleted = 0, totalPlans = 0;
+      (d.departments || []).forEach(function(dep) {
+        totalCompleted += (dep.completed || []).length;
+        totalPlans += (dep.next_week || []).length;
+      });
+      var riskCount = (d.risks || []).length;
+      var deptCount = (d.departments || []).length;
+      return { completed: totalCompleted, plans: totalPlans, risks: riskCount, docs: deptCount };
+    }
+
+    function renderSummaryKPI(d) {
+      var s = computeSummaryKPI(d);
+      var grid = document.getElementById("summary-kpi-grid");
+      grid.innerHTML = [
+        { cls: "completed", label: "本周任务完成数", value: s.completed, sub: "跨部门汇总", icon: "✅" },
+        { cls: "plans",     label: "下周计划数",     value: s.plans,     sub: "跨部门汇总", icon: "📋" },
+        { cls: "risks",     label: "风险项数量",     value: s.risks,     sub: "需重点关注", icon: "⚠️" },
+        { cls: "docs",      label: "协作团队数",     value: s.docs,      sub: "已提交周报", icon: "📄" }
+      ].map(function(c) {
+        return '<div class="summary-kpi-card ' + c.cls + '"><div class="sk-label">' + c.icon + ' ' + c.label + '</div><div class="sk-value">' + c.value + '</div><div class="sk-sub">' + c.sub + '</div></div>';
+      }).join("");
+    }
+
+    // ---- Member Cards (new: 双列网格 + 分页懒加载) ----
+    var memberPageState = { current: 1, perPage: 10, allCards: [], filteredCards: [] };
+
+    function buildMemberCards(wData) {
+      var persons = [];
+      if (wData && wData.reports && wData.reports.length > 0) {
+        var latestReport = wData.reports[0];
+        if (latestReport.persons) {
+          persons = latestReport.persons.map(function(p) {
+            return {
+              name: p.name,
+              dept: p.dept,
+              work: p.work || "",
+              issues: p.issues || "",
+              plan: p.plan || ""
+            };
+          });
+        }
+      }
+      // Fallback: use dashboard_data.json departments
+      if (persons.length === 0 && cache && cache.departments) {
+        persons = cache.departments.map(function(dep) {
+          return {
+            name: dep.name,
+            dept: dep.dept,
+            work: (dep.highlights || []).join("；"),
+            issues: (dep.issues || []).join("；"),
+            plan: (dep.next_week || []).join("；")
+          };
+        });
+      }
+      return persons;
+    }
+
+    function parseRiskLevel(issuesText) {
+      if (!issuesText) return "low";
+      var lower = issuesText.toLowerCase();
+      var highKw = ["紧急", "严重", "停滞", "阻碍", "超标", "故障", "无法", "急需", "风险", "逾期"];
+      var medKw = ["缓慢", "延迟", "不足", "下降", "需跟进", "待解决", "缺少", "不足"];
+      for (var i = 0; i < highKw.length; i++) { if (issuesText.indexOf(highKw[i]) !== -1) return "high"; }
+      for (var j = 0; j < medKw.length; j++) { if (issuesText.indexOf(medKw[j]) !== -1) return "med"; }
+      return "low";
+    }
+
+    function splitItems(text) {
+      if (!text) return [];
+      // Split by common Chinese delimiters
+      return text.split(/[；;。\n]+/).filter(function(s) { return s.trim().length > 0; }).map(function(s) { return s.trim(); });
+    }
+
+    function renderOneMemberCard(m) {
+      var riskLevel = parseRiskLevel(m.issues);
+      var riskLabel = { high: "高风险", med: "中风险", low: "低风险" }[riskLevel];
+      var completedItems = splitItems(m.work).slice(0, 3);
+      var planItems = splitItems(m.plan).slice(0, 3);
+      var issueItems = splitItems(m.issues);
+      var avatarChar = m.name.charAt(m.name.length - 1);
+      return '<div class="member-card">'
+        + '<div class="member-card-header">'
+        + '<span class="member-card-name"><span class="member-avatar">' + avatarChar + '</span>' + m.name + '<span class="member-dept-tag">' + m.dept + '</span></span>'
+        + '<span class="member-risk-badges">'
+        + '<span class="risk-dot ' + riskLevel + '" title="' + riskLabel + '"></span>'
+        + '<span style="font-size:11px;color:var(--text-dim);">' + riskLabel + '</span>'
+        + '</span>'
+        + '</div>'
+        + (completedItems.length ? '<div class="member-section completed"><div class="member-section-title completed">✅ 本周完成</div><ul>' + completedItems.map(function(s) { return '<li>' + s + '</li>'; }).join("") + '</ul></div>' : '')
+        + (planItems.length ? '<div class="member-section plans"><div class="member-section-title plans">🎯 下周计划</div><ul>' + planItems.map(function(s) { return '<li>' + s + '</li>'; }).join("") + '</ul></div>' : '')
+        + (issueItems.length ? '<div class="member-section issues"><div class="member-section-title issues">⚠️ 问题/风险</div><ul>' + issueItems.slice(0,2).map(function(s) { return '<li>' + s + '</li>'; }).join("") + '</ul></div>' : '')
+        + '</div>';
+    }
+
+    function renderPagination(total, current, perPage) {
+      var bar = document.getElementById("member-pagination");
+      if (total <= perPage) { bar.innerHTML = ""; return; }
+      var totalPages = Math.ceil(total / perPage);
+      var html = '';
+      html += '<button class="page-btn" ' + (current <= 1 ? 'disabled' : '') + ' onclick="goToPage(' + (current - 1) + ')">◀</button>';
+      for (var p = 1; p <= totalPages; p++) {
+        if (p === 1 || p === totalPages || (p >= current - 1 && p <= current + 1)) {
+          html += '<button class="page-btn' + (p === current ? ' active' : '') + '" onclick="goToPage(' + p + ')">' + p + '</button>';
+        } else if (p === current - 2 || p === current + 2) {
+          html += '<span class="page-info">…</span>';
+        }
+      }
+      html += '<button class="page-btn" ' + (current >= totalPages ? 'disabled' : '') + ' onclick="goToPage(' + (current + 1) + ')">▶</button>';
+      html += '<span class="page-info">共 ' + total + ' 条 / ' + totalPages + ' 页</span>';
+      bar.innerHTML = html;
+    }
+
+    function goToPage(page) {
+      var total = memberPageState.filteredCards.length;
+      var totalPages = Math.ceil(total / memberPageState.perPage) || 1;
+      if (page < 1 || page > totalPages) return;
+      memberPageState.current = page;
+      var start = (page - 1) * memberPageState.perPage;
+      var end = start + memberPageState.perPage;
+      var pageCards = memberPageState.filteredCards.slice(start, end);
+      var grid = document.getElementById("member-grid-container");
+      if (pageCards.length === 0) {
+        grid.innerHTML = '<div class="empty-missing"><div class="icon">📭</div><h3>暂无数据</h3><p>本周尚未生成成员周报数据</p></div>';
+      } else {
+        grid.innerHTML = '<div class="member-grid">' + pageCards.map(renderOneMemberCard).join("") + '</div>';
+      }
+      renderPagination(total, page, memberPageState.perPage);
+      // Smooth scroll to top of member section
+      document.getElementById("member-grid-container").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function renderMemberCards(wData) {
+      var allCards = buildMemberCards(wData);
+      memberPageState.allCards = allCards;
+      memberPageState.filteredCards = allCards;
+      memberPageState.current = 1;
+
+      // Update stats
+      var deptSet = {};
+      allCards.forEach(function(c) { deptSet[c.dept] = true; });
+      var totalDepts = Object.keys(deptSet).length;
+      document.getElementById("member-stats").innerHTML = '共 <span>' + allCards.length + '</span> 人 · <span>' + totalDepts + '</span> 个部门';
+
+      if (allCards.length === 0) {
+        document.getElementById("member-grid-container").innerHTML = '<div class="empty-missing"><div class="icon">📭</div><h3>暂无成员数据</h3><p>请等待本周周报生成后刷新</p></div>';
+        document.getElementById("member-pagination").innerHTML = "";
+        return;
+      }
+
+      goToPage(1);
+    }
+
     // ---- Submission statistics (from weekly_data.json) ----
     function computeMissing(report, roster) {
       var submitted = (report.persons || []).map(function(p) { return p.name; });
@@ -745,6 +1018,7 @@
         cache = data;
         renderHeader(data.meta);
         renderKPI(data.kpi);
+        renderSummaryKPI(data);
         renderCollectionChart(data.kpi);
         renderLouleiChart(data.kpi);
         renderOilChart(data.kpi);
@@ -767,6 +1041,10 @@
           renderSubmissionKPI();
           renderMissing();
           renderMonitoring();
+          renderMemberCards(wData);
+        } else {
+          // Fallback: render member cards from dashboard_data.json departments
+          renderMemberCards(null);
         }
       } catch (e) {
         console.error("刷新失败", e);
