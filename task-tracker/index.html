@@ -306,6 +306,7 @@ header .refresh-badge {
 .badge.completed { background: #dcfce7; color: #15803d; }
 .badge.in_progress { background: #fef3c7; color: #b45309; }
 .badge.pending { background: #f1f5f9; color: #64748b; }
+.badge.overdue { background: #fee2e2; color: #dc2626; font-weight: 600; }
 
 /* Priority badges */
 .priority {
@@ -641,7 +642,8 @@ function getDaysLeft(d) {
 const STATUS_MAP = {
     'completed': '已完成',
     'in_progress': '进行中',
-    'pending': '待启动'
+    'pending': '待启动',
+    'overdue': '已逾期'
 };
 const PRIORITY_ORDER = { 'critical': 0, 'high': 1, 'medium': 2, 'low': 3 };
 const PRIORITY_LABELS = { 'critical': '🔴 紧急', 'high': '🟠 高', 'medium': '🟡 中', 'low': '🟢 低' };
@@ -670,6 +672,7 @@ function render(data) {
     const inProgress = allTasks.filter(t => t.status === 'in_progress').length;
     const overdue = allTasks.filter(t => {
         if (t.status === 'completed') return false;
+        if (t.status === 'overdue') return true;
         const ds = getDeadlineStatus(t.deadline, t.status);
         return ds === 'urgent';
     }).length;
@@ -829,8 +832,9 @@ function renderTable() {
 
     tasks.forEach((t, i) => {
         const ds = getDeadlineStatus(t.deadline, t.status);
-        const rowClass = ds === 'urgent' ? 'overdue-row' : (ds === 'warning' ? 'due-soon' : '');
-        const daysLeft = t.status !== 'completed' ? getDaysLeft(t.deadline) : '';
+        const isOverdue = t.status === 'overdue' || ds === 'urgent';
+        const rowClass = isOverdue ? 'overdue-row' : (ds === 'warning' ? 'due-soon' : '');
+        const daysLeft = t.status !== 'completed' && t.status !== 'overdue' ? getDaysLeft(t.deadline) : '';
         const statusLabel = STATUS_MAP[t.status] || t.status;
         const prioLabel = PRIORITY_LABELS[t.priority] || t.priority;
 
@@ -850,7 +854,7 @@ function renderTable() {
                 ${ds==='warning'?'<span class="deadline-tag soon-tag">临近</span>':''}
                 ${daysLeft && ds!=='done'?`<span class="days-left">${daysLeft}</span>`:''}
             </td>
-            <td><span class="badge ${t.status}">${t.status==='completed'?'✅ ':'🔄 '}${statusLabel}</span></td>
+            <td><span class="badge ${t.status}">${t.status==='completed'?'✅ ':t.status==='overdue'?'⚠️ ':t.status==='in_progress'?'🔄 ':'⏳ '}${statusLabel}</span></td>
         </tr>`;
     });
 
