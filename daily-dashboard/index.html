@@ -428,7 +428,7 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-06-26 12:45</span>
+                    数据更新: <span id="data-date">2026-06-26 12:55</span>
                 </div>
             </div>
             </div>
@@ -444,12 +444,8 @@
             <div class="kpi-card">
                 <div class="kpi-label">本周收运总量</div>
                 <div class="kpi-value" id="kpi-week-total">--</div>
+                <div class="kpi-sub" id="kpi-prev-week-sub">上周：--</div>
                 <div class="kpi-change neutral" id="kpi-week-change">--</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-label">上周收运总量</div>
-                <div class="kpi-value" id="kpi-prev-week-total">--</div>
-                <div class="kpi-sub" id="kpi-prev-week-range">--</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">本周日均收运</div>
@@ -614,36 +610,34 @@
             '累计 ' + KPI.month_count + ' 车次';
 
         document.getElementById('kpi-week-total').innerHTML = formatWeight(KPI.week_total);
+        
         const changeEl = document.getElementById('kpi-week-change');
         if (KPI.week_change > 0) {
-            changeEl.textContent = '↑ ' + KPI.week_change.toFixed(1) + '% vs 上周';
+            changeEl.textContent = '↑ ' + KPI.week_change.toFixed(1) + '%';
             changeEl.className = 'kpi-change positive';
         } else if (KPI.week_change < 0) {
-            changeEl.textContent = '↓ ' + Math.abs(KPI.week_change).toFixed(1) + '% vs 上周';
+            changeEl.textContent = '↓ ' + Math.abs(KPI.week_change).toFixed(1) + '%';
             changeEl.className = 'kpi-change negative';
         } else {
-            changeEl.textContent = '持平 vs 上周';
+            changeEl.textContent = '持平';
             changeEl.className = 'kpi-change neutral';
         }
-
-        document.getElementById('kpi-prev-week-total').innerHTML = formatWeight(KPI.prev_week_total);
-        // 显示上周日期范围（周一至周日）
+        
+        // 显示上周数据 + 日期范围
+        let prevWeekText = '上周：' + formatWeight(KPI.prev_week_total);
         if (KPI.prev_week_key) {
             const parts = KPI.prev_week_key.split('-W');
             const year = parseInt(parts[0]);
             const weekNum = parseInt(parts[1]);
-            // 计算该周的周一日期
             const jan4 = new Date(year, 0, 4);
             const jan4Day = jan4.getDay() || 7;
             const monday = new Date(year, 0, 4 - jan4Day + (weekNum - 1) * 7 + 1);
             const sunday = new Date(monday);
             sunday.setDate(monday.getDate() + 6);
             const formatDate = (d) => (d.getMonth() + 1) + '/' + d.getDate();
-            document.getElementById('kpi-prev-week-range').textContent =
-                formatDate(monday) + ' - ' + formatDate(sunday);
-        } else {
-            document.getElementById('kpi-prev-week-range').textContent = '上周';
+            prevWeekText += ' (' + formatDate(monday) + ' - ' + formatDate(sunday) + ')';
         }
+        document.getElementById('kpi-prev-week-sub').textContent = prevWeekText;
 
         document.getElementById('kpi-week-avg').innerHTML = formatWeight(KPI.week_avg) + '<span class="kpi-unit">/日</span>';
         document.getElementById('kpi-month-avg').textContent =
