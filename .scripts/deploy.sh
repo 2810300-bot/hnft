@@ -56,9 +56,9 @@ if [ ! -d ".git" ]; then
     git remote add origin "$REPO_URL" 2>/dev/null || git remote set-url origin "$REPO_URL"
 fi
 
-# 拉取最新代码（如果远程存在）
+# 拉取最新代码并 rebase 本地变更（保留本地文件）
 echo "📥 拉取远程最新代码..."
-git fetch origin "$BRANCH" 2>/dev/null && git reset --hard "origin/$BRANCH" 2>/dev/null || echo "   (远程仓库尚不存在或无法访问，使用本地版本)"
+git fetch origin "$BRANCH" 2>/dev/null && git pull --rebase origin "$BRANCH" 2>/dev/null || echo "   (远程仓库尚不存在或无法访问，使用本地版本)"
 
 # 检查变更
 CHANGES=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
