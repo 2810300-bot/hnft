@@ -600,9 +600,13 @@ const PERIOD = 24 * 60 * 60 * 1000; // 24h (today = 6/24/2026)
 
 function parseDeadline(d) {
     if (!d) return null;
-    // Handle "6月30日" and "6/30/2026" formats
-    let m = d.match(/(\d+)\/(\d+)\/(\d+)/);
+    // Handle "YYYY-MM-DD" format (from Python sync script)
+    let m = d.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    if (m) return new Date(+m[1], +m[2]-1, +m[3]);
+    // Handle "M/D/YYYY" formats
+    m = d.match(/(\d+)\/(\d+)\/(\d+)/);
     if (m) return new Date(+m[3], +m[1]-1, +m[2]);
+    // Handle "M月D日" format
     m = d.match(/(\d+)月(\d+)日/);
     if (m) return new Date(2026, +m[1]-1, +m[2]);
     return null;
@@ -775,7 +779,12 @@ function renderTable() {
 
     // Filter
     if (currentFilter === 'overdue') {
-        tasks = tasks.filter(t => t.status !== 'completed' && getDeadlineStatus(t.deadline, t.status) === 'urgent');
+        // 双重匹配：Python 脚本标记的 overdue 状态 + 运行时 deadline 过期判断
+        tasks = tasks.filter(t => {
+            if (t.status === 'overdue') return true;
+            if (t.status === 'completed') return false;
+            return getDeadlineStatus(t.deadline, t.status) === 'urgent';
+        });
     } else if (currentFilter !== 'all') {
         tasks = tasks.filter(t => t.status === currentFilter);
     }
@@ -786,19 +795,25 @@ function renderTable() {
         tasks = tasks.filter(t => t.category === currentCategory);
     }
 
-    // Sort by priority, then by deadline urgency
+    // Sort: overdue → priority → status → deadline
     tasks.sort((a, b) => {
+        // 1. Overdue tasks ALWAYS at the very top
+        const aOverdue = (a.status === 'overdue' || getDeadlineStatus(a.deadline, a.status) === 'urgent') ? 0 : 1;
+        const bOverdue = (b.status === 'overdue' || getDeadlineStatus(b.deadline, b.status) === 'urgent') ? 0 : 1;
+        if (aOverdue !== bOverdue) return aOverdue - bOverdue;
+
+        // 2. Priority (critical → high → medium → low)
         const pa = PRIORITY_ORDER[a.priority] ?? 99;
         const pb = PRIORITY_ORDER[b.priority] ?? 99;
         if (pa !== pb) return pa - pb;
 
-        // Then sort by status (in_progress first, then pending, then completed)
-        const so = { 'in_progress': 0, 'pending': 1, 'completed': 2 };
+        // 3. Status (overdue → in_progress → pending → completed)
+        const so = { 'overdue': -1, 'in_progress': 0, 'pending': 1, 'completed': 2 };
         const sa = so[a.status] ?? 99;
         const sb = so[b.status] ?? 99;
         if (sa !== sb) return sa - sb;
 
-        // Then by deadline (most urgent first)
+        // 4. Deadline (earliest first)
         const da = parseDeadline(a.deadline);
         const db = parseDeadline(b.deadline);
         if (da && db) return da - db;
