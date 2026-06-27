@@ -206,13 +206,13 @@ const approvalLogs = {
     { time: '2026-06-20 09:00', user: '运营部-张三', action: '发起合同', result: '提交', comment: '换热器采购合同，金额27万' },
     { time: '2026-06-20 14:30', user: '法务-李律师', action: '法务审核', result: '通过', comment: '条款合规，建议增加质保条款' },
     { time: '2026-06-21 10:00', user: '财务-王会计', action: '财务审批', result: '通过', comment: '预算内，付款方式合理' },
-    { time: '2026-06-22 09:00', user: '总经理-颜一亩', action: '总经理签批', result: '待签', comment: '' },
+    { time: '2026-06-22 09:00', user: '总经理', action: '总经理签批', result: '待签', comment: '' },
   ],
   '重大合同': [
     { time: '2025-11-17 09:00', user: '运营部-张三', action: '发起污水技改工程合同', result: '提交', comment: '金额132.8万，涉及技改工程' },
     { time: '2025-11-17 14:00', user: '法务-李律师', action: '法务审核', result: '通过', comment: '与民法典合同编一致，风险可控' },
     { time: '2025-11-18 10:00', user: '分管副总-赵总', action: '副总审批', result: '通过', comment: '同意技改方案' },
-    { time: '2025-11-19 09:00', user: '总经理-颜一亩', action: '总经理签批', result: '通过', comment: '同意' },
+    { time: '2025-11-19 09:00', user: '总经理', action: '总经理签批', result: '通过', comment: '同意' },
     { time: '2025-11-20 14:00', user: '董事会', action: '董事会决议', result: '通过', comment: '全票通过' },
   ],
 };
