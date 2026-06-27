@@ -3,9 +3,9 @@
     "title": "湖南伏泰环境科技 周报驾驶舱",
     "company": "湖南伏泰环境科技有限责任公司",
     "recipient": "颜一亩 总经理",
-    "report_period": "2026年6月12日 — 2026年6月19日",
-    "report_period_short": "2026年6月12日 — 2026年6月19日",
-    "generated_at": "2026-06-23 08:57（",
+    "report_period": "2026年6月22日 — 6月28日",
+    "report_period_short": "6月22日—6月28日",
+    "generated_at": "2026-06-27 13:39",
     "report_source": "钉钉 OA 周报 / WorkBuddy 自动汇总",
     "submitted_count": 4,
     "departments": [
@@ -14,19 +14,19 @@
       "运维业务部",
       "安环部"
     ],
-    "last_update": "2026-06-24T19:40:22+08:00",
-    "source_file": "weekly_report_summary_20260623"
+    "last_update": "2026-06-27T13:39:03+08:00",
+    "source_file": "weekly_report_summary_20260627"
   },
   "kpi": {
     "weekly_collection_tons": 1391.09,
     "daily_avg_tons": 198.73,
     "monthly_cumulative_tons": 3666.19,
-    "monthly_target_tons": 6140.0,
+    "monthly_target_tons": 6140,
     "monthly_completion_rate": 99.5,
     "weekly_decline_tons": -36.15,
     "new_signed_this_week": 56,
     "new_signed_month": 120,
-    "new_signed_completion_rate": 125.0,
+    "new_signed_completion_rate": 125,
     "loulei_investigation_rate": 35.68,
     "loulei_conversion_rate": 39.5,
     "loulei_investigated": 785,
@@ -40,10 +40,10 @@
     "fry_oil_monthly": 22.86,
     "fry_oil_rate": 101.67,
     "oil_sales_tons": 32.98,
-    "biochem_water_daily": 230.0,
-    "code_41000_mg_per_l": true,
-    "suspend_3phase_arriving": true,
-    "mbr_cleaned": true
+    "biochem_water_daily": 230,
+    "code_41000_mg_per_l": false,
+    "suspend_3phase_arriving": false,
+    "mbr_cleaned": false
   },
   "departments": [
     {
