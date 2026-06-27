@@ -108,6 +108,13 @@
             color: rgba(255,255,255,0.8);
             white-space: nowrap;
         }
+        .refresh-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--positive);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
         .next-update {
             display: inline-flex;
             align-items: center;
@@ -118,13 +125,6 @@
             font-size: 12px;
             color: rgba(255,255,255,0.65);
             white-space: nowrap;
-        }
-        .refresh-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--positive);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
         }
         @keyframes pulse {
             0%, 100% { opacity: 1; }
@@ -445,12 +445,12 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">--</span>
-                    </div>
+                    数据更新: <span id="data-date">2026-06-27 14:43</span>
+                </div>
                     <div class="next-update" id="next-update-container">
                         下次更新: <span id="next-update">--</span>
                     </div>
-            </div>
+                </div>
             </div>
         </header>
 
@@ -1232,26 +1232,12 @@
     // ============================================================
     // 初始化
     // ============================================================
-    // 更新数据更新时间
-    function updateDataDate() {
-        var el = document.getElementById('data-date');
-        if (!el) return;
-        var now = new Date();
-        var ts = now.getFullYear() + '-' +
-                 String(now.getMonth()+1).padStart(2,'0') + '-' +
-                 String(now.getDate()).padStart(2,'0') + ' ' +
-                 String(now.getHours()).padStart(2,'0') + ':' +
-                 String(now.getMinutes()).padStart(2,'0');
-        el.textContent = ts;
-    }
-
     document.addEventListener('DOMContentLoaded', function() {
         renderKPIs();
         renderAllCharts('14');
         renderAnomalyTable();
         renderSeverityPie();
         AutoRefresh.init();
-        updateDataDate();  // 页面加载时更新数据更新时间
         
         // 计算并显示下次更新时间（每日 06:00）
         (function updateNextUpdate() {
@@ -1269,7 +1255,7 @@
                 });
             }
             // 每小时刷新一次显示
-            setTimeout(updateNextUpdate, 3600000);
+            setTimeout(updateNextUpdate, 60*60*1000);
         })();
     });
     </script>
