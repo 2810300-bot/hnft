@@ -460,7 +460,11 @@
         title: { text: `${fmtNum(k.monthly_cumulative_tons)} / ${fmtNum(k.monthly_target_tons)} 吨`, left: "right", textStyle: { fontSize: 14, color: "#94a3b8" } },
         xAxis: {
           type: "category",
-          data: ["6/1—6/18 累计", "6 月目标", "差额 (待冲)"],
+          data: [
+            k.monthly_cutoff_date ? ("6月截止" + k.monthly_cutoff_date + " 累计") : "6 月累计",
+            "6 月目标",
+            "差额 (待冲)"
+          ],
           axisLine: { lineStyle: { color: "#334155" } },
           axisLabel: { color: "#94a3b8", fontSize: 11 }
         },
