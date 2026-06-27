@@ -72,6 +72,12 @@
             position: relative;
             z-index: 1;
         }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
         .header-top h1 {
             font-size: 22px;
             font-weight: 700;
@@ -101,6 +107,18 @@
             font-size: 12px;
             color: rgba(255,255,255,0.8);
             white-space: nowrap;
+        }
+        .next-update {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.08);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.65);
+            white-space: nowrap;
+            margin-left: 8px;
         }
         .refresh-dot {
             width: 8px;
@@ -428,8 +446,11 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-06-27 11:23</span>
-                </div>
+                    数据更新: <span id="data-date">--</span>
+                    </div>
+                    <div class="next-update" id="next-update-container">
+                        下次更新: <span id="next-update">--</span>
+                    </div>
             </div>
             </div>
         </header>
@@ -1218,6 +1239,25 @@
         renderAnomalyTable();
         renderSeverityPie();
         AutoRefresh.init();
+        
+        // 计算并显示下次更新时间（每日 06:00）
+        (function updateNextUpdate() {
+            const now = new Date();
+            let next = new Date(now);
+            next.setHours(6, 0, 0, 0);
+            if (now >= next) {
+                next.setDate(next.getDate() + 1);
+            }
+            const el = document.getElementById('next-update');
+            if (el) {
+                el.textContent = next.toLocaleString('zh-CN', {
+                    month: '2-digit', day: '2-digit',
+                    hour: '2-digit', minute: '2-digit', hour12: false
+                });
+            }
+            // 每小时刷新一次显示
+            setTimeout(updateNextUpdate, 3600000);
+        })();
     });
     </script>
 </body>
