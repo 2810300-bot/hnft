@@ -5,20 +5,20 @@
     "recipient": "总经理",
     "report_period": "2026年6月22日—6月28日",
     "report_period_short": "6月22日—6月28日",
-    "generated_at": "2026-06-27 22:47",
+    "generated_at": "2026-06-27 23:10",
     "report_source": "钉钉 OA 周报 / WorkBuddy 自动汇总",
     "submitted_count": 8,
     "departments": [
-      "收运部",
-      "财务部",
-      "运维业务部",
-      "PMO部",
       "销售部",
       "生产部",
-      "综合管理部",
-      "安环部"
+      "PMO部",
+      "财务部",
+      "安环部",
+      "收运部",
+      "运维业务部",
+      "综合管理部"
     ],
-    "last_update": "2026-06-27T22:47:09+08:00",
+    "last_update": "2026-06-27T23:10:30+08:00",
     "source_file": "weekly_report_summary_20260627"
   },
   "kpi": {
@@ -27,7 +27,6 @@
     "weekly_collection_tons": 1400.48,
     "daily_avg_tons": 200.07,
     "monthly_cumulative_tons": 5065.15,
-    "monthly_completion_rate": 99.0,
     "trench_oil_rate": 91.09,
     "fry_oil_rate": 104.7,
     "new_signed_this_week": 19,
@@ -42,7 +41,8 @@
     "loulei_active": 238,
     "loulei_conversion_rate": 42.03,
     "loulei_active_rate": 68.39,
-    "oil_sales_tons": 33
+    "oil_sales_tons": 33,
+    "monthly_completion_rate": 82.49
   },
   "departments": [
     {
