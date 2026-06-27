@@ -149,27 +149,6 @@
     .empty-missing .icon { font-size: 40px; }
     .empty-missing h3 { font-size: 16px; color: #4ade80; margin-top: 8px; }
     .empty-missing p { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
-    /* Execution monitoring */
-    .monitor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
-    .monitor-item { text-align: center; padding: 14px 12px; background: var(--bg-soft); border-radius: 10px; border: 1px solid var(--border); }
-    .monitor-item .mon-label { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; }
-    .monitor-item .mon-value { font-size: 14px; font-weight: 700; }
-    .monitor-item .mon-value.ok { color: #4ade80; }
-    .monitor-item .mon-value.pending { color: #fbbf24; }
-    .monitor-item .mon-value.fail { color: #f87171; }
-    /* Department cards */
-    .dept-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
-    .dept-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
-    .dept-header h3 { font-size: 16px; }
-    .dept-header .meta { font-size: 12px; color: var(--text-dim); }
-    .dept-section { margin-top: 14px; }
-    .dept-section .title { font-size: 12px; color: var(--primary); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .dept-section ul { list-style: none; padding-left: 0; }
-    .dept-section li { font-size: 13px; padding: 4px 0 4px 18px; position: relative; color: var(--text); }
-    .dept-section li::before { content: "•"; position: absolute; left: 6px; color: var(--primary); }
-    .dept-section.issues li::before { color: var(--yellow); }
-    .dept-section.next li::before { color: var(--green); }
-    .dept-section.next li::before { content: "→"; }
     /* Footer */
     .footer { text-align: center; font-size: 12px; color: var(--text-dim); padding: 20px 0; }
     .footer a { color: var(--primary); text-decoration: none; }
@@ -334,12 +313,6 @@
       <div id="missing-content"><div style="text-align:center;padding:20px;color:var(--text-dim);">加载提交数据中...</div></div>
     </div>
 
-    <!-- Execution Monitoring -->
-    <div class="card" style="margin-bottom:24px;">
-      <h3>执行监控</h3>
-      <div class="desc">自动化运行状态</div>
-      <div class="monitor-grid" id="monitor-grid"></div>
-    </div>
 
     <!-- Charts Row 1 -->
     <div class="grid cols-2">
@@ -388,9 +361,6 @@
       </div>
     </div>
 
-    <!-- Department Cards -->
-    <h2 style="margin: 16px 0 12px; font-size: 18px;">部门周报详情</h2>
-    <div class="grid cols-2" id="dept-grid"></div>
 
     <!-- Member Cards (new: 双列网格 + 分页懒加载) -->
     <div class="section-header-bar">
@@ -661,35 +631,6 @@
         </table>
       `;
       document.getElementById("equipment-table").innerHTML = html;
-    }
-
-    // ---- Dept cards ----
-    function renderDepartments(d) {
-      const html = d.departments.map(dep => `
-        <div class="dept-card">
-          <div class="dept-header">
-            <h3>${dep.name} <span style="font-size:12px;color:#94a3b8;font-weight:400">· ${dep.dept}</span></h3>
-            <div class="meta">${dep.period}</div>
-          </div>
-          <div class="dept-section">
-            <div class="title">📌 关键进展</div>
-            <ul>${dep.highlights.map(s => `<li>${s}</li>`).join("")}</ul>
-          </div>
-          ${dep.completed.length ? `<div class="dept-section">
-            <div class="title">✅ 完成事项</div>
-            <ul>${dep.completed.map(s => `<li>${s}</li>`).join("")}</ul>
-          </div>` : ""}
-          ${dep.issues.length ? `<div class="dept-section issues">
-            <div class="title">⚠️ 遇到问题</div>
-            <ul>${dep.issues.map(s => `<li>${s}</li>`).join("")}</ul>
-          </div>` : ""}
-          <div class="dept-section next">
-            <div class="title">🎯 下周计划</div>
-            <ul>${dep.next_week.map(s => `<li>${s}</li>`).join("")}</ul>
-          </div>
-        </div>
-      `).join("");
-      document.getElementById("dept-grid").innerHTML = html;
     }
 
     function renderNextFocus(d) {
@@ -996,21 +937,6 @@
       URL.revokeObjectURL(url);
     }
 
-    function renderMonitoring() {
-      var grid = document.getElementById("monitor-grid");
-      if (!weeklyCache) { grid.innerHTML = ""; return; }
-      var m = weeklyCache.monitoring || {};
-      var push = m.push_destinations || {};
-      grid.innerHTML = [
-        { label: "上次执行", value: m.last_execution || "--", cls: "ok" },
-        { label: "下次执行", value: m.next_execution || "周六 18:00", cls: "" },
-        { label: "执行状态", value: m.execution_status === "success" ? "✅ 成功" : (m.execution_status === "failed" ? "❌ 失败" : "⏳ 等待"), cls: m.execution_status === "success" ? "ok" : (m.execution_status === "failed" ? "fail" : "pending") },
-        { label: "钉钉推送", value: push.dingtalk ? "✅" : "⏳", cls: push.dingtalk ? "ok" : "pending" },
-        { label: "腾讯文档", value: push.tencent_docs ? "✅" : "⏳", cls: push.tencent_docs ? "ok" : "pending" },
-        { label: "IMA 知识库", value: push.ima ? "✅" : "⏳", cls: push.ima ? "ok" : "pending" }
-      ].map(item => '<div class="monitor-item"><div class="mon-label">' + item.label + '</div><div class="mon-value ' + item.cls + '">' + item.value + '</div></div>').join("");
-    }
-
     // ---- Boot ----
     async function refresh() {
       try {
@@ -1026,7 +952,6 @@
         renderRiskChart(data);
         renderRevenueTable(data);
         renderEquipmentTable(data);
-        renderDepartments(data);
         renderNextFocus(data);
         // Fetch submission data
         const wData = await fetchWeeklyData();
@@ -1040,7 +965,6 @@
           });
           renderSubmissionKPI();
           renderMissing();
-          renderMonitoring();
           renderMemberCards(wData);
         } else {
           // Fallback: render member cards from dashboard_data.json departments
