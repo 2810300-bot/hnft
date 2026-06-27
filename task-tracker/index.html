@@ -52,6 +52,14 @@ body {
 .breadcrumb-bar .sep { color: #cbd5e1; margin: 0 8px; }
 .breadcrumb-bar .current { color: #1a2332; font-weight: 500; }
 
+/* Header badges container - vertical stack */
+.header-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+}
+
 /* Unified refresh badge */
 .refresh-badge {
     display: inline-flex;
@@ -574,12 +582,14 @@ header .refresh-badge {
             <h1>📋 工作任务跟踪系统</h1>
             <div class="subtitle">岳阳市厨余垃圾资源化利用和无害化处置项目</div>
         </div>
-        <div class="refresh-badge" id="syncBadge" style="display:none;">
-            <span class="refresh-dot"></span>
-            数据更新: <span id="syncTime">--</span>
-        </div>
-        <div class="next-update-badge" id="nextUpdateBadge">
-            下次更新: <span id="tt-next-update">--</span>
+        <div class="header-badges">
+            <div class="refresh-badge" id="syncBadge" style="display:none;">
+                <span class="refresh-dot"></span>
+                数据更新: <span id="syncTime">--</span>
+            </div>
+            <div class="next-update-badge" id="nextUpdateBadge">
+                下次更新: <span id="tt-next-update">--</span>
+            </div>
         </div>
     </div>
 </header>
