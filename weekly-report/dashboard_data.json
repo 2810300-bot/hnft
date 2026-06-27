@@ -5,27 +5,27 @@
     "recipient": "颜一亩 总经理",
     "report_period": "2026年6月22日—6月28日",
     "report_period_short": "6月22日—6月28日",
-    "generated_at": "2026-06-27 13:38",
+    "generated_at": "2026-06-27 14:09",
     "report_source": "钉钉 OA 周报 / WorkBuddy 自动汇总",
     "submitted_count": 8,
     "departments": [
-      "综合管理部",
       "销售部",
-      "生产部",
-      "运维业务部",
-      "收运部",
-      "PMO部",
+      "综合管理部",
       "财务部",
-      "安环部"
+      "运维业务部",
+      "安环部",
+      "收运部",
+      "生产部",
+      "PMO部"
     ],
-    "last_update": "2026-06-27T13:39:03+08:00",
+    "last_update": "2026-06-27T14:09:28+08:00",
     "source_file": "weekly_report_summary_20260627"
   },
   "kpi": {
     "weekly_collection_tons": 1400.48,
     "daily_avg_tons": 200.07,
-    "monthly_cumulative_tons": 5065.15,
     "monthly_completion_rate": 99.0,
+    "monthly_cumulative_tons": 5065.15,
     "fry_oil_weekly": 5.48,
     "fry_oil_monthly": 29.15,
     "fry_oil_rate": 104.7,
@@ -257,97 +257,65 @@
   ],
   "revenue": [
     {
-      "item": "2025年5月财政补贴新增207.16万元",
-      "status": "单据待签字",
+      "item": "餐厨项目财政补贴",
+      "status": "待催收",
       "owner": "李洁",
-      "progress": 70
-    },
-    {
-      "item": "餐厨项目财政补贴累计2160.11万元",
-      "status": "未收回",
-      "owner": "李洁",
-      "progress": 30
+      "progress": 40
     }
   ],
   "equipment": [
     {
-      "name": "三相离心机返厂维修",
-      "status": "waiting_parts",
-      "label": "返厂维修达50天，需催厂家到场"
-    },
-    {
-      "name": "2#锅炉风门",
-      "status": "waiting_parts",
-      "label": "待配件到货"
-    },
-    {
-      "name": "预处理卷帘门更换",
+      "name": "设备维修",
       "status": "pending",
-      "label": "报采购买新快速密闭门"
-    },
-    {
-      "name": "除杂泵更换轴承",
-      "status": "completed",
-      "label": "已完成"
-    },
-    {
-      "name": "厌氧进料螺杆泵维修",
-      "status": "pending",
-      "label": "下周安排维修"
-    },
-    {
-      "name": "2#厌氧罐清罐",
-      "status": "pending",
-      "label": "下周人员进场准备"
-    },
-    {
-      "name": "PAC/PAM药剂试验",
-      "status": "tracking",
-      "label": "小试试验进行中"
+      "label": "待处理"
     }
   ],
   "risks": [
     {
-      "level": "high",
-      "text": "生产部：1、絮凝剂、碳源的比价采购进度需加快。\n\n2、三相离心机已返厂维修达50天，需联系厂家，下周必须到场；\n\n3、因环保压力"
+      "level": "med",
+      "text": "生产部：1、絮凝剂、碳源的比价采购进度需加快。\n\n2、三相离心机已返厂维修达50天，需联系厂家，下周必须到场；\n\n3、因环保压力大，快速门、风幕机、紫外线灯管、活性碳、"
     }
   ],
   "next_focus": [
     {
       "priority": 1,
-      "text": "餐厨项目回款资料提交与核量进度（5月临港待签字，楼区质保金在走流程）"
+      "text": "1.开展常态化对账，重点加强交投应收款项催收，推动停滞款项进展"
     },
     {
       "priority": 1,
-      "text": "交投应收款项催收：2160万财政补贴及其他应收款"
+      "text": "3、跟进餐厨项目资料提交、核量进度。"
+    },
+    {
+      "priority": 1,
+      "text": "4、跟进家庭厨余项目回款进度。"
     },
     {
       "priority": 2,
-      "text": "岳阳楼区收运线路优化与新签商户消化（已摸排828家，新签348家）"
+      "text": "四、日常摸排登记工作且加快摸排速度。"
     },
     {
       "priority": 2,
-      "text": "半年度财务数据汇总与报表编制（李洁牵头）"
+      "text": "1、优化调整岳阳楼区收运线路，整理新签商户名单，编排收运线路。"
     },
     {
       "priority": 3,
-      "text": "生产设备维修跟踪：离心机返厂50天需到场，备品备件采购跟进"
+      "text": "一、跟进吕仙亭派出所报案事宜。"
     },
     {
       "priority": 3,
-      "text": "一网统管发债项目推进（周纯：与中国移动二次线上沟通）"
+      "text": "二、制定7月运维人员工作计划与目标"
     },
     {
-      "priority": 4,
-      "text": "安全生产月总结与防暑降温培训（吴胡兵牵头）"
+      "priority": 3,
+      "text": "三、东城片区中南区域蹲点偷盗，锁盖。"
     },
     {
-      "priority": 5,
-      "text": "汨罗/城陵矶智慧环卫项目跟进（周纯：对接高层资源）"
+      "priority": 3,
+      "text": "下周生产工作："
     },
     {
-      "priority": 6,
-      "text": "6月考勤审核、绩效打分与半年度人事汇总"
+      "priority": 3,
+      "text": "1、因下游污水厂限排，上周库存水量清理暂缓，继续将浓水池、生化池清水池、膜池清洗池库存水抽至应急池，清理库存水量。"
     }
   ]
 }
