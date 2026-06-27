@@ -153,24 +153,6 @@
     /* Footer */
     .footer { text-align: center; font-size: 12px; color: var(--text-dim); padding: 20px 0; }
     .footer a { color: var(--primary); text-decoration: none; }
-    /* Summary KPI grid (new horizontal row) */
-    .summary-kpi-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 14px; margin-bottom: 20px;
-    }
-    .summary-kpi-card {
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
-      padding: 16px 18px; text-align: center; transition: transform .2s;
-    }
-    .summary-kpi-card:hover { transform: translateY(-2px); }
-    .summary-kpi-card .sk-label { font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
-    .summary-kpi-card .sk-value { font-size: 28px; font-weight: 700; }
-    .summary-kpi-card .sk-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-    .summary-kpi-card.completed .sk-value { color: #4ade80; }
-    .summary-kpi-card.plans .sk-value { color: #38bdf8; }
-    .summary-kpi-card.risks .sk-value { color: #fbbf24; }
-    .summary-kpi-card.docs .sk-value { color: #a78bfa; }
-
     /* Section divider */
     .section-header-bar {
       display: flex; align-items: center; gap: 12px;
@@ -264,7 +246,6 @@
       .header h1 { font-size: 18px; }
       .kpi .value { font-size: 24px; }
       .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
-      .summary-kpi-grid { grid-template-columns: repeat(2, 1fr); }
       .member-grid { grid-template-columns: 1fr; }
       .chart { height: 260px; }
     }
@@ -296,19 +277,6 @@
     <!-- KPI -->
     <div class="kpi-grid" id="kpi-grid"></div>
 
-    <!-- Summary KPI (new: 任务完成/下周计划/风险项/协作文档) -->
-    <div class="summary-kpi-grid" id="summary-kpi-grid"></div>
-
-    <!-- Missing Persons Tracking -->
-    <div class="missing-section card" id="missing-section">
-      <div class="missing-header">
-        <h2>未提交人员追踪</h2>
-        <div class="missing-tools">
-          <select class="missing-filter" id="dept-filter" onchange="filterMissing()"><option value="all">全部部门</option></select>
-        </div>
-      </div>
-      <div id="missing-content"><div style="text-align:center;padding:20px;color:var(--text-dim);">加载提交数据中...</div></div>
-    </div>
 
 
     <!-- Charts Row 1 -->
@@ -359,9 +327,20 @@
     </div>
 
 
-    <!-- Member Cards (new: 双列网格 + 分页懒加载) -->
+    <!-- Missing Persons Tracking -->
+    <div class="missing-section card" id="missing-section">
+      <div class="missing-header">
+        <h2>周报未提交人员追踪</h2>
+        <div class="missing-tools">
+          <select class="missing-filter" id="dept-filter" onchange="filterMissing()"><option value="all">全部部门</option></select>
+        </div>
+      </div>
+      <div id="missing-content"><div style="text-align:center;padding:20px;color:var(--text-dim);">加载提交数据中...</div></div>
+    </div>
+
+        <!-- Member Cards (new: 双列网格 + 分页懒加载) -->
     <div class="section-header-bar">
-      <h2>👥 团队成员周报摘要</h2>
+      <h2>👥 周报摘要</h2>
       <div class="section-stats" id="member-stats">加载中…</div>
     </div>
     <div id="member-grid-container">
@@ -668,17 +647,7 @@
       return { completed: totalCompleted, plans: totalPlans, risks: riskCount, docs: deptCount };
     }
 
-    function renderSummaryKPI(d) {
-      var s = computeSummaryKPI(d);
-      var grid = document.getElementById("summary-kpi-grid");
-      grid.innerHTML = [
-        { cls: "completed", label: "本周任务完成数", value: s.completed, sub: "跨部门汇总", icon: "✅" },
-        { cls: "plans",     label: "下周计划数",     value: s.plans,     sub: "跨部门汇总", icon: "📋" },
-        { cls: "risks",     label: "风险项数量",     value: s.risks,     sub: "需重点关注", icon: "⚠️" }
-      ].map(function(c) {
-        return '<div class="summary-kpi-card ' + c.cls + '"><div class="sk-label">' + c.icon + ' ' + c.label + '</div><div class="sk-value">' + c.value + '</div><div class="sk-sub">' + c.sub + '</div></div>';
-      }).join("");
-    }
+
 
     // ---- Member Cards (new: 双列网格 + 分页懒加载) ----
     var memberPageState = { current: 1, perPage: 10, allCards: [], filteredCards: [] };
