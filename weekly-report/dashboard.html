@@ -771,8 +771,6 @@
         grid.innerHTML = '<div class="member-grid">' + pageCards.map(renderOneMemberCard).join("") + '</div>';
       }
       renderPagination(total, page, memberPageState.perPage);
-      // Smooth scroll to top of member section
-      document.getElementById("member-grid-container").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function renderMemberCards(wData) {
