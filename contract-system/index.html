@@ -23,6 +23,14 @@
     .top-bar a:hover { text-decoration: underline; }
     .top-bar .sep { color: #cbd5e1; margin: 0 8px; }
 </style>
+<style>
+  .refresh-badge, .next-update-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; padding: 4px 10px; border-radius: 20px;
+  }
+  .refresh-badge { color: #64748b; background: #f1f5f9; }
+  .next-update-badge { color: #94a3b8; background: #f8fafc; }
+</style>
 </head>
 <body>
 <!-- Breadcrumb -->
@@ -69,10 +77,10 @@
     </nav>
     <div class="sidebar-footer">
       <div class="user-info">
-        <div class="avatar">颜</div>
+        <div class="avatar">管</div>
         <div class="user-detail">
-          <span class="user-name">颜一亩</span>
-          <span class="user-role">总经理</span>
+          <span class="user-name">管理员</span>
+          <span class="user-role">系统管理员</span>
         </div>
       </div>
     </div>
@@ -87,6 +95,12 @@
         <h1 id="module-title">总览仪表盘</h1>
       </div>
       <div class="topbar-right">
+        <div class="refresh-badge" id="refresh-time">
+          🔄 数据同步：<span id="last-sync-time">--</span>
+        </div>
+        <div class="next-update-badge" id="next-update-badge">
+          下次更新：<span id="cs-next-update">--</span>
+        </div>
         <div class="search-box">
           <input type="text" placeholder="搜索合同、模板、文件..." id="globalSearch" onkeyup="handleGlobalSearch(event)">
           <button onclick="doGlobalSearch()">&#128269;</button>
@@ -816,5 +830,22 @@
 
 <script src="data.js"></script>
 <script src="app.js"></script>
+<script>
+// 计算下次更新时间（每周一 08:00）
+(function updateNext(){
+  const now=new Date(), n=new Date(now);
+  const d=n.getDay(), diff=(1-d+7)%7;
+  n.setDate(n.getDate()+(diff===0&&now.getHours()>=8?7:diff));
+  n.setHours(8,0,0,0);
+  const el=document.getElementById('cs-next-update');
+  if(el) el.textContent=n.toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+  setTimeout(updateNext,3600000);
+})();
+// 更新数据同步时间
+(function(){
+  const el=document.getElementById('last-sync-time');
+  if(el) el.textContent='2026-06-22 09:00';
+})();
+</script>
 </body>
 </html>
