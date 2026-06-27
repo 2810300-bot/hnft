@@ -88,6 +88,7 @@
     .kpi .delta { font-size: 12px; margin-top: 8px; display: inline-block; padding: 2px 8px; border-radius: 6px; }
     .delta.up { color: #4ade80; background: rgba(74,222,128,0.12); }
     .delta.down { color: #f87171; background: rgba(248,113,113,0.12); }
+    .kpi .remark { font-size: 11px; color: #94a3b8; margin-top: 6px; font-style: italic; }
     /* Charts grid */
     .grid { display: grid; gap: 16px; margin-bottom: 24px; }
     .grid.cols-2 { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
@@ -307,7 +308,6 @@
         <h2>未提交人员追踪</h2>
         <div class="missing-tools">
           <select class="missing-filter" id="dept-filter" onchange="filterMissing()"><option value="all">全部部门</option></select>
-          <button class="missing-btn export" id="btn-export-csv" onclick="exportMissingCSV()" disabled>导出 CSV</button>
         </div>
       </div>
       <div id="missing-content"><div style="text-align:center;padding:20px;color:var(--text-dim);">加载提交数据中...</div></div>
@@ -380,8 +380,7 @@
     </div>
 
     <div class="footer">
-      <div>数据来源：<span id="data-source">钉钉 OA 周报</span> · 自动部署至 GitHub Pages · 无需手动同步</div>
-      <div style="margin-top: 12px; font-size: 11px; color: #64748b;">&copy; 2026 湖南伏泰环境科技有限责任公司</div>
+      <div>© 2026 湖南伏泰环境科技有限责任公司</div>
     </div>
   </div>
 
@@ -449,7 +448,7 @@
     function renderKPI(k) {
       const grid = document.getElementById("kpi-grid");
       const cards = [
-        { cls: "blue",   label: "本周收运量",         value: fmtNum(k.weekly_collection_tons, 2), unit: "吨", delta: `${k.weekly_decline_tons > 0 ? "+" : ""}${k.weekly_decline_tons} 吨 周环比`, deltaCls: k.weekly_decline_tons < 0 ? "down" : "up" },
+        { cls: "blue",   label: "本周收运量",         value: fmtNum(k.weekly_collection_tons, 2), unit: "吨", delta: `${k.weekly_decline_tons > 0 ? "+" : ""}${k.weekly_decline_tons} 吨 周环比`, deltaCls: k.weekly_decline_tons < 0 ? "down" : "up", remark: "数据范围：上周五至本周四（与李慧报告保持一致）" },
         { cls: "green",  label: "6 月累计 / 目标",     value: fmtNum(k.monthly_cumulative_tons), unit: `/${fmtNum(k.monthly_target_tons)} 吨`, delta: `完成率 ${fmtPct(k.monthly_completion_rate)}`, deltaCls: "up" },
         { cls: "orange", label: "本周新签转化",         value: fmtNum(k.new_signed_this_week), unit: "家", delta: `6 月累计 ${k.new_signed_month} 家 (完成率 ${k.new_signed_completion_rate}%)`, deltaCls: "up" },
         { cls: "purple", label: "岳阳楼区专项",         value: fmtPct(k.loulei_investigation_rate), unit: "摸排", delta: `新签转化 ${fmtPct(k.loulei_conversion_rate)} · 有效收运 ${fmtPct(k.loulei_active_rate)}`, deltaCls: "up" }
@@ -459,6 +458,7 @@
           <div class="label">${c.label}</div>
           <div class="value">${c.value}<span class="unit">${c.unit}</span></div>
           <div class="delta ${c.deltaCls}">${c.delta}</div>
+          ${c.remark ? `<div class="remark">${c.remark}</div>` : ""}
         </div>
       `).join("");
     }
@@ -854,13 +854,9 @@
       var expCount = latest.expected_count || weeklyCache.roster.length || subCount;
       var missingCount = (latest.missing_persons || []).length;
       var rate = expCount > 0 ? Math.round((subCount / expCount) * 100) : 0;
-      var totalWeeks = weeklyCache.total_weeks || reports.length;
-      var consecutive = weeklyCache.consecutive_weeks || 0;
       grid.innerHTML = [
         { cls: "blue", label: "提交率", value: rate + "%", unit: "", delta: subCount + "/" + expCount + " 人已提交", deltaCls: rate >= 100 ? "up" : "down" },
-        { cls: rate >= 100 ? "green" : (missingCount <= 2 ? "orange" : "purple"), label: "未提交人数", value: missingCount, unit: "人", delta: missingCount === 0 ? "全员提交" : "需跟进", deltaCls: missingCount === 0 ? "up" : "down" },
-        { cls: "purple", label: "已生成周数", value: totalWeeks, unit: "周", delta: "累计周报总结", deltaCls: "up" },
-        { cls: "blue", label: "连续执行", value: consecutive, unit: "周", delta: "不间断运行", deltaCls: "up" }
+        { cls: rate >= 100 ? "green" : (missingCount <= 2 ? "orange" : "purple"), label: "未提交人数", value: missingCount, unit: "人", delta: missingCount === 0 ? "全员提交" : "需跟进", deltaCls: missingCount === 0 ? "up" : "down" }
       ].map(c => `
         <div class="kpi ${c.cls}">
           <div class="label">${c.label}</div>
@@ -872,10 +868,8 @@
 
     function renderMissing() {
       var container = document.getElementById("missing-content");
-      var btnExport = document.getElementById("btn-export-csv");
       if (!weeklyCache) {
         container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-dim);">提交数据暂不可用</div>';
-        btnExport.disabled = true;
         return;
       }
       var roster = weeklyCache.roster || [];
@@ -885,7 +879,6 @@
       var depts = [];
       roster.forEach(function(p) { if (depts.indexOf(p.dept) === -1) depts.push(p.dept); });
       deptFilter.innerHTML = '<option value="all">全部部门 (' + depts.length + ')</option>' + depts.map(d => '<option value="' + d + '">' + d + '</option>').join("");
-      btnExport.disabled = allMissing.length === 0;
       if (allMissing.length === 0) {
         container.innerHTML = '<div class="empty-missing"><div class="icon">✅</div><h3>全员已提交，无缺失</h3><p>所有 ' + roster.length + ' 位成员均已按时提交周报</p></div>';
         return;
@@ -914,25 +907,6 @@
       document.querySelectorAll(".missing-row").forEach(function(row) {
         row.style.display = (dept === "all" || row.getAttribute("data-dept") === dept) ? "" : "none";
       });
-    }
-
-    function exportMissingCSV() {
-      var allMissing = computeAllTimeMissing();
-      if (allMissing.length === 0) { alert("当前无缺失人员"); return; }
-      var BOM = '\uFEFF';
-      var header = ['序号','姓名','所属部门','缺失日期范围','连续缺失周数','累计缺失次数'];
-      var rows = [header.join(',')];
-      allMissing.forEach(function(m, i) {
-        rows.push([i+1, '"' + m.name + '"', '"' + m.dept + '"', '"' + m.date_range + '"', m.consecutive_weeks, m.total_missed].join(','));
-      });
-      var now = new Date();
-      var dateStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
-      var blob = new Blob([BOM + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-      var url = URL.createObjectURL(blob);
-      var link = document.createElement('a');
-      link.href = url; link.download = '未提交周报人员_' + dateStr + '.csv';
-      document.body.appendChild(link); link.click(); document.body.removeChild(link);
-      URL.revokeObjectURL(url);
     }
 
     // ---- Boot ----
