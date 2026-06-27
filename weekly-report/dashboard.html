@@ -155,7 +155,7 @@
     .footer a { color: var(--primary); text-decoration: none; }
     /* Summary KPI grid (new horizontal row) */
     .summary-kpi-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr);
+      display: grid; grid-template-columns: repeat(3, 1fr);
       gap: 14px; margin-bottom: 20px;
     }
     .summary-kpi-card {
@@ -299,9 +299,6 @@
     <!-- Summary KPI (new: 任务完成/下周计划/风险项/协作文档) -->
     <div class="summary-kpi-grid" id="summary-kpi-grid"></div>
 
-    <!-- Submission KPI -->
-    <div class="kpi-grid" id="submission-kpi-grid" style="margin-bottom:16px;"></div>
-
     <!-- Missing Persons Tracking -->
     <div class="missing-section card" id="missing-section">
       <div class="missing-header">
@@ -389,6 +386,7 @@
     let cache = null;
     let weeklyCache = null;
     let charts = {};
+    let reportDateRange = "";
     const REMOTE_URL = "https://2810300-bot.github.io/hnft/weekly-report/dashboard_data.json";
     const WEEKLY_URL = "https://2810300-bot.github.io/hnft/weekly-report/weekly_data.json";
 
@@ -435,19 +433,36 @@
       return fmt(monday) + ' — ' + fmt(sunday);
     }
 
+    // 计算报告周期：自动化运行日的上周五至本周四
+    function computeReportWeekRange(dateStr) {
+      var d = dateStr ? new Date(dateStr) : new Date();
+      if (isNaN(d.getTime())) { d = new Date(); }
+      // 找到最近的周四
+      var thursday = new Date(d);
+      var day = thursday.getDay();
+      var daysSinceThursday = (day + 3) % 7;
+      thursday.setDate(thursday.getDate() - daysSinceThursday);
+      // 往前推6天得到上周五
+      var friday = new Date(thursday);
+      friday.setDate(thursday.getDate() - 6);
+      function fmt(dt) { return (dt.getMonth()+1) + '月' + dt.getDate() + '日'; }
+      return fmt(friday) + '—' + fmt(thursday);
+    }
+
     function setText(id, txt) { const el = document.getElementById(id); if (el) el.textContent = txt; }
 
     function renderHeader(meta) {
       setText("company-name", "📊 周报驾驶舱");
       setText("report-period", "报告周期：" + computeNaturalWeek(meta.generated_at));
       setText("generated-at", (meta.generated_at || "").replace(/\s*（.*$/, "").split(" ")[0]);
+      reportDateRange = computeReportWeekRange(meta.generated_at);
     }
 
     // ---- KPI cards ----
     function renderKPI(k) {
       const grid = document.getElementById("kpi-grid");
       const cards = [
-        { cls: "blue",   label: "本周收运量",     value: fmtNum(k.weekly_collection_tons, 2), unit: "吨", delta: `${k.weekly_decline_tons > 0 ? "+" : ""}${k.weekly_decline_tons} 吨 周环比`, deltaCls: k.weekly_decline_tons < 0 ? "down" : "up", remark: "数据范围：上周五至本周四（与李慧报告保持一致）" },
+        { cls: "blue",   label: "本周收运量",     value: fmtNum(k.weekly_collection_tons, 2), unit: "吨", delta: `${k.weekly_decline_tons > 0 ? "+" : ""}${k.weekly_decline_tons} 吨 周环比`, deltaCls: k.weekly_decline_tons < 0 ? "down" : "up", remark: "数据范围：" + (reportDateRange || "上周五至本周四") + "（源于收运部周报）" },
         { cls: "green",  label: "6 月累计 / 目标",     value: fmtNum(k.monthly_cumulative_tons), unit: `/${fmtNum(k.monthly_target_tons)} 吨`, delta: `完成率 ${fmtPct(k.monthly_completion_rate)}`, deltaCls: "up" },
         { cls: "orange", label: "本周新签转化",         value: fmtNum(k.new_signed_this_week), unit: "家", delta: `6 月累计 ${k.new_signed_month} 家 (完成率 ${k.new_signed_completion_rate}%)`, deltaCls: "up" },
         { cls: "purple", label: "岳阳楼区专项",         value: fmtPct(k.loulei_investigation_rate), unit: "摸排", delta: `新签转化 ${fmtPct(k.loulei_conversion_rate)} · 有效收运 ${fmtPct(k.loulei_active_rate)}`, deltaCls: "up" }
@@ -659,8 +674,7 @@
       grid.innerHTML = [
         { cls: "completed", label: "本周任务完成数", value: s.completed, sub: "跨部门汇总", icon: "✅" },
         { cls: "plans",     label: "下周计划数",     value: s.plans,     sub: "跨部门汇总", icon: "📋" },
-        { cls: "risks",     label: "风险项数量",     value: s.risks,     sub: "需重点关注", icon: "⚠️" },
-        { cls: "docs",      label: "协作团队数",     value: s.docs,      sub: "已提交周报", icon: "📄" }
+        { cls: "risks",     label: "风险项数量",     value: s.risks,     sub: "需重点关注", icon: "⚠️" }
       ].map(function(c) {
         return '<div class="summary-kpi-card ' + c.cls + '"><div class="sk-label">' + c.icon + ' ' + c.label + '</div><div class="sk-value">' + c.value + '</div><div class="sk-sub">' + c.sub + '</div></div>';
       }).join("");
@@ -844,26 +858,7 @@
       return result;
     }
 
-    function renderSubmissionKPI() {
-      var grid = document.getElementById("submission-kpi-grid");
-      if (!weeklyCache) { grid.innerHTML = ""; return; }
-      var reports = weeklyCache.reports || [];
-      var latest = reports[0] || {};
-      var subCount = latest.submitted_count || (latest.persons || []).length;
-      var expCount = latest.expected_count || weeklyCache.roster.length || subCount;
-      var missingCount = (latest.missing_persons || []).length;
-      var rate = expCount > 0 ? Math.round((subCount / expCount) * 100) : 0;
-      grid.innerHTML = [
-        { cls: "blue", label: "提交率", value: rate + "%", unit: "", delta: subCount + "/" + expCount + " 人已提交", deltaCls: rate >= 100 ? "up" : "down" },
-        { cls: rate >= 100 ? "green" : (missingCount <= 2 ? "orange" : "purple"), label: "未提交人数", value: missingCount, unit: "人", delta: missingCount === 0 ? "全员提交" : "需跟进", deltaCls: missingCount === 0 ? "up" : "down" }
-      ].map(c => `
-        <div class="kpi ${c.cls}">
-          <div class="label">${c.label}</div>
-          <div class="value">${c.value}<span class="unit">${c.unit}</span></div>
-          <div class="delta ${c.deltaCls}">${c.delta}</div>
-        </div>
-      `).join("");
-    }
+    // renderSubmissionKPI removed per user request 2026-06-27
 
     function renderMissing() {
       var container = document.getElementById("missing-content");
@@ -871,33 +866,34 @@
         container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-dim);">提交数据暂不可用</div>';
         return;
       }
+      var reports = weeklyCache.reports || [];
+      var latest = reports[0] || {};
       var roster = weeklyCache.roster || [];
-      var allMissing = computeAllTimeMissing();
+      var missingList = latest.missing_persons || [];
+
       // Populate dept filter
       var deptFilter = document.getElementById("dept-filter");
       var depts = [];
       roster.forEach(function(p) { if (depts.indexOf(p.dept) === -1) depts.push(p.dept); });
-      deptFilter.innerHTML = '<option value="all">全部部门 (' + depts.length + ')</option>' + depts.map(d => '<option value="' + d + '">' + d + '</option>').join("");
-      if (allMissing.length === 0) {
-        container.innerHTML = '<div class="empty-missing"><div class="icon">✅</div><h3>全员已提交，无缺失</h3><p>所有 ' + roster.length + ' 位成员均已按时提交周报</p></div>';
+      deptFilter.innerHTML = '<option value="all">全部部门 (' + depts.length + ')</option>' + depts.map(function(d) { return '<option value="' + d + '">' + d + '</option>'; }).join("");
+
+      if (missingList.length === 0) {
+        container.innerHTML = '<div class="empty-missing"><div class="icon">✅</div><h3>本周全员已提交</h3><p>所有 ' + roster.length + ' 位成员均已提交本周周报</p></div>';
         return;
       }
-      var html = '<table class="missing-table"><thead><tr><th>#</th><th>姓名</th><th>部门</th><th>缺失日期范围</th><th>连续缺失</th><th>累计缺失</th><th>状态</th></tr></thead><tbody>';
-      allMissing.forEach(function(m, i) {
-        var sevClass = m.consecutive_weeks >= 3 ? "high" : (m.consecutive_weeks >= 2 ? "medium" : "low");
+
+      // Show simple list
+      var html = '<table class="missing-table"><thead><tr><th>#</th><th>姓名</th><th>部门</th></tr></thead><tbody>';
+      missingList.forEach(function(m, i) {
         var lastName = m.name.charAt(m.name.length - 1);
         html += '<tr class="missing-row" data-dept="' + m.dept + '">';
         html += '<td style="color:var(--text-dim);">' + (i+1) + '</td>';
         html += '<td><span class="person-badge"><span class="person-avatar">' + lastName + '</span>' + m.name + '</span></td>';
         html += '<td><span class="dept-tag-light">' + m.dept + '</span></td>';
-        html += '<td><span class="range-text">' + m.date_range + '</span></td>';
-        html += '<td><span class="severity-badge ' + sevClass + '">' + m.consecutive_weeks + ' 周</span></td>';
-        html += '<td>' + m.total_missed + ' 次</td>';
-        html += '<td><span class="badge ' + (m.consecutive_weeks >= 2 ? 'missing' : 'med') + '">' + (m.consecutive_weeks >= 2 ? '需跟进' : '关注') + '</span></td>';
         html += '</tr>';
       });
       html += '</tbody></table>';
-      html += '<div style="font-size:11px;color:var(--text-dim);margin-top:8px;">共 ' + allMissing.length + ' 人存在周报缺失，按连续缺失周数降序排列</div>';
+      html += '<div style="font-size:11px;color:var(--text-dim);margin-top:8px;">本周共 ' + missingList.length + ' 人未提交周报</div>';
       container.innerHTML = html;
     }
 
@@ -934,7 +930,6 @@
             if (!r.expected_count) r.expected_count = weeklyCache.roster.length || r.submitted_count;
             if (!r.missing_persons) r.missing_persons = computeMissing(r, weeklyCache.roster);
           });
-          renderSubmissionKPI();
           renderMissing();
           renderMemberCards(wData);
         } else {
