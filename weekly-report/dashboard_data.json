@@ -5,25 +5,25 @@
     "recipient": "总经理",
     "report_period": "2026年6月22日—6月28日",
     "report_period_short": "6月22日—6月28日",
-    "generated_at": "2026-06-27 20:14",
+    "generated_at": "2026-06-27 22:47",
     "report_source": "钉钉 OA 周报 / WorkBuddy 自动汇总",
     "submitted_count": 8,
     "departments": [
-      "运维业务部",
       "收运部",
-      "生产部",
       "财务部",
-      "销售部",
+      "运维业务部",
       "PMO部",
-      "安环部",
-      "综合管理部"
+      "销售部",
+      "生产部",
+      "综合管理部",
+      "安环部"
     ],
-    "last_update": "2026-06-27T20:14:58+08:00",
+    "last_update": "2026-06-27T22:47:09+08:00",
     "source_file": "weekly_report_summary_20260627"
   },
   "kpi": {
     "monthly_target_tons": 6140,
-    "weekly_decline_tons": 0,
+    "weekly_decline_tons": 9.39,
     "weekly_collection_tons": 1400.48,
     "daily_avg_tons": 200.07,
     "monthly_cumulative_tons": 5065.15,
@@ -35,6 +35,7 @@
     "new_signed_target": 96,
     "new_signed_completion_rate": 138.54,
     "loulei_target": 800.0,
+    "monthly_cutoff_date": "6/25",
     "loulei_investigated": 828,
     "loulei_investigation_rate": 37.64,
     "loulei_signed": 348,
@@ -317,27 +318,27 @@
   "next_focus": [
     {
       "priority": 1,
-      "text": "1.开展常态化对账，重点加强交投应收款项催收，推动停滞款项进展"
+      "text": "开展常态化对账，重点加强交投应收款项催收，推动停滞款项进展"
     },
     {
       "priority": 1,
-      "text": "3、跟进餐厨项目资料提交、核量进度。"
+      "text": "跟进餐厨项目资料提交、核量进度。"
     },
     {
       "priority": 1,
-      "text": "4、跟进家庭厨余项目回款进度。"
+      "text": "跟进家庭厨余项目回款进度。"
     },
     {
       "priority": 2,
-      "text": "1、优化调整岳阳楼区收运线路，整理新签商户名单，编排收运线路。"
+      "text": "优化调整岳阳楼区收运线路，整理新签商户名单，编排收运线路。"
     },
     {
       "priority": 2,
-      "text": "四、日常摸排登记工作且加快摸排速度。"
+      "text": "日常摸排登记工作且加快摸排速度。"
     },
     {
       "priority": 3,
-      "text": "2.启动月末账务集中处理，加快半年度财务报表编制进度，确保按期完成核算。"
+      "text": "启动月末账务集中处理，加快半年度财务报表编制进度，确保按期完成核算。"
     },
     {
       "priority": 3,
