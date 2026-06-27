@@ -448,7 +448,7 @@
     function renderKPI(k) {
       const grid = document.getElementById("kpi-grid");
       const cards = [
-        { cls: "blue",   label: "本周收运量",         value: fmtNum(k.weekly_collection_tons, 2), unit: "吨", delta: `${k.weekly_decline_tons > 0 ? "+" : ""}${k.weekly_decline_tons} 吨 周环比`, deltaCls: k.weekly_decline_tons < 0 ? "down" : "up", remark: "数据范围：上周五至本周四（与李慧报告保持一致）" },
+        { cls: "blue",   label: "本周收运量",     value: fmtNum(k.weekly_collection_tons, 2), unit: "吨", delta: `${k.weekly_decline_tons > 0 ? "+" : ""}${k.weekly_decline_tons} 吨 周环比`, deltaCls: k.weekly_decline_tons < 0 ? "down" : "up", remark: "数据范围：上周五至本周四（与李慧报告保持一致）" },
         { cls: "green",  label: "6 月累计 / 目标",     value: fmtNum(k.monthly_cumulative_tons), unit: `/${fmtNum(k.monthly_target_tons)} 吨`, delta: `完成率 ${fmtPct(k.monthly_completion_rate)}`, deltaCls: "up" },
         { cls: "orange", label: "本周新签转化",         value: fmtNum(k.new_signed_this_week), unit: "家", delta: `6 月累计 ${k.new_signed_month} 家 (完成率 ${k.new_signed_completion_rate}%)`, deltaCls: "up" },
         { cls: "purple", label: "岳阳楼区专项",         value: fmtPct(k.loulei_investigation_rate), unit: "摸排", delta: `新签转化 ${fmtPct(k.loulei_conversion_rate)} · 有效收运 ${fmtPct(k.loulei_active_rate)}`, deltaCls: "up" }
@@ -944,7 +944,12 @@
         }
       } catch (e) {
         console.error("刷新失败", e);
-        setText("generated-at", "加载失败");
+        setText("generated-at", "加载失败：" + (e.message || e));
+        // Show error on page for debugging
+        var errDiv = document.createElement("div");
+        errDiv.style = "position:fixed;top:0;left:0;right:0;background:#ef4444;color:#fff;padding:12px 20px;z-index:9999;font-size:13px;";
+        errDiv.textContent = "页面加载错误：" + (e.message || e) + "（请按 Cmd+Shift+R 强制刷新）";
+        document.body.prepend(errDiv);
       }
     }
 
