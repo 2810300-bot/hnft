@@ -310,26 +310,10 @@
         <div class="desc">本周 vs 6 月累计 vs 目标</div>
         <div id="chart-sign" class="chart small"></div>
       </div>
-      <div class="card">
-        <h3>风险等级分布</h3>
-        <div class="desc">高 / 中 / 低</div>
-        <div id="chart-risk" class="chart small"></div>
-      </div>
+
     </div>
 
-    <!-- Revenue / Equipment -->
-    <div class="grid cols-2">
-      <div class="card">
-        <h3>财务回款进度</h3>
-        <div class="desc">签字盖章 / 资料提交节点</div>
-        <div id="revenue-table"></div>
-      </div>
-      <div class="card">
-        <h3>设备状态</h3>
-        <div class="desc">已完成 / 进行中 / 等配件</div>
-        <div id="equipment-table"></div>
-      </div>
-    </div>
+
 
 
     <!-- Missing Persons Tracking -->
@@ -570,66 +554,12 @@
       });
     }
 
-    function renderRiskChart(d) {
-      const chart = echarts.init(document.getElementById("chart-risk"));
-      charts.risk = chart;
-      const counts = { high: 0, med: 0, low: 0 };
-      d.risks.forEach(r => counts[r.level]++);
-      chart.setOption({
-        ...baseChart,
-        tooltip: { ...baseChart.tooltip, trigger: "item" },
-        legend: { bottom: 0, textStyle: { color: "#94a3b8" } },
-        series: [{
-          type: "pie",
-          radius: ["50%", "75%"],
-          center: ["50%", "45%"],
-          label: { color: "#e2e8f0", formatter: "{b}\n{c} 项" },
-          data: [
-            { value: counts.high, name: "高", itemStyle: { color: "#ef4444" } },
-            { value: counts.med,  name: "中", itemStyle: { color: "#f59e0b" } },
-            { value: counts.low,  name: "低", itemStyle: { color: "#38bdf8" } }
-          ]
-        }]
-      });
-    }
+
 
     // ---- Tables ----
-    function renderRevenueTable(d) {
-      const html = `
-        <table>
-          <thead><tr><th>项目</th><th>状态</th><th>负责人</th><th style="width:140px">进度</th></tr></thead>
-          <tbody>
-            ${d.revenue.map(r => {
-              const cls = r.progress >= 80 ? "" : (r.progress >= 60 ? "yellow" : "red");
-              return `<tr>
-                <td>${r.item}</td>
-                <td>${r.status}</td>
-                <td>${r.owner}</td>
-                <td><div class="progress ${cls}"><span style="width:${r.progress}%"></span></div></td>
-              </tr>`;
-            }).join("")}
-          </tbody>
-        </table>
-      `;
-      document.getElementById("revenue-table").innerHTML = html;
-    }
 
-    function renderEquipmentTable(d) {
-      const html = `
-        <table>
-          <thead><tr><th>设备/项目</th><th>状态</th></tr></thead>
-          <tbody>
-            ${d.equipment.map(e => `
-              <tr>
-                <td>${e.name}</td>
-                <td><span class="badge ${e.status}">${e.label}</span></td>
-              </tr>
-            `).join("")}
-          </tbody>
-        </table>
-      `;
-      document.getElementById("equipment-table").innerHTML = html;
-    }
+
+
 
     function renderNextFocus(d) {
       const html = `
@@ -670,6 +600,16 @@
               issues: p.issues || "",
               plan: p.plan || ""
             };
+          });
+          // 调整顺序：施洪彬、李慧排到最前
+          var priorityNames = ["施洪彬", "李慧"];
+          persons.sort(function(a, b) {
+            var aIdx = priorityNames.indexOf(a.name);
+            var bIdx = priorityNames.indexOf(b.name);
+            if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+            if (aIdx !== -1) return -1;
+            if (bIdx !== -1) return 1;
+            return 0;
           });
         }
       }
@@ -889,9 +829,6 @@
         renderLouleiChart(data.kpi);
         renderOilChart(data.kpi);
         renderSignChart(data.kpi);
-        renderRiskChart(data);
-        renderRevenueTable(data);
-        renderEquipmentTable(data);
         renderNextFocus(data);
         // Fetch submission data
         const wData = await fetchWeeklyData();
