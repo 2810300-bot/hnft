@@ -60,6 +60,10 @@
     .refresh-badge {
       font-size: 13px; color: var(--text-dim); display: inline-flex; align-items: center; gap: 6px;
     }
+    .next-update-badge {
+      font-size: 12px; color: var(--text-dim); display: inline-flex; align-items: center; gap: 6px;
+      opacity: 0.7; margin-top: 2px;
+    }
     .pulse { width: 8px; height: 8px; border-radius: 50%; background: #4ade80;
       box-shadow: 0 0 0 0 rgba(74,222,128,0.7); animation: pulse 1.6s infinite; }
     @keyframes pulse {
@@ -271,6 +275,7 @@
       </div>
       <div class="header-right">
         <span class="refresh-badge"><span class="pulse"></span>数据更新：<span id="generated-at">加载中…</span></span>
+        <span class="next-update-badge" id="next-update-badge">下次更新：<span id="next-update">计算中…</span></span>
       </div>
     </div>
 
@@ -920,6 +925,17 @@
     });
 
     refresh();
+    
+    // 计算下周更新时间（每周六 18:00）
+    (function updateNext(){
+      const now=new Date(), n=new Date(now);
+      const d=n.getDay(), diff=(6-d+7)%7;
+      n.setDate(n.getDate()+(diff===0&&now.getHours()>=18?7:diff));
+      n.setHours(18,0,0,0);
+      const el=document.getElementById('next-update');
+      if(el) el.textContent=n.toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+      setTimeout(updateNext,3600000);
+    })();
   </script>
 </body>
 </html>
