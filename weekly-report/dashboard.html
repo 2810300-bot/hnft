@@ -435,13 +435,12 @@
       return fmt(monday) + ' — ' + fmt(sunday);
     }
 
-    function setText(id, txt) { document.getElementById(id).textContent = txt; }
+    function setText(id, txt) { const el = document.getElementById(id); if (el) el.textContent = txt; }
 
     function renderHeader(meta) {
       setText("company-name", "📊 周报驾驶舱");
       setText("report-period", "报告周期：" + computeNaturalWeek(meta.generated_at));
       setText("generated-at", (meta.generated_at || "").replace(/\s*（.*$/, "").split(" ")[0]);
-      setText("data-source", meta.report_source);
     }
 
     // ---- KPI cards ----
