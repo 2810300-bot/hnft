@@ -457,7 +457,7 @@
       charts.collection = chart;
       chart.setOption({
         ...baseChart,
-        title: { text: `${fmtNum(k.monthly_cumulative_tons)} / ${fmtNum(k.monthly_target_tons)} 吨`, left: "right", textStyle: { fontSize: 14, color: "#94a3b8" } },
+        title: { text: `${fmtNum(k.monthly_cumulative_tons, 2)} / ${fmtNum(k.monthly_target_tons)} 吨`, left: "right", textStyle: { fontSize: 14, color: "#94a3b8" } },
         xAxis: {
           type: "category",
           data: [
@@ -478,7 +478,7 @@
             { value: k.monthly_target_tons - k.monthly_cumulative_tons, itemStyle: { color: "#f59e0b" } }
           ],
           barWidth: 60,
-          label: { show: true, position: "top", color: "#e2e8f0", formatter: "{c:.2f} 吨" }
+          label: { show: true, position: "top", color: "#e2e8f0", formatter: function(p) { var v = p.value; return (v % 1 === 0 ? v : v.toFixed(2)) + " 吨"; } }
         }]
       });
     }
