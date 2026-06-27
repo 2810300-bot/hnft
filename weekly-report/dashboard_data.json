@@ -18,12 +18,12 @@
     "source_file": "weekly_report_summary_20260627"
   },
   "kpi": {
-    "weekly_collection_tons": 1391.09,
-    "daily_avg_tons": 198.73,
-    "monthly_cumulative_tons": 3666.19,
+    "weekly_collection_tons": 1400.48,
+    "daily_avg_tons": 200.07,
+    "monthly_cumulative_tons": 5065.15,
     "monthly_target_tons": 6140,
-    "monthly_completion_rate": 99.5,
-    "weekly_decline_tons": -36.15,
+    "monthly_completion_rate": 99.0,
+    "weekly_decline_tons": 9.39,
     "new_signed_this_week": 56,
     "new_signed_month": 120,
     "new_signed_completion_rate": 125,
