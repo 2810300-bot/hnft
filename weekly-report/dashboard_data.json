@@ -5,20 +5,20 @@
     "recipient": "总经理",
     "report_period": "2026年6月22日—6月28日",
     "report_period_short": "6月22日—6月28日",
-    "generated_at": "2026-06-27 19:35",
+    "generated_at": "2026-06-27 20:07",
     "report_source": "钉钉 OA 周报 / WorkBuddy 自动汇总",
     "submitted_count": 8,
     "departments": [
-      "财务部",
-      "销售部",
       "PMO部",
-      "生产部",
+      "销售部",
+      "安环部",
+      "财务部",
       "运维业务部",
       "综合管理部",
       "收运部",
-      "安环部"
+      "生产部"
     ],
-    "last_update": "2026-06-27T19:35:21+08:00",
+    "last_update": "2026-06-27T20:07:03+08:00",
     "source_file": "weekly_report_summary_20260627"
   },
   "kpi": {
@@ -32,7 +32,8 @@
     "fry_oil_rate": 104.7,
     "new_signed_this_week": 19,
     "new_signed_month": 133,
-    "new_signed_completion_rate": 554.17,
+    "new_signed_target": 800.0,
+    "new_signed_completion_rate": 16.62,
     "loulei_investigated": 828,
     "loulei_investigation_rate": 37.64,
     "loulei_signed": 348,
