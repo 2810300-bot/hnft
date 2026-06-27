@@ -1232,12 +1232,26 @@
     // ============================================================
     // 初始化
     // ============================================================
+    // 更新数据更新时间
+    function updateDataDate() {
+        var el = document.getElementById('data-date');
+        if (!el) return;
+        var now = new Date();
+        var ts = now.getFullYear() + '-' +
+                 String(now.getMonth()+1).padStart(2,'0') + '-' +
+                 String(now.getDate()).padStart(2,'0') + ' ' +
+                 String(now.getHours()).padStart(2,'0') + ':' +
+                 String(now.getMinutes()).padStart(2,'0');
+        el.textContent = ts;
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         renderKPIs();
         renderAllCharts('14');
         renderAnomalyTable();
         renderSeverityPie();
         AutoRefresh.init();
+        updateDataDate();  // 页面加载时更新数据更新时间
         
         // 计算并显示下次更新时间（每日 06:00）
         (function updateNextUpdate() {
