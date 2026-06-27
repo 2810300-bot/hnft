@@ -764,6 +764,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span class="refresh-dot"></span>
                     数据更新: <span id="footer-updated"></span>
                 </div>
+                <div class="flex items-center gap-2" id="next-update-wrapper">
+                    <i class="fas fa-clock"></i>
+                    <span>下次更新: <span id="mr-next-update">--</span></span>
+                </div>
                 <div class="flex items-center gap-2">
                     <i class="fas fa-clock"></i>
                     <span>每月15日更新</span>
@@ -1143,6 +1147,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 300);
 
+})();
+</script>
+
+<script>
+// 计算下次更新时间（每月15日 00:00）
+(function updateNext(){
+  const now=new Date(), n=new Date(now);
+  if(now.getDate()<15||(now.getDate()===15&&now.getHours()<0)){
+    n.setDate(15); n.setHours(0,0,0,0);
+  } else {
+    n.setMonth(n.getMonth()+1); n.setDate(15); n.setHours(0,0,0,0);
+  }
+  const el=document.getElementById('mr-next-update');
+  if(el) el.textContent=n.toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+  setTimeout(updateNext,3600000);
 })();
 </script>
 
