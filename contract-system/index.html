@@ -7,41 +7,8 @@
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-<style>
-    /* ===== TOP BAR (breadcrumb) ===== */
-    .top-bar {
-        background: #fff;
-        border-bottom: 1px solid #e2e8f0;
-        padding: 10px 24px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 13px;
-        color: #6b7280;
-    }
-    .top-bar a { color: #3b82f6; text-decoration: none; font-weight: 500; }
-    .top-bar a:hover { text-decoration: underline; }
-    .top-bar .sep { color: #cbd5e1; margin: 0 8px; }
-</style>
-<style>
-  .refresh-badge, .next-update-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 12px; padding: 4px 10px; border-radius: 20px;
-  }
-  .refresh-badge { color: #64748b; background: #f1f5f9; }
-  .next-update-badge { color: #94a3b8; background: #f8fafc; }
-</style>
 </head>
 <body>
-<!-- Breadcrumb -->
-<div class="top-bar">
-    <div>
-        <a href="../">🏠 看板中心</a>
-        <span class="sep">/</span>
-        <span>合同管理系统</span>
-    </div>
-</div>
-
 <div id="app">
   <!-- 侧边栏 -->
   <aside class="sidebar" id="sidebar">
@@ -77,10 +44,10 @@
     </nav>
     <div class="sidebar-footer">
       <div class="user-info">
-        <div class="avatar">管</div>
+        <div class="avatar">颜</div>
         <div class="user-detail">
-          <span class="user-name">管理员</span>
-          <span class="user-role">系统管理员</span>
+          <span class="user-name">颜一亩</span>
+          <span class="user-role">总经理</span>
         </div>
       </div>
     </div>
@@ -95,12 +62,6 @@
         <h1 id="module-title">总览仪表盘</h1>
       </div>
       <div class="topbar-right">
-        <div class="refresh-badge" id="refresh-time">
-          🔄 数据同步：<span id="last-sync-time">--</span>
-        </div>
-        <div class="next-update-badge" id="next-update-badge">
-          下次更新：<span id="cs-next-update">--</span>
-        </div>
         <div class="search-box">
           <input type="text" placeholder="搜索合同、模板、文件..." id="globalSearch" onkeyup="handleGlobalSearch(event)">
           <button onclick="doGlobalSearch()">&#128269;</button>
@@ -167,7 +128,7 @@
                 </div>
                 <div class="timeline-item">
                   <span class="tl-date">06-18</span>
-                  <span class="tl-text">IMA知识库「岳阳市厨余垃圾项目-合同管理」同步完成（70份文件，69份合同已映射）</span>
+                  <span class="tl-text">IMA知识库「岳阳餐厨垃圾项目-合同管理」同步完成（70份文件，69份合同已映射）</span>
                 </div>
                 <div class="timeline-item">
                   <span class="tl-date">06-17</span>
@@ -206,13 +167,13 @@
             <div class="card-header"><h3>IMA 知识库状态</h3></div>
             <div class="card-body">
               <div class="kb-status-list">
-                <div class="kb-item"><span class="kb-icon">&#128218;</span><span class="kb-name">岳阳市厨余垃圾项目 <small>(513条目)</small></span><span class="kb-badge ready">已连接</span></div>
+                <div class="kb-item"><span class="kb-icon">&#128218;</span><span class="kb-name">岳阳餐厨垃圾项目 <small>(513条目)</small></span><span class="kb-badge ready">已连接</span></div>
                 <div class="kb-item"><span class="kb-icon">&#128193;</span><span class="kb-name">合同管理文件夹 <small>(8个子目录)</small></span><span class="kb-badge ready">就绪</span></div>
                 <div class="kb-item"><span class="kb-icon">&#128195;</span><span class="kb-name">合同模板库</span><span class="kb-badge pending">待创建</span></div>
                 <div class="kb-item"><span class="kb-icon">&#9878;</span><span class="kb-name">法律法规库</span><span class="kb-badge pending">待创建</span></div>
                 <div class="kb-item"><span class="kb-icon">&#128203;</span><span class="kb-name">合同审查标准</span><span class="kb-badge pending">待创建</span></div>
               </div>
-              <p class="kb-hint">数据来源: IMA知识库「岳阳市厨余垃圾项目-合同管理」 | 最后同步: <span id="imaLastSync">2026-06-22</span> | 自动同步: 每周一08:00</p>
+              <p class="kb-hint">数据来源: IMA知识库「岳阳餐厨垃圾项目-合同管理」 | 最后同步: <span id="imaLastSync">2026-06-22</span> | 自动同步: 每周一08:00</p>
             </div>
           </div>
         </div>
@@ -482,7 +443,7 @@
 
         <div class="storage-tree">
           <div class="tree-folder open">
-            <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>岳阳市厨余垃圾项目<span class="tf-count">513条目</span></div>
+            <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>岳阳餐厨垃圾项目<span class="tf-count">513条目</span></div>
             <div class="tf-content">
               <div class="tree-folder open">
                 <div class="tf-header" onclick="toggleFolder(this)"><span class="tf-icon">&#128193;</span>合同管理<span class="tf-count">69份合同</span></div>
@@ -799,16 +760,16 @@
       <div class="modal-body">
         <div class="ima-status-detail" id="imaStatusContent">
           <div class="ima-conn-row"><span class="ima-conn-label">连接状态</span><span class="ima-conn-value connected">已连接 ✓</span></div>
-          <div class="ima-conn-row"><span class="ima-conn-label">已授权知识库</span><span class="ima-conn-value">岳阳市厨余垃圾项目 (513条目)</span></div>
+          <div class="ima-conn-row"><span class="ima-conn-label">已授权知识库</span><span class="ima-conn-value">岳阳餐厨垃圾项目 (513条目)</span></div>
           <div class="ima-conn-row"><span class="ima-conn-label">合同管理文件夹</span><span class="ima-conn-value">8个子目录</span></div>
           <div class="ima-conn-row"><span class="ima-conn-label">最后同步</span><span class="ima-conn-value">2026-06-18</span></div>
           <div class="ima-kb-list">
-            <div class="ima-kb-item ready"><span>岳阳市厨余垃圾项目 — 合同管理</span><span class="kb-badge ready">已连接</span></div>
+            <div class="ima-kb-item ready"><span>岳阳餐厨垃圾项目 — 合同管理</span><span class="kb-badge ready">已连接</span></div>
             <div class="ima-kb-item pending"><span>伏泰-合同模板库</span><span class="kb-badge pending">待创建</span></div>
             <div class="ima-kb-item pending"><span>伏泰-法律法规库</span><span class="kb-badge pending">待创建</span></div>
             <div class="ima-kb-item pending"><span>伏泰-合同审查标准</span><span class="kb-badge pending">待创建</span></div>
           </div>
-          <p class="ima-hint">数据来源: IMA知识库「岳阳市厨余垃圾项目-合同管理」（70份文件，69份合同已映射），自动化引擎每周一08:00扫描更新。</p>
+          <p class="ima-hint">数据来源: IMA知识库「岳阳餐厨垃圾项目-合同管理」（70份文件，69份合同已映射），自动化引擎每周一08:00扫描更新。</p>
         </div>
       </div>
       <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('imaStatusModal')">关闭</button></div>
@@ -826,26 +787,8 @@
   </div>
 
 </div>
-<footer style="text-align:center; padding:24px; margin-top:40px; border-top:1px solid var(--border); color:var(--text-secondary); font-size:13px;">&copy; 2026 湖南伏泰环境科技有限责任公司</footer>
 
 <script src="data.js"></script>
 <script src="app.js"></script>
-<script>
-// 计算下次更新时间（每周一 08:00）
-(function updateNext(){
-  const now=new Date(), n=new Date(now);
-  const d=n.getDay(), diff=(1-d+7)%7;
-  n.setDate(n.getDate()+(diff===0&&now.getHours()>=8?7:diff));
-  n.setHours(8,0,0,0);
-  const el=document.getElementById('cs-next-update');
-  if(el) el.textContent=n.toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
-  setTimeout(updateNext,3600000);
-})();
-// 更新数据同步时间
-(function(){
-  const el=document.getElementById('last-sync-time');
-  if(el) el.textContent='2026-06-22 09:00';
-})();
-</script>
 </body>
 </html>
