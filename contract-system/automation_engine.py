@@ -33,7 +33,7 @@ STATUS_FILE = SNAPSHOT_DIR / "task_status.json"
 
 IMA_BASE_URL = "https://ima.qq.com/openapi/wiki/v1"
 IMA_KB_ID = "rpjY-P_h9OTpvV05usKihwJFx1ini69GhCxY-83pEvo="
-IMA_KB_NAME = "岳阳市厨余垃圾项目"
+IMA_KB_NAME = "岳阳餐厨垃圾项目"
 IMA_CONTRACT_FOLDER_ID = "folder_7474652100181775"
 
 # 预警阈值（天数）
@@ -56,29 +56,44 @@ def _get_ima_credentials():
     return client_id, api_key
 
 def _ima_api_request(endpoint, data):
-    """通用IMA API请求"""
+    """通用IMA API请求（通过ima_api.cjs调用，更可靠）"""
     client_id, api_key = _get_ima_credentials()
-    url = f"{IMA_BASE_URL}/{endpoint}"
+    ima_api_path = Path("/Users/mac/.workbuddy/skills/ima-skill/ima_api.cjs")
     
-    headers = {
-        "ima-openapi-clientid": client_id,
-        "ima-openapi-apikey": api_key,
-        "Content-Type": "application/json"
-    }
+    if not ima_api_path.exists():
+        return {"error": "ima_api.cjs 不存在"}
     
-    body = json.dumps(data).encode("utf-8")
-    req = Request(url, data=body, headers=headers, method="POST")
+    # 确保 endpoint 为完整 apiPath
+    if not endpoint.startswith("openapi/"):
+        api_path = f"openapi/wiki/v1/{endpoint}"
+    else:
+        api_path = endpoint
+    
+    opts = json.dumps({"clientId": client_id, "apiKey": api_key}, ensure_ascii=False)
+    body = json.dumps(data, ensure_ascii=False)
     
     try:
-        with urlopen(req, timeout=30) as resp:
-            result = json.loads(resp.read().decode("utf-8"))
-            if result.get("retcode") != 0:
-                return {"error": result.get("errmsg", "未知错误"), "retcode": result.get("retcode")}
-            return result.get("data", {})
-    except (URLError, HTTPError) as e:
+        result = subprocess.run(
+            ["/Users/mac/.workbuddy/binaries/node/versions/22.22.2/bin/node", str(ima_api_path), api_path, body, opts],
+            capture_output=True, text=True, timeout=60
+        )
+        
+        if result.returncode != 0:
+            err_text = result.stderr.strip() or result.stdout.strip()
+            try:
+                err_json = json.loads(err_text)
+                return {"error": err_json.get("msg", err_text)}
+            except json.JSONDecodeError:
+                return {"error": err_text or "ima_api 调用失败"}
+        
+        resp = json.loads(result.stdout)
+        if resp.get("code") != 0:
+            return {"error": resp.get("msg", "未知错误")}
+        return resp.get("data", {})
+    except subprocess.TimeoutExpired:
+        return {"error": "IMA API 请求超时"}
+    except Exception as e:
         return {"error": str(e)}
-    except json.JSONDecodeError:
-        return {"error": "响应解析失败"}
 
 def scan_knowledge_base(folder_id=None, limit=50):
     """扫描IMA知识库指定文件夹，获取所有条目列表"""
@@ -210,15 +225,17 @@ def detect_changes(current_items, previous_items):
 # ============================================================
 def scan_expiry_warnings(contracts_data):
     """扫描合同到期情况，生成分级预警"""
-    now = datetime.datetime(2026, 6, 22)
+    now = datetime.datetime.now()
     warnings = []
     
     for c in contracts_data:
         status = c.get("status", "")
         end_date_str = c.get("endDate", "")
         
-        # 排除已完成/已归档/无明确日期的合同
-        if status in ["已归档", "履行完毕", "已到期"]:
+        # 排除已完成/已归档的合同
+        if status in ["已归档", "履行完毕"]:
+            continue
+        if "后续已续签" in status:
             continue
         if not end_date_str or any(k in end_date_str for k in ["待", "长期", "贰年", "约", "收到", "款到", "货期", "付", "天", "左右"]):
             continue
@@ -229,11 +246,23 @@ def scan_expiry_warnings(contracts_data):
             continue
         
         days_left = (end_date - now).days
-        if days_left < 0 or days_left > 90:
+        # 保留90天内到期或已过期（但不超过90天前）的合同
+        if days_left > 90 or days_left < -90:
             continue
         
-        level = "urgent" if days_left <= 7 else "caution" if days_left <= 30 else "notice"
-        action = "紧急处理" if days_left <= 7 else "需续签" if days_left <= 30 else "关注"
+        # 已过期/待续签 强制标记为紧急
+        if days_left < 0 or status in ["待续签", "已到期"]:
+            level = "urgent"
+            action = "已过期，需立即续签" if days_left < 0 else "需续签"
+        elif days_left <= 7:
+            level = "urgent"
+            action = "紧急处理"
+        elif days_left <= 30:
+            level = "caution"
+            action = "需续签"
+        else:
+            level = "notice"
+            action = "关注"
         
         warnings.append({
             "id": c.get("id", ""),
