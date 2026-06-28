@@ -17,14 +17,6 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SITE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-# 优先用 env 指定，其次检测本地 git remote，最后用 HTTPS+token 兜底
-if [ -n "${GITHUB_PAGES_REPO:-}" ]; then
-    REPO_URL="$GITHUB_PAGES_REPO"
-elif git remote get-url origin 2>/dev/null | grep -q '@\|https'; then
-    REPO_URL="$(git remote get-url origin)"
-else
-    REPO_URL="https://github.com/2810300-bot/hnft.git"
-fi
 BRANCH="${GITHUB_PAGES_BRANCH:-main}"
 COMMIT_MSG="auto: dashboard refresh $(date '+%Y-%m-%d %H:%M:%S')"
 DRY_RUN=false
@@ -44,7 +36,6 @@ done
 echo "============================================"
 echo "  GitHub Pages 部署: hnft-site"
 echo "  时间: $(date '+%Y-%m-%d %H:%M:%S')"
-echo "  目标: $REPO_URL"
 echo "============================================"
 
 cd "$SITE_DIR"
@@ -53,8 +44,19 @@ cd "$SITE_DIR"
 if [ ! -d ".git" ]; then
     echo "🔧 初始化 Git 仓库..."
     git init
-    git remote add origin "$REPO_URL" 2>/dev/null || git remote set-url origin "$REPO_URL"
+    git remote add origin "https://github.com/${OWNER}/${REPO}.git" 2>/dev/null || git remote set-url origin "https://github.com/${OWNER}/${REPO}.git"
 fi
+
+# 优先用 env 指定，其次检测本地 git remote（必须在 cd 到 SITE_DIR 之后）
+if [ -n "${GITHUB_PAGES_REPO:-}" ]; then
+    REPO_URL="$GITHUB_PAGES_REPO"
+elif git remote get-url origin 2>/dev/null | grep -q '@\|https'; then
+    REPO_URL="$(git remote get-url origin)"
+else
+    REPO_URL="https://github.com/${OWNER}/${REPO}.git"
+fi
+
+echo "  目标: $REPO_URL"
 
 # 拉取最新代码并 rebase 本地变更（保留本地文件）
 echo "📥 拉取远程最新代码..."
