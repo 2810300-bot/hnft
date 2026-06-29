@@ -422,6 +422,128 @@
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
+
+        /* Weekly Report Module */
+        .weekly-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: var(--gap);
+            min-height: 600px;
+        }
+        .weekly-list-panel {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .weekly-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+        .btn-refresh {
+            background: none;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .btn-refresh:hover { background: #f0f2f5; }
+        .weekly-list-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+        .weekly-report-item {
+            padding: 12px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 4px;
+            border: 1px solid transparent;
+        }
+        .weekly-report-item:hover {
+            background: #f0f4f8;
+            border-color: #d0dbe8;
+        }
+        .weekly-report-item.active {
+            background: #e8f0fe;
+            border-color: var(--accent);
+        }
+        .wr-week {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+        .wr-range {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .wr-summary {
+            font-size: 12px;
+            color: #888;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .wr-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 6px;
+        }
+        .weekly-preview-panel {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+        .weekly-preview-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-height: 400px;
+        }
+        .btn-detail {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .btn-detail:hover { background: #3a5a8c; }
+
+        @media (max-width: 900px) {
+            .weekly-layout {
+                grid-template-columns: 1fr;
+            }
+            .weekly-preview-panel {
+                min-height: 400px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -445,7 +567,7 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-06-29 11:57</span>
+                    数据更新: <span id="data-date">2026-06-29 12:41</span>
                 </div>
                     <div class="next-update" id="next-update-container">
                         下次更新: <span id="next-update">--</span>
@@ -581,7 +703,6 @@
             </div>
         </section>
 
-
         <!-- Module 3: 周度分析报告 -->
         <section class="module-content" id="module-weekly">
             <div class="filter-bar">
@@ -598,14 +719,11 @@
                 <div class="filter-group" style="margin-left: auto;">
                     <span id="weekly-count" style="font-size: 13px; color: var(--text-secondary);"></span>
                 </div>
-                <button onclick="exportCurrentReport()" id="btn-export" class="btn-export" style="display:none;" title="导出当前报告">
-                    📥 导出HTML
+                <button onclick="showDetailReport()" id="btn-detail" class="btn-detail" style="display:none;" title="在新标签页打开详情报告">
+                    📋 显示详情
                 </button>
             </div>
-
-            <!-- Layout: list + preview -->
             <div class="weekly-layout">
-                <!-- Report List -->
                 <div class="weekly-list-panel" id="weekly-list-panel">
                     <div class="weekly-list-header">
                         <span>📋 报告列表</span>
@@ -619,8 +737,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Preview Panel -->
                 <div class="weekly-preview-panel" id="weekly-preview">
                     <div class="weekly-preview-placeholder">
                         <div style="font-size: 48px; opacity: 0.3;">📋</div>
@@ -1145,6 +1261,9 @@
             renderSeverityPie();
             renderAnomalyTable();
         }
+        if (name === 'weekly') {
+            if (typeof WeeklyReports !== 'undefined') WeeklyReports.init();
+        }
     }
 
     function updateCharts() {
@@ -1346,22 +1465,16 @@
             document.querySelectorAll('.weekly-report-item').forEach(el => el.classList.remove('active'));
             const placeholder = document.querySelector('.weekly-preview-placeholder');
             const iframe = document.getElementById('weekly-iframe');
-            const exportBtn = document.getElementById('btn-export');
+            const detailBtn = document.getElementById('btn-detail');
             if (placeholder) placeholder.style.display = 'none';
             iframe.style.display = 'block';
             iframe.src = report.url;
-            exportBtn.style.display = 'inline-flex';
+            if (detailBtn) detailBtn.style.display = 'inline-flex';
         }
 
-        function exportReport() {
+        function showDetail() {
             if (!activeReport) return;
-            const a = document.createElement('a');
-            a.href = activeReport.url;
-            a.download = '花果畈第' + activeReport.week + '周收运量分析报告.html';
-            a.target = '_blank';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            window.open(activeReport.url, '_blank');
         }
 
         async function init() {
@@ -1371,7 +1484,7 @@
             if (reports.length > 0) preview(reports[0].week);
         }
 
-        return { init, preview, exportReport, loadIndex, getReports: function() { return reports; } };
+        return { init, preview, showDetail, loadIndex, renderList, getReports: function() { return reports; } };
     })();
 
     function filterWeeklyReports() {
@@ -1383,10 +1496,10 @@
             if (filter !== 'all' || search) {
                 const ph = document.querySelector('.weekly-preview-placeholder');
                 const ifr = document.getElementById('weekly-iframe');
-                const btn = document.getElementById('btn-export');
+                const btn = document.getElementById('btn-detail');
                 if (ph) ph.style.display = 'flex';
-                ifr.style.display = 'none';
-                btn.style.display = 'none';
+                if (ifr) ifr.style.display = 'none';
+                if (btn) btn.style.display = 'none';
             }
         });
     }
@@ -1396,10 +1509,9 @@
         WeeklyReports.init();
     }
 
-    function exportCurrentReport() {
-        WeeklyReports.exportReport();
+    function showDetailReport() {
+        WeeklyReports.showDetail();
     }
-
 
     // ============================================================
     // 初始化
