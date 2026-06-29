@@ -219,6 +219,9 @@
 
         /* Module Content */
         .module-content {
+            display: none;
+        }
+        .module-content.active {
             display: block;
         }
 
@@ -420,6 +423,127 @@
             100% { background-position: 200% 0; }
         }
 
+        /* Weekly Report Module */
+        .weekly-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: var(--gap);
+            min-height: 600px;
+        }
+        .weekly-list-panel {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .weekly-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+        .btn-refresh {
+            background: none;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .btn-refresh:hover { background: #f0f2f5; }
+        .weekly-list-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+        .weekly-report-item {
+            padding: 12px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 4px;
+            border: 1px solid transparent;
+        }
+        .weekly-report-item:hover {
+            background: #f0f4f8;
+            border-color: #d0dbe8;
+        }
+        .weekly-report-item.active {
+            background: #e8f0fe;
+            border-color: var(--accent);
+        }
+        .wr-week {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+        .wr-range {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .wr-summary {
+            font-size: 12px;
+            color: #888;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .wr-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 6px;
+        }
+        .weekly-preview-panel {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+        .weekly-preview-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-height: 400px;
+        }
+        .btn-detail {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .btn-detail:hover { background: #3a5a8c; }
+
+        @media (max-width: 900px) {
+            .weekly-layout {
+                grid-template-columns: 1fr;
+            }
+            .weekly-preview-panel {
+                min-height: 400px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -443,7 +567,7 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-06-29 12:41</span>
+                    数据更新: <span id="data-date">2026-06-30 05:55</span>
                 </div>
                     <div class="next-update" id="next-update-container">
                         下次更新: <span id="next-update">--</span>
@@ -493,7 +617,8 @@
         <!-- Module Tabs -->
         <nav class="module-tabs">
             <button class="module-tab active" onclick="switchModule('volume')">📊 数据量分析</button>
-            <button class="module-tab active" onclick="switchModule('anomaly')">⚠️ 异常分析</button>
+            <button class="module-tab" onclick="switchModule('anomaly')">⚠️ 异常分析</button>
+            <button class="module-tab" onclick="switchModule('weekly')">📋 周度分析报告</button>
         </nav>
 
         <!-- Module 1: 数据量分析 -->
@@ -538,7 +663,7 @@
         </section>
 
         <!-- Module 2: 异常分析 -->
-        <section class="module-content active" id="module-anomaly">
+        <section class="module-content" id="module-anomaly">
             <div class="filter-bar">
                 <div class="filter-group">
                     <label>严重度</label>
@@ -575,6 +700,50 @@
             <div class="table-section">
                 <h3>异常明细列表</h3>
                 <div id="anomaly-table-container"></div>
+            </div>
+        </section>
+
+        <!-- Module 3: 周度分析报告 -->
+        <section class="module-content" id="module-weekly">
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>筛选周次</label>
+                    <select id="weekly-filter" onchange="filterWeeklyReports()">
+                        <option value="all">全部报告</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>搜索</label>
+                    <input type="text" id="weekly-search" placeholder="输入关键词..." oninput="filterWeeklyReports()" style="width:200px;">
+                </div>
+                <div class="filter-group" style="margin-left: auto;">
+                    <span id="weekly-count" style="font-size: 13px; color: var(--text-secondary);"></span>
+                </div>
+                <button onclick="showDetailReport()" id="btn-detail" class="btn-detail" style="display:none;" title="在新标签页打开详情报告">
+                    📋 显示详情
+                </button>
+            </div>
+            <div class="weekly-layout">
+                <div class="weekly-list-panel" id="weekly-list-panel">
+                    <div class="weekly-list-header">
+                        <span>📋 报告列表</span>
+                        <button onclick="refreshWeeklyReports()" class="btn-refresh" title="刷新列表">🔄</button>
+                    </div>
+                    <div class="weekly-list-body" id="weekly-list">
+                        <div style="padding: 40px; text-align: center; color: var(--text-secondary);">
+                            <div class="shimmer" style="width: 200px; height: 20px; margin: 10px auto; border-radius: 4px;"></div>
+                            <div class="shimmer" style="width: 150px; height: 16px; margin: 10px auto; border-radius: 4px;"></div>
+                            <div style="margin-top: 12px;">正在加载报告列表...</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="weekly-preview-panel" id="weekly-preview">
+                    <div class="weekly-preview-placeholder">
+                        <div style="font-size: 48px; opacity: 0.3;">📋</div>
+                        <div style="margin-top: 12px; color: var(--text-secondary);">选择一份报告进行预览</div>
+                    </div>
+                    <iframe id="weekly-iframe" style="display:none; width: 100%; height: 100%; border: none;" sandbox="allow-scripts allow-same-origin"></iframe>
+                </div>
             </div>
         </section>
 
@@ -1083,12 +1252,17 @@
     // ============================================================
     function switchModule(name) {
         document.querySelectorAll('.module-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.module-content').forEach(m => m.classList.remove('active'));
+
         document.querySelector(`[onclick="switchModule('${name}')"]`).classList.add('active');
-        document.getElementById('module-' + name).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('module-' + name).classList.add('active');
 
         if (name === 'anomaly') {
             renderSeverityPie();
             renderAnomalyTable();
+        }
+        if (name === 'weekly') {
+            if (typeof WeeklyReports !== 'undefined') WeeklyReports.init();
         }
     }
 
@@ -1224,6 +1398,120 @@
             restore: restoreState,
         };
     })();
+
+    // ============================================================
+    // 周度分析报告模块
+    // ============================================================
+    const WeeklyReports = (function() {
+        const INDEX_URL = '../weekly-analysis/reports.json';
+        let reports = [];
+        let activeReport = null;
+
+        async function loadIndex() {
+            try {
+                const resp = await fetch(INDEX_URL);
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const data = await resp.json();
+                reports = data.reports || [];
+                return reports;
+            } catch (e) {
+                console.error('Failed to load reports index:', e);
+                return [];
+            }
+        }
+
+        function renderList(filterWeek, searchTerm) {
+            const container = document.getElementById('weekly-list');
+            const countEl = document.getElementById('weekly-count');
+            let filtered = [...reports];
+            if (filterWeek && filterWeek !== 'all') {
+                filtered = filtered.filter(r => r.week === parseInt(filterWeek));
+            }
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filtered = filtered.filter(r =>
+                    (r.label || '').toLowerCase().includes(term) ||
+                    (r.summary || '').toLowerCase().includes(term) ||
+                    String(r.week).includes(term)
+                );
+            }
+            countEl.textContent = '共 ' + filtered.length + ' 份报告';
+            if (filtered.length === 0) {
+                container.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--text-secondary);">暂无匹配的报告</div>';
+                return;
+            }
+            let html = '';
+            filtered.forEach(r => {
+                const isActive = activeReport && activeReport.week === r.week;
+                html += '<div class="weekly-report-item' + (isActive ? ' active' : '') + '" onclick="WeeklyReports.preview(' + r.week + ')" title="' + (r.summary || '') + '"><div class="wr-week">' + r.label + '</div><div class="wr-range">' + r.date_range + '</div><div class="wr-summary">' + (r.summary || '') + '</div><div class="wr-meta"><span>' + r.size_kb + ' KB</span><span>' + (r.created || '').substring(0, 10) + '</span></div></div>';
+            });
+            container.innerHTML = html;
+        }
+
+        function populateWeekFilter() {
+            const select = document.getElementById('weekly-filter');
+            const weeks = [...new Set(reports.map(r => r.week))].sort((a, b) => b - a);
+            select.innerHTML = '<option value="all">全部报告</option>';
+            weeks.forEach(w => {
+                const r = reports.find(r2 => r2.week === w);
+                select.innerHTML += '<option value="' + w + '">第' + w + '周' + (r ? ' (' + r.date_range + ')' : '') + '</option>';
+            });
+        }
+
+        function preview(weekNum) {
+            const report = reports.find(r => r.week === weekNum);
+            if (!report) return;
+            activeReport = report;
+            document.querySelectorAll('.weekly-report-item').forEach(el => el.classList.remove('active'));
+            const placeholder = document.querySelector('.weekly-preview-placeholder');
+            const iframe = document.getElementById('weekly-iframe');
+            const detailBtn = document.getElementById('btn-detail');
+            if (placeholder) placeholder.style.display = 'none';
+            iframe.style.display = 'block';
+            iframe.src = report.url;
+            if (detailBtn) detailBtn.style.display = 'inline-flex';
+        }
+
+        function showDetail() {
+            if (!activeReport) return;
+            window.open(activeReport.url, '_blank');
+        }
+
+        async function init() {
+            await loadIndex();
+            populateWeekFilter();
+            renderList('all', '');
+            if (reports.length > 0) preview(reports[0].week);
+        }
+
+        return { init, preview, showDetail, loadIndex, renderList, getReports: function() { return reports; } };
+    })();
+
+    function filterWeeklyReports() {
+        const filter = document.getElementById('weekly-filter').value;
+        const search = document.getElementById('weekly-search').value;
+        WeeklyReports.loadIndex().then(() => {
+            document.querySelectorAll('.weekly-report-item').forEach(el => el.classList.remove('active'));
+            WeeklyReports.renderList(filter, search);
+            if (filter !== 'all' || search) {
+                const ph = document.querySelector('.weekly-preview-placeholder');
+                const ifr = document.getElementById('weekly-iframe');
+                const btn = document.getElementById('btn-detail');
+                if (ph) ph.style.display = 'flex';
+                if (ifr) ifr.style.display = 'none';
+                if (btn) btn.style.display = 'none';
+            }
+        });
+    }
+
+    function refreshWeeklyReports() {
+        document.getElementById('weekly-list').innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-secondary);"><div class="shimmer" style="width:200px;height:20px;margin:10px auto;border-radius:4px;"></div><div>刷新中...</div></div>';
+        WeeklyReports.init();
+    }
+
+    function showDetailReport() {
+        WeeklyReports.showDetail();
+    }
 
     // ============================================================
     // 初始化
