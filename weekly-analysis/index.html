@@ -6,44 +6,72 @@
 <title>花果畈餐厨垃圾第26周收运量分析报告 (6.22-6.28)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
+:root {
+  --primary: #1a5276;
+  --primary-light: #2e86c1;
+  --bg: #f0f2f5;
+  --card-bg: #ffffff;
+  --text: #2c3e50;
+  --text-secondary: #6c757d;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --gap: 20px;
+}
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #333; line-height: 1.6; }
-.header { background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%); color: white; padding: 32px 40px; text-align: center; }
-.header h1 { font-size: 28px; margin-bottom: 8px; }
-.header .sub { opacity: 0.85; font-size: 14px; }
-.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
-.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
-.kpi-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; }
-.kpi-card .label { font-size: 13px; color: #888; margin-bottom: 6px; }
-.kpi-card .value { font-size: 32px; font-weight: 700; color: #1a5276; }
-.kpi-card .sub-value { font-size: 13px; color: #999; margin-top: 4px; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+.header { background: linear-gradient(135deg, #0d3b59 0%, #1a5276 50%, #2e86c1 100%); color: white; padding: 40px 48px; text-align: center; position: relative; overflow: hidden; }
+.header::before { content: ''; position: absolute; top: -50%; right: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); border-radius: 50%; }
+.header > * { position: relative; z-index: 1; }
+.header h1 { font-size: 30px; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px; }
+.header .sub { opacity: 0.85; font-size: 14px; letter-spacing: 0.3px; }
+.container { max-width: 1200px; margin: 0 auto; padding: var(--gap); }
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); margin-bottom: var(--gap); }
+.kpi-card { background: var(--card-bg); border-radius: var(--radius); padding: 24px 20px; box-shadow: var(--shadow); text-align: center; transition: transform 0.2s, box-shadow 0.2s; border-top: 3px solid transparent; }
+.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+.kpi-card:nth-child(1) { border-top-color: #2e86c1; }
+.kpi-card:nth-child(2) { border-top-color: #2e86c1; }
+.kpi-card:nth-child(3) { border-top-color: #e15759; }
+.kpi-card:nth-child(4) { border-top-color: #59a14f; }
+.kpi-card .label { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
+.kpi-card .value { font-size: 36px; font-weight: 700; color: var(--primary); line-height: 1.2; }
+.kpi-card .sub-value { font-size: 13px; color: #999; margin-top: 6px; }
 .kpi-card.peak .value { color: #e15759; }
 .kpi-card.valley .value { color: #59a14f; }
-.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-.chart-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-.chart-card h3 { font-size: 16px; margin-bottom: 16px; color: #333; }
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); margin-bottom: var(--gap); }
+.chart-card { background: var(--card-bg); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+.chart-card h3 { font-size: 16px; margin-bottom: 16px; color: var(--text); font-weight: 600; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
 .chart-card.full { grid-column: 1 / -1; }
-.table-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 24px; }
-.table-card h3 { font-size: 16px; margin-bottom: 12px; }
+.chart-card canvas { max-height: 380px; }
+.table-card { background: var(--card-bg); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin-bottom: var(--gap); overflow-x: auto; }
+.table-card h3 { font-size: 16px; margin-bottom: 14px; color: var(--text); font-weight: 600; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th { background: #f8f9fa; text-align: left; padding: 10px 12px; font-weight: 600; color: #555; border-bottom: 2px solid #e0e0e0; }
-td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
-tr:hover { background: #fafbfc; }
+th { background: #f8f9fa; text-align: left; padding: 12px 14px; font-weight: 600; color: #555; border-bottom: 2px solid #dee2e6; white-space: nowrap; }
+td { padding: 11px 14px; border-bottom: 1px solid #f0f0f0; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8fafc; }
 .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
-.alert-box { background: #fff3cd; border-left: 4px solid #f28e2b; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; font-size: 14px; }
+.alert-box { background: #fff8e1; border-left: 4px solid #f28e2b; padding: 16px 20px; border-radius: 8px; margin-bottom: var(--gap); font-size: 14px; line-height: 1.6; }
 .alert-box strong { color: #d35400; }
-.insight-box { background: #eaf2f8; border-left: 4px solid #2e86c1; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; font-size: 14px; }
-.footer { text-align: center; padding: 24px; color: #aaa; font-size: 12px; }
+.insight-box { background: #e8f4fd; border-left: 4px solid #2e86c1; padding: 16px 20px; border-radius: 8px; margin-bottom: var(--gap); font-size: 14px; line-height: 1.6; }
+.footer { text-align: center; padding: 32px 24px; color: #999; font-size: 13px; background: #fff; border-top: 1px solid #eee; margin-top: 8px; }
 @media (max-width: 768px) {
+  .header { padding: 28px 20px; }
+  .header h1 { font-size: 22px; }
   .kpi-row { grid-template-columns: repeat(2, 1fr); }
   .chart-grid { grid-template-columns: 1fr; }
+  .kpi-card .value { font-size: 28px; }
+  .container { padding: 12px; }
+}
+@media print {
+  body { background: #fff; }
+  .header { background: #1a5276 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 </style>
 </head>
 <body>
 <div class="header">
   <h1>花果畈餐厨垃圾第26周收运量分析报告</h1>
-  <div class="sub">分析周期：2026年6月22日 — 6月28日（7天） ｜ 湖南伏泰环境科技</div>
+  <div class="sub">分析周期：2026年6月22日 — 6月28日（7天） ｜ 岳阳市厨余垃圾资源化利用和无害化处置项目</div>
 </div>
 
 <div class="container">
@@ -145,7 +173,7 @@ tr:hover { background: #fafbfc; }
   </div>
 </div>
 
-<div class="footer">湖南伏泰环境科技 &middot; 花果畈餐厨垃圾项目 &middot; 报告生成时间 2026-06-29 11:08</div>
+<div class="footer">&copy; 2026 湖南伏泰环境科技有限责任公司</div>
 
 <script>
 new Chart(document.getElementById("dailyChart"), {
