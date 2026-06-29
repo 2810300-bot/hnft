@@ -279,6 +279,66 @@ body {
 .peak-cell { color: var(--accent-red); font-weight: 600; }
 .valley-cell { color: var(--accent-green); font-weight: 600; }
 
+/* Bottom-10 Vehicle Table */
+.bottom10-card {
+  background: linear-gradient(135deg, #fef2f2 0%, #fff5f5 100%);
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 16px;
+}
+.bottom10-card h4 {
+  font-size: 14px; font-weight: 600;
+  margin-bottom: 10px;
+  color: #b91c1c;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #fecaca;
+  display: flex; align-items: center; gap: 8px;
+}
+.bottom10-card .warn-icon { font-size: 18px; }
+.vehicle-table .warn-row td { background: #fef2f2; }
+.vehicle-table .warn-row:hover td { background: #fee2e2; }
+.vehicle-table .decline-reasons {
+  font-size: 11px;
+  color: #b91c1c;
+  max-width: 260px;
+  line-height: 1.5;
+}
+.vehicle-table .mom-down { color: #b91c1c; font-weight: 600; }
+.vehicle-table .mom-up { color: #16a34a; }
+.vehicle-table .mom-neutral { color: #64748b; }
+.vehicle-table th { white-space: nowrap; }
+.vehicle-table td { white-space: nowrap; }
+.vehicle-table td.reason-cell { white-space: normal; }
+
+/* Dual ranking row */
+.ranking-duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+.ranking-card {
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid var(--border-light);
+}
+.ranking-card.top { background: #f0fdf4; border-color: #bbf7d0; }
+.ranking-card.bottom { background: #fef2f2; border-color: #fecaca; }
+.ranking-card h4 {
+  font-size: 14px; font-weight: 600;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid;
+  display: flex; align-items: center; gap: 8px;
+}
+.ranking-card.top h4 { color: #166534; border-color: #bbf7d0; }
+.ranking-card.bottom h4 { color: #991b1b; border-color: #fecaca; }
+
+@media (max-width: 768px) {
+  .ranking-duo { grid-template-columns: 1fr; }
+}
+
 .section-subtitle {
   font-size: 14px; font-weight: 600;
   color: var(--text);
@@ -546,23 +606,101 @@ function renderRegionTable(w) {
     '<tbody>' + rows + '</tbody></table>';
 }
 
-// ---- Render vehicle table (W26 only for now) ----
-function renderVehicleTable(w) {
+// ---- Render top 10 vehicle table ----
+function renderTopVehicleTable(w) {
   if (!w.vehicles_top10 || w.vehicles_top10.length === 0) return '';
-  var rows = w.vehicles_top10.map(function(v) {
+  var rows = w.vehicles_top10.map(function(v, idx) {
+    var rank = v.rank || (idx + 1);
     return '<tr>' +
-      '<td>' + v.rank + '</td>' +
+      '<td>' + rank + '</td>' +
       '<td><strong>' + v.plate + '</strong></td>' +
-      '<td>' + fmtNum(v.kg) + '</td>' +
-      '<td>' + v.trips + '</td>' +
+      '<td>' + fmtNum(v.total_kg || v.kg) + '</td>' +
+      '<td>' + (v.total_trips || v.trips) + '</td>' +
       '<td>' + fmtNum(v.avg_per_trip) + '</td>' +
-      '<td>' + v.attendance + '</td>' +
+      '<td>' + (v.attendance || v.days_active + '/7') + '</td>' +
       '</tr>';
   }).join('');
-  return '<div class="section-subtitle">🚛 运力TOP10车辆</div>' +
-    '<table class="detail-table">' +
+  return '<table class="detail-table vehicle-table">' +
     '<thead><tr><th>#</th><th>车牌号</th><th>周总量 (kg)</th><th>车次</th><th>车均 (kg)</th><th>出勤</th></tr></thead>' +
     '<tbody>' + rows + '</tbody></table>';
+}
+
+// ---- Render bottom 10 vehicle table with reasons ----
+function renderBottomVehicleTable(w) {
+  if (!w.vehicles_bottom10 || w.vehicles_bottom10.length === 0) return '';
+  
+  var weekAvg = w.total_kg / w.total_trips;  // overall weekly average per trip
+  
+  var rows = w.vehicles_bottom10.map(function(v, idx) {
+    var kg = v.total_kg || v.kg;
+    var trips = v.total_trips || v.trips;
+    var momHtml = '';
+    if (v.mom_change_pct !== null && v.mom_change_pct !== undefined) {
+      if (v.mom_change_pct > 0) {
+        momHtml = '<span class="mom-up">+' + v.mom_change_pct.toFixed(1) + '%</span>';
+      } else if (v.mom_change_pct < 0) {
+        momHtml = '<span class="mom-down">' + v.mom_change_pct.toFixed(1) + '%</span>';
+      } else {
+        momHtml = '<span class="mom-neutral">0%</span>';
+      }
+    } else {
+      momHtml = '<span class="mom-neutral">基线</span>';
+    }
+    
+    var reasons = v.decline_reasons || [];
+    var reasonsHtml = reasons.length > 0 
+      ? reasons.map(function(r) { return '<span style="display:inline-block;background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;margin:1px;font-size:11px;">' + r + '</span>'; }).join(' ')
+      : '<span style="color:#64748b;">正常</span>';
+    
+    return '<tr class="warn-row">' +
+      '<td style="color:#991b1b;font-weight:700;">' + (10 - idx) + '</td>' +
+      '<td><strong>' + v.plate + '</strong><div style="font-size:11px;color:#64748b;">' + (v.unit || '') + '</div></td>' +
+      '<td>' + fmtNum(kg) + '</td>' +
+      '<td>' + trips + '</td>' +
+      '<td>' + fmtNum(v.avg_per_trip) + '</td>' +
+      '<td>' + (v.attendance || v.days_active + '/7') + '</td>' +
+      '<td>' + momHtml + '</td>' +
+      '<td class="reason-cell"><div class="decline-reasons">' + reasonsHtml + '</div></td>' +
+      '</tr>';
+  }).join('');
+  
+  return '<div class="ranking-card bottom">' +
+    '<h4>⚠️ 运力后10名·需关注车辆</h4>' +
+    '<div style="font-size:11px;color:#991b1b;margin-bottom:8px;">🔍 排名依据：周收运总量(kg) │ 环比变化｜出勤率｜车均装载量</div>' +
+    '<table class="detail-table vehicle-table">' +
+    '<thead><tr><th>#</th><th>车牌号</th><th>周总量(kg)</th><th>车次</th><th>车均(kg)</th><th>出勤</th><th>环比</th><th>下滑原因</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table></div>';
+}
+
+// ---- Render combined vehicle rankings (top + bottom side by side) ----
+function renderVehicleRankings(w) {
+  var hasTop = w.vehicles_top10 && w.vehicles_top10.length > 0;
+  var hasBottom = w.vehicles_bottom10 && w.vehicles_bottom10.length > 0;
+  
+  if (!hasTop && !hasBottom) return '';
+  
+  var html = '<div class="section-subtitle">🚛 运力排名分析</div>';
+  
+  if (hasTop && hasBottom) {
+    html += '<div class="ranking-duo">' +
+      '<div class="ranking-card top">' +
+        '<h4>🏆 运力TOP10 · 高效车辆</h4>' +
+        '<div style="font-size:11px;color:#166534;margin-bottom:8px;">📊 排名依据：周收运总量(kg) │ 车均装载量 │ 出勤率</div>' +
+        renderTopVehicleTable(w) +
+      '</div>' +
+      renderBottomVehicleTable(w) +
+    '</div>';
+  } else if (hasTop) {
+    html += '<div class="ranking-card top" style="margin-top:16px;">' +
+      '<h4>🏆 运力TOP10 · 高效车辆</h4>' +
+      '<div style="font-size:11px;color:#166534;margin-bottom:8px;">📊 排名依据：周收运总量(kg) │ 车均装载量 │ 出勤率</div>' +
+      renderTopVehicleTable(w) +
+    '</div>';
+  } else if (hasBottom) {
+    html += renderBottomVehicleTable(w);
+  }
+  
+  return html;
 }
 
 // ---- Render daily chart ----
@@ -691,7 +829,7 @@ async function toggleWeek(weekNum, headerEl) {
       '</div>' +
       renderAnomalyBar(w) +
       renderRegionTable(w) +
-      renderVehicleTable(w);
+      renderVehicleRankings(w);
 
     // Render chart
     setTimeout(function() { renderDailyChart(w); }, 100);

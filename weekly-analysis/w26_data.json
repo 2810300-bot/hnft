@@ -17,39 +17,490 @@
   "trend": "rebound",
   "trend_label": "强势反弹",
   "trend_color": "#16a34a",
-  "peak": { "date": "6月22日", "kg": 211640, "trips": 42, "ton": 211.6 },
-  "valley": { "date": "6月27日", "kg": 166170, "trips": 37, "ton": 166.2 },
+  "peak": {
+    "date": "6月22日",
+    "kg": 211640,
+    "trips": 42,
+    "ton": 211.6
+  },
+  "valley": {
+    "date": "6月27日",
+    "kg": 166170,
+    "trips": 37,
+    "ton": 166.2
+  },
   "summary": "强势反弹+5.3%，收运回升至1,381.8吨，结束连续两周下滑。6月22-26日（周一至周五）收运量高位稳定在205-211吨区间，6月27-28日周末回落至166-167吨。运营韧性良好，日均恢复至197.4吨。",
   "anomalies_total": 75,
   "anomalies_high": 0,
   "anomalies_medium": 29,
   "anomalies_low": 46,
   "daily": [
-    { "date": "6月22日", "weekday": "周一", "total": 211640, "trips": 42, "change_pct": null },
-    { "date": "6月23日", "weekday": "周二", "total": 205860, "trips": 43, "change_pct": -2.7 },
-    { "date": "6月24日", "weekday": "周三", "total": 207990, "trips": 45, "change_pct": 1.0 },
-    { "date": "6月25日", "weekday": "周四", "total": 210960, "trips": 46, "change_pct": 1.4 },
-    { "date": "6月26日", "weekday": "周五", "total": 211630, "trips": 46, "change_pct": 0.3 },
-    { "date": "6月27日", "weekday": "周六", "total": 166170, "trips": 37, "change_pct": -21.5 },
-    { "date": "6月28日", "weekday": "周日", "total": 167590, "trips": 37, "change_pct": 0.9 }
+    {
+      "date": "6月22日",
+      "weekday": "周一",
+      "total": 211640,
+      "trips": 42,
+      "change_pct": null
+    },
+    {
+      "date": "6月23日",
+      "weekday": "周二",
+      "total": 205860,
+      "trips": 43,
+      "change_pct": -2.7
+    },
+    {
+      "date": "6月24日",
+      "weekday": "周三",
+      "total": 207990,
+      "trips": 45,
+      "change_pct": 1.0
+    },
+    {
+      "date": "6月25日",
+      "weekday": "周四",
+      "total": 210960,
+      "trips": 46,
+      "change_pct": 1.4
+    },
+    {
+      "date": "6月26日",
+      "weekday": "周五",
+      "total": 211630,
+      "trips": 46,
+      "change_pct": 0.3
+    },
+    {
+      "date": "6月27日",
+      "weekday": "周六",
+      "total": 166170,
+      "trips": 37,
+      "change_pct": -21.5
+    },
+    {
+      "date": "6月28日",
+      "weekday": "周日",
+      "total": 167590,
+      "trips": 37,
+      "change_pct": 0.9
+    }
   ],
   "regions": [
-    { "name": "岳阳楼区餐厨", "kg": 849940, "pct": 61.5, "trips": 181, "avg_per_trip": 4696 },
-    { "name": "开发区餐厨", "kg": 271940, "pct": 19.7, "trips": 65, "avg_per_trip": 4184 },
-    { "name": "岳阳君山区餐厨", "kg": 103870, "pct": 7.5, "trips": 17, "avg_per_trip": 6110 },
-    { "name": "南湖新区餐厨", "kg": 98780, "pct": 7.1, "trips": 19, "avg_per_trip": 5199 },
-    { "name": "临港新区餐厨", "kg": 57310, "pct": 4.1, "trips": 14, "avg_per_trip": 4094 }
+    {
+      "name": "岳阳楼区餐厨",
+      "kg": 849940,
+      "pct": 61.5,
+      "trips": 181,
+      "avg_per_trip": 4696
+    },
+    {
+      "name": "开发区餐厨",
+      "kg": 271940,
+      "pct": 19.7,
+      "trips": 65,
+      "avg_per_trip": 4184
+    },
+    {
+      "name": "岳阳君山区餐厨",
+      "kg": 103870,
+      "pct": 7.5,
+      "trips": 17,
+      "avg_per_trip": 6110
+    },
+    {
+      "name": "南湖新区餐厨",
+      "kg": 98780,
+      "pct": 7.1,
+      "trips": 19,
+      "avg_per_trip": 5199
+    },
+    {
+      "name": "临港新区餐厨",
+      "kg": 57310,
+      "pct": 4.1,
+      "trips": 14,
+      "avg_per_trip": 4094
+    }
   ],
   "vehicles_top10": [
-    { "rank": 1, "plate": "湘FB9498", "kg": 122450, "trips": 28, "avg_per_trip": 4373, "attendance": "7/7" },
-    { "rank": 2, "plate": "湘FA3040", "kg": 103490, "trips": 21, "avg_per_trip": 4928, "attendance": "7/7" },
-    { "rank": 3, "plate": "湘FA8040", "kg": 100350, "trips": 19, "avg_per_trip": 5282, "attendance": "7/7" },
-    { "rank": 4, "plate": "湘FA9847", "kg": 98780, "trips": 19, "avg_per_trip": 5199, "attendance": "7/7" },
-    { "rank": 5, "plate": "湘FC5523", "kg": 94800, "trips": 14, "avg_per_trip": 6771, "attendance": "7/7" },
-    { "rank": 6, "plate": "湘F86680", "kg": 90420, "trips": 22, "avg_per_trip": 4110, "attendance": "7/7" },
-    { "rank": 7, "plate": "湘FC1673", "kg": 87190, "trips": 19, "avg_per_trip": 4589, "attendance": "7/7" },
-    { "rank": 8, "plate": "湘FB6266", "kg": 76780, "trips": 16, "avg_per_trip": 4799, "attendance": "7/7" },
-    { "rank": 9, "plate": "湘FB8611", "kg": 61770, "trips": 17, "avg_per_trip": 3634, "attendance": "7/7" },
-    { "rank": 10, "plate": "湘FB0252", "kg": 57590, "trips": 14, "avg_per_trip": 4114, "attendance": "7/7" }
-  ]
+    {
+      "plate": "湘FB9498",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 122450,
+      "total_ton": 122.45,
+      "total_trips": 28,
+      "avg_per_trip": 4373,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 1880,
+      "mom_change_pct": 1.6,
+      "prev_week_kg": 120570,
+      "prev_week_ton": 120.57,
+      "prev_week_trips": 27,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 4466
+    },
+    {
+      "plate": "湘FA3040",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 103490,
+      "total_ton": 103.49,
+      "total_trips": 21,
+      "avg_per_trip": 4928,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 18950,
+      "mom_change_pct": 22.4,
+      "prev_week_kg": 84540,
+      "prev_week_ton": 84.54,
+      "prev_week_trips": 19,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 4449
+    },
+    {
+      "plate": "湘FA8040",
+      "unit": "开发区餐厨",
+      "total_kg": 100350,
+      "total_ton": 100.35,
+      "total_trips": 19,
+      "avg_per_trip": 5282,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 26610,
+      "mom_change_pct": 36.1,
+      "prev_week_kg": 73740,
+      "prev_week_ton": 73.74,
+      "prev_week_trips": 16,
+      "prev_attendance": "6/7",
+      "prev_avg_per_trip": 4609
+    },
+    {
+      "plate": "湘FA9847",
+      "unit": "南湖新区餐厨",
+      "total_kg": 98780,
+      "total_ton": 98.78,
+      "total_trips": 19,
+      "avg_per_trip": 5199,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 39490,
+      "mom_change_pct": 66.6,
+      "prev_week_kg": 59290,
+      "prev_week_ton": 59.29,
+      "prev_week_trips": 12,
+      "prev_attendance": "6/7",
+      "prev_avg_per_trip": 4941
+    },
+    {
+      "plate": "湘FC5523",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 94800,
+      "total_ton": 94.8,
+      "total_trips": 14,
+      "avg_per_trip": 6771,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": -17780,
+      "mom_change_pct": -15.8,
+      "prev_week_kg": 112580,
+      "prev_week_ton": 112.58,
+      "prev_week_trips": 22,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 5117
+    },
+    {
+      "plate": "湘F86680",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 90420,
+      "total_ton": 90.42,
+      "total_trips": 22,
+      "avg_per_trip": 4110,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 8570,
+      "mom_change_pct": 10.5,
+      "prev_week_kg": 81850,
+      "prev_week_ton": 81.85,
+      "prev_week_trips": 21,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 3898
+    },
+    {
+      "plate": "湘FC1673",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 87190,
+      "total_ton": 87.19,
+      "total_trips": 19,
+      "avg_per_trip": 4589,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 8070,
+      "mom_change_pct": 10.2,
+      "prev_week_kg": 79120,
+      "prev_week_ton": 79.12,
+      "prev_week_trips": 17,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 4654
+    },
+    {
+      "plate": "湘FB6266",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 76780,
+      "total_ton": 76.78,
+      "total_trips": 16,
+      "avg_per_trip": 4799,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": -17310,
+      "mom_change_pct": -18.4,
+      "prev_week_kg": 94090,
+      "prev_week_ton": 94.09,
+      "prev_week_trips": 19,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 4952
+    },
+    {
+      "plate": "湘FB8611",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 61770,
+      "total_ton": 61.77,
+      "total_trips": 17,
+      "avg_per_trip": 3634,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": -10200,
+      "mom_change_pct": -14.2,
+      "prev_week_kg": 71970,
+      "prev_week_ton": 71.97,
+      "prev_week_trips": 16,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 4498
+    },
+    {
+      "plate": "湘FB0252",
+      "unit": "开发区餐厨",
+      "total_kg": 57590,
+      "total_ton": 57.59,
+      "total_trips": 14,
+      "avg_per_trip": 4114,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": -7840,
+      "mom_change_pct": -12.0,
+      "prev_week_kg": 65430,
+      "prev_week_ton": 65.43,
+      "prev_week_trips": 14,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 4674
+    }
+  ],
+  "vehicles_bottom10": [
+    {
+      "plate": "湘FB9409",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 6290,
+      "total_ton": 6.29,
+      "total_trips": 1,
+      "avg_per_trip": 6290,
+      "days_active": 1,
+      "attendance": "1/7",
+      "mom_change_kg": 80,
+      "mom_change_pct": 1.3,
+      "prev_week_kg": 6210,
+      "prev_week_ton": 6.21,
+      "prev_week_trips": 1,
+      "prev_attendance": "1/7",
+      "prev_avg_per_trip": 6210,
+      "decline_reasons": [
+        "出勤不足（仅1/7天）",
+        "周车次过少（仅1次）",
+        "持续弱势（多次位列后10）"
+      ]
+    },
+    {
+      "plate": "湘FA5403",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 23350,
+      "total_ton": 23.35,
+      "total_trips": 7,
+      "avg_per_trip": 3336,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 760,
+      "mom_change_pct": 3.4,
+      "prev_week_kg": 22590,
+      "prev_week_ton": 22.59,
+      "prev_week_trips": 7,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 3227,
+      "decline_reasons": [
+        "车均装载偏低（3336kg < 周均值4668kg）",
+        "周车次过少（仅7次）"
+      ]
+    },
+    {
+      "plate": "湘FB9046",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 29130,
+      "total_ton": 29.13,
+      "total_trips": 10,
+      "avg_per_trip": 2913,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": -9830,
+      "mom_change_pct": -25.2,
+      "prev_week_kg": 38960,
+      "prev_week_ton": 38.96,
+      "prev_week_trips": 12,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 3247,
+      "decline_reasons": [
+        "车均装载偏低（2913kg < 周均值4668kg）",
+        "环比大幅下滑-25.2%",
+        "周车次偏少（仅10次）"
+      ]
+    },
+    {
+      "plate": "湘FB3975",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 36640,
+      "total_ton": 36.64,
+      "total_trips": 7,
+      "avg_per_trip": 5234,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 370,
+      "mom_change_pct": 1.0,
+      "prev_week_kg": 36270,
+      "prev_week_ton": 36.27,
+      "prev_week_trips": 7,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 5181,
+      "decline_reasons": [
+        "周车次过少（仅7次）"
+      ]
+    },
+    {
+      "plate": "湘FA8340",
+      "unit": "开发区餐厨",
+      "total_kg": 38720,
+      "total_ton": 38.72,
+      "total_trips": 12,
+      "avg_per_trip": 3227,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 2750,
+      "mom_change_pct": 7.6,
+      "prev_week_kg": 35970,
+      "prev_week_ton": 35.97,
+      "prev_week_trips": 11,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 3270,
+      "decline_reasons": [
+        "车均装载偏低（3227kg < 周均值4668kg）"
+      ]
+    },
+    {
+      "plate": "湘FB7351",
+      "unit": "开发区餐厨",
+      "total_kg": 41890,
+      "total_ton": 41.89,
+      "total_trips": 10,
+      "avg_per_trip": 4189,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 3680,
+      "mom_change_pct": 9.6,
+      "prev_week_kg": 38210,
+      "prev_week_ton": 38.21,
+      "prev_week_trips": 9,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 4246,
+      "decline_reasons": [
+        "车均装载略低（4189kg，周均值4668kg）",
+        "周车次偏少（仅10次）"
+      ]
+    },
+    {
+      "plate": "湘FC3710",
+      "unit": "开发区餐厨",
+      "total_kg": 43300,
+      "total_ton": 43.3,
+      "total_trips": 11,
+      "avg_per_trip": 3936,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": -810,
+      "mom_change_pct": -1.8,
+      "prev_week_kg": 44110,
+      "prev_week_ton": 44.11,
+      "prev_week_trips": 9,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 4901,
+      "decline_reasons": [
+        "车均装载略低（3936kg，周均值4668kg）"
+      ]
+    },
+    {
+      "plate": "湘FA8342",
+      "unit": "岳阳君山区餐厨",
+      "total_kg": 50700,
+      "total_ton": 50.7,
+      "total_trips": 8,
+      "avg_per_trip": 6338,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": -850,
+      "mom_change_pct": -1.6,
+      "prev_week_kg": 51550,
+      "prev_week_ton": 51.55,
+      "prev_week_trips": 10,
+      "prev_attendance": "6/7",
+      "prev_avg_per_trip": 5155,
+      "decline_reasons": [
+        "周车次偏少（仅8次）"
+      ]
+    },
+    {
+      "plate": "湘FB0388",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 52610,
+      "total_ton": 52.61,
+      "total_trips": 10,
+      "avg_per_trip": 5261,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 10830,
+      "mom_change_pct": 25.9,
+      "prev_week_kg": 41780,
+      "prev_week_ton": 41.78,
+      "prev_week_trips": 8,
+      "prev_attendance": "7/7",
+      "prev_avg_per_trip": 5222,
+      "decline_reasons": [
+        "周车次偏少（仅10次）"
+      ]
+    },
+    {
+      "plate": "湘FC8698",
+      "unit": "岳阳君山区餐厨",
+      "total_kg": 53170,
+      "total_ton": 53.17,
+      "total_trips": 9,
+      "avg_per_trip": 5908,
+      "days_active": 7,
+      "attendance": "7/7",
+      "mom_change_kg": 9180,
+      "mom_change_pct": 20.9,
+      "prev_week_kg": 43990,
+      "prev_week_ton": 43.99,
+      "prev_week_trips": 7,
+      "prev_attendance": "5/7",
+      "prev_avg_per_trip": 6284,
+      "decline_reasons": [
+        "周车次偏少（仅9次）"
+      ]
+    }
+  ],
+  "vehicle_count": 22
 }
