@@ -3,220 +3,762 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>花果畈餐厨垃圾第26周收运量分析报告 (6.22-6.28)</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>花果畈 · 周度报告分析</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
-  --primary: #1a5276;
-  --primary-light: #2e86c1;
   --bg: #f0f2f5;
   --card-bg: #ffffff;
-  --text: #2c3e50;
-  --text-secondary: #6c757d;
-  --radius: 12px;
-  --shadow: 0 2px 12px rgba(0,0,0,0.06);
-  --gap: 20px;
+  --header-bg: #1a1a2e;
+  --header-bg2: #16213e;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --text-light: #e2e8f0;
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.1), 0 8px 32px rgba(0,0,0,0.08);
+  --accent-blue: #4C72B0;
+  --accent-green: #16a34a;
+  --accent-orange: #DD8452;
+  --accent-red: #e15759;
+  --accent-cyan: #0891b2;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; -webkit-font-smoothing: antialiased; }
-.header { background: linear-gradient(135deg, #0d3b59 0%, #1a5276 50%, #2e86c1 100%); color: white; padding: 40px 48px; text-align: center; position: relative; overflow: hidden; }
-.header::before { content: ''; position: absolute; top: -50%; right: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); border-radius: 50%; }
-.header > * { position: relative; z-index: 1; }
-.header h1 { font-size: 30px; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px; }
-.header .sub { opacity: 0.85; font-size: 14px; letter-spacing: 0.3px; }
-.container { max-width: 1200px; margin: 0 auto; padding: var(--gap); }
-.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); margin-bottom: var(--gap); }
-.kpi-card { background: var(--card-bg); border-radius: var(--radius); padding: 24px 20px; box-shadow: var(--shadow); text-align: center; transition: transform 0.2s, box-shadow 0.2s; border-top: 3px solid transparent; }
-.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
-.kpi-card:nth-child(1) { border-top-color: #2e86c1; }
-.kpi-card:nth-child(2) { border-top-color: #2e86c1; }
-.kpi-card:nth-child(3) { border-top-color: #e15759; }
-.kpi-card:nth-child(4) { border-top-color: #59a14f; }
-.kpi-card .label { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
-.kpi-card .value { font-size: 36px; font-weight: 700; color: var(--primary); line-height: 1.2; }
-.kpi-card .sub-value { font-size: 13px; color: #999; margin-top: 6px; }
-.kpi-card.peak .value { color: #e15759; }
-.kpi-card.valley .value { color: #59a14f; }
-.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); margin-bottom: var(--gap); }
-.chart-card { background: var(--card-bg); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
-.chart-card h3 { font-size: 16px; margin-bottom: 16px; color: var(--text); font-weight: 600; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
-.chart-card.full { grid-column: 1 / -1; }
-.chart-card canvas { max-height: 380px; }
-.table-card { background: var(--card-bg); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin-bottom: var(--gap); overflow-x: auto; }
-.table-card h3 { font-size: 16px; margin-bottom: 14px; color: var(--text); font-weight: 600; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th { background: #f8f9fa; text-align: left; padding: 12px 14px; font-weight: 600; color: #555; border-bottom: 2px solid #dee2e6; white-space: nowrap; }
-td { padding: 11px 14px; border-bottom: 1px solid #f0f0f0; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: #f8fafc; }
-.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
-.alert-box { background: #fff8e1; border-left: 4px solid #f28e2b; padding: 16px 20px; border-radius: 8px; margin-bottom: var(--gap); font-size: 14px; line-height: 1.6; }
-.alert-box strong { color: #d35400; }
-.insight-box { background: #e8f4fd; border-left: 4px solid #2e86c1; padding: 16px 20px; border-radius: 8px; margin-bottom: var(--gap); font-size: 14px; line-height: 1.6; }
-.footer { text-align: center; padding: 32px 24px; color: #999; font-size: 13px; background: #fff; border-top: 1px solid #eee; margin-top: 8px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Breadcrumb */
+.breadcrumb-bar {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.breadcrumb-bar a { color: var(--accent-blue); text-decoration: none; font-weight: 500; }
+.breadcrumb-bar a:hover { text-decoration: underline; }
+.breadcrumb-bar .sep { color: #94a3b8; margin: 0 8px; }
+
+/* Header */
+.site-header {
+  background: linear-gradient(135deg, var(--header-bg), var(--header-bg2));
+  color: var(--text-light);
+  padding: 32px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.site-header::after {
+  content: '';
+  position: absolute;
+  top: -30%; right: -5%;
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.header-content h1 { font-size: 26px; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+.header-content .subtitle { font-size: 13px; color: rgba(255,255,255,0.55); }
+.header-meta {
+  display: flex; gap: 20px; margin-top: 12px; flex-wrap: wrap;
+  font-size: 12px; color: rgba(255,255,255,0.6);
+}
+
+/* Main */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px 48px;
+}
+
+/* Section title */
+.section-title {
+  font-size: 18px; font-weight: 700; color: var(--text);
+  margin-bottom: 16px; padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+
+/* Monthly KPI row */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.kpi-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  border-top: 3px solid transparent;
+}
+.kpi-card:nth-child(1) { border-top-color: var(--accent-blue); }
+.kpi-card:nth-child(2) { border-top-color: var(--accent-green); }
+.kpi-card:nth-child(3) { border-top-color: var(--accent-orange); }
+.kpi-card:nth-child(4) { border-top-color: var(--accent-cyan); }
+.kpi-card .label { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.kpi-card .value { font-size: 30px; font-weight: 700; color: var(--text); line-height: 1.2; }
+.kpi-card .unit { font-size: 14px; color: var(--text-secondary); margin-left: 2px; font-weight: 400; }
+.kpi-card .sub { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+/* Report list */
+.report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+/* Week card */
+.week-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: box-shadow 0.25s ease;
+  border-left: 5px solid transparent;
+}
+.week-card:hover {
+  box-shadow: var(--shadow-hover);
+}
+.week-card.rebound { border-left-color: var(--accent-green); }
+.week-card.valley { border-left-color: var(--accent-red); }
+.week-card.decline { border-left-color: var(--accent-orange); }
+.week-card.baseline { border-left-color: var(--accent-blue); }
+
+/* Card header - always visible */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.card-header:hover { background: #f8fafc; }
+.card-header .week-badge {
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 80px;
+  text-align: center;
+}
+.card-header .week-info {
+  flex: 1;
+  min-width: 0;
+}
+.card-header .week-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.card-header .week-dates {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.card-header .mini-kpis {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.mini-kpi { text-align: right; }
+.mini-kpi .mk-label { font-size: 11px; color: var(--text-secondary); }
+.mini-kpi .mk-value { font-size: 22px; font-weight: 700; }
+.mini-kpi .mk-value .mk-unit { font-size: 12px; font-weight: 400; color: var(--text-secondary); }
+.mini-kpi .mk-change { font-size: 11px; margin-top: 2px; }
+.mk-change.up { color: var(--accent-green); }
+.mk-change.down { color: var(--accent-red); }
+.mk-change.neutral { color: var(--text-secondary); }
+
+.card-expand-icon {
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.week-card.expanded .card-expand-icon { transform: rotate(180deg); }
+
+/* Card summary (always visible when collapsed) */
+.card-summary {
+  padding: 0 24px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.card-summary .trend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+/* Card body - expanded content */
+.card-body {
+  display: none;
+  padding: 20px 24px 24px;
+  animation: fadeIn 0.3s ease;
+}
+.week-card.expanded .card-body { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Inside expanded body */
+.body-chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.body-chart-card {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid var(--border-light);
+}
+.body-chart-card h4 {
+  font-size: 14px; font-weight: 600; margin-bottom: 10px;
+  color: var(--text); padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.body-chart-card canvas { max-height: 300px; }
+.body-chart-card.full { grid-column: 1 / -1; }
+
+/* Detail table */
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 12px;
+}
+.detail-table th {
+  background: #f8fafc;
+  text-align: left;
+  padding: 10px 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border);
+}
+.detail-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border-light);
+}
+.detail-table tr:last-child td { border-bottom: none; }
+.detail-table tr:hover td { background: #f8fafc; }
+.detail-table .total-row td {
+  font-weight: 700;
+  background: #f8fafc;
+  border-top: 2px solid var(--border);
+}
+
+.peak-cell { color: var(--accent-red); font-weight: 600; }
+.valley-cell { color: var(--accent-green); font-weight: 600; }
+
+.section-subtitle {
+  font-size: 14px; font-weight: 600;
+  color: var(--text);
+  margin: 20px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* Anomaly bars */
+.anomaly-bar {
+  display: flex; gap: 8px; align-items: center; margin-top: 4px;
+}
+.anomaly-bar .seg {
+  height: 6px; border-radius: 3px;
+}
+.anomaly-bar .seg.medium { background: var(--accent-orange); }
+.anomaly-bar .seg.low { background: #94a3b8; }
+.anomaly-bar .label { font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
+
+/* Footer */
+.site-footer {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* Loading & empty */
+.loading-placeholder {
+  text-align: center; padding: 60px 20px; color: var(--text-secondary);
+}
+.spinner {
+  display: inline-block; width: 32px; height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
 @media (max-width: 768px) {
-  .header { padding: 28px 20px; }
-  .header h1 { font-size: 22px; }
+  .site-header { padding: 24px 20px; }
+  .header-content h1 { font-size: 20px; }
   .kpi-row { grid-template-columns: repeat(2, 1fr); }
-  .chart-grid { grid-template-columns: 1fr; }
-  .kpi-card .value { font-size: 28px; }
-  .container { padding: 12px; }
+  .card-header { flex-wrap: wrap; gap: 10px; padding: 14px 16px; }
+  .card-header .mini-kpis { width: 100%; justify-content: space-around; }
+  .body-chart-row { grid-template-columns: 1fr; }
+  .main-container { padding: 16px 12px 32px; }
+  .card-summary { padding: 0 16px 12px; }
+  .card-body { padding: 12px 16px 20px; }
 }
 @media print {
-  body { background: #fff; }
-  .header { background: #1a5276 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .card-body { display: block !important; }
+  .week-card { break-inside: avoid; border: 1px solid #ccc; }
+  .site-header { background: #333 !important; -webkit-print-color-adjust: exact; }
 }
 </style>
 </head>
 <body>
-<div class="header">
-  <h1>花果畈餐厨垃圾第26周收运量分析报告</h1>
-  <div class="sub">分析周期：2026年6月22日 — 6月28日（7天） ｜ 岳阳市厨余垃圾资源化利用和无害化处置项目</div>
+
+<div class="breadcrumb-bar">
+  <a href="../">🏠 看板中心</a>
+  <span class="sep">/</span>
+  <span>周度报告分析</span>
 </div>
 
-<div class="container">
-  <div class="insight-box">
-    <strong>本周概览：</strong>7天共收运 <strong>303 车次</strong>，总量 <strong>1,381.8 吨</strong>。
-    日均收运 <strong>197.4 吨</strong>，日均车次 <strong>43.3 辆</strong>。
-    6月27-28日（周末）收运量明显下降，与工作日均值相比下降约21%。
+<header class="site-header">
+  <div class="header-content">
+    <h1>📋 花果畈 · 周度报告分析</h1>
+    <div class="subtitle">岳阳市厨余垃圾资源化利用和无害化处置项目 — 6月全周度收运数据</div>
+    <div class="header-meta">
+      <span>📅 分析范围：2026年6月1日 — 6月28日（4周 · 28天）</span>
+      <span>📊 数据来源：金山文档「每日数据-花果畈」</span>
+      <span id="data-status">🔄 加载中…</span>
+    </div>
+  </div>
+</header>
+
+<div class="main-container">
+
+  <!-- Monthly KPI -->
+  <div class="kpi-row" id="monthly-kpi"></div>
+
+  <!-- Report list -->
+  <div class="section-title">
+    <span>📑</span> 报告列表
+    <span style="font-size:12px;font-weight:400;color:var(--text-secondary);margin-left:auto;" id="report-count"></span>
   </div>
 
-  <div class="alert-box">
-    <strong>异常提示：</strong>6月27日收运量环比下降21.5%（211,630 &rarr; 166,170 kg），主要受周末运营节奏影响。6月28日（周日）维持低位，属正常运营波动。建议关注周末收运排班优化。
-  </div>
-
-  <div class="kpi-row">
-    <div class="kpi-card">
-      <div class="label">周总收运量</div>
-      <div class="value">1,381.8<span style="font-size:16px;font-weight:400"> 吨</span></div>
-      <div class="sub-value">7天合计</div>
-    </div>
-    <div class="kpi-card">
-      <div class="label">日均收运量</div>
-      <div class="value">197.4<span style="font-size:16px;font-weight:400"> 吨/日</span></div>
-      <div class="sub-value">周均 43.3 车次/日</div>
-    </div>
-    <div class="kpi-card peak">
-      <div class="label">单日峰值</div>
-      <div class="value">211.6<span style="font-size:16px;font-weight:400"> 吨</span></div>
-      <div class="sub-value">6月22日 &middot; 43车次</div>
-    </div>
-    <div class="kpi-card valley">
-      <div class="label">单日谷值</div>
-      <div class="value">166.2<span style="font-size:16px;font-weight:400"> 吨</span></div>
-      <div class="sub-value">6月27日 &middot; 38车次</div>
+  <div class="report-list" id="report-list">
+    <div class="loading-placeholder">
+      <div class="spinner"></div>
+      <p>正在加载周度报告数据...</p>
     </div>
   </div>
 
-  <div class="chart-grid">
-    <div class="chart-card">
-      <h3>每日收运量趋势</h3>
-      <canvas id="dailyChart"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>各区域收运量占比</h3>
-      <canvas id="unitPie"></canvas>
-    </div>
-    <div class="chart-card full">
-      <h3>每日收运量 &amp; 车次双轴图</h3>
-      <canvas id="combinedChart"></canvas>
-    </div>
-  </div>
-
-  <div class="table-card">
-    <h3>每日明细</h3>
-    <table>
-      <tr><th>日期</th><th>车次</th><th>收运量 (kg)</th></tr>
-      <tr><td>6月22日</td><td>43</td><td>211,640</td></tr>
-<tr><td>6月23日</td><td>44</td><td>205,860</td></tr>
-<tr><td>6月24日</td><td>46</td><td>207,990</td></tr>
-<tr><td>6月25日</td><td>47</td><td>210,960</td></tr>
-<tr><td>6月26日</td><td>47</td><td>211,630</td></tr>
-<tr><td>6月27日</td><td>38</td><td>166,170</td></tr>
-<tr><td>6月28日</td><td>38</td><td>167,590</td></tr>
-
-      <tr style="font-weight:700;background:#f8f9fa">
-        <td>合计/均值</td><td>303</td><td>1,381,840</td>
-      </tr>
-    </table>
-  </div>
-
-  <div class="table-card">
-    <h3>各区域收运量明细</h3>
-    <table>
-      <tr><th>区域</th><th>周总量 (kg)</th><th>占比</th><th>车次</th><th>车均 (kg)</th></tr>
-      <tr><td><span class='dot' style='background:#4e79a7'></span>岳阳楼区餐厨</td><td>849,940</td><td>61.5%</td><td>181</td><td>4,696</td></tr>
-<tr><td><span class='dot' style='background:#f28e2b'></span>开发区餐厨</td><td>271,940</td><td>19.7%</td><td>65</td><td>4,184</td></tr>
-<tr><td><span class='dot' style='background:#e15759'></span>岳阳君山区餐厨</td><td>103,870</td><td>7.5%</td><td>17</td><td>6,110</td></tr>
-<tr><td><span class='dot' style='background:#76b7b2'></span>南湖新区餐厨</td><td>98,780</td><td>7.1%</td><td>19</td><td>5,199</td></tr>
-<tr><td><span class='dot' style='background:#59a14f'></span>临港新区餐厨</td><td>57,310</td><td>4.1%</td><td>14</td><td>4,094</td></tr>
-
-    </table>
-  </div>
-
-  <div class="table-card">
-    <h3>运力TOP10车辆</h3>
-    <table>
-      <tr><th>#</th><th>车牌号</th><th>周总量 (kg)</th><th>车次</th><th>车均 (kg)</th><th>出勤</th></tr>
-      <tr><td>1</td><td>湘FB9498</td><td>122,450</td><td>28</td><td>4,373</td><td>7/7</td></tr>
-<tr><td>2</td><td>湘FA3040</td><td>103,490</td><td>21</td><td>4,928</td><td>7/7</td></tr>
-<tr><td>3</td><td>湘FA8040</td><td>100,350</td><td>19</td><td>5,282</td><td>7/7</td></tr>
-<tr><td>4</td><td>湘FA9847</td><td>98,780</td><td>19</td><td>5,199</td><td>7/7</td></tr>
-<tr><td>5</td><td>湘FC5523</td><td>94,800</td><td>14</td><td>6,771</td><td>7/7</td></tr>
-<tr><td>6</td><td>湘F86680</td><td>90,420</td><td>22</td><td>4,110</td><td>7/7</td></tr>
-<tr><td>7</td><td>湘FC1673</td><td>87,190</td><td>19</td><td>4,589</td><td>7/7</td></tr>
-<tr><td>8</td><td>湘FB6266</td><td>76,780</td><td>16</td><td>4,799</td><td>7/7</td></tr>
-<tr><td>9</td><td>湘FB8611</td><td>61,770</td><td>17</td><td>3,634</td><td>7/7</td></tr>
-<tr><td>10</td><td>湘FB0252</td><td>57,590</td><td>14</td><td>4,114</td><td>7/7</td></tr>
-
-    </table>
-  </div>
 </div>
 
-<div class="footer">&copy; 2026 湖南伏泰环境科技有限责任公司</div>
+<footer class="site-footer">
+  <p>&copy; 2026 湖南伏泰环境科技有限责任公司 · 数据自动同步 · 历史记录永久保留</p>
+</footer>
 
+<!-- ==================== Scripts ==================== -->
 <script>
-new Chart(document.getElementById("dailyChart"), {
-  type: "bar",
-  data: {
-    labels: ["6\u670822\u65e5", "6\u670823\u65e5", "6\u670824\u65e5", "6\u670825\u65e5", "6\u670826\u65e5", "6\u670827\u65e5", "6\u670828\u65e5"],
-    datasets: [{
-      label: "收运量 (kg)",
-      data: [211640, 205860, 207990, 210960, 211630, 166170, 167590],
-      backgroundColor: ["#4e79a7","#4e79a7","#4e79a7","#4e79a7","#4e79a7","#f28e2b","#f28e2b"],
-      borderColor: ["#3a5f8a","#3a5f8a","#3a5f8a","#3a5f8a","#3a5f8a","#d4721a","#d4721a"],
-      borderWidth: 1, borderRadius: 6,
-    }]
-  },
-  options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false } } }
-});
+// ---- Constants ----
+const DATA_BASE = '.';
+const WEEK_FILES = {
+  23: 'w23_data.json',
+  24: 'w24_data.json',
+  25: 'w25_data.json',
+  26: 'w26_data.json'
+};
 
-new Chart(document.getElementById("unitPie"), {
-  type: "doughnut",
-  data: {
-    labels: ["\u5cb3\u9633\u697c\u533a\u9910\u53a8", "\u5f00\u53d1\u533a\u9910\u53a8", "\u5cb3\u9633\u541b\u5c71\u533a\u9910\u53a8", "\u5357\u6e56\u65b0\u533a\u9910\u53a8", "\u4e34\u6e2f\u65b0\u533a\u9910\u53a8"],
-    datasets: [{ data: [849940, 271940, 103870, 98780, 57310], backgroundColor: ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2", "#59a14f"], borderWidth: 2, borderColor: "#fff" }]
-  },
-  options: { responsive: true, plugins: { legend: { position: "right", labels: { padding: 12, font: { size: 12 } } } } }
-});
+// ---- State ----
+let allWeeks = [];
+let expandedWeek = null;
+let activeChart = null;  // single chart instance, reused
 
-new Chart(document.getElementById("combinedChart"), {
-  type: "line",
-  data: {
-    labels: ["6\u670822\u65e5", "6\u670823\u65e5", "6\u670824\u65e5", "6\u670825\u65e5", "6\u670826\u65e5", "6\u670827\u65e5", "6\u670828\u65e5"],
-    datasets: [
-      { label: "收运量 (kg)", data: [211640, 205860, 207990, 210960, 211630, 166170, 167590], borderColor: "#2e86c1", backgroundColor: "rgba(46,134,193,0.1)", yAxisID: "y", tension: 0.3, fill: true, pointRadius: 5, pointBackgroundColor: "#2e86c1" },
-      { label: "车次", data: [43, 44, 46, 47, 47, 38, 38], borderColor: "#e15759", yAxisID: "y1", tension: 0.3, fill: false, pointRadius: 5, pointBackgroundColor: "#e15759", borderDash: [5,3] }
-    ]
-  },
-  options: {
-    responsive: true, interaction: { mode: "index", intersect: false },
-    scales: {
-      y: { type: "linear", display: true, position: "left", title: { display: true, text: "收运量 (kg)" }, beginAtZero: false },
-      y1: { type: "linear", display: true, position: "right", title: { display: true, text: "车次" }, grid: { drawOnChartArea: false }, min: 30 }
+// ---- Utilities ----
+function fmtNum(n, d) {
+  if (n === null || n === undefined) return '-';
+  d = d || 0;
+  return Number(n).toLocaleString('zh-CN', { maximumFractionDigits: d });
+}
+function fmtPct(n) { return (Number(n) || 0).toFixed(1) + '%'; }
+
+// ---- Load data for a specific week ----
+async function loadWeekData(weekNum) {
+  const file = WEEK_FILES[weekNum];
+  if (!file) return null;
+  try {
+    const resp = await fetch(DATA_BASE + '/' + file + '?ts=' + Date.now());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    return resp.json();
+  } catch (e) {
+    console.warn('Failed to load week ' + weekNum + ':', e);
+    return null;
+  }
+}
+
+// ---- Render monthly KPI ----
+function renderMonthlyKPI(weeks) {
+  const totalTon = weeks.reduce(function(s, w) { return s + w.total_ton; }, 0);
+  const totalTrips = weeks.reduce(function(s, w) { return s + w.total_trips; }, 0);
+  const avgDaily = totalTon / (weeks.length * 7);
+  const peaks = weeks.map(function(w) { return w.peak.ton; });
+  const valleys = weeks.map(function(w) { return w.valley.ton; });
+  const maxPeak = Math.max.apply(null, peaks);
+  const minValley = Math.min.apply(null, valleys);
+
+  document.getElementById('monthly-kpi').innerHTML =
+    '<div class="kpi-card">' +
+      '<div class="label">6月总收运量</div>' +
+      '<div class="value">' + fmtNum(totalTon, 1) + '<span class="unit">吨</span></div>' +
+      '<div class="sub">目标 6140吨 · 完成率 ' + (totalTon / 6140 * 100).toFixed(1) + '%</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">日均收运量</div>' +
+      '<div class="value">' + fmtNum(avgDaily, 1) + '<span class="unit">吨/日</span></div>' +
+      '<div class="sub">总车次 ' + totalTrips + ' · 日均 ' + (totalTrips / 28).toFixed(1) + ' 车次</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">月内单日峰值</div>' +
+      '<div class="value">' + fmtNum(maxPeak, 1) + '<span class="unit">吨</span></div>' +
+      '<div class="sub">' + weeks.filter(function(w) { return Math.abs(w.peak.ton - maxPeak) < 0.01; }).map(function(w) { return w.peak.date; }).join('、') + '</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">月内单日谷值</div>' +
+      '<div class="value">' + fmtNum(minValley, 1) + '<span class="unit">吨</span></div>' +
+      '<div class="sub">' + weeks.filter(function(w) { return Math.abs(w.valley.ton - minValley) < 0.01; }).map(function(w) { return w.valley.date; }).join('、') + '</div>' +
+    '</div>';
+}
+
+// ---- Render week card header ----
+function renderCardHeader(w, idx) {
+  var changeHtml = '';
+  if (w.change_pct !== null && w.change_pct !== undefined) {
+    var cls = w.change_pct > 0 ? 'up' : 'down';
+    var sign = w.change_pct > 0 ? '+' : '';
+    changeHtml = '<div class="mk-change ' + cls + '">' + sign + fmtPct(w.change_pct) + ' 环周</div>';
+  } else {
+    changeHtml = '<div class="mk-change neutral">基线周</div>';
+  }
+
+  return '<div class="card-header" onclick="toggleWeek(' + w.week + ', this)">' +
+    '<div class="week-badge" style="color:' + w.trend_color + '">第' + w.week + '周</div>' +
+    '<div class="week-info">' +
+      '<div class="week-title">第' + w.week + '周 · ' + w.trend_label + '</div>' +
+      '<div class="week-dates">📅 ' + w.date_range + '（' + w.days + '天）</div>' +
+    '</div>' +
+    '<div class="mini-kpis">' +
+      '<div class="mini-kpi">' +
+        '<div class="mk-label">周收运量</div>' +
+        '<div class="mk-value">' + fmtNum(w.total_ton, 1) + '<span class="mk-unit"> 吨</span></div>' +
+        changeHtml +
+      '</div>' +
+      '<div class="mini-kpi">' +
+        '<div class="mk-label">日均</div>' +
+        '<div class="mk-value">' + fmtNum(w.avg_daily_ton, 1) + '<span class="mk-unit"> 吨</span></div>' +
+        '<div class="mk-change neutral">' + w.total_trips + ' 车次</div>' +
+      '</div>' +
+    '</div>' +
+    '<span class="card-expand-icon">▼</span>' +
+  '</div>' +
+  '<div class="card-summary">' +
+    '<span class="trend-dot" style="background:' + w.trend_color + '"></span>' +
+    '<span>' + w.summary + '</span>' +
+  '</div>' +
+  '<div class="card-body" id="body-' + w.week + '">' +
+    '<div style="text-align:center;padding:24px;color:var(--text-secondary);">点击展开以加载详细数据...</div>' +
+  '</div>';
+}
+
+// ---- Render daily detail table ----
+function renderDailyTable(w) {
+  var rows = w.daily.map(function(d) {
+    var changeCell = d.change_pct === null ? '<td>-</td>' :
+      '<td style="color:' + (d.change_pct > 0 ? 'var(--accent-red)' : (d.change_pct < 0 ? 'var(--accent-green)' : 'var(--text-secondary)')) + '">' +
+      (d.change_pct > 0 ? '+' : '') + d.change_pct.toFixed(1) + '%</td>';
+
+    var rowClass = '';
+    if (d.total === w.peak.kg) rowClass = ' peak-cell';
+    else if (d.total === w.valley.kg) rowClass = ' valley-cell';
+
+    return '<tr class="' + rowClass + '">' +
+      '<td>' + d.date + '</td>' +
+      '<td>' + d.weekday + '</td>' +
+      '<td>' + fmtNum(d.total) + '</td>' +
+      '<td>' + d.trips + '</td>' +
+      changeCell +
+      '</tr>';
+  }).join('');
+
+  return '<table class="detail-table">' +
+    '<thead><tr><th>日期</th><th>星期</th><th>收运量 (kg)</th><th>车次</th><th>日环比</th></tr></thead>' +
+    '<tbody>' + rows +
+    '<tr class="total-row">' +
+      '<td><strong>合计/均值</strong></td>' +
+      '<td>' + w.days + '天</td>' +
+      '<td><strong>' + fmtNum(w.total_kg) + '</strong></td>' +
+      '<td><strong>' + w.total_trips + '</strong></td>' +
+      '<td>日均 ' + fmtNum(w.avg_daily_kg) + ' kg</td>' +
+    '</tr></tbody></table>';
+}
+
+// ---- Render region table (W26 only for now) ----
+function renderRegionTable(w) {
+  if (!w.regions || w.regions.length === 0) return '';
+  var rows = w.regions.map(function(r, i) {
+    var colors = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f'];
+    return '<tr>' +
+      '<td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + colors[i] + ';margin-right:8px;"></span>' + r.name + '</td>' +
+      '<td>' + fmtNum(r.kg) + '</td>' +
+      '<td>' + r.pct.toFixed(1) + '%</td>' +
+      '<td>' + r.trips + '</td>' +
+      '<td>' + fmtNum(r.avg_per_trip) + '</td>' +
+      '</tr>';
+  }).join('');
+  return '<div class="section-subtitle">🏘️ 各区域收运量明细</div>' +
+    '<table class="detail-table">' +
+    '<thead><tr><th>区域</th><th>周总量 (kg)</th><th>占比</th><th>车次</th><th>车均 (kg)</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table>';
+}
+
+// ---- Render vehicle table (W26 only for now) ----
+function renderVehicleTable(w) {
+  if (!w.vehicles_top10 || w.vehicles_top10.length === 0) return '';
+  var rows = w.vehicles_top10.map(function(v) {
+    return '<tr>' +
+      '<td>' + v.rank + '</td>' +
+      '<td><strong>' + v.plate + '</strong></td>' +
+      '<td>' + fmtNum(v.kg) + '</td>' +
+      '<td>' + v.trips + '</td>' +
+      '<td>' + fmtNum(v.avg_per_trip) + '</td>' +
+      '<td>' + v.attendance + '</td>' +
+      '</tr>';
+  }).join('');
+  return '<div class="section-subtitle">🚛 运力TOP10车辆</div>' +
+    '<table class="detail-table">' +
+    '<thead><tr><th>#</th><th>车牌号</th><th>周总量 (kg)</th><th>车次</th><th>车均 (kg)</th><th>出勤</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table>';
+}
+
+// ---- Render daily chart ----
+function renderDailyChart(w) {
+  var labels = w.daily.map(function(d) { return d.date; });
+  var values = w.daily.map(function(d) { return d.total; });
+  var trips = w.daily.map(function(d) { return d.trips; });
+  var bgColors = w.daily.map(function(d) {
+    if (d.total === w.peak.kg) return 'rgba(225,87,89,0.7)';
+    if (d.total === w.valley.kg) return 'rgba(89,161,79,0.7)';
+    return 'rgba(76,114,176,0.6)';
+  });
+  var borderColors = w.daily.map(function(d) {
+    if (d.total === w.peak.kg) return '#e15759';
+    if (d.total === w.valley.kg) return '#59a14f';
+    return '#4C72B0';
+  });
+
+  var canvas = document.getElementById('daily-chart-' + w.week);
+  if (!canvas) return;
+
+  // Destroy existing chart if any
+  if (activeChart) {
+    activeChart.destroy();
+    activeChart = null;
+  }
+
+  activeChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: '收运量 (kg)',
+        data: values,
+        backgroundColor: bgColors,
+        borderColor: borderColors,
+        borderWidth: 1,
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              var idx = ctx.dataIndex;
+              return '收运量: ' + fmtNum(ctx.raw) + ' kg · ' + trips[idx] + ' 车次';
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          ticks: { callback: function(v) { return (v/1000).toFixed(0) + 'k'; } }
+        }
+      }
+    }
+  });
+}
+
+// ---- Anomaly visualization ----
+function renderAnomalyBar(w) {
+  var total = w.anomalies_total;
+  var med = w.anomalies_medium;
+  var low = w.anomalies_low;
+  var medPct = (med / total * 100).toFixed(0);
+  var lowPct = (low / total * 100).toFixed(0);
+  return '<div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">' +
+    '异常检测：共 <strong>' + total + '</strong> 项 ' +
+    '<span style="color:var(--accent-orange);">中危 ' + med + '</span> · ' +
+    '<span style="color:#94a3b8;">低危 ' + low + '</span>' +
+    '<div class="anomaly-bar">' +
+    '<span class="seg medium" style="width:' + medPct + '%"></span>' +
+    '<span class="seg low" style="width:' + lowPct + '%"></span>' +
+    '<span class="label">中危 ' + medPct + '% | 低危 ' + lowPct + '%</span>' +
+    '</div></div>';
+}
+
+// ---- Toggle week expansion ----
+async function toggleWeek(weekNum, headerEl) {
+  var card = headerEl.parentElement;
+  var body = document.getElementById('body-' + weekNum);
+
+  if (card.classList.contains('expanded')) {
+    // Collapse
+    card.classList.remove('expanded');
+    if (activeChart) { activeChart.destroy(); activeChart = null; }
+    expandedWeek = null;
+    return;
+  }
+
+  // Collapse any previously expanded
+  if (expandedWeek !== null) {
+    var prevCard = document.querySelector('.week-card.expanded');
+    if (prevCard) prevCard.classList.remove('expanded');
+    if (activeChart) { activeChart.destroy(); activeChart = null; }
+  }
+
+  // Expand this one
+  card.classList.add('expanded');
+  expandedWeek = weekNum;
+
+  // Load data if not yet loaded
+  if (body.getAttribute('data-loaded') !== 'true') {
+    body.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-secondary);"><div class="spinner"></div><p>加载第' + weekNum + '周详细数据...</p></div>';
+
+    var w = await loadWeekData(weekNum);
+    if (!w) {
+      body.innerHTML = '<div style="text-align:center;padding:24px;color:var(--accent-red);">数据加载失败，请稍后重试</div>';
+      return;
+    }
+
+    // Merge into allWeeks if not there
+    var existing = allWeeks.filter(function(x) { return x.week === weekNum; });
+    if (existing.length === 0) allWeeks.push(w);
+
+    body.setAttribute('data-loaded', 'true');
+    body.innerHTML =
+      '<div class="body-chart-row">' +
+        '<div class="body-chart-card"><h4>📊 每日收运量趋势</h4><canvas id="daily-chart-' + weekNum + '"></canvas></div>' +
+        '<div class="body-chart-card"><h4>📋 每日收运明细</h4>' + renderDailyTable(w) + '</div>' +
+      '</div>' +
+      renderAnomalyBar(w) +
+      renderRegionTable(w) +
+      renderVehicleTable(w);
+
+    // Render chart
+    setTimeout(function() { renderDailyChart(w); }, 100);
+  } else {
+    // Re-render chart (may have been destroyed)
+    var w = allWeeks.filter(function(x) { return x.week === weekNum; })[0];
+    if (w) {
+      setTimeout(function() { renderDailyChart(w); }, 100);
     }
   }
-});
+}
+
+// ---- Main init ----
+async function init() {
+  // Load reports.json for the index
+  var weeksData = [];
+  var weekNums = [26, 25, 24, 23];  // Reverse chronological
+
+  // Load summary data for all weeks (just header info)
+  for (var i = 0; i < weekNums.length; i++) {
+    try {
+      var w = await loadWeekData(weekNums[i]);
+      if (w) weeksData.push(w);
+    } catch (e) {
+      console.warn('Failed to load W' + weekNums[i], e);
+    }
+  }
+
+  if (weeksData.length === 0) {
+    document.getElementById('report-list').innerHTML =
+      '<div class="loading-placeholder"><p>暂无报告数据</p></div>';
+    document.getElementById('data-status').textContent = '⚠️ 数据加载失败';
+    return;
+  }
+
+  allWeeks = weeksData;
+
+  // Sort reverse chronological (W26 first)
+  allWeeks.sort(function(a, b) { return b.week - a.week; });
+
+  // Render monthly KPI
+  renderMonthlyKPI(allWeeks);
+
+  // Render report list
+  document.getElementById('report-count').textContent =
+    '共 ' + allWeeks.length + ' 周报告 · 按时间倒序排列';
+
+  var listHtml = allWeeks.map(function(w) {
+    return '<div class="week-card ' + w.trend + '">' + renderCardHeader(w) + '</div>';
+  }).join('');
+
+  document.getElementById('report-list').innerHTML = listHtml;
+  document.getElementById('data-status').textContent =
+    '✅ 已加载 ' + allWeeks.length + ' 周数据';
+
+  // Auto-expand the most recent week (W26 by default)
+  var firstCard = document.querySelector('.week-card');
+  if (firstCard) {
+    var firstHeader = firstCard.querySelector('.card-header');
+    if (firstHeader) {
+      await toggleWeek(allWeeks[0].week, firstHeader);
+    }
+  }
+}
+
+// Start
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>

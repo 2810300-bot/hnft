@@ -1,17 +1,52 @@
 {
-  "updated": "2026-06-29T11:57:09.972753",
-  "total": 1,
+  "updated": "2026-06-29T15:45:00+08:00",
+  "total": 4,
+  "auto_append": true,
+  "append_rule": "新周报告按 week_num 倒序插入。仅追加，禁止覆盖/删除已有条目。每周数据存储在独立 JSON 文件 (wXX_data.json) 中，index.html 动态加载。",
   "reports": [
     {
       "week": 26,
       "year": 2026,
       "label": "第26周 (6月22日-28日)",
       "date_range": "2026-06-22 ~ 2026-06-28",
-      "url": "https://2810300-bot.github.io/hnft/weekly-analysis/index.html",
-      "file": "index.html",
-      "size_kb": 10.1,
+      "data_file": "w26_data.json",
+      "url": "https://2810300-bot.github.io/hnft/weekly-analysis/",
+      "size_kb": 1.9,
       "created": "2026-06-29T11:08:00+08:00",
-      "summary": "周总收运1,381.8吨，日均197.4吨，周末收运量环比下降21.5%"
+      "summary": "周总收运1,381.8吨，日均197.4吨，强势反弹+5.3%，结束连续两周下滑趋势。周末收运量环比下降21.5%。"
+    },
+    {
+      "week": 25,
+      "year": 2026,
+      "label": "第25周 (6月15日-21日)",
+      "date_range": "2026-06-15 ~ 2026-06-21",
+      "data_file": "w25_data.json",
+      "url": "https://2810300-bot.github.io/hnft/weekly-analysis/",
+      "size_kb": 1.2,
+      "created": "2026-06-29T15:45:00+08:00",
+      "summary": "全月最低周，收运1,311.8吨，日均187.4吨，环比再降2.0%。端午假期影响显著，6月19日降至全月最低165.2吨。"
+    },
+    {
+      "week": 24,
+      "year": 2026,
+      "label": "第24周 (6月8日-14日)",
+      "date_range": "2026-06-08 ~ 2026-06-14",
+      "data_file": "w24_data.json",
+      "url": "https://2810300-bot.github.io/hnft/weekly-analysis/",
+      "size_kb": 1.2,
+      "created": "2026-06-29T15:45:00+08:00",
+      "summary": "环比下降5.1%（-72.3吨），周总收运1,338.5吨。工作日收运稳定，周末连续两日低于180吨。"
+    },
+    {
+      "week": 23,
+      "year": 2026,
+      "label": "第23周 (6月1日-7日)",
+      "date_range": "2026-06-01 ~ 2026-06-07",
+      "data_file": "w23_data.json",
+      "url": "https://2810300-bot.github.io/hnft/weekly-analysis/",
+      "size_kb": 1.2,
+      "created": "2026-06-29T15:45:00+08:00",
+      "summary": "6月基线周，收运1,410.9吨（全月最高），日均201.6吨。6月5日峰值224.6吨，周末骤降至174.5吨。"
     }
   ]
 }
