@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "last_updated": "2026-06-26T16:31:18+08:00",
+  "last_updated": "2026-06-30T07:50:59+08:00",
   "source": "IMA知识库 > 岳阳市厨余垃圾资源化利用和无害化处理项目 > 待办事项跟踪",
   "source_folder_id": "folder_7475472996785309",
   "source_file": "工作任务事项清单表（6月25日更新）.xls",
@@ -85,7 +85,7 @@
       "completed_date": "",
       "priority": "critical",
       "notes": "已对厂区进行“5S”整顿整改专项检查，正在将检查问题整理拟写整改方案",
-      "overdue_since": "2026-06-26"
+      "overdue_since": "2026-06-30"
     },
     {
       "id": "t06",
@@ -169,7 +169,7 @@
       "completed_date": "",
       "priority": "high",
       "notes": "已对初稿进行讨论，根据会议意见进行修改中",
-      "overdue_since": "2026-06-26"
+      "overdue_since": "2026-06-30"
     },
     {
       "id": "t12",
