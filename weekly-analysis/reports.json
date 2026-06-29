@@ -1,0 +1,17 @@
+{
+  "updated": "2026-06-29T11:57:09.972753",
+  "total": 1,
+  "reports": [
+    {
+      "week": 26,
+      "year": 2026,
+      "label": "第26周 (6月22日-28日)",
+      "date_range": "2026-06-22 ~ 2026-06-28",
+      "url": "https://2810300-bot.github.io/hnft/weekly-analysis/index.html",
+      "file": "index.html",
+      "size_kb": 10.1,
+      "created": "2026-06-29T11:08:00+08:00",
+      "summary": "周总收运1,381.8吨，日均197.4吨，周末收运量环比下降21.5%"
+    }
+  ]
+}
