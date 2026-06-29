@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>花果畈餐厨垃圾第26周收运量分析报告 (6.22-6.28)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #333; line-height: 1.6; }
+.header { background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%); color: white; padding: 32px 40px; text-align: center; }
+.header h1 { font-size: 28px; margin-bottom: 8px; }
+.header .sub { opacity: 0.85; font-size: 14px; }
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.kpi-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; }
+.kpi-card .label { font-size: 13px; color: #888; margin-bottom: 6px; }
+.kpi-card .value { font-size: 32px; font-weight: 700; color: #1a5276; }
+.kpi-card .sub-value { font-size: 13px; color: #999; margin-top: 4px; }
+.kpi-card.peak .value { color: #e15759; }
+.kpi-card.valley .value { color: #59a14f; }
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.chart-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.chart-card h3 { font-size: 16px; margin-bottom: 16px; color: #333; }
+.chart-card.full { grid-column: 1 / -1; }
+.table-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 24px; }
+.table-card h3 { font-size: 16px; margin-bottom: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { background: #f8f9fa; text-align: left; padding: 10px 12px; font-weight: 600; color: #555; border-bottom: 2px solid #e0e0e0; }
+td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+tr:hover { background: #fafbfc; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
+.alert-box { background: #fff3cd; border-left: 4px solid #f28e2b; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; font-size: 14px; }
+.alert-box strong { color: #d35400; }
+.insight-box { background: #eaf2f8; border-left: 4px solid #2e86c1; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; font-size: 14px; }
+.footer { text-align: center; padding: 24px; color: #aaa; font-size: 12px; }
+@media (max-width: 768px) {
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>花果畈餐厨垃圾第26周收运量分析报告</h1>
+  <div class="sub">分析周期：2026年6月22日 — 6月28日（7天） ｜ 湖南伏泰环境科技</div>
+</div>
+
+<div class="container">
+  <div class="insight-box">
+    <strong>本周概览：</strong>7天共收运 <strong>303 车次</strong>，总量 <strong>1,381.8 吨</strong>。
+    日均收运 <strong>197.4 吨</strong>，日均车次 <strong>43.3 辆</strong>。
+    6月27-28日（周末）收运量明显下降，与工作日均值相比下降约21%。
+  </div>
+
+  <div class="alert-box">
+    <strong>异常提示：</strong>6月27日收运量环比下降21.5%（211,630 &rarr; 166,170 kg），主要受周末运营节奏影响。6月28日（周日）维持低位，属正常运营波动。建议关注周末收运排班优化。
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="label">周总收运量</div>
+      <div class="value">1,381.8<span style="font-size:16px;font-weight:400"> 吨</span></div>
+      <div class="sub-value">7天合计</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">日均收运量</div>
+      <div class="value">197.4<span style="font-size:16px;font-weight:400"> 吨/日</span></div>
+      <div class="sub-value">周均 43.3 车次/日</div>
+    </div>
+    <div class="kpi-card peak">
+      <div class="label">单日峰值</div>
+      <div class="value">211.6<span style="font-size:16px;font-weight:400"> 吨</span></div>
+      <div class="sub-value">6月22日 &middot; 43车次</div>
+    </div>
+    <div class="kpi-card valley">
+      <div class="label">单日谷值</div>
+      <div class="value">166.2<span style="font-size:16px;font-weight:400"> 吨</span></div>
+      <div class="sub-value">6月27日 &middot; 38车次</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>每日收运量趋势</h3>
+      <canvas id="dailyChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>各区域收运量占比</h3>
+      <canvas id="unitPie"></canvas>
+    </div>
+    <div class="chart-card full">
+      <h3>每日收运量 &amp; 车次双轴图</h3>
+      <canvas id="combinedChart"></canvas>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <h3>每日明细</h3>
+    <table>
+      <tr><th>日期</th><th>车次</th><th>收运量 (kg)</th></tr>
+      <tr><td>6月22日</td><td>43</td><td>211,640</td></tr>
+<tr><td>6月23日</td><td>44</td><td>205,860</td></tr>
+<tr><td>6月24日</td><td>46</td><td>207,990</td></tr>
+<tr><td>6月25日</td><td>47</td><td>210,960</td></tr>
+<tr><td>6月26日</td><td>47</td><td>211,630</td></tr>
+<tr><td>6月27日</td><td>38</td><td>166,170</td></tr>
+<tr><td>6月28日</td><td>38</td><td>167,590</td></tr>
+
+      <tr style="font-weight:700;background:#f8f9fa">
+        <td>合计/均值</td><td>303</td><td>1,381,840</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="table-card">
+    <h3>各区域收运量明细</h3>
+    <table>
+      <tr><th>区域</th><th>周总量 (kg)</th><th>占比</th><th>车次</th><th>车均 (kg)</th></tr>
+      <tr><td><span class='dot' style='background:#4e79a7'></span>岳阳楼区餐厨</td><td>849,940</td><td>61.5%</td><td>181</td><td>4,696</td></tr>
+<tr><td><span class='dot' style='background:#f28e2b'></span>开发区餐厨</td><td>271,940</td><td>19.7%</td><td>65</td><td>4,184</td></tr>
+<tr><td><span class='dot' style='background:#e15759'></span>岳阳君山区餐厨</td><td>103,870</td><td>7.5%</td><td>17</td><td>6,110</td></tr>
+<tr><td><span class='dot' style='background:#76b7b2'></span>南湖新区餐厨</td><td>98,780</td><td>7.1%</td><td>19</td><td>5,199</td></tr>
+<tr><td><span class='dot' style='background:#59a14f'></span>临港新区餐厨</td><td>57,310</td><td>4.1%</td><td>14</td><td>4,094</td></tr>
+
+    </table>
+  </div>
+
+  <div class="table-card">
+    <h3>运力TOP10车辆</h3>
+    <table>
+      <tr><th>#</th><th>车牌号</th><th>周总量 (kg)</th><th>车次</th><th>车均 (kg)</th><th>出勤</th></tr>
+      <tr><td>1</td><td>湘FB9498</td><td>122,450</td><td>28</td><td>4,373</td><td>7/7</td></tr>
+<tr><td>2</td><td>湘FA3040</td><td>103,490</td><td>21</td><td>4,928</td><td>7/7</td></tr>
+<tr><td>3</td><td>湘FA8040</td><td>100,350</td><td>19</td><td>5,282</td><td>7/7</td></tr>
+<tr><td>4</td><td>湘FA9847</td><td>98,780</td><td>19</td><td>5,199</td><td>7/7</td></tr>
+<tr><td>5</td><td>湘FC5523</td><td>94,800</td><td>14</td><td>6,771</td><td>7/7</td></tr>
+<tr><td>6</td><td>湘F86680</td><td>90,420</td><td>22</td><td>4,110</td><td>7/7</td></tr>
+<tr><td>7</td><td>湘FC1673</td><td>87,190</td><td>19</td><td>4,589</td><td>7/7</td></tr>
+<tr><td>8</td><td>湘FB6266</td><td>76,780</td><td>16</td><td>4,799</td><td>7/7</td></tr>
+<tr><td>9</td><td>湘FB8611</td><td>61,770</td><td>17</td><td>3,634</td><td>7/7</td></tr>
+<tr><td>10</td><td>湘FB0252</td><td>57,590</td><td>14</td><td>4,114</td><td>7/7</td></tr>
+
+    </table>
+  </div>
+</div>
+
+<div class="footer">湖南伏泰环境科技 &middot; 花果畈餐厨垃圾项目 &middot; 报告生成时间 2026-06-29 11:08</div>
+
+<script>
+new Chart(document.getElementById("dailyChart"), {
+  type: "bar",
+  data: {
+    labels: ["6\u670822\u65e5", "6\u670823\u65e5", "6\u670824\u65e5", "6\u670825\u65e5", "6\u670826\u65e5", "6\u670827\u65e5", "6\u670828\u65e5"],
+    datasets: [{
+      label: "收运量 (kg)",
+      data: [211640, 205860, 207990, 210960, 211630, 166170, 167590],
+      backgroundColor: ["#4e79a7","#4e79a7","#4e79a7","#4e79a7","#4e79a7","#f28e2b","#f28e2b"],
+      borderColor: ["#3a5f8a","#3a5f8a","#3a5f8a","#3a5f8a","#3a5f8a","#d4721a","#d4721a"],
+      borderWidth: 1, borderRadius: 6,
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false } } }
+});
+
+new Chart(document.getElementById("unitPie"), {
+  type: "doughnut",
+  data: {
+    labels: ["\u5cb3\u9633\u697c\u533a\u9910\u53a8", "\u5f00\u53d1\u533a\u9910\u53a8", "\u5cb3\u9633\u541b\u5c71\u533a\u9910\u53a8", "\u5357\u6e56\u65b0\u533a\u9910\u53a8", "\u4e34\u6e2f\u65b0\u533a\u9910\u53a8"],
+    datasets: [{ data: [849940, 271940, 103870, 98780, 57310], backgroundColor: ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2", "#59a14f"], borderWidth: 2, borderColor: "#fff" }]
+  },
+  options: { responsive: true, plugins: { legend: { position: "right", labels: { padding: 12, font: { size: 12 } } } } }
+});
+
+new Chart(document.getElementById("combinedChart"), {
+  type: "line",
+  data: {
+    labels: ["6\u670822\u65e5", "6\u670823\u65e5", "6\u670824\u65e5", "6\u670825\u65e5", "6\u670826\u65e5", "6\u670827\u65e5", "6\u670828\u65e5"],
+    datasets: [
+      { label: "收运量 (kg)", data: [211640, 205860, 207990, 210960, 211630, 166170, 167590], borderColor: "#2e86c1", backgroundColor: "rgba(46,134,193,0.1)", yAxisID: "y", tension: 0.3, fill: true, pointRadius: 5, pointBackgroundColor: "#2e86c1" },
+      { label: "车次", data: [43, 44, 46, 47, 47, 38, 38], borderColor: "#e15759", yAxisID: "y1", tension: 0.3, fill: false, pointRadius: 5, pointBackgroundColor: "#e15759", borderDash: [5,3] }
+    ]
+  },
+  options: {
+    responsive: true, interaction: { mode: "index", intersect: false },
+    scales: {
+      y: { type: "linear", display: true, position: "left", title: { display: true, text: "收运量 (kg)" }, beginAtZero: false },
+      y1: { type: "linear", display: true, position: "right", title: { display: true, text: "车次" }, grid: { drawOnChartArea: false }, min: 30 }
+    }
+  }
+});
+</script>
+</body>
+</html>
