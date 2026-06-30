@@ -261,6 +261,11 @@
         .chart-wrapper.tall {
             height: 380px;
         }
+        .chart-wrapper canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
 
         /* Data Table */
         .table-section {
@@ -449,7 +454,7 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-06-30 15:03</span>
+                    数据更新: <span id="data-date">2026-06-30 16:01</span>
                 </div>
                     <div class="next-update" id="next-update-container">
                         下次更新: <span id="next-update">--</span>
@@ -590,7 +595,11 @@
         </footer>
     </div>
 
-    <!-- Chart.js 4.4.0 内嵌于 body 末尾：先解析 canvas 元素再加载图表库，修复 Safari 布局阻塞问题 -->
+    <!-- Chart.js 4.4.0 内嵌于 body 末尾 (v7.4)
+         1) 先解析 canvas 元素再加载图表库，避免 Safari 200KB 内联脚本阻塞 CSSOM 构建
+         2) canvas 设置 display:block + width/height:100%，让 Safari 正确计算容器尺寸
+         3) init 流程中强制 reflow、ResizeObserver 监听、chartArea 二次校验补渲染
+    -->
     <script>
     /**
  * Skipped minification because the original files appears to be already minified.
@@ -1332,24 +1341,85 @@
     })();
 
     // ============================================================
-    // 初始化 v7.3（Chart.js 已移至 body 末尾内嵌，优于 head 中内嵌避免 Safari 布局阻塞）
-    // Safari 兼容：pageshow + readyState + 尺寸轮询 多层回退
-    // v7.3 核心修复: 将 Chart.js 内联脚本从 <head> 移至 <body> 末尾(canvas 之后)，
-    //   解决 Safari 中 200KB 内联脚本阻塞 CSSOM 构建导致 canvas 初始尺寸为 0×0 的问题
+    // 初始化 v7.4（Chart.js 已内嵌 + 多层回退 + Safari 尺寸/重绘兼容）
+    // Safari 兼容策略：
+    //   1. Chart.js 从 <head> 移至 <body> 末尾(canvas 之后)，避免 CSSOM 阻塞
+    //   2. 强制父容器 reflow，确保 Safari 在创建图表前完成布局
+    //   3. 创建后二次校验 chartArea/offset 尺寸，0 尺寸则销毁重绘
+    //   4. ResizeObserver 监听容器尺寸变化，自动重绘
+    //   5. pageshow + readyState + 定时轮询 + 用户交互 多层回退
     // ============================================================
     var _initDone = false;
     var _kpiRendered = false;
+    var _resizeObserver = null;
+    var _safariValidationTimer = null;
+
+    function forceReflow(el) {
+        // Safari 关键修复：强制浏览器完成一次布局计算，避免读到旧尺寸
+        if (el && el.getBoundingClientRect) {
+            el.getBoundingClientRect();
+        }
+    }
+
+    function isChartInvisible(chart) {
+        if (!chart) return true;
+        var ca = chart.chartArea || {};
+        if (!ca || ca.width <= 0 || ca.height <= 0) return true;
+        var canvas = chart.canvas;
+        if (!canvas) return true;
+        if (canvas.offsetWidth <= 0 || canvas.offsetHeight <= 0) return true;
+        var style = window.getComputedStyle(canvas);
+        if (style.display === 'none' || style.visibility === 'hidden' || parseFloat(style.opacity) === 0) return true;
+        return false;
+    }
+
+    function setupResizeObserver() {
+        // 现代浏览器：监听 chart 容器尺寸变化，自动重绘
+        if (_resizeObserver || typeof ResizeObserver === 'undefined') return;
+        var targets = [
+            document.getElementById('chart-daily-trend'),
+            document.getElementById('chart-weekly-bar')
+        ].filter(Boolean);
+        if (targets.length === 0) return;
+        _resizeObserver = new ResizeObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+                    if (Object.keys(charts).length === 0) {
+                        console.log('[Dashboard#v7.4] ResizeObserver 触发补渲染');
+                        tryRenderVolumeCharts();
+                    }
+                }
+            });
+        });
+        targets.forEach(function(t) { _resizeObserver.observe(t.parentElement || t); });
+    }
+
+    function validateAndRedrawCharts() {
+        // Safari 兼容：即使 charts 已创建，仍可能 invisible（chartArea 为 0），需销毁重绘
+        var hasCharts = Object.keys(charts).length > 0;
+        var firstKey = hasCharts ? Object.keys(charts)[0] : null;
+        if (hasCharts && firstKey && !isChartInvisible(charts[firstKey])) {
+            console.log('[Dashboard#v7.4] 图表可见性校验通过');
+            return true;
+        }
+        if (hasCharts) {
+            console.warn('[Dashboard#v7.4] 图表已创建但不可见，销毁重绘');
+            destroyCharts();
+        }
+        return tryRenderVolumeCharts();
+    }
 
     function tryRenderVolumeCharts() {
         if (typeof Chart === 'undefined') return false;
         try {
-            renderAllCharts(document.getElementById('filter-period').value || '14');
-            // Safari 关键修复：验证 canvas 实际尺寸
-            // inline script 阻塞渲染时 canvas 可能尚未布局（offsetWidth/offsetHeight=0）
-            // 此时 Chart.js 仍会创建图表但不可见 → 所有重试被 charts.length>0 跳过
             var canvas = document.getElementById('chart-daily-trend');
-            if (canvas && (canvas.offsetWidth === 0 || canvas.offsetHeight === 0)) {
-                console.warn('[Dashboard#v7.3] Canvas 尺寸为0，销毁重试');
+            if (canvas) forceReflow(canvas.parentElement);
+            renderAllCharts(document.getElementById('filter-period').value || '14');
+            setupResizeObserver();
+            // v7.4 Safari 关键修复：创建后再校验 chartArea 尺寸，0 尺寸则销毁重试
+            var firstKey = Object.keys(charts)[0];
+            if (firstKey && isChartInvisible(charts[firstKey])) {
+                console.warn('[Dashboard#v7.4] 图表 chartArea 为0/不可见，销毁重试');
                 destroyCharts();
                 return false;
             }
@@ -1368,16 +1438,16 @@
 
     function initCharts(attempt) {
         if (typeof Chart === 'undefined') {
-            console.warn('[Dashboard#v7.3] Chart.js 未就绪 (attempt=' + (attempt||0) + ')');
+            console.warn('[Dashboard#v7.4] Chart.js 未就绪 (attempt=' + (attempt||0) + ')');
             return false;
         }
-        if (Object.keys(charts).length > 0) {
-            console.log('[Dashboard#v7.3] 图表已渲染，跳过');
+        if (Object.keys(charts).length > 0 && !isChartInvisible(charts[Object.keys(charts)[0]])) {
+            console.log('[Dashboard#v7.4] 图表已渲染且可见，跳过');
             return true;
         }
-        console.log('[Dashboard#v7.3] 尝试渲染图表 (attempt=' + (attempt||0) + ')');
-        var ok = tryRenderVolumeCharts();
-        if (ok) console.log('[Dashboard#v7.3] 图表渲染成功 (attempt=' + (attempt||0) + ')');
+        console.log('[Dashboard#v7.4] 尝试渲染图表 (attempt=' + (attempt||0) + ')');
+        var ok = validateAndRedrawCharts();
+        if (ok) console.log('[Dashboard#v7.4] 图表渲染成功 (attempt=' + (attempt||0) + ')');
         return ok;
     }
 
@@ -1393,69 +1463,91 @@
         try { AutoRefresh.init(); } catch(e) { console.error('[Dashboard] AutoRefresh 初始化失败:', e.message); }
         try { updateNextUpdate(); } catch(e) { console.error('[Dashboard] updateNextUpdate 失败:', e.message); }
 
-        // v7.2: 先等 Canvas 有非零尺寸再渲染
-        // 避免 Safari 中 inline script 阻塞导致 canvas 初始为 0×0，Chart.js 创建不可见图
+        // v7.4: 先等 Canvas 有非零尺寸再渲染；Safari 布局完成后再创建图表
         waitForCanvasAndRender(0);
     }
 
     function waitForCanvasAndRender(attempt) {
-        const MAX_ATTEMPTS = 50;
-        if (Object.keys(charts).length > 0) {
-            console.log('[Dashboard#v7.3] 图表已渲染，轮询结束');
+        const MAX_ATTEMPTS = 60;  // 6 秒
+        if (Object.keys(charts).length > 0 && !isChartInvisible(charts[Object.keys(charts)[0]])) {
+            console.log('[Dashboard#v7.4] 图表已渲染且可见，轮询结束');
             return;
         }
         var canvas = document.getElementById('chart-daily-trend');
+        if (canvas) forceReflow(canvas);
         if (canvas && canvas.offsetWidth > 0 && canvas.offsetHeight > 0) {
-            console.log('[Dashboard#v7.3] Canvas 尺寸就绪 (' + canvas.offsetWidth + 'x' + canvas.offsetHeight + '), 尝试渲染');
+            console.log('[Dashboard#v7.4] Canvas 尺寸就绪 (' + canvas.offsetWidth + 'x' + canvas.offsetHeight + '), 尝试渲染');
             var ok = initCharts('canvas-ready');
             if (!ok && attempt < MAX_ATTEMPTS) {
                 setTimeout(function() { waitForCanvasAndRender(attempt + 1); }, 100);
             }
         } else if (attempt < MAX_ATTEMPTS) {
             if (attempt === 0 || attempt % 5 === 0) {
-                console.log('[Dashboard#v7.3] Canvas 尚未就绪，继续等待 (' + attempt + ')');
+                console.log('[Dashboard#v7.4] Canvas 尚未就绪，继续等待 (' + attempt + ')');
             }
             setTimeout(function() { waitForCanvasAndRender(attempt + 1); }, 100);
         } else {
-            console.warn('[Dashboard#v7.3] Canvas 等待超时，强制渲染');
+            console.warn('[Dashboard#v7.4] Canvas 等待超时，强制渲染');
             initCharts('timeout');
         }
+    }
+
+    function startSafariValidationLoop() {
+        // Safari 兼容性：启动后 1s/2s/3s/5s 再次校验可见性
+        if (_safariValidationTimer) clearTimeout(_safariValidationTimer);
+        var schedule = [1000, 2000, 3000, 5000, 8000];
+        var idx = 0;
+        function next() {
+            if (idx >= schedule.length) return;
+            _safariValidationTimer = setTimeout(function() {
+                initCharts('safari-check-' + schedule[idx]);
+                idx += 1;
+                next();
+            }, schedule[idx]);
+        }
+        next();
     }
 
     // ---- 多层回退渲染机制 ----
 
     // 策略0：document.readyState 已经是 interactive/complete 时立即执行
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
-        console.log('[Dashboard#v7.3] readyState=' + document.readyState + ', 立即初始化');
+        console.log('[Dashboard#v7.4] readyState=' + document.readyState + ', 立即初始化');
         fullInit();
+        startSafariValidationLoop();
     }
 
     // 策略1：DOMContentLoaded
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('[Dashboard#v7.3] DOMContentLoaded 触发');
+        console.log('[Dashboard#v7.4] DOMContentLoaded 触发');
         fullInit();
+        startSafariValidationLoop();
     });
 
     // 策略2：Safari pageshow（bfcache 恢复时不触发 DOMContentLoaded）
     window.addEventListener('pageshow', function(e) {
-        console.log('[Dashboard#v7.3] pageshow 触发 (persisted=' + (e.persisted || false) + ')');
+        console.log('[Dashboard#v7.4] pageshow 触发 (persisted=' + (e.persisted || false) + ')');
         if (e.persisted) {
             // bfcache 恢复：重新初始化
             _initDone = false;
             _kpiRendered = false;
+            Object.values(charts).forEach(function(c) { try { c.destroy(); } catch(err) {} });
+            charts = {};
         }
         fullInit();
+        startSafariValidationLoop();
     });
 
     // 策略3：window.onload
     window.addEventListener('load', function() {
         setTimeout(function() { initCharts(1); }, 100);
-        setTimeout(function() { initCharts(2); }, 200);
-        setTimeout(function() { initCharts(3); }, 500);
+        setTimeout(function() { initCharts(2); }, 300);
+        setTimeout(function() { initCharts(3); }, 600);
+        setTimeout(function() { initCharts(4); }, 1000);
     });
 
-    // 策略5：延迟回退（1s, 2s, 3s）
-    [1000, 2000, 3000].forEach(function(ms) {
+    // 策略5：延迟回退（1s, 2s, 3s, 5s, 8s）
+    [1000, 2000, 3000, 5000, 8000].forEach(function(ms) {
         setTimeout(function() { initCharts('t' + ms); }, ms);
     });
 
