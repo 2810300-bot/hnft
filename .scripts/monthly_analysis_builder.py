@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-花果畈厨余垃圾收运量月度数据分析构建器
+花果畈厨余垃圾收运量月度数据分析构建器 v3.2
 
 用法:
   # 默认：金山文档直读（推荐）
   python3 monthly_analysis_builder.py                                # 默认 kdocs 源
   python3 monthly_analysis_builder.py --month 2026-06                # 指定月份
+  python3 monthly_analysis_builder.py --month 2026-06 --validate     # 仅校验已有数据
 
   # 回退：本地周数据
   python3 monthly_analysis_builder.py --source local                 # 本地 JSON 源
@@ -13,9 +14,21 @@
 
 数据源:
   kdocs: 通过 kdocs-cli 从金山文档 "每日数据-花果畈" 目录直读日数据文件
-         优势: 无需等待周数据聚合，实时直读
+         优势: 无需等待周数据聚合，实时直读；支持车辆排名
   local: 读取本地 hnft-site/weekly-analysis/wXX_data.json
          优势: 离线可用; 劣势: 依赖周数据预生成
+
+v3.2 更新:
+  - kdocs 模式支持车辆排名：从每日文件车牌号字段解析并聚合月度TOP10/Bottom10
+
+v3.1 更新:
+  - DataValidator 数据校验框架（9类自动检测）
+  - pending天排除：avg_daily 计算、weekday_pattern 均排除 pending
+  - region trips 计数修复（按实际车次而非文件数）
+  - weekly_breakdown date_range/trend_label 填充
+  - mom环比自比Bug修复
+  - 月度数据归档 (archive/)
+  - HTML 数据质量警报
 
 输出:  monthly_analysis.json + index.html
 """
@@ -349,7 +362,9 @@ def parse_kdocs_xls(cells):
     表格格式（列）:
       0: 序号, 1: 区域, 2: 车牌号, 3: 毛重, 4: 皮重, 5: 净重, 6: 差值, 7: 时间, 8: 状态
 
-    返回: {"total_kg": int, "trips": int, "regions": {"区域名": kg, ...}}
+    返回: {"total_kg": int, "trips": int, "regions": {"区域名": kg, ...},
+           "region_trips": {"区域名": count, ...},
+           "vehicles": {"车牌号": {"kg": int, "trips": int, "region_trips": {"区域": count}, "unit": "主要区域"}, ...}}
     """
     total_kg = 0
     trips = 0
@@ -395,8 +410,8 @@ def parse_kdocs_xls(cells):
             # 需要关联到对应行的区域名
             pass  # 先标记净重，等区域名读取后再配对
     
-    # 第二次遍历：构建行数据
-    rows = {}  # row -> {region, net_weight}
+    # 第二次遍历：构建行数据（区域、车牌号、净重）
+    rows = {}  # row -> {region, plate, net_weight}
     for cell in cells:
         r = cell.get("rowFrom", 0)
         c = cell.get("colFrom", 0)
@@ -408,24 +423,44 @@ def parse_kdocs_xls(cells):
             continue
         
         if r not in rows:
-            rows[r] = {"region": "", "net_weight": 0}
+            rows[r] = {"region": "", "plate": "", "net_weight": 0}
         
         if c == 1 and t:
             rows[r]["region"] = t
+        if c == 2 and t:
+            rows[r]["plate"] = t
         if c == 5 and isinstance(val, (int, float)) and val > 0:
             rows[r]["net_weight"] = int(val)
     
     # 按区域汇总
     trips_count = 0
     region_trips = {}  # v3.1: 每个区域的实际车次数
+    vehicles = {}  # v3.2: 按车牌聚合
     for row_key, row_data in rows.items():
         region = row_data.get("region", "")
+        plate = row_data.get("plate", "")
         net = row_data.get("net_weight", 0)
         if region and net > 0:
             clean_region = _normalize_region(region)
             regions[clean_region] = regions.get(clean_region, 0) + net
             region_trips[clean_region] = region_trips.get(clean_region, 0) + 1
             trips_count += 1
+            
+            # 车牌聚合（空车牌按未知处理，不计入车辆排名）
+            if plate:
+                if plate not in vehicles:
+                    vehicles[plate] = {
+                        "kg": 0,
+                        "trips": 0,
+                        "region_trips": {},
+                        "unit": clean_region  # 初始默认区域
+                    }
+                v = vehicles[plate]
+                v["kg"] += net
+                v["trips"] += 1
+                v["region_trips"][clean_region] = v["region_trips"].get(clean_region, 0) + 1
+                # 更新主要区域
+                v["unit"] = max(v["region_trips"], key=v["region_trips"].get)
     
     if trips_count == 0:
         trips_count = len(rows)
@@ -434,7 +469,8 @@ def parse_kdocs_xls(cells):
         "total_kg": total_kg,
         "trips": trips_count,
         "regions": regions,
-        "region_trips": region_trips  # v3.1: 每个区域的车次数
+        "region_trips": region_trips,  # v3.1: 每个区域的车次数
+        "vehicles": vehicles  # v3.2: 每辆车当天数据
     }
 
 
@@ -462,6 +498,7 @@ def read_daily_from_kdocs(year, month):
     Returns:
         daily_list: 同 aggregate_daily_data() 格式
         region_totals: {"岳阳楼区": {"kg": ..., "trips": ...}, ...}
+        vehicle_totals: {"车牌号": {"kg": ..., "trips": ..., "unit": ...}, ...}
     """
     month_files = list_kdocs_daily_files(year, month)
     if not month_files:
@@ -471,6 +508,7 @@ def read_daily_from_kdocs(year, month):
     weekday_names = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
     daily_list = []
     region_totals = {}
+    vehicle_totals = {}  # v3.2: 月度车辆聚合
     
     for i, (date_str, file_id) in enumerate(month_files):
         try:
@@ -529,6 +567,24 @@ def read_daily_from_kdocs(year, month):
                     # 回退：至少计 1 次（该区域当天有收运）
                     region_totals[rname]["trips"] += 1
             
+            # 车辆汇总 (v3.2: 从每日文件聚合车牌)
+            for plate, vdata in parsed.get("vehicles", {}).items():
+                if plate not in vehicle_totals:
+                    vehicle_totals[plate] = {
+                        "kg": 0,
+                        "trips": 0,
+                        "region_trips": {},
+                        "unit": vdata.get("unit", "")
+                    }
+                vt = vehicle_totals[plate]
+                vt["kg"] += vdata.get("kg", 0)
+                vt["trips"] += vdata.get("trips", 0)
+                for rname, rcnt in vdata.get("region_trips", {}).items():
+                    vt["region_trips"][rname] = vt["region_trips"].get(rname, 0) + rcnt
+                # 主要区域 = 车次最多的区域
+                if vt["region_trips"]:
+                    vt["unit"] = max(vt["region_trips"], key=vt["region_trips"].get)
+            
             if (i + 1) % 5 == 0 or i == len(month_files) - 1:
                 print(f"  [PROGRESS] 已读取 {i+1}/{len(month_files)} 个文件")
             
@@ -536,8 +592,8 @@ def read_daily_from_kdocs(year, month):
             print(f"  [SKIP] {date_str}: 解析异常 {e}")
             continue
     
-    print(f"[INFO] 金山文档: 成功读取 {len(daily_list)} / {len(month_files)} 个文件")
-    return daily_list, region_totals
+    print(f"[INFO] 金山文档: 成功读取 {len(daily_list)} / {len(month_files)} 个文件, 车辆 {len(vehicle_totals)} 台")
+    return daily_list, region_totals, vehicle_totals
 
 
 def aggregate_regions(weeks_data):
@@ -1019,7 +1075,7 @@ def build_monthly_report(weekly_dir, year, month, source="local"):
     # 数据源：本地周数据 或 金山文档直读
     if source == "kdocs":
         print(f"[INFO] 数据源: 金山文档直读")
-        daily_list, region_map = read_daily_from_kdocs(year, month)
+        daily_list, region_map, vehicle_map = read_daily_from_kdocs(year, month)
         if not daily_list:
             print("[WARN] 金山文档读取失败或无数据，回退到本地周数据")
             source = "local"
@@ -1059,9 +1115,24 @@ def build_monthly_report(weekly_dir, year, month, source="local"):
                 "trips": rdata["trips"],
                 "avg_per_day_kg": avg_per_day
             })
-        # kdocs 模式暂不支持车辆排名（每日文件粒度 vs 周聚合粒度不同）
-        # 标记为 N/A 而非 0 以避免误导
-        vehicle_count = -1  # -1 = 不适用（kdocs 模式无车辆排名）
+        
+        # 从 vehicle_map 构造车辆排名 (v3.2)
+        if vehicle_map:
+            sorted_vehicles = sorted(
+                [{"plate": plate, **vdata} for plate, vdata in vehicle_map.items()],
+                key=lambda x: x["kg"], reverse=True
+            )
+            for v in sorted_vehicles:
+                v["avg_per_trip"] = round(v["kg"] / v["trips"]) if v["trips"] else 0
+                v.pop("region_trips", None)  # 前端不需要
+            top10_vehicles = sorted_vehicles[:10] if len(sorted_vehicles) >= 10 else sorted_vehicles
+            bottom10_vehicles = sorted(sorted_vehicles[-10:], key=lambda x: x["kg"]) if len(sorted_vehicles) >= 10 else []
+            vehicle_count = len(sorted_vehicles)
+        else:
+            # 无车牌数据时降级显示
+            top10_vehicles = []
+            bottom10_vehicles = []
+            vehicle_count = -1
         
     # 计算周度分解（kdocs 模式从 daily_list 自行分组）
     if source == "kdocs" and daily_list:
@@ -2096,7 +2167,7 @@ def main():
     # 打印摘要
     print()
     print("=" * 50)
-    print(f"  {year}年{month}月 月度分析摘要 (v3.1)")
+    print(f"  {year}年{month}月 月度分析摘要 (v3.2)")
     print(f"  数据源:     {args.source.upper()}")
     print(f"  数据质量:   {report.get('data_quality', {}).get('quality_score', '--')}/100"
           f" ({report.get('data_quality', {}).get('severity', 'N/A')})")

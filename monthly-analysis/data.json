@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-06-30 16:17:31",
+  "generated_at": "2026-06-30 16:34:54",
   "month": "2026-06",
   "year": 2026,
   "month_num": 6,
@@ -338,9 +338,151 @@
       "avg_per_day_kg": 8226
     }
   ],
-  "vehicles_top10": [],
-  "vehicles_bottom10": [],
-  "vehicle_count": -1,
+  "vehicles_top10": [
+    {
+      "plate": "湘FA8040",
+      "kg": 418492,
+      "trips": 84,
+      "unit": "开发区",
+      "avg_per_trip": 4982
+    },
+    {
+      "plate": "湘FC5523",
+      "kg": 415530,
+      "trips": 66,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 6296
+    },
+    {
+      "plate": "湘FB9498",
+      "kg": 400945,
+      "trips": 93,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 4311
+    },
+    {
+      "plate": "湘FA3040",
+      "kg": 386270,
+      "trips": 85,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 4544
+    },
+    {
+      "plate": "湘FA9847",
+      "kg": 383040,
+      "trips": 74,
+      "unit": "南湖新区",
+      "avg_per_trip": 5176
+    },
+    {
+      "plate": "湘F86680",
+      "kg": 366406,
+      "trips": 91,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 4026
+    },
+    {
+      "plate": "湘FB0252",
+      "kg": 365540,
+      "trips": 79,
+      "unit": "开发区",
+      "avg_per_trip": 4627
+    },
+    {
+      "plate": "湘FC1673",
+      "kg": 351510,
+      "trips": 77,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 4565
+    },
+    {
+      "plate": "湘FB6266",
+      "kg": 337340,
+      "trips": 69,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 4889
+    },
+    {
+      "plate": "湘FB8611",
+      "kg": 259760,
+      "trips": 66,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 3936
+    }
+  ],
+  "vehicles_bottom10": [
+    {
+      "plate": "湘FB9409",
+      "kg": 29890,
+      "trips": 5,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 5978
+    },
+    {
+      "plate": "湘FA5403",
+      "kg": 90890,
+      "trips": 29,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 3134
+    },
+    {
+      "plate": "湘FB3975",
+      "kg": 147450,
+      "trips": 29,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 5084
+    },
+    {
+      "plate": "湘FB9046",
+      "kg": 161160,
+      "trips": 51,
+      "unit": "开发区",
+      "avg_per_trip": 3160
+    },
+    {
+      "plate": "湘FA8340",
+      "kg": 163510,
+      "trips": 47,
+      "unit": "开发区",
+      "avg_per_trip": 3479
+    },
+    {
+      "plate": "湘FB7351",
+      "kg": 171590,
+      "trips": 42,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 4085
+    },
+    {
+      "plate": "湘FC3710",
+      "kg": 174660,
+      "trips": 38,
+      "unit": "开发区",
+      "avg_per_trip": 4596
+    },
+    {
+      "plate": "湘FB0388",
+      "kg": 192250,
+      "trips": 37,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 5196
+    },
+    {
+      "plate": "湘FC8698",
+      "kg": 198090,
+      "trips": 32,
+      "unit": "君山区",
+      "avg_per_trip": 6190
+    },
+    {
+      "plate": "湘FA8342",
+      "kg": 198560,
+      "trips": 34,
+      "unit": "君山区",
+      "avg_per_trip": 5840
+    }
+  ],
+  "vehicle_count": 22,
   "weekday_pattern": {
     "周一": {
       "avg_kg": 202906,
@@ -385,21 +527,17 @@
   },
   "data_quality": {
     "is_valid": true,
-    "quality_score": 90,
+    "quality_score": 95,
     "severity": "WARNING",
     "error_count": 0,
-    "warning_count": 2,
+    "warning_count": 1,
     "errors": [],
     "warnings": [
-      {
-        "field": "vehicles",
-        "message": "车辆排名数据不可用（kdocs 模式暂不支持）"
-      },
       {
         "field": "daily.pending",
         "message": "待上传日期 (1天): 6月30日"
       }
     ],
-    "summary": "数据覆盖: 29/30天有效 | 待上传: 1天(6月30日) | 警告: 2项 | 质量评分: 90/100"
+    "summary": "数据覆盖: 29/30天有效 | 待上传: 1天(6月30日) | 警告: 1项 | 质量评分: 95/100"
   }
 }
