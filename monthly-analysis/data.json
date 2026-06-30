@@ -1,13 +1,19 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-30 14:43:28",
+  "generated_at": "2026-06-30 15:21:43",
   "month": "2026-06",
   "year": 2026,
   "month_num": 6,
   "label": "2026年6月",
   "date_range": "6月1日 - 6月30日",
   "days_in_month": 30,
-  "data_days": 28,
+  "data_days": 30,
+  "pending_dates": [
+    "6月29日",
+    "6月30日"
+  ],
+  "pending_count": 2,
+  "has_pending": true,
   "weeks_covered": [
     23,
     24,
@@ -17,9 +23,9 @@
   "total_kg": 5443050,
   "total_ton": 5443.1,
   "total_trips": 1172,
-  "avg_daily_kg": 194395,
-  "avg_daily_ton": 194.4,
-  "avg_daily_trips": 41.9,
+  "avg_daily_kg": 181435,
+  "avg_daily_ton": 181.4,
+  "avg_daily_trips": 39.1,
   "peak": {
     "date": "6月5日",
     "weekday": "周五",
@@ -235,6 +241,24 @@
       "total_kg": 167590,
       "trips": 37,
       "week": 26
+    },
+    {
+      "date": "6月29日",
+      "weekday": "周一",
+      "total_kg": 0,
+      "trips": 0,
+      "week": 27,
+      "pending": true,
+      "pending_reason": "数据待上传"
+    },
+    {
+      "date": "6月30日",
+      "weekday": "周二",
+      "total_kg": 0,
+      "trips": 0,
+      "week": 27,
+      "pending": true,
+      "pending_reason": "数据待上传"
     }
   ],
   "weekly_breakdown": [
@@ -519,14 +543,14 @@
   "vehicle_count": 22,
   "weekday_pattern": {
     "周一": {
-      "avg_kg": 201910,
-      "avg_ton": 201.9,
-      "count": 4
+      "avg_kg": 161528,
+      "avg_ton": 161.5,
+      "count": 5
     },
     "周二": {
-      "avg_kg": 202638,
-      "avg_ton": 202.6,
-      "count": 4
+      "avg_kg": 162110,
+      "avg_ton": 162.1,
+      "count": 5
     },
     "周三": {
       "avg_kg": 196705,
@@ -553,10 +577,10 @@
       "avg_ton": 180.7,
       "count": 4
     },
-    "workday_avg_kg": 201260,
-    "workday_avg_ton": 201.3,
+    "workday_avg_kg": 182964,
+    "workday_avg_ton": 183.0,
     "weekend_avg_kg": 177231,
     "weekend_avg_ton": 177.2,
-    "weekend_drop_pct": 11.9
+    "weekend_drop_pct": 3.1
   }
 }

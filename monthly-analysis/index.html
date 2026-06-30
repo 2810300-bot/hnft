@@ -216,6 +216,34 @@ body {
 
 .peak-cell { color: var(--accent-red); font-weight: 600; }
 .valley-cell { color: var(--accent-green); font-weight: 600; }
+
+/* Pending Alert */
+.pending-alert {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border: 1px solid #fbbf24;
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #92400e;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pending-alert .icon { font-size: 20px; }
+.pending-date {
+  display: inline-block;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 4px;
+  padding: 1px 8px;
+  margin: 0 3px;
+  font-weight: 600;
+  color: #b45309;
+}
+@media (max-width: 768px) {
+  .pending-alert { flex-direction: column; align-items: flex-start; }
+}
 </style>
 </head>
 <body>
@@ -231,8 +259,8 @@ body {
     <div class="subtitle">2026年6月 · 花果畈餐厨垃圾处理项目</div>
     <div class="header-meta">
       <span>📅 报告月: 6月1日 - 6月30日</span>
-      <span>🔢 已加载 28 天数据（覆盖 4 周）</span>
-      <span>🔄 生成于 2026-06-30 14:43:28</span>
+      <span>🔢 已加载 30 天数据（覆盖 4 周）, <em style=\"color:#fbbf24;\">2 天待上传</em></span>
+      <span>🔄 生成于 2026-06-30 15:21:43</span>
     </div>
   </div>
 </header>
@@ -244,6 +272,9 @@ body {
 
   <!-- 环比趋势 KPI -->
   <div class="kpi-row" id="kpi-trend-row"></div>
+
+  <!-- Pending Data Alert -->
+  <div id="pending-alert" style="display:none;"></div>
 
   <!-- Charts: Weekly Breakdown + Daily Trend -->
   <div class="chart-grid">
@@ -322,14 +353,20 @@ body {
 // ============================================================
 const MONTHLY_DATA = {
   "schema_version": 1,
-  "generated_at": "2026-06-30 14:43:28",
+  "generated_at": "2026-06-30 15:21:43",
   "month": "2026-06",
   "year": 2026,
   "month_num": 6,
   "label": "2026年6月",
   "date_range": "6月1日 - 6月30日",
   "days_in_month": 30,
-  "data_days": 28,
+  "data_days": 30,
+  "pending_dates": [
+    "6月29日",
+    "6月30日"
+  ],
+  "pending_count": 2,
+  "has_pending": true,
   "weeks_covered": [
     23,
     24,
@@ -339,9 +376,9 @@ const MONTHLY_DATA = {
   "total_kg": 5443050,
   "total_ton": 5443.1,
   "total_trips": 1172,
-  "avg_daily_kg": 194395,
-  "avg_daily_ton": 194.4,
-  "avg_daily_trips": 41.9,
+  "avg_daily_kg": 181435,
+  "avg_daily_ton": 181.4,
+  "avg_daily_trips": 39.1,
   "peak": {
     "date": "6月5日",
     "weekday": "周五",
@@ -557,6 +594,24 @@ const MONTHLY_DATA = {
       "total_kg": 167590,
       "trips": 37,
       "week": 26
+    },
+    {
+      "date": "6月29日",
+      "weekday": "周一",
+      "total_kg": 0,
+      "trips": 0,
+      "week": 27,
+      "pending": true,
+      "pending_reason": "数据待上传"
+    },
+    {
+      "date": "6月30日",
+      "weekday": "周二",
+      "total_kg": 0,
+      "trips": 0,
+      "week": 27,
+      "pending": true,
+      "pending_reason": "数据待上传"
     }
   ],
   "weekly_breakdown": [
@@ -841,14 +896,14 @@ const MONTHLY_DATA = {
   "vehicle_count": 22,
   "weekday_pattern": {
     "周一": {
-      "avg_kg": 201910,
-      "avg_ton": 201.9,
-      "count": 4
+      "avg_kg": 161528,
+      "avg_ton": 161.5,
+      "count": 5
     },
     "周二": {
-      "avg_kg": 202638,
-      "avg_ton": 202.6,
-      "count": 4
+      "avg_kg": 162110,
+      "avg_ton": 162.1,
+      "count": 5
     },
     "周三": {
       "avg_kg": 196705,
@@ -875,11 +930,11 @@ const MONTHLY_DATA = {
       "avg_ton": 180.7,
       "count": 4
     },
-    "workday_avg_kg": 201260,
-    "workday_avg_ton": 201.3,
+    "workday_avg_kg": 182964,
+    "workday_avg_ton": 183.0,
     "weekend_avg_kg": 177231,
     "weekend_avg_ton": 177.2,
-    "weekend_drop_pct": 11.9
+    "weekend_drop_pct": 3.1
   }
 };
 
@@ -909,7 +964,7 @@ function renderKPIs() {
     '<div class="kpi-card">' +
       '<div class="label">月度总收运量</div>' +
       '<div class="value">' + fmtNum(d.total_ton, 1) + '<span class="unit">吨</span></div>' +
-      '<div class="sub">' + d.total_trips + ' 车次 · 覆盖 ' + d.data_days + ' 天</div>' +
+      '<div class="sub">' + d.total_trips + ' 车次 · 已覆盖 ' + d.data_days + '/' + d.days_in_month + ' 天</div>' +
     '</div>' +
     '<div class="kpi-card">' +
       '<div class="label">日均收运量</div>' +
@@ -949,6 +1004,22 @@ function renderKPIs() {
       '<div class="value" style="font-size:22px;">&#x2009;' + d.trend_label + '</div>' +
       '<div class="sub">覆盖 ' + (d.vehicle_count || '-') + ' 台车辆</div>' +
     '</div>';
+  
+  // Pending alert
+  if (d.has_pending) {
+    var pendingBadges = d.pending_dates.map(function(dt) {
+      return '<span class="pending-date">' + dt + '</span>';
+    }).join('');
+    document.getElementById('pending-alert').style.display = 'flex';
+    document.getElementById('pending-alert').className = 'pending-alert';
+    document.getElementById('pending-alert').innerHTML =
+      '<span class="icon">&#x26A0;</span>' +
+      '<div>' +
+        '<strong>部分日期数据待上传</strong><br>' +
+        '以下 ' + d.pending_count + ' 天数据尚未上传：' + pendingBadges +
+        '。数据上传后将自动纳入统计。' +
+      '</div>';
+  }
 }
 
 // ============================================================
@@ -998,13 +1069,20 @@ function renderCharts() {
     const ctx = document.getElementById('chart-daily-trend');
     if (!ctx) return;
     const daily = d.daily;
-    const peakIdx = daily.findIndex(x => x.total_kg === d.peak.kg);
-    const valleyIdx = daily.findIndex(x => x.total_kg === d.valley.kg);
+    const peakIdx = daily.findIndex(x => x.total_kg === d.peak.kg && !x.pending);
+    const valleyIdx = daily.findIndex(x => x.total_kg === d.valley.kg && !x.pending);
     
-    const pointColors = daily.map((x, i) => {
+    const defaultRadius = daily.map(function(x) { return x.pending ? 2 : 3; });
+    const pointColors = daily.map(function(x, i) {
+      if (x.pending) return '#cbd5e1';
       if (i === peakIdx) return '#e15759';
       if (i === valleyIdx) return '#59a14f';
       return '#4C72B0';
+    });
+    const pointRadii = daily.map(function(x, i) {
+      if (x.pending) return 2;
+      if (i === peakIdx || i === valleyIdx) return 6;
+      return 3;
     });
 
     new Chart(ctx, {
@@ -1018,9 +1096,15 @@ function renderCharts() {
           backgroundColor: 'rgba(76,114,176,0.1)',
           fill: true,
           tension: 0.3,
-          pointRadius: daily.map((x, i) => (i === peakIdx || i === valleyIdx) ? 6 : 3),
+          pointRadius: pointRadii,
           pointBackgroundColor: pointColors,
-          pointBorderColor: pointColors
+          pointBorderColor: pointColors,
+          segment: {
+            borderDash: function(ctx) {
+              var idx = ctx.p0DataIndex;
+              return daily[idx].pending ? [5, 5] : undefined;
+            }
+          }
         }]
       },
       options: {
@@ -1030,6 +1114,7 @@ function renderCharts() {
             callbacks: {
               label: function(ctx) {
                 const x = daily[ctx.dataIndex];
+                if (x.pending) return x.date + ' · ' + x.weekday + ' · 数据待上传';
                 return fmtTon(x.total_kg, 1) + '吨 · ' + x.trips + '车次 · ' + x.weekday;
               }
             }
