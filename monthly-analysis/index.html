@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>厨余垃圾收运量月度数据分析 · 2026年6月</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #f0f2f5;
+  --card-bg: #ffffff;
+  --header-bg: #1a1a2e;
+  --header-bg2: #16213e;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --text-light: #e2e8f0;
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.1), 0 8px 32px rgba(0,0,0,0.08);
+  --accent-blue: #4C72B0;
+  --accent-green: #16a34a;
+  --accent-orange: #DD8452;
+  --accent-red: #e15759;
+  --accent-cyan: #0891b2;
+  --accent-purple: #7c3aed;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Breadcrumb */
+.breadcrumb-bar {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.breadcrumb-bar a { color: var(--accent-blue); text-decoration: none; font-weight: 500; }
+.breadcrumb-bar a:hover { text-decoration: underline; }
+.breadcrumb-bar .sep { color: #94a3b8; margin: 0 8px; }
+
+/* Header */
+.site-header {
+  background: linear-gradient(135deg, var(--header-bg), var(--header-bg2));
+  color: var(--text-light);
+  padding: 32px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.site-header::after {
+  content: '';
+  position: absolute;
+  top: -30%; right: -5%;
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.header-content h1 { font-size: 26px; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+.header-content .subtitle { font-size: 13px; color: rgba(255,255,255,0.55); }
+.header-meta {
+  display: flex; gap: 20px; margin-top: 12px; flex-wrap: wrap;
+  font-size: 12px; color: rgba(255,255,255,0.6);
+}
+
+/* Main */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px 48px;
+}
+
+/* Section */
+.section-title {
+  font-size: 18px; font-weight: 700; color: var(--text);
+  margin-bottom: 16px; padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.section-subtitle {
+  font-size: 15px; font-weight: 600; color: var(--text);
+  margin: 20px 0 12px;
+}
+
+/* KPI Row */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.kpi-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  border-top: 3px solid transparent;
+}
+.kpi-card:nth-child(1) { border-top-color: var(--accent-blue); }
+.kpi-card:nth-child(2) { border-top-color: var(--accent-green); }
+.kpi-card:nth-child(3) { border-top-color: var(--accent-orange); }
+.kpi-card:nth-child(4) { border-top-color: var(--accent-purple); }
+.kpi-card .label { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.kpi-card .value { font-size: 30px; font-weight: 700; color: var(--text); line-height: 1.2; }
+.kpi-card .unit { font-size: 14px; color: var(--text-secondary); margin-left: 2px; font-weight: 400; }
+.kpi-card .sub { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+.kpi-card .sub.up { color: var(--accent-green); font-weight: 600; }
+.kpi-card .sub.down { color: var(--accent-red); font-weight: 600; }
+
+/* Chart Grid */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.chart-grid .full { grid-column: 1 / -1; }
+.chart-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.chart-card h3 {
+  font-size: 14px; font-weight: 600;
+  margin-bottom: 12px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text);
+}
+.chart-card canvas { max-height: 320px; }
+
+/* Tables */
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 8px;
+}
+.detail-table th {
+  background: #f8fafc;
+  text-align: left;
+  padding: 10px 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border);
+}
+.detail-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border-light);
+}
+.detail-table tr:last-child td { border-bottom: none; }
+.detail-table tr:hover td { background: #f8fafc; }
+
+/* Table Card */
+.table-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+.table-card h3 {
+  font-size: 14px; font-weight: 600;
+  margin-bottom: 12px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text);
+}
+
+/* Dual Table Row */
+.dual-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+/* Footer */
+.site-footer {
+  text-align: center;
+  padding: 32px 24px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid { grid-template-columns: 1fr; }
+  .dual-table { grid-template-columns: 1fr; }
+  .site-header { padding: 24px 20px; }
+  .header-content h1 { font-size: 22px; }
+  .main-container { padding: 20px 16px 32px; }
+}
+
+.peak-cell { color: var(--accent-red); font-weight: 600; }
+.valley-cell { color: var(--accent-green); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="breadcrumb-bar">
+  <a href="../">🏠 看板中心</a><span class="sep">/</span>
+  <a href="./">📊 月度数据分析</a>
+</div>
+
+<header class="site-header">
+  <div class="header-content">
+    <h1>📊 厨余垃圾收运量 · 月度数据分析</h1>
+    <div class="subtitle">2026年6月 · 花果畈餐厨垃圾处理项目</div>
+    <div class="header-meta">
+      <span>📅 报告月: 6月1日 - 6月30日</span>
+      <span>🔢 已加载 28 天数据（覆盖 4 周）</span>
+      <span>🔄 生成于 2026-06-30 14:43:28</span>
+    </div>
+  </div>
+</header>
+
+<div class="main-container">
+
+  <!-- KPI Cards -->
+  <div class="kpi-row" id="kpi-row"></div>
+
+  <!-- 环比趋势 KPI -->
+  <div class="kpi-row" id="kpi-trend-row"></div>
+
+  <!-- Charts: Weekly Breakdown + Daily Trend -->
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>📅 周度收运量分解</h3>
+      <canvas id="chart-weekly-breakdown"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>📈 日收运量趋势</h3>
+      <canvas id="chart-daily-trend"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>🏘️ 区域收运分布</h3>
+      <canvas id="chart-region-pie"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>📅 工作日 vs 周末收运模式</h3>
+      <canvas id="chart-weekday-pattern"></canvas>
+    </div>
+  </div>
+
+  <!-- 周度明细表 -->
+  <div class="table-card">
+    <h3>📋 周度收运明细</h3>
+    <table class="detail-table">
+      <thead><tr><th>周次</th><th>日期范围</th><th>周总量 (吨)</th><th>日均 (吨)</th><th>车次</th><th>趋势</th></tr></thead>
+      <tbody id="weekly-detail-body"></tbody>
+    </table>
+  </div>
+
+  <!-- 区域 + 工作日模式 双栏 -->
+  <div class="dual-table">
+    <div class="table-card">
+      <h3>🏘️ 各区域收运量占比</h3>
+      <table class="detail-table">
+        <thead><tr><th>区域</th><th>月总量 (吨)</th><th>占比</th><th>车次</th><th>车均 (kg)</th></tr></thead>
+        <tbody id="region-table-body"></tbody>
+      </table>
+    </div>
+    <div class="table-card">
+      <h3>📅 工作日/周末收运模式</h3>
+      <table class="detail-table">
+        <thead><tr><th>类别</th><th>日均收运量 (吨)</th><th>统计天数</th></tr></thead>
+        <tbody id="weekday-pattern-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 车辆排名 -->
+  <div class="dual-table">
+    <div class="table-card">
+      <h3>🏆 运力TOP10 · 高效车辆</h3>
+      <table class="detail-table">
+        <thead><tr><th>#</th><th>车牌号</th><th>月总量 (kg)</th><th>车次</th><th>车均 (kg)</th><th>区域</th></tr></thead>
+        <tbody id="top10-body"></tbody>
+      </table>
+    </div>
+    <div class="table-card">
+      <h3>⚠️ 运力后10名 · 需关注车辆</h3>
+      <table class="detail-table">
+        <thead><tr><th>#</th><th>车牌号</th><th>月总量 (kg)</th><th>车次</th><th>车均 (kg)</th><th>区域</th></tr></thead>
+        <tbody id="bottom10-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <p>&copy; 2026 湖南伏泰环境科技有限责任公司 · 数据自动同步 · 每月1日自动刷新</p>
+</footer>
+
+<script>
+// ============================================================
+// Data (embedded from Python)
+// ============================================================
+const MONTHLY_DATA = {
+  "schema_version": 1,
+  "generated_at": "2026-06-30 14:43:28",
+  "month": "2026-06",
+  "year": 2026,
+  "month_num": 6,
+  "label": "2026年6月",
+  "date_range": "6月1日 - 6月30日",
+  "days_in_month": 30,
+  "data_days": 28,
+  "weeks_covered": [
+    23,
+    24,
+    25,
+    26
+  ],
+  "total_kg": 5443050,
+  "total_ton": 5443.1,
+  "total_trips": 1172,
+  "avg_daily_kg": 194395,
+  "avg_daily_ton": 194.4,
+  "avg_daily_trips": 41.9,
+  "peak": {
+    "date": "6月5日",
+    "weekday": "周五",
+    "kg": 224590,
+    "ton": 224.6,
+    "trips": 49
+  },
+  "valley": {
+    "date": "6月19日",
+    "weekday": "周五",
+    "kg": 165230,
+    "ton": 165.2,
+    "trips": 37
+  },
+  "prev_month_total_ton": 5443.1,
+  "mom_change_ton": -0.1,
+  "mom_change_pct": -0.0,
+  "trend": "down",
+  "trend_label": "环比下降",
+  "daily": [
+    {
+      "date": "6月1日",
+      "weekday": "周一",
+      "total_kg": 205930,
+      "trips": 44,
+      "week": 23
+    },
+    {
+      "date": "6月2日",
+      "weekday": "周二",
+      "total_kg": 206320,
+      "trips": 42,
+      "week": 23
+    },
+    {
+      "date": "6月3日",
+      "weekday": "周三",
+      "total_kg": 202390,
+      "trips": 42,
+      "week": 23
+    },
+    {
+      "date": "6月4日",
+      "weekday": "周四",
+      "total_kg": 201180,
+      "trips": 43,
+      "week": 23
+    },
+    {
+      "date": "6月5日",
+      "weekday": "周五",
+      "total_kg": 224590,
+      "trips": 49,
+      "week": 23
+    },
+    {
+      "date": "6月6日",
+      "weekday": "周六",
+      "total_kg": 174460,
+      "trips": 37,
+      "week": 23
+    },
+    {
+      "date": "6月7日",
+      "weekday": "周日",
+      "total_kg": 195990,
+      "trips": 42,
+      "week": 23
+    },
+    {
+      "date": "6月8日",
+      "weekday": "周一",
+      "total_kg": 182820,
+      "trips": 39,
+      "week": 24
+    },
+    {
+      "date": "6月9日",
+      "weekday": "周二",
+      "total_kg": 187690,
+      "trips": 40,
+      "week": 24
+    },
+    {
+      "date": "6月10日",
+      "weekday": "周三",
+      "total_kg": 203440,
+      "trips": 44,
+      "week": 24
+    },
+    {
+      "date": "6月11日",
+      "weekday": "周四",
+      "total_kg": 209410,
+      "trips": 46,
+      "week": 24
+    },
+    {
+      "date": "6月12日",
+      "weekday": "周五",
+      "total_kg": 197970,
+      "trips": 42,
+      "week": 24
+    },
+    {
+      "date": "6月13日",
+      "weekday": "周六",
+      "total_kg": 179900,
+      "trips": 41,
+      "week": 24
+    },
+    {
+      "date": "6月14日",
+      "weekday": "周日",
+      "total_kg": 177290,
+      "trips": 40,
+      "week": 24
+    },
+    {
+      "date": "6月15日",
+      "weekday": "周一",
+      "total_kg": 207250,
+      "trips": 44,
+      "week": 25
+    },
+    {
+      "date": "6月16日",
+      "weekday": "周二",
+      "total_kg": 210680,
+      "trips": 47,
+      "week": 25
+    },
+    {
+      "date": "6月17日",
+      "weekday": "周三",
+      "total_kg": 173000,
+      "trips": 40,
+      "week": 25
+    },
+    {
+      "date": "6月18日",
+      "weekday": "周四",
+      "total_kg": 199220,
+      "trips": 44,
+      "week": 25
+    },
+    {
+      "date": "6月19日",
+      "weekday": "周五",
+      "total_kg": 165230,
+      "trips": 37,
+      "week": 25
+    },
+    {
+      "date": "6月20日",
+      "weekday": "周六",
+      "total_kg": 174720,
+      "trips": 36,
+      "week": 25
+    },
+    {
+      "date": "6月21日",
+      "weekday": "周日",
+      "total_kg": 181730,
+      "trips": 37,
+      "week": 25
+    },
+    {
+      "date": "6月22日",
+      "weekday": "周一",
+      "total_kg": 211640,
+      "trips": 42,
+      "week": 26
+    },
+    {
+      "date": "6月23日",
+      "weekday": "周二",
+      "total_kg": 205860,
+      "trips": 43,
+      "week": 26
+    },
+    {
+      "date": "6月24日",
+      "weekday": "周三",
+      "total_kg": 207990,
+      "trips": 45,
+      "week": 26
+    },
+    {
+      "date": "6月25日",
+      "weekday": "周四",
+      "total_kg": 210960,
+      "trips": 46,
+      "week": 26
+    },
+    {
+      "date": "6月26日",
+      "weekday": "周五",
+      "total_kg": 211630,
+      "trips": 46,
+      "week": 26
+    },
+    {
+      "date": "6月27日",
+      "weekday": "周六",
+      "total_kg": 166170,
+      "trips": 37,
+      "week": 26
+    },
+    {
+      "date": "6月28日",
+      "weekday": "周日",
+      "total_kg": 167590,
+      "trips": 37,
+      "week": 26
+    }
+  ],
+  "weekly_breakdown": [
+    {
+      "week": 23,
+      "total_ton": 1410.9,
+      "avg_daily": 201.6,
+      "total_trips": 299,
+      "date_range": "6月1日 - 6月7日",
+      "trend_label": "基线周",
+      "trend_color": "#4C72B0"
+    },
+    {
+      "week": 24,
+      "total_ton": 1338.5,
+      "avg_daily": 191.2,
+      "total_trips": 292,
+      "date_range": "6月8日 - 6月14日",
+      "trend_label": "环比下降",
+      "trend_color": "#DD8452"
+    },
+    {
+      "week": 25,
+      "total_ton": 1311.8,
+      "avg_daily": 187.4,
+      "total_trips": 285,
+      "date_range": "6月15日 - 6月21日",
+      "trend_label": "全月最低",
+      "trend_color": "#e15759"
+    },
+    {
+      "week": 26,
+      "total_ton": 1381.8,
+      "avg_daily": 197.4,
+      "total_trips": 296,
+      "date_range": "6月22日 - 6月28日",
+      "trend_label": "强势反弹",
+      "trend_color": "#16a34a"
+    }
+  ],
+  "regions": [
+    {
+      "name": "岳阳楼区餐厨",
+      "kg": 849940,
+      "pct": 61.5,
+      "trips": 181,
+      "avg_per_trip": 4696
+    },
+    {
+      "name": "开发区餐厨",
+      "kg": 271940,
+      "pct": 19.7,
+      "trips": 65,
+      "avg_per_trip": 4184
+    },
+    {
+      "name": "岳阳君山区餐厨",
+      "kg": 103870,
+      "pct": 7.5,
+      "trips": 17,
+      "avg_per_trip": 6110
+    },
+    {
+      "name": "南湖新区餐厨",
+      "kg": 98780,
+      "pct": 7.1,
+      "trips": 19,
+      "avg_per_trip": 5199
+    },
+    {
+      "name": "临港新区餐厨",
+      "kg": 57310,
+      "pct": 4.1,
+      "trips": 14,
+      "avg_per_trip": 4094
+    }
+  ],
+  "vehicles_top10": [
+    {
+      "plate": "湘FC5523",
+      "unit": "岳阳楼区餐厨",
+      "kg": 401970,
+      "trips": 64,
+      "avg_sum": 401954,
+      "avg_count": 64,
+      "days_active": "7",
+      "avg_per_trip": 6281
+    },
+    {
+      "plate": "湘FA8040",
+      "unit": "开发区餐厨",
+      "kg": 394340,
+      "trips": 79,
+      "avg_sum": 394366,
+      "avg_count": 79,
+      "days_active": "7",
+      "avg_per_trip": 4992
+    },
+    {
+      "plate": "湘FB9498",
+      "unit": "岳阳楼区餐厨",
+      "kg": 380230,
+      "trips": 89,
+      "avg_sum": 380233,
+      "avg_count": 89,
+      "days_active": "7",
+      "avg_per_trip": 4272
+    },
+    {
+      "plate": "湘FA3040",
+      "unit": "岳阳楼区餐厨",
+      "kg": 372300,
+      "trips": 82,
+      "avg_sum": 372294,
+      "avg_count": 82,
+      "days_active": "7",
+      "avg_per_trip": 4540
+    },
+    {
+      "plate": "湘FA9847",
+      "unit": "南湖新区餐厨",
+      "kg": 365980,
+      "trips": 71,
+      "avg_sum": 365986,
+      "avg_count": 71,
+      "days_active": "7",
+      "avg_per_trip": 5155
+    },
+    {
+      "plate": "湘FB0252",
+      "unit": "开发区餐厨",
+      "kg": 355480,
+      "trips": 77,
+      "avg_sum": 355492,
+      "avg_count": 77,
+      "days_active": "7",
+      "avg_per_trip": 4617
+    },
+    {
+      "plate": "湘F86680",
+      "unit": "岳阳楼区餐厨",
+      "kg": 351280,
+      "trips": 88,
+      "avg_sum": 351301,
+      "avg_count": 88,
+      "days_active": "7",
+      "avg_per_trip": 3992
+    },
+    {
+      "plate": "湘FC1673",
+      "unit": "岳阳楼区餐厨",
+      "kg": 337780,
+      "trips": 74,
+      "avg_sum": 337784,
+      "avg_count": 74,
+      "days_active": "7",
+      "avg_per_trip": 4565
+    },
+    {
+      "plate": "湘FB6266",
+      "unit": "岳阳楼区餐厨",
+      "kg": 325790,
+      "trips": 67,
+      "avg_sum": 325803,
+      "avg_count": 67,
+      "days_active": "7",
+      "avg_per_trip": 4863
+    },
+    {
+      "plate": "湘FB8611",
+      "unit": "岳阳楼区餐厨",
+      "kg": 192850,
+      "trips": 49,
+      "avg_sum": 192850,
+      "avg_count": 49,
+      "days_active": "7",
+      "avg_per_trip": 3936
+    }
+  ],
+  "vehicles_bottom10": [
+    {
+      "plate": "湘FB9409",
+      "unit": "岳阳楼区餐厨",
+      "kg": 29890,
+      "trips": 5,
+      "avg_sum": 29890,
+      "avg_count": 5,
+      "days_active": "1",
+      "avg_per_trip": 5978
+    },
+    {
+      "plate": "湘FB2060",
+      "unit": "临港新区餐厨",
+      "kg": 58400,
+      "trips": 15,
+      "avg_sum": 58395,
+      "avg_count": 15,
+      "days_active": "7",
+      "avg_per_trip": 3893
+    },
+    {
+      "plate": "湘FA5403",
+      "unit": "岳阳楼区餐厨",
+      "kg": 87420,
+      "trips": 28,
+      "avg_sum": 87423,
+      "avg_count": 28,
+      "days_active": "7",
+      "avg_per_trip": 3122
+    },
+    {
+      "plate": "湘FA8347",
+      "unit": "岳阳楼区餐厨",
+      "kg": 97210,
+      "trips": 14,
+      "avg_sum": 97209,
+      "avg_count": 14,
+      "days_active": "7",
+      "avg_per_trip": 6944
+    },
+    {
+      "plate": "湘FA8342",
+      "unit": "岳阳君山区餐厨",
+      "kg": 140180,
+      "trips": 23,
+      "avg_sum": 140186,
+      "avg_count": 23,
+      "days_active": "7",
+      "avg_per_trip": 6095
+    },
+    {
+      "plate": "湘FC8698",
+      "unit": "岳阳君山区餐厨",
+      "kg": 140420,
+      "trips": 23,
+      "avg_sum": 140420,
+      "avg_count": 23,
+      "days_active": "7",
+      "avg_per_trip": 6105
+    },
+    {
+      "plate": "湘FB3975",
+      "unit": "岳阳楼区餐厨",
+      "kg": 142220,
+      "trips": 28,
+      "avg_sum": 142219,
+      "avg_count": 28,
+      "days_active": "7",
+      "avg_per_trip": 5079
+    },
+    {
+      "plate": "湘FB9046",
+      "unit": "开发区餐厨",
+      "kg": 154140,
+      "trips": 49,
+      "avg_sum": 154140,
+      "avg_count": 49,
+      "days_active": "7",
+      "avg_per_trip": 3146
+    },
+    {
+      "plate": "湘FA8340",
+      "unit": "开发区餐厨",
+      "kg": 156340,
+      "trips": 45,
+      "avg_sum": 156346,
+      "avg_count": 45,
+      "days_active": "7",
+      "avg_per_trip": 3474
+    },
+    {
+      "plate": "湘FB7351",
+      "unit": "岳阳楼区餐厨",
+      "kg": 164260,
+      "trips": 40,
+      "avg_sum": 164267,
+      "avg_count": 40,
+      "days_active": "7",
+      "avg_per_trip": 4107
+    }
+  ],
+  "vehicle_count": 22,
+  "weekday_pattern": {
+    "周一": {
+      "avg_kg": 201910,
+      "avg_ton": 201.9,
+      "count": 4
+    },
+    "周二": {
+      "avg_kg": 202638,
+      "avg_ton": 202.6,
+      "count": 4
+    },
+    "周三": {
+      "avg_kg": 196705,
+      "avg_ton": 196.7,
+      "count": 4
+    },
+    "周四": {
+      "avg_kg": 205192,
+      "avg_ton": 205.2,
+      "count": 4
+    },
+    "周五": {
+      "avg_kg": 199855,
+      "avg_ton": 199.9,
+      "count": 4
+    },
+    "周六": {
+      "avg_kg": 173812,
+      "avg_ton": 173.8,
+      "count": 4
+    },
+    "周日": {
+      "avg_kg": 180650,
+      "avg_ton": 180.7,
+      "count": 4
+    },
+    "workday_avg_kg": 201260,
+    "workday_avg_ton": 201.3,
+    "weekend_avg_kg": 177231,
+    "weekend_avg_ton": 177.2,
+    "weekend_drop_pct": 11.9
+  }
+};
+
+// ============================================================
+// Utilities
+// ============================================================
+function fmtNum(n, d) {
+  if (n === null || n === undefined) return '-';
+  d = d || 0;
+  return Number(n).toLocaleString('zh-CN', { maximumFractionDigits: d });
+}
+function fmtTon(kg, d) { return (kg / 1000).toFixed(d || 1); }
+function fmtPct(n) { return (n !== null && n !== undefined) ? n.toFixed(1) + '%' : '-'; }
+
+const CHART_COLORS = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#edc949', '#af7aa1'];
+const CHART_BG = CHART_COLORS.map(c => c.replace(')', ',0.7)').replace('rgb', 'rgba'));
+
+// ============================================================
+// KPI Rendering
+// ============================================================
+function renderKPIs() {
+  const d = MONTHLY_DATA;
+  const momClass = d.mom_change_pct !== null && d.mom_change_pct > 0 ? 'up' : 'down';
+  const momSign = d.mom_change_pct !== null && d.mom_change_pct >= 0 ? '+' : '';
+
+  document.getElementById('kpi-row').innerHTML =
+    '<div class="kpi-card">' +
+      '<div class="label">月度总收运量</div>' +
+      '<div class="value">' + fmtNum(d.total_ton, 1) + '<span class="unit">吨</span></div>' +
+      '<div class="sub">' + d.total_trips + ' 车次 · 覆盖 ' + d.data_days + ' 天</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">日均收运量</div>' +
+      '<div class="value">' + fmtNum(d.avg_daily_ton, 1) + '<span class="unit">吨/日</span></div>' +
+      '<div class="sub">日均 ' + d.avg_daily_trips + ' 车次</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">月内单日峰值</div>' +
+      '<div class="value">' + d.peak.ton + '<span class="unit">吨</span></div>' +
+      '<div class="sub">' + d.peak.date + ' ' + d.peak.weekday + ' · ' + d.peak.trips + '车次</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">月内单日谷值</div>' +
+      '<div class="value">' + d.valley.ton + '<span class="unit">吨</span></div>' +
+      '<div class="sub">' + d.valley.date + ' ' + d.valley.weekday + ' · ' + d.valley.trips + '车次</div>' +
+    '</div>';
+  
+  document.getElementById('kpi-trend-row').innerHTML =
+    '<div class="kpi-card">' +
+      '<div class="label">上月总量</div>' +
+      '<div class="value">' + (d.prev_month_total_ton > 0 ? fmtNum(d.prev_month_total_ton, 1) : '-') + '<span class="unit">吨</span></div>' +
+      '<div class="sub">' + (d.prev_month_total_ton > 0 ? '作为环比基准' : '暂无上月数据') + '</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">环比变化</div>' +
+      '<div class="value" style="color:' + (d.mom_change_ton > 0 ? 'var(--accent-green)' : 'var(--accent-red))') + '">' +
+        (d.mom_change_ton > 0 ? '+' : '') + d.mom_change_ton + '<span class="unit">吨</span></div>' +
+      '<div class="sub ' + momClass + '">' + momSign + (d.mom_change_pct !== null ? d.mom_change_pct : '--') + '%</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">周均收运量</div>' +
+      '<div class="value">' + (d.weekly_breakdown.length > 0 ? (d.total_ton / d.weekly_breakdown.length).toFixed(1) : '-') + '<span class="unit">吨/周</span></div>' +
+      '<div class="sub">覆盖 ' + d.weekly_breakdown.length + ' 周</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">趋势判断</div>' +
+      '<div class="value" style="font-size:22px;">&#x2009;' + d.trend_label + '</div>' +
+      '<div class="sub">覆盖 ' + (d.vehicle_count || '-') + ' 台车辆</div>' +
+    '</div>';
+}
+
+// ============================================================
+// Charts
+// ============================================================
+function renderCharts() {
+  const d = MONTHLY_DATA;
+  
+  // 1. Weekly Breakdown Bar Chart
+  (function() {
+    const ctx = document.getElementById('chart-weekly-breakdown');
+    if (!ctx) return;
+    const wb = d.weekly_breakdown;
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: wb.map(w => '第' + w.week + '周'),
+        datasets: [{
+          label: '周收运量 (吨)',
+          data: wb.map(w => w.total_ton),
+          backgroundColor: wb.map(w => w.trend_color || '#4C72B0'),
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                const w = wb[ctx.dataIndex];
+                return '总量: ' + w.total_ton + '吨 · 日均: ' + w.avg_daily + '吨 · ' + w.total_trips + '车次';
+              }
+            }
+          }
+        },
+        scales: {
+          y: { beginAtZero: false, title: { display: true, text: '吨' } }
+        }
+      }
+    });
+  })();
+
+  // 2. Daily Trend Line Chart
+  (function() {
+    const ctx = document.getElementById('chart-daily-trend');
+    if (!ctx) return;
+    const daily = d.daily;
+    const peakIdx = daily.findIndex(x => x.total_kg === d.peak.kg);
+    const valleyIdx = daily.findIndex(x => x.total_kg === d.valley.kg);
+    
+    const pointColors = daily.map((x, i) => {
+      if (i === peakIdx) return '#e15759';
+      if (i === valleyIdx) return '#59a14f';
+      return '#4C72B0';
+    });
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: daily.map(x => x.date),
+        datasets: [{
+          label: '收运量 (吨)',
+          data: daily.map(x => x.total_kg / 1000),
+          borderColor: '#4C72B0',
+          backgroundColor: 'rgba(76,114,176,0.1)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: daily.map((x, i) => (i === peakIdx || i === valleyIdx) ? 6 : 3),
+          pointBackgroundColor: pointColors,
+          pointBorderColor: pointColors
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                const x = daily[ctx.dataIndex];
+                return fmtTon(x.total_kg, 1) + '吨 · ' + x.trips + '车次 · ' + x.weekday;
+              }
+            }
+          }
+        },
+        scales: {
+          y: { beginAtZero: false, title: { display: true, text: '吨' } },
+          x: { ticks: { maxRotation: 45 } }
+        }
+      }
+    });
+  })();
+
+  // 3. Region Pie Chart
+  (function() {
+    const ctx = document.getElementById('chart-region-pie');
+    if (!ctx || d.regions.length === 0) return;
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: d.regions.map(r => r.name),
+        datasets: [{
+          data: d.regions.map(r => r.kg),
+          backgroundColor: CHART_COLORS.slice(0, d.regions.length),
+          borderWidth: 2,
+          borderColor: '#fff'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                const r = d.regions[ctx.dataIndex];
+                return r.name + ': ' + fmtTon(r.kg, 1) + '吨 (' + r.pct + '%)';
+              }
+            }
+          }
+        }
+      }
+    });
+  })();
+
+  // 4. Weekday Pattern Bar Chart
+  (function() {
+    const ctx = document.getElementById('chart-weekday-pattern');
+    if (!ctx) return;
+    const wp = d.weekday_pattern;
+    const days = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+    const values = days.map(wd => wp[wd] ? wp[wd].avg_ton : 0);
+    const colors = days.map(wd => 
+      wd === '周六' || wd === '周日' ? '#e15759' : '#4C72B0'
+    );
+    
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: days,
+        datasets: [{
+          label: '日均收运量 (吨)',
+          data: values,
+          backgroundColor: colors,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                const wd = days[ctx.dataIndex];
+                const p = wp[wd];
+                return p ? p.avg_ton + '吨/日 · ' + p.count + '天' : '0吨';
+              }
+            }
+          }
+        },
+        scales: {
+          y: { beginAtZero: false, title: { display: true, text: '吨/日' } }
+        }
+      }
+    });
+  })();
+}
+
+// ============================================================
+// Tables
+// ============================================================
+function renderTables() {
+  const d = MONTHLY_DATA;
+  
+  // Weekly Detail
+  document.getElementById('weekly-detail-body').innerHTML = d.weekly_breakdown.map(function(w) {
+    return '<tr>' +
+      '<td><strong>第' + w.week + '周</strong></td>' +
+      '<td>' + w.date_range + '</td>' +
+      '<td><strong>' + fmtNum(w.total_ton, 1) + '</strong></td>' +
+      '<td>' + w.avg_daily + '</td>' +
+      '<td>' + w.total_trips + '</td>' +
+      '<td style="color:' + w.trend_color + '">' + w.trend_label + '</td>' +
+    '</tr>';
+  }).join('');
+
+  // Regions
+  document.getElementById('region-table-body').innerHTML = d.regions.map(function(r, i) {
+    const color = CHART_COLORS[i % CHART_COLORS.length];
+    return '<tr>' +
+      '<td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + color + ';margin-right:8px;"></span>' + r.name + '</td>' +
+      '<td><strong>' + fmtTon(r.kg, 1) + '</strong></td>' +
+      '<td>' + r.pct + '%</td>' +
+      '<td>' + r.trips + '</td>' +
+      '<td>' + fmtNum(r.avg_per_trip) + '</td>' +
+    '</tr>';
+  }).join('');
+
+  // Weekday Pattern
+  const wp = d.weekday_pattern;
+  document.getElementById('weekday-pattern-body').innerHTML = [
+    ['工作日 (周一~周五)', wp.workday_avg_ton || '-', wp.workday_avg_ton ? '~' + (wp.workday_avg_ton > 0 ? Math.round(d.data_days * 5/7) : 0) + ' 天' : '-'],
+    ['周末 (周六~周日)', wp.weekend_avg_ton || '-', wp.weekend_avg_ton ? '~' + (wp.weekend_avg_ton > 0 ? Math.round(d.data_days * 2/7) : 0) + ' 天' : '-'],
+    ['周末较工作日下降', wp.weekend_drop_pct > 0 ? wp.weekend_drop_pct + '%' : '-', '']
+  ].map(function(row) {
+    return '<tr>' +
+      '<td><strong>' + row[0] + '</strong></td>' +
+      '<td><strong>' + row[1] + ' 吨/日</strong></td>' +
+      '<td style="color:var(--text-secondary);">' + row[2] + '</td>' +
+    '</tr>';
+  }).join('');
+
+  // Top 10 Vehicles
+  document.getElementById('top10-body').innerHTML = d.vehicles_top10.map(function(v, i) {
+    return '<tr>' +
+      '<td><strong>' + (i + 1) + '</strong></td>' +
+      '<td><strong>' + v.plate + '</strong></td>' +
+      '<td>' + fmtNum(v.kg) + '</td>' +
+      '<td>' + v.trips + '</td>' +
+      '<td>' + fmtNum(v.avg_per_trip) + '</td>' +
+      '<td style="font-size:12px;color:var(--text-secondary);">' + (v.unit || '') + '</td>' +
+    '</tr>';
+  }).join('');
+
+  // Bottom 10 Vehicles
+  document.getElementById('bottom10-body').innerHTML = d.vehicles_bottom10.map(function(v, i) {
+    return '<tr>' +
+      '<td style="color:#991b1b;font-weight:700;">' + (d.vehicles_bottom10.length - i) + '</td>' +
+      '<td><strong>' + v.plate + '</strong></td>' +
+      '<td>' + fmtNum(v.kg) + '</td>' +
+      '<td>' + v.trips + '</td>' +
+      '<td>' + fmtNum(v.avg_per_trip) + '</td>' +
+      '<td style="font-size:12px;color:var(--text-secondary);">' + (v.unit || '') + '</td>' +
+    '</tr>';
+  }).join('');
+
+  // Add peak/valley highlight to daily trend data
+  var peakDay = null, valleyDay = null;
+  for (var i = 0; i < d.daily.length; i++) {
+    if (d.daily[i].total_kg === d.peak.kg) peakDay = d.daily[i];
+    if (d.daily[i].total_kg === d.valley.kg) valleyDay = d.daily[i];
+  }
+}
+
+// ============================================================
+// Init
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+  renderKPIs();
+  renderCharts();
+  renderTables();
+});
+</script>
+</body>
+</html>
