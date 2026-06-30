@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>餐厨垃圾收运量数据可视化看板</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+    <!-- Chart.js: 四层回退，确保国内/国际网络均可加载 -->
+    <!-- 1. jsdelivr 中国镜像 (fastly) -->
+    <script src="https://fastly.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
+        onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';s.onerror=function(){var s2=document.createElement('script');s2.src='https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js';document.head.appendChild(s2);};document.head.appendChild(s);"></script>
     <style>
         :root {
             --bg-primary: #f5f6fa;
@@ -447,7 +450,7 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-06-30 09:13</span>
+                    数据更新: <span id="data-date">2026-06-30 10:35</span>
                 </div>
                     <div class="next-update" id="next-update-container">
                         下次更新: <span id="next-update">--</span>
@@ -1111,16 +1114,32 @@
     // ============================================================
     // 模块切换
     // ============================================================
+    let _anomalyChartsRendered = false;
+
     function switchModule(name) {
-        document.querySelectorAll('.module-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.module-content').forEach(m => m.classList.remove('active'));
+        document.querySelectorAll('.module-tab').forEach(function(t) { t.classList.remove('active'); });
+        document.querySelectorAll('.module-content').forEach(function(m) { m.classList.remove('active'); });
 
-        document.querySelector(`[onclick="switchModule('${name}')"]`).classList.add('active');
-        document.getElementById('module-' + name).classList.add('active');
+        var tab = document.querySelector('[onclick="switchModule(\'' + name + '\')"]');
+        if (tab) tab.classList.add('active');
+        var module = document.getElementById('module-' + name);
+        if (module) module.classList.add('active');
 
-        if (name === 'anomaly') {
-            renderSeverityPie();
-            renderAnomalyTable();
+        if (name === 'anomaly' && !_anomalyChartsRendered) {
+            // 首次切换到异常分析时，延迟渲染（等待 DOM 可见后再建图表）
+            setTimeout(function() {
+                try {
+                    if (typeof Chart !== 'undefined') {
+                        renderSeverityPie();
+                        renderAnomalyTable();
+                    } else {
+                        renderAnomalyTable();
+                    }
+                } catch(e) {
+                    console.error('[Dashboard] 异常图表渲染失败:', e.message);
+                }
+                _anomalyChartsRendered = true;
+            }, 100);
         }
     }
 
@@ -1262,30 +1281,61 @@
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
         renderKPIs();
-        renderAllCharts('14');
+
+        // 检测 Chart.js 是否已加载
+        if (typeof Chart === 'undefined') {
+            console.warn('[Dashboard] Chart.js 未加载，图表区域将显示提示信息');
+            // 在所有 chart-wrapper 中显示加载失败提示
+            document.querySelectorAll('.chart-wrapper').forEach(function(el) {
+                el.style.display = 'flex';
+                el.style.alignItems = 'center';
+                el.style.justifyContent = 'center';
+                el.innerHTML = '<div style="text-align:center;color:#6c757d;padding:20px;">'
+                    + '<div style="font-size:32px;margin-bottom:8px;">📊</div>'
+                    + '<div>图表组件加载失败</div>'
+                    + '<div style="font-size:12px;margin-top:4px;">请检查网络连接后刷新页面</div>'
+                    + '<button onclick="location.reload()" style="margin-top:12px;padding:6px 16px;background:#4C72B0;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;">刷新页面</button>'
+                    + '</div>';
+            });
+            // 仍然渲染表格（不依赖Chart.js）
+            renderAnomalyTable();
+            AutoRefresh.init();
+            updateNextUpdate();
+            return;
+        }
+
+        try {
+            renderAllCharts('14');
+        } catch(e) {
+            console.error('[Dashboard] 图表渲染失败:', e.message);
+        }
+
+        // 异常分析模块的图表延迟到切换时再创建（避免在隐藏 canvas 上渲染）
+        // renderSeverityPie() 由 switchModule('anomaly') 触发
+        // 但异常明细表不需要 Chart.js，可以立即渲染
         renderAnomalyTable();
-        renderSeverityPie();
+
         AutoRefresh.init();
-        
-        // 计算并显示下次更新时间（每日 06:00）
-        (function updateNextUpdate() {
-            const now = new Date();
-            let next = new Date(now);
-            next.setHours(6, 0, 0, 0);
-            if (now >= next) {
-                next.setDate(next.getDate() + 1);
-            }
-            const el = document.getElementById('next-update');
-            if (el) {
-                el.textContent = next.toLocaleString('zh-CN', {
-                    month: '2-digit', day: '2-digit',
-                    hour: '2-digit', minute: '2-digit', hour12: false
-                });
-            }
-            // 每小时刷新一次显示
-            setTimeout(updateNextUpdate, 60*60*1000);
-        })();
+        updateNextUpdate();
     });
+
+    // 提取为独立函数以便复用
+    function updateNextUpdate() {
+        var now = new Date();
+        var next = new Date(now);
+        next.setHours(6, 0, 0, 0);
+        if (now >= next) {
+            next.setDate(next.getDate() + 1);
+        }
+        var el = document.getElementById('next-update');
+        if (el) {
+            el.textContent = next.toLocaleString('zh-CN', {
+                month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', hour12: false
+            });
+        }
+        setTimeout(updateNextUpdate, 60*60*1000);
+    }
     </script>
 </body>
 </html>
