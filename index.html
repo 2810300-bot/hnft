@@ -465,6 +465,22 @@
             <span class="card-arrow">→</span>
         </a>
 
+        <a href="hr-system/" class="dashboard-card">
+            <span class="card-accent" style="background:linear-gradient(90deg,#6366f1,#818cf8)"></span>
+            <div class="card-icon" style="background:#e0e7ff;">👥</div>
+            <div class="card-title">人事管理系统</div>
+            <div class="card-desc">
+                员工花名册、入离职管理、考勤管理、薪酬管理。
+                深度集成钉钉通讯录与考勤数据，IMA知识库权威存储。
+            </div>
+            <div class="card-meta">
+                <span class="card-tag update-freq">🕐 每日同步考勤</span>
+                <span class="card-tag">🔗 钉钉集成</span>
+                <span class="card-tag">📊 Chart.js</span>
+            </div>
+            <span class="card-arrow">→</span>
+        </a>
+
     </div>
 
 
@@ -490,6 +506,7 @@ document.getElementById('build-timestamp').textContent = new Date().toLocaleStri
         { name: '月度报告', path: 'monthly-report/', el: null },
         { name: '合同管理', path: 'contract-system/', el: null },
         { name: '任务跟踪', path: 'task-tracker/', el: null },
+        { name: '人事管理', path: 'hr-system/', el: null },
     ];
 
     for (const d of dashboards) {

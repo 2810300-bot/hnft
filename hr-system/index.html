@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>湖南伏泰人事管理系统</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <!-- 侧边栏 -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">&#128100;</span>
+        <span class="logo-text">伏泰人事管理</span>
+      </div>
+      <div class="org-tag">湖南伏泰环境科技</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-module="dashboard" onclick="switchModule('dashboard')">
+        <span class="nav-icon">&#9632;</span><span class="nav-label">总览仪表盘</span>
+      </a>
+      <a class="nav-item" data-module="roster" onclick="switchModule('roster')">
+        <span class="nav-icon">&#128101;</span><span class="nav-label">员工花名册</span>
+      </a>
+      <a class="nav-item" data-module="hr-events" onclick="switchModule('hr-events')">
+        <span class="nav-icon">&#128260;</span><span class="nav-label">入离职管理</span>
+      </a>
+      <a class="nav-item" data-module="attendance" onclick="switchModule('attendance')">
+        <span class="nav-icon">&#128197;</span><span class="nav-label">考勤管理</span>
+      </a>
+      <a class="nav-item" data-module="salary" onclick="switchModule('salary')">
+        <span class="nav-icon">&#128176;</span><span class="nav-label">薪酬管理</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="avatar">颜</div>
+        <div class="user-detail">
+          <span class="user-name">颜一亩</span>
+          <span class="user-role">总经理</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 主内容区 -->
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" onclick="toggleSidebar()">&#9776;</button>
+        <h1 id="module-title">总览仪表盘</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="sync-status">
+          <span class="sync-dot"></span>数据同步: <span id="syncTime">--</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="module-container" id="moduleContainer">
+
+      <!-- ========== 总览仪表盘 ========== -->
+      <div class="module-panel active" id="panel-dashboard">
+        <div class="ima-status-bar">
+          <span>&#128218;</span>
+          <span class="label">数据源:</span> IMA知识库「伏泰HR人事管理」 + 钉钉考勤/通讯录
+          <span style="margin-left:auto">最后同步: <span id="dbSyncTime">--</span></span>
+        </div>
+
+        <div class="stats-grid" id="dashboardStats"></div>
+
+        <div class="dashboard-row">
+          <div class="card">
+            <div class="card-header"><h3>部门人员分布</h3></div>
+            <div class="card-body chart-container">
+              <canvas id="chartDeptPie"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>待办提醒</h3></div>
+            <div class="card-body">
+              <div class="alert-list" id="dashboardAlerts"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-row">
+          <div class="card">
+            <div class="card-header"><h3>本月考勤概览</h3></div>
+            <div class="card-body chart-container">
+              <canvas id="chartAttendanceBar"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>薪酬总额月度趋势</h3></div>
+            <div class="card-body chart-container">
+              <canvas id="chartSalaryTrend"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 员工花名册 ========== -->
+      <div class="module-panel" id="panel-roster">
+        <div class="filter-bar">
+          <select id="filterDept" onchange="renderRoster()">
+            <option value="">全部部门</option>
+          </select>
+          <select id="filterStatus" onchange="renderRoster()">
+            <option value="">全部状态</option>
+            <option value="在职">在职</option>
+            <option value="试用期">试用期</option>
+            <option value="离职">离职</option>
+          </select>
+          <input type="text" id="searchEmployee" placeholder="搜索姓名、职位、手机号..." oninput="renderRoster()">
+          <button class="btn btn-outline btn-sm" onclick="exportContacts()">&#128229; 导出通讯录</button>
+        </div>
+
+        <table class="data-table" id="rosterTable">
+          <thead>
+            <tr>
+              <th>姓名</th><th>部门</th><th>职位</th><th>手机号</th>
+              <th>入职日期</th><th>合同到期</th><th>状态</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="rosterTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- ========== 入离职管理 ========== -->
+      <div class="module-panel" id="panel-hr-events">
+        <div class="filter-bar">
+          <select id="filterEventType" onchange="renderEvents()">
+            <option value="">全部类型</option>
+            <option value="入职">入职</option>
+            <option value="转正">转正</option>
+            <option value="离职">离职</option>
+            <option value="调岗">调岗</option>
+          </select>
+          <span style="font-size:14px;color:var(--gray-500)">
+            本月入职: <strong style="color:var(--success)" id="monthOnboard">0</strong> 人 |
+            本月离职: <strong style="color:var(--danger)" id="monthOffboard">0</strong> 人
+          </span>
+        </div>
+
+        <div class="timeline" id="eventsTimeline"></div>
+      </div>
+
+      <!-- ========== 考勤管理 ========== -->
+      <div class="module-panel" id="panel-attendance">
+        <div class="attendance-tabs">
+          <button class="att-tab active" onclick="switchAttTab('monthly')">月度汇总</button>
+          <button class="att-tab" onclick="switchAttTab('daily')">每日明细</button>
+        </div>
+
+        <!-- 月度汇总 -->
+        <div id="attMonthlyPanel">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon stat-green">&#10003;</div>
+              <div class="stat-info">
+                <span class="stat-value" id="attAvgRate">--</span>
+                <span class="stat-label">平均出勤率</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon stat-orange">&#9888;</div>
+              <div class="stat-info">
+                <span class="stat-value" id="attTotalLate">--</span>
+                <span class="stat-label">本月迟到总次数</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon stat-red">&#10007;</div>
+              <div class="stat-info">
+                <span class="stat-value" id="attTotalAbsent">--</span>
+                <span class="stat-label">本月旷工天数</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon stat-blue">&#9200;</div>
+              <div class="stat-info">
+                <span class="stat-value" id="attTotalOT">--</span>
+                <span class="stat-label">本月加班总小时</span>
+              </div>
+            </div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>姓名</th><th>部门</th><th>应出勤</th><th>实出勤</th>
+                <th>迟到</th><th>早退</th><th>旷工</th><th>请假</th>
+                <th>加班(h)</th><th>出差</th><th>出勤率</th>
+              </tr>
+            </thead>
+            <tbody id="attMonthlyBody"></tbody>
+          </table>
+        </div>
+
+        <!-- 每日明细 -->
+        <div id="attDailyPanel" style="display:none">
+          <div class="filter-bar">
+            <select id="attDailyEmployee" onchange="renderDailyAttendance()">
+              <option value="">全部员工</option>
+            </select>
+            <select id="attDailyStatus" onchange="renderDailyAttendance()">
+              <option value="">全部状态</option>
+              <option value="正常">正常</option>
+              <option value="迟到">迟到</option>
+              <option value="早退">早退</option>
+              <option value="旷工">旷工</option>
+              <option value="请假">请假</option>
+            </select>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>日期</th><th>姓名</th><th>上班打卡</th><th>下班打卡</th>
+                <th>状态</th><th>地点</th><th>备注</th>
+              </tr>
+            </thead>
+            <tbody id="attDailyBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ========== 薪酬管理 ========== -->
+      <div class="module-panel" id="panel-salary">
+        <div id="salaryLock" class="salary-password-overlay">
+          <div class="lock-icon">&#128274;</div>
+          <p>薪酬数据为敏感信息，请输入查看密码</p>
+          <div class="pwd-input-group">
+            <input type="password" id="salaryPwd" placeholder="输入密码" onkeyup="if(event.key==='Enter')unlockSalary()">
+            <button class="btn btn-primary" onclick="unlockSalary()">确认</button>
+          </div>
+        </div>
+
+        <div id="salaryContent" style="display:none">
+          <div class="salary-summary-grid" id="salarySummary"></div>
+
+          <div class="card">
+            <div class="card-header"><h3>2026年6月 薪酬明细表</h3></div>
+            <div class="card-body" style="overflow-x:auto">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>姓名</th><th>部门</th><th>基本工资</th><th>岗位津贴</th>
+                    <th>绩效奖金</th><th>加班费</th><th>餐补</th><th>交通补贴</th>
+                    <th>其他补贴</th><th>应发合计</th><th>社保</th><th>公积金</th>
+                    <th>个税</th><th>其他扣款</th><th>扣款合计</th><th>实发工资</th>
+                  </tr>
+                </thead>
+                <tbody id="salaryTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="dashboard-row">
+            <div class="card">
+              <div class="card-header"><h3>部门薪酬对比</h3></div>
+              <div class="card-body chart-container">
+                <canvas id="chartSalaryDept"></canvas>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><h3>薪酬构成分析</h3></div>
+              <div class="card-body chart-container">
+                <canvas id="chartSalaryComposition"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- 员工详情侧滑面板 -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-panel-header">
+      <h3>员工详情</h3>
+      <button onclick="closeDetailPanel()">&#10005;</button>
+    </div>
+    <div class="detail-panel-body" id="detailContent"></div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toastContainer" class="toast-container"></div>
+
+</div>
+
+<script src="hr_data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
