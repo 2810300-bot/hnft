@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-30 15:21:43",
+  "generated_at": "2026-06-30 15:39:25",
   "month": "2026-06",
   "year": 2026,
   "month_num": 6,
@@ -9,23 +9,23 @@
   "days_in_month": 30,
   "data_days": 30,
   "pending_dates": [
-    "6月29日",
     "6月30日"
   ],
-  "pending_count": 2,
+  "pending_count": 1,
   "has_pending": true,
   "weeks_covered": [
     23,
     24,
     25,
-    26
+    26,
+    27
   ],
-  "total_kg": 5443050,
-  "total_ton": 5443.1,
-  "total_trips": 1172,
-  "avg_daily_kg": 181435,
-  "avg_daily_ton": 181.4,
-  "avg_daily_trips": 39.1,
+  "total_kg": 5661513,
+  "total_ton": 5661.5,
+  "total_trips": 1217,
+  "avg_daily_kg": 188717,
+  "avg_daily_ton": 188.7,
+  "avg_daily_trips": 40.6,
   "peak": {
     "date": "6月5日",
     "weekday": "周五",
@@ -40,11 +40,11 @@
     "ton": 165.2,
     "trips": 37
   },
-  "prev_month_total_ton": 5443.1,
-  "mom_change_ton": -0.1,
-  "mom_change_pct": -0.0,
-  "trend": "down",
-  "trend_label": "环比下降",
+  "prev_month_total_ton": 5661.5,
+  "mom_change_ton": 0.0,
+  "mom_change_pct": 0.0,
+  "trend": "flat",
+  "trend_label": "环比持平",
   "daily": [
     {
       "date": "6月1日",
@@ -231,8 +231,8 @@
     {
       "date": "6月27日",
       "weekday": "周六",
-      "total_kg": 166170,
-      "trips": 37,
+      "total_kg": 177743,
+      "trips": 39,
       "week": 26
     },
     {
@@ -245,11 +245,9 @@
     {
       "date": "6月29日",
       "weekday": "周一",
-      "total_kg": 0,
-      "trips": 0,
-      "week": 27,
-      "pending": true,
-      "pending_reason": "数据待上传"
+      "total_kg": 206890,
+      "trips": 43,
+      "week": 27
     },
     {
       "date": "6月30日",
@@ -267,8 +265,8 @@
       "total_ton": 1410.9,
       "avg_daily": 201.6,
       "total_trips": 299,
-      "date_range": "6月1日 - 6月7日",
-      "trend_label": "基线周",
+      "date_range": "",
+      "trend_label": "",
       "trend_color": "#4C72B0"
     },
     {
@@ -276,275 +274,77 @@
       "total_ton": 1338.5,
       "avg_daily": 191.2,
       "total_trips": 292,
-      "date_range": "6月8日 - 6月14日",
-      "trend_label": "环比下降",
-      "trend_color": "#DD8452"
+      "date_range": "",
+      "trend_label": "",
+      "trend_color": "#4C72B0"
     },
     {
       "week": 25,
       "total_ton": 1311.8,
       "avg_daily": 187.4,
       "total_trips": 285,
-      "date_range": "6月15日 - 6月21日",
-      "trend_label": "全月最低",
-      "trend_color": "#e15759"
+      "date_range": "",
+      "trend_label": "",
+      "trend_color": "#4C72B0"
     },
     {
       "week": 26,
-      "total_ton": 1381.8,
-      "avg_daily": 197.4,
-      "total_trips": 296,
-      "date_range": "6月22日 - 6月28日",
-      "trend_label": "强势反弹",
-      "trend_color": "#16a34a"
+      "total_ton": 1393.4,
+      "avg_daily": 199.1,
+      "total_trips": 298,
+      "date_range": "",
+      "trend_label": "",
+      "trend_color": "#4C72B0"
+    },
+    {
+      "week": 27,
+      "total_ton": 206.9,
+      "avg_daily": 103.4,
+      "total_trips": 43,
+      "date_range": "",
+      "trend_label": "",
+      "trend_color": "#4C72B0"
     }
   ],
   "regions": [
     {
-      "name": "岳阳楼区餐厨",
-      "kg": 849940,
-      "pct": 61.5,
-      "trips": 181,
-      "avg_per_trip": 4696
+      "name": "岳阳楼区",
+      "kg": 3356761,
+      "trips": 29,
+      "avg_per_day_kg": 115750
     },
     {
-      "name": "开发区餐厨",
-      "kg": 271940,
-      "pct": 19.7,
-      "trips": 65,
-      "avg_per_trip": 4184
+      "name": "开发区",
+      "kg": 1286522,
+      "trips": 29,
+      "avg_per_day_kg": 44363
     },
     {
-      "name": "岳阳君山区餐厨",
-      "kg": 103870,
-      "pct": 7.5,
-      "trips": 17,
-      "avg_per_trip": 6110
+      "name": "君山区",
+      "kg": 396650,
+      "trips": 29,
+      "avg_per_day_kg": 13678
     },
     {
-      "name": "南湖新区餐厨",
-      "kg": 98780,
-      "pct": 7.1,
-      "trips": 19,
-      "avg_per_trip": 5199
-    },
-    {
-      "name": "临港新区餐厨",
-      "kg": 57310,
-      "pct": 4.1,
-      "trips": 14,
-      "avg_per_trip": 4094
-    }
-  ],
-  "vehicles_top10": [
-    {
-      "plate": "湘FC5523",
-      "unit": "岳阳楼区餐厨",
-      "kg": 401970,
-      "trips": 64,
-      "avg_sum": 401954,
-      "avg_count": 64,
-      "days_active": "7",
-      "avg_per_trip": 6281
-    },
-    {
-      "plate": "湘FA8040",
-      "unit": "开发区餐厨",
-      "kg": 394340,
-      "trips": 79,
-      "avg_sum": 394366,
-      "avg_count": 79,
-      "days_active": "7",
-      "avg_per_trip": 4992
-    },
-    {
-      "plate": "湘FB9498",
-      "unit": "岳阳楼区餐厨",
-      "kg": 380230,
-      "trips": 89,
-      "avg_sum": 380233,
-      "avg_count": 89,
-      "days_active": "7",
-      "avg_per_trip": 4272
-    },
-    {
-      "plate": "湘FA3040",
-      "unit": "岳阳楼区餐厨",
-      "kg": 372300,
-      "trips": 82,
-      "avg_sum": 372294,
-      "avg_count": 82,
-      "days_active": "7",
-      "avg_per_trip": 4540
-    },
-    {
-      "plate": "湘FA9847",
-      "unit": "南湖新区餐厨",
-      "kg": 365980,
-      "trips": 71,
-      "avg_sum": 365986,
-      "avg_count": 71,
-      "days_active": "7",
-      "avg_per_trip": 5155
-    },
-    {
-      "plate": "湘FB0252",
-      "unit": "开发区餐厨",
-      "kg": 355480,
-      "trips": 77,
-      "avg_sum": 355492,
-      "avg_count": 77,
-      "days_active": "7",
-      "avg_per_trip": 4617
-    },
-    {
-      "plate": "湘F86680",
-      "unit": "岳阳楼区餐厨",
-      "kg": 351280,
-      "trips": 88,
-      "avg_sum": 351301,
-      "avg_count": 88,
-      "days_active": "7",
-      "avg_per_trip": 3992
-    },
-    {
-      "plate": "湘FC1673",
-      "unit": "岳阳楼区餐厨",
-      "kg": 337780,
-      "trips": 74,
-      "avg_sum": 337784,
-      "avg_count": 74,
-      "days_active": "7",
-      "avg_per_trip": 4565
-    },
-    {
-      "plate": "湘FB6266",
-      "unit": "岳阳楼区餐厨",
-      "kg": 325790,
-      "trips": 67,
-      "avg_sum": 325803,
-      "avg_count": 67,
-      "days_active": "7",
-      "avg_per_trip": 4863
-    },
-    {
-      "plate": "湘FB8611",
-      "unit": "岳阳楼区餐厨",
-      "kg": 192850,
-      "trips": 49,
-      "avg_sum": 192850,
-      "avg_count": 49,
-      "days_active": "7",
-      "avg_per_trip": 3936
-    }
-  ],
-  "vehicles_bottom10": [
-    {
-      "plate": "湘FB9409",
-      "unit": "岳阳楼区餐厨",
-      "kg": 29890,
-      "trips": 5,
-      "avg_sum": 29890,
-      "avg_count": 5,
-      "days_active": "1",
-      "avg_per_trip": 5978
-    },
-    {
-      "plate": "湘FB2060",
-      "unit": "临港新区餐厨",
-      "kg": 58400,
-      "trips": 15,
-      "avg_sum": 58395,
-      "avg_count": 15,
-      "days_active": "7",
-      "avg_per_trip": 3893
-    },
-    {
-      "plate": "湘FA5403",
-      "unit": "岳阳楼区餐厨",
-      "kg": 87420,
+      "name": "南湖新区",
+      "kg": 383040,
       "trips": 28,
-      "avg_sum": 87423,
-      "avg_count": 28,
-      "days_active": "7",
-      "avg_per_trip": 3122
+      "avg_per_day_kg": 13208
     },
     {
-      "plate": "湘FA8347",
-      "unit": "岳阳楼区餐厨",
-      "kg": 97210,
-      "trips": 14,
-      "avg_sum": 97209,
-      "avg_count": 14,
-      "days_active": "7",
-      "avg_per_trip": 6944
-    },
-    {
-      "plate": "湘FA8342",
-      "unit": "岳阳君山区餐厨",
-      "kg": 140180,
-      "trips": 23,
-      "avg_sum": 140186,
-      "avg_count": 23,
-      "days_active": "7",
-      "avg_per_trip": 6095
-    },
-    {
-      "plate": "湘FC8698",
-      "unit": "岳阳君山区餐厨",
-      "kg": 140420,
-      "trips": 23,
-      "avg_sum": 140420,
-      "avg_count": 23,
-      "days_active": "7",
-      "avg_per_trip": 6105
-    },
-    {
-      "plate": "湘FB3975",
-      "unit": "岳阳楼区餐厨",
-      "kg": 142220,
-      "trips": 28,
-      "avg_sum": 142219,
-      "avg_count": 28,
-      "days_active": "7",
-      "avg_per_trip": 5079
-    },
-    {
-      "plate": "湘FB9046",
-      "unit": "开发区餐厨",
-      "kg": 154140,
-      "trips": 49,
-      "avg_sum": 154140,
-      "avg_count": 49,
-      "days_active": "7",
-      "avg_per_trip": 3146
-    },
-    {
-      "plate": "湘FA8340",
-      "unit": "开发区餐厨",
-      "kg": 156340,
-      "trips": 45,
-      "avg_sum": 156346,
-      "avg_count": 45,
-      "days_active": "7",
-      "avg_per_trip": 3474
-    },
-    {
-      "plate": "湘FB7351",
-      "unit": "岳阳楼区餐厨",
-      "kg": 164260,
-      "trips": 40,
-      "avg_sum": 164267,
-      "avg_count": 40,
-      "days_active": "7",
-      "avg_per_trip": 4107
+      "name": "临港新区",
+      "kg": 238540,
+      "trips": 29,
+      "avg_per_day_kg": 8226
     }
   ],
-  "vehicle_count": 22,
+  "vehicles_top10": [],
+  "vehicles_bottom10": [],
+  "vehicle_count": -1,
   "weekday_pattern": {
     "周一": {
-      "avg_kg": 161528,
-      "avg_ton": 161.5,
+      "avg_kg": 202906,
+      "avg_ton": 202.9,
       "count": 5
     },
     "周二": {
@@ -568,8 +368,8 @@
       "count": 4
     },
     "周六": {
-      "avg_kg": 173812,
-      "avg_ton": 173.8,
+      "avg_kg": 176706,
+      "avg_ton": 176.7,
       "count": 4
     },
     "周日": {
@@ -577,10 +377,10 @@
       "avg_ton": 180.7,
       "count": 4
     },
-    "workday_avg_kg": 182964,
-    "workday_avg_ton": 183.0,
-    "weekend_avg_kg": 177231,
-    "weekend_avg_ton": 177.2,
-    "weekend_drop_pct": 3.1
+    "workday_avg_kg": 192368,
+    "workday_avg_ton": 192.4,
+    "weekend_avg_kg": 178678,
+    "weekend_avg_ton": 178.7,
+    "weekend_drop_pct": 7.1
   }
 }
