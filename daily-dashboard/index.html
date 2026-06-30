@@ -473,7 +473,7 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-06-30 11:52</span>
+                    数据更新: <span id="data-date">2026-06-30 12:07</span>
                 </div>
                     <div class="next-update" id="next-update-container">
                         下次更新: <span id="next-update">--</span>
@@ -790,65 +790,69 @@
             return DAY_TYPE_COLORS['工作日'];
         });
 
-        charts.dailyTrend = new Chart(document.getElementById('chart-daily-trend'), {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '收运量 (kg)',
-                    data: totals,
-                    backgroundColor: bgColors.map(c => c + '99'),
-                    borderColor: bgColors,
-                    borderWidth: 1.5,
-                    borderRadius: 4,
-                    yAxisID: 'y',
-                }, {
-                    label: '车次',
-                    data: counts,
-                    type: 'line',
-                    borderColor: '#8172B3',
-                    backgroundColor: 'transparent',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#8172B3',
-                    tension: 0.3,
-                    yAxisID: 'y1',
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
-                plugins: {
-                    legend: { position: 'top', labels: { usePointStyle: true, padding: 20 } },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) {
-                                if (ctx.datasetIndex === 0) return '收运量: ' + formatWeight(ctx.parsed.y);
-                                return '车次: ' + ctx.parsed.y + ' 趟';
+        try {
+            charts.dailyTrend = new Chart(document.getElementById('chart-daily-trend'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '收运量 (kg)',
+                        data: totals,
+                        backgroundColor: bgColors.map(c => c + '99'),
+                        borderColor: bgColors,
+                        borderWidth: 1.5,
+                        borderRadius: 4,
+                        yAxisID: 'y',
+                    }, {
+                        label: '车次',
+                        data: counts,
+                        type: 'line',
+                        borderColor: '#8172B3',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#8172B3',
+                        tension: 0.3,
+                        yAxisID: 'y1',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { position: 'top', labels: { usePointStyle: true, padding: 20 } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(ctx) {
+                                    if (ctx.datasetIndex === 0) return '收运量: ' + formatWeight(ctx.parsed.y);
+                                    return '车次: ' + ctx.parsed.y + ' 趟';
+                                }
                             }
                         }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 11 } } },
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            title: { display: true, text: '收运量 (kg)' },
+                            ticks: { callback: v => (v/1000).toFixed(0) + 't' },
+                            beginAtZero: false,
+                        },
+                        y1: {
+                            type: 'linear',
+                            position: 'right',
+                            title: { display: true, text: '车次' },
+                            grid: { drawOnChartArea: false },
+                            beginAtZero: false,
+                        },
                     }
-                },
-                scales: {
-                    x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 11 } } },
-                    y: {
-                        type: 'linear',
-                        position: 'left',
-                        title: { display: true, text: '收运量 (kg)' },
-                        ticks: { callback: v => (v/1000).toFixed(0) + 't' },
-                        beginAtZero: false,
-                    },
-                    y1: {
-                        type: 'linear',
-                        position: 'right',
-                        title: { display: true, text: '车次' },
-                        grid: { drawOnChartArea: false },
-                        beginAtZero: false,
-                    },
                 }
-            }
-        });
+            });
+        } catch(e) {
+            console.error('[Dashboard] 每日收运量趋势图渲染失败:', e.message);
+        }
 
         // 周度对比柱状图
         const weekKeys = Object.keys(WEEKLY_DATA);
@@ -856,37 +860,41 @@
         const weekTotals = weekKeys.map(k => WEEKLY_DATA[k].week_total);
         const weekAvgs = weekKeys.map(k => WEEKLY_DATA[k].week_avg);
 
-        charts.weeklyBar = new Chart(document.getElementById('chart-weekly-bar'), {
-            type: 'bar',
-            data: {
-                labels: weekLabels,
-                datasets: [{
-                    label: '周总量',
-                    data: weekTotals,
-                    backgroundColor: COLORS.map(c => c + 'CC'),
-                    borderColor: COLORS,
-                    borderWidth: 1.5,
-                    borderRadius: 6,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: { label: ctx => '周总量: ' + formatWeight(ctx.parsed.y) }
-                    }
+        try {
+            charts.weeklyBar = new Chart(document.getElementById('chart-weekly-bar'), {
+                type: 'bar',
+                data: {
+                    labels: weekLabels,
+                    datasets: [{
+                        label: '周总量',
+                        data: weekTotals,
+                        backgroundColor: COLORS.map(c => c + 'CC'),
+                        borderColor: COLORS,
+                        borderWidth: 1.5,
+                        borderRadius: 6,
+                    }]
                 },
-                scales: {
-                    x: { grid: { display: false } },
-                    y: {
-                        ticks: { callback: v => (v/1000).toFixed(0) + 't' },
-                        title: { display: true, text: 'kg' }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: { label: ctx => '周总量: ' + formatWeight(ctx.parsed.y) }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: {
+                            ticks: { callback: v => (v/1000).toFixed(0) + 't' },
+                            title: { display: true, text: 'kg' }
+                        }
                     }
                 }
-            }
-        });
+            });
+        } catch(e) {
+            console.error('[Dashboard] 周度对比图渲染失败:', e.message);
+        }
 
         // 工作日 vs 周末 vs 节假日 对比
         const typeData = { '工作日': { total: 0, count: 0 }, '周末': { total: 0, count: 0 }, '节假日': { total: 0, count: 0 } };
@@ -910,97 +918,109 @@
         const typeLabels = Object.keys(typeData);
         const typeAvgs = typeLabels.map(t => typeData[t].count > 0 ? typeData[t].total / typeData[t].count : 0);
 
-        charts.typeComparison = new Chart(document.getElementById('chart-type-comparison'), {
-            type: 'bar',
-            data: {
-                labels: typeLabels,
-                datasets: [{
-                    label: '日均收运量 (kg)',
-                    data: typeAvgs,
-                    backgroundColor: typeLabels.map(t => (DAY_TYPE_COLORS[t] || '#888') + 'CC'),
-                    borderColor: typeLabels.map(t => DAY_TYPE_COLORS[t] || '#888'),
-                    borderWidth: 1.5,
-                    borderRadius: 6,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) {
-                                const t = typeLabels[ctx.dataIndex];
-                                const cnt = typeData[t].count;
-                                return '日均: ' + formatWeight(ctx.parsed.x) + ' | ' + cnt + '天';
+        try {
+            charts.typeComparison = new Chart(document.getElementById('chart-type-comparison'), {
+                type: 'bar',
+                data: {
+                    labels: typeLabels,
+                    datasets: [{
+                        label: '日均收运量 (kg)',
+                        data: typeAvgs,
+                        backgroundColor: typeLabels.map(t => (DAY_TYPE_COLORS[t] || '#888') + 'CC'),
+                        borderColor: typeLabels.map(t => DAY_TYPE_COLORS[t] || '#888'),
+                        borderWidth: 1.5,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(ctx) {
+                                    const t = typeLabels[ctx.dataIndex];
+                                    const cnt = typeData[t].count;
+                                    return '日均: ' + formatWeight(ctx.parsed.x) + ' | ' + cnt + '天';
+                                }
                             }
                         }
+                    },
+                    scales: {
+                        x: { ticks: { callback: v => (v/1000).toFixed(0) + 't' } }
                     }
-                },
-                scales: {
-                    x: { ticks: { callback: v => (v/1000).toFixed(0) + 't' } }
                 }
-            }
-        });
+            });
+        } catch(e) {
+            console.error('[Dashboard] 工作日对比图渲染失败:', e.message);
+        }
 
         // 异常频发单位排名
         const unitLabels = Object.keys(UNIT_DATA).sort((a, b) => UNIT_DATA[b].count - UNIT_DATA[a].count);
         const unitCounts = unitLabels.map(u => UNIT_DATA[u].count);
 
-        charts.unitAnomaly = new Chart(document.getElementById('chart-unit-anomaly'), {
-            type: 'bar',
-            data: {
-                labels: unitLabels,
-                datasets: [{
-                    label: '异常次数',
-                    data: unitCounts,
-                    backgroundColor: COLORS.map(c => c + 'CC'),
-                    borderColor: COLORS,
-                    borderWidth: 1.5,
-                    borderRadius: 6,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: { legend: { display: false } },
-                scales: { x: { title: { display: true, text: '异常次数' } } }
-            }
-        });
+        try {
+            charts.unitAnomaly = new Chart(document.getElementById('chart-unit-anomaly'), {
+                type: 'bar',
+                data: {
+                    labels: unitLabels,
+                    datasets: [{
+                        label: '异常次数',
+                        data: unitCounts,
+                        backgroundColor: COLORS.map(c => c + 'CC'),
+                        borderColor: COLORS,
+                        borderWidth: 1.5,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: { x: { title: { display: true, text: '异常次数' } } }
+                }
+            });
+        } catch(e) {
+            console.error('[Dashboard] 单位异常图渲染失败:', e.message);
+        }
 
         // 车次趋势
-        charts.tripTrend = new Chart(document.getElementById('chart-trip-trend'), {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '车次',
-                    data: counts,
-                    borderColor: '#8172B3',
-                    backgroundColor: '#8172B320',
-                    borderWidth: 2,
-                    pointRadius: 3,
-                    pointBackgroundColor: '#8172B3',
-                    tension: 0.3,
-                    fill: true,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: ctx => '车次: ' + ctx.parsed.y + ' 趟' } }
+        try {
+            charts.tripTrend = new Chart(document.getElementById('chart-trip-trend'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '车次',
+                        data: counts,
+                        borderColor: '#8172B3',
+                        backgroundColor: '#8172B320',
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#8172B3',
+                        tension: 0.3,
+                        fill: true,
+                    }]
                 },
-                scales: {
-                    x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 10 } } },
-                    y: { title: { display: true, text: '车次' }, beginAtZero: false },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: ctx => '车次: ' + ctx.parsed.y + ' 趟' } }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 10 } } },
+                        y: { title: { display: true, text: '车次' }, beginAtZero: false },
+                    }
                 }
-            }
-        });
+            });
+        } catch(e) {
+            console.error('[Dashboard] 车次趋势图渲染失败:', e.message);
+        }
     }
 
     function renderSeverityPie() {
@@ -1163,6 +1183,17 @@
                 }
                 _anomalyChartsRendered = true;
             }, 100);
+        } else if (name === 'volume') {
+            // 切换到数据量分析时，如果图表未渲染则尝试补渲染（兼容某些浏览器初始化失败的情况）
+            setTimeout(function() {
+                try {
+                    if (typeof Chart !== 'undefined' && Object.keys(charts).length === 0) {
+                        renderAllCharts(document.getElementById('filter-period').value || '14');
+                    }
+                } catch(e) {
+                    console.error('[Dashboard] 数据量图表补渲染失败:', e.message);
+                }
+            }, 100);
         }
     }
 
@@ -1305,26 +1336,39 @@
     document.addEventListener('DOMContentLoaded', function() {
         renderKPIs();
 
-        if (typeof Chart !== 'undefined') {
+        function tryRenderVolumeCharts() {
+            if (typeof Chart === 'undefined') return false;
             try {
-                renderAllCharts('14');
+                renderAllCharts(document.getElementById('filter-period').value || '14');
+                return Object.keys(charts).length > 0;
             } catch(e) {
                 console.error('[Dashboard] 图表渲染失败:', e.message);
+                return false;
             }
-        } else {
-            console.warn('[Dashboard] Chart.js 未定义');
-            document.querySelectorAll('.chart-wrapper').forEach(function(el) {
-                var canvas = el.querySelector('canvas');
-                if (canvas) canvas.style.display = 'none';
-                var errDiv = document.createElement('div');
-                errDiv.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.95);z-index:100;flex-direction:column;';
-                errDiv.innerHTML = '<div style="font-size:32px;margin-bottom:8px;">📊</div>'
-                    + '<div style="color:#6c757d;">图表组件加载失败</div>'
-                    + '<div style="font-size:12px;color:#94a3b8;margin-top:4px;">请刷新页面重试</div>'
-                    + '<button onclick="location.reload()" style="margin-top:12px;padding:6px 16px;background:#4C72B0;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;">刷新页面</button>';
-                el.appendChild(errDiv);
-            });
         }
+
+        // 首次渲染（数据量分析模块默认可见）
+        if (!tryRenderVolumeCharts()) {
+            console.warn('[Dashboard] 首次渲染未成功，准备 fallback');
+        }
+
+        // 安全网1：window.onload 后再次检查
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (typeof Chart !== 'undefined' && Object.keys(charts).length === 0) {
+                    console.warn('[Dashboard] window.onload 补渲染图表');
+                    tryRenderVolumeCharts();
+                }
+            }, 100);
+        });
+
+        // 安全网2：延迟 800ms 再次检查，兼容某些浏览器异步渲染时序
+        setTimeout(function() {
+            if (typeof Chart !== 'undefined' && Object.keys(charts).length === 0) {
+                console.warn('[Dashboard] 延迟 800ms 补渲染图表');
+                tryRenderVolumeCharts();
+            }
+        }, 800);
 
         renderAnomalyTable();
         AutoRefresh.init();
