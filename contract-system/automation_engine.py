@@ -314,10 +314,15 @@ const knowledgeBaseChanges = {json.dumps(changes, ensure_ascii=False, indent=2)}
 """
     
     # 查找是否已有自动化信息区块，如果有则替换
-    pattern = r"/\* =+\n   自动化运行信息.*?\n   =+ \*/\nconst automationRunInfo.*?const knowledgeBaseChanges.*?\n;"
+    # 使用更宽泛的正则匹配，兼容 "// ========== " 和 "/* ===== " 两种注释格式
+    # 同时匹配所有旧版本区块（可能有多个重复），统一替换为单个新区块
+    pattern = r"(// ========== 自动化运行信息.*?const knowledgeBaseChanges\s*=\s*\{.*?\};)"
     
     if re.search(pattern, existing_content, re.DOTALL):
-        new_content = re.sub(pattern, auto_info_js.strip(), existing_content, flags=re.DOTALL)
+        # 替换最后一个匹配（最新的），删除之前所有重复区块
+        # 先删除所有匹配区块，再在末尾追加新区块
+        new_content = re.sub(pattern, "", existing_content, flags=re.DOTALL).rstrip()
+        new_content = new_content + "\n" + auto_info_js
     else:
         # 在文件末尾追加
         new_content = existing_content.rstrip() + "\n" + auto_info_js

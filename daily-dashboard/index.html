@@ -449,7 +449,7 @@
             <div class="header-top">
                 <div>
                     <h1>📊 餐厨垃圾收运量日数据分析</h1>
-                    <div class="header-meta">岳阳市厨余垃圾资源化利用和无害化处置项目</div>
+                    <div class="header-meta">岳阳市厨余垃圾资源化利用和无害化处置项目（花果畈收运数据）</div>
                 </div>
                 <div class="header-actions">
                     <div class="refresh-badge">
@@ -754,6 +754,17 @@
         charts = {};
     }
 
+    // v8.0 fix: 只销毁数据量图表，保留异常图表不受影响
+    function destroyVolumeCharts() {
+        const volumeKeys = ['dailyTrend', 'weeklyBar', 'typeComparison', 'unitChart'];
+        volumeKeys.forEach(k => {
+            if (charts[k]) {
+                try { charts[k].destroy(); } catch(e) {}
+                delete charts[k];
+            }
+        });
+    }
+
     function getDateValues(limitDays) {
         const entries = Object.entries(DAILY_DATA);
         if (limitDays && limitDays !== 'all') {
@@ -763,7 +774,7 @@
     }
 
     function renderAllCharts(limitDays) {
-        destroyCharts();
+        destroyVolumeCharts();
 
         // 每日收运量趋势
         const dailyEntries = getDateValues(limitDays);
@@ -1178,8 +1189,10 @@
         var module = document.getElementById('module-' + name);
         if (module) module.classList.add('active');
 
-        if (name === 'anomaly' && !_anomalyChartsRendered) {
-            // 首次切换到异常分析时，延迟渲染（等待 DOM 可见后再建图表）
+        // v8.0 fix: 检查异常图表实例是否真实存在（而非标志），确保销毁后能重新渲染
+        var anomalyChartsExist = charts.severityPie && charts.anomalyTrend;
+        if (name === 'anomaly' && !anomalyChartsExist) {
+            // 切换到异常分析时，如果图表不存在则渲染（等待 DOM 可见后再建图表）
             setTimeout(function() {
                 try {
                     if (typeof Chart !== 'undefined') {
@@ -1194,16 +1207,19 @@
                 _anomalyChartsRendered = true;
             }, 100);
         } else if (name === 'volume') {
-            // 切换到数据量分析时，如果图表未渲染则尝试补渲染（兼容某些浏览器初始化失败的情况）
-            setTimeout(function() {
-                try {
-                    if (typeof Chart !== 'undefined' && Object.keys(charts).length === 0) {
-                        renderAllCharts(document.getElementById('filter-period').value || '14');
+            // v8.0 fix: 检查数据量图表而非全量
+            var volumeChartsExist = ['dailyTrend', 'weeklyBar', 'typeComparison', 'unitChart'].some(k => charts[k]);
+            if (!volumeChartsExist) {
+                setTimeout(function() {
+                    try {
+                        if (typeof Chart !== 'undefined') {
+                            renderAllCharts(document.getElementById('filter-period').value || '14');
+                        }
+                    } catch(e) {
+                        console.error('[Dashboard] 数据量图表补渲染失败:', e.message);
                     }
-                } catch(e) {
-                    console.error('[Dashboard] 数据量图表补渲染失败:', e.message);
-                }
-            }, 100);
+                }, 100);
+            }
         }
     }
 
@@ -1395,16 +1411,16 @@
     }
 
     function validateAndRedrawCharts() {
-        // Safari 兼容：即使 charts 已创建，仍可能 invisible（chartArea 为 0），需销毁重绘
-        var hasCharts = Object.keys(charts).length > 0;
-        var firstKey = hasCharts ? Object.keys(charts)[0] : null;
-        if (hasCharts && firstKey && !isChartInvisible(charts[firstKey])) {
-            console.log('[Dashboard#v7.4] 图表可见性校验通过');
+        // v8.0 fix: 只校验数据量图表可见性，不影响异常图表
+        var hasVolumeCharts = ['dailyTrend', 'weeklyBar', 'typeComparison', 'unitChart'].some(k => charts[k]);
+        var firstVolumeKey = hasVolumeCharts ? ['dailyTrend', 'weeklyBar', 'typeComparison', 'unitChart'].find(k => charts[k]) : null;
+        if (hasVolumeCharts && firstVolumeKey && !isChartInvisible(charts[firstVolumeKey])) {
+            console.log('[Dashboard#v8.0] 数据量图表可见性校验通过');
             return true;
         }
-        if (hasCharts) {
-            console.warn('[Dashboard#v7.4] 图表已创建但不可见，销毁重绘');
-            destroyCharts();
+        if (hasVolumeCharts) {
+            console.warn('[Dashboard#v8.0] 数据量图表已创建但不可见，销毁重绘');
+            destroyVolumeCharts();
         }
         return tryRenderVolumeCharts();
     }
@@ -1416,14 +1432,14 @@
             if (canvas) forceReflow(canvas.parentElement);
             renderAllCharts(document.getElementById('filter-period').value || '14');
             setupResizeObserver();
-            // v7.4 Safari 关键修复：创建后再校验 chartArea 尺寸，0 尺寸则销毁重试
-            var firstKey = Object.keys(charts)[0];
-            if (firstKey && isChartInvisible(charts[firstKey])) {
-                console.warn('[Dashboard#v7.4] 图表 chartArea 为0/不可见，销毁重试');
-                destroyCharts();
+            // v8.0 fix: 校验数据量图表而非全量图表
+            var firstVolumeKey = ['dailyTrend', 'weeklyBar', 'typeComparison', 'unitChart'].find(k => charts[k]);
+            if (firstVolumeKey && isChartInvisible(charts[firstVolumeKey])) {
+                console.warn('[Dashboard#v8.0] 数据量图表 chartArea 为0/不可见，销毁重试');
+                destroyVolumeCharts();
                 return false;
             }
-            return Object.keys(charts).length > 0;
+            return ['dailyTrend', 'weeklyBar', 'typeComparison', 'unitChart'].some(k => charts[k]);
         } catch(e) {
             console.error('[Dashboard] 图表渲染失败:', e.message);
             return false;
@@ -1438,16 +1454,18 @@
 
     function initCharts(attempt) {
         if (typeof Chart === 'undefined') {
-            console.warn('[Dashboard#v7.4] Chart.js 未就绪 (attempt=' + (attempt||0) + ')');
+            console.warn('[Dashboard#v8.0] Chart.js 未就绪 (attempt=' + (attempt||0) + ')');
             return false;
         }
-        if (Object.keys(charts).length > 0 && !isChartInvisible(charts[Object.keys(charts)[0]])) {
-            console.log('[Dashboard#v7.4] 图表已渲染且可见，跳过');
+        // v8.0 fix: 只检查数据量图表可见性
+        var firstVolumeKey = ['dailyTrend', 'weeklyBar', 'typeComparison', 'unitChart'].find(k => charts[k]);
+        if (firstVolumeKey && !isChartInvisible(charts[firstVolumeKey])) {
+            console.log('[Dashboard#v8.0] 数据量图表已渲染且可见，跳过');
             return true;
         }
-        console.log('[Dashboard#v7.4] 尝试渲染图表 (attempt=' + (attempt||0) + ')');
+        console.log('[Dashboard#v8.0] 尝试渲染图表 (attempt=' + (attempt||0) + ')');
         var ok = validateAndRedrawCharts();
-        if (ok) console.log('[Dashboard#v7.4] 图表渲染成功 (attempt=' + (attempt||0) + ')');
+        if (ok) console.log('[Dashboard#v8.0] 图表渲染成功 (attempt=' + (attempt||0) + ')');
         return ok;
     }
 
@@ -1469,25 +1487,27 @@
 
     function waitForCanvasAndRender(attempt) {
         const MAX_ATTEMPTS = 60;  // 6 秒
-        if (Object.keys(charts).length > 0 && !isChartInvisible(charts[Object.keys(charts)[0]])) {
-            console.log('[Dashboard#v7.4] 图表已渲染且可见，轮询结束');
+        // v8.0 fix: 只检查数据量图表
+        var firstVolumeKey = ['dailyTrend', 'weeklyBar', 'typeComparison', 'unitChart'].find(k => charts[k]);
+        if (firstVolumeKey && !isChartInvisible(charts[firstVolumeKey])) {
+            console.log('[Dashboard#v8.0] 数据量图表已渲染且可见，轮询结束');
             return;
         }
         var canvas = document.getElementById('chart-daily-trend');
         if (canvas) forceReflow(canvas);
         if (canvas && canvas.offsetWidth > 0 && canvas.offsetHeight > 0) {
-            console.log('[Dashboard#v7.4] Canvas 尺寸就绪 (' + canvas.offsetWidth + 'x' + canvas.offsetHeight + '), 尝试渲染');
+            console.log('[Dashboard#v8.0] Canvas 尺寸就绪 (' + canvas.offsetWidth + 'x' + canvas.offsetHeight + '), 尝试渲染');
             var ok = initCharts('canvas-ready');
             if (!ok && attempt < MAX_ATTEMPTS) {
                 setTimeout(function() { waitForCanvasAndRender(attempt + 1); }, 100);
             }
         } else if (attempt < MAX_ATTEMPTS) {
             if (attempt === 0 || attempt % 5 === 0) {
-                console.log('[Dashboard#v7.4] Canvas 尚未就绪，继续等待 (' + attempt + ')');
+                console.log('[Dashboard#v8.0] Canvas 尚未就绪，继续等待 (' + attempt + ')');
             }
             setTimeout(function() { waitForCanvasAndRender(attempt + 1); }, 100);
         } else {
-            console.warn('[Dashboard#v7.4] Canvas 等待超时，强制渲染');
+            console.warn('[Dashboard#v8.0] Canvas 等待超时，强制渲染');
             initCharts('timeout');
         }
     }
