@@ -473,7 +473,7 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-06-30 12:07</span>
+                    数据更新: <span id="data-date">2026-06-30 12:28</span>
                 </div>
                     <div class="next-update" id="next-update-container">
                         下次更新: <span id="next-update">--</span>
@@ -1331,48 +1331,125 @@
     })();
 
     // ============================================================
-    // 初始化（Chart.js 已内嵌，无需外部加载）
+    // 初始化 v7.0（Chart.js 已内嵌，无需外部加载）
+    // Safari 兼容：pageshow + readyState + requestAnimationFrame 多层回退
     // ============================================================
+    var _initDone = false;
+    var _kpiRendered = false;
+
+    function tryRenderVolumeCharts() {
+        if (typeof Chart === 'undefined') return false;
+        try {
+            renderAllCharts(document.getElementById('filter-period').value || '14');
+            return Object.keys(charts).length > 0;
+        } catch(e) {
+            console.error('[Dashboard] 图表渲染失败:', e.message);
+            return false;
+        }
+    }
+
+    function initKPIs() {
+        if (_kpiRendered) return;
+        _kpiRendered = true;
+        try { renderKPIs(); } catch(e) { console.error('[Dashboard] KPI 渲染失败:', e.message); }
+    }
+
+    function initCharts(attempt) {
+        if (typeof Chart === 'undefined') {
+            console.warn('[Dashboard#v7] Chart.js 未就绪 (attempt=' + (attempt||0) + ')');
+            return false;
+        }
+        if (Object.keys(charts).length > 0) {
+            console.log('[Dashboard#v7] 图表已渲染，跳过');
+            return true;
+        }
+        console.log('[Dashboard#v7] 尝试渲染图表 (attempt=' + (attempt||0) + ')');
+        var ok = tryRenderVolumeCharts();
+        if (ok) console.log('[Dashboard#v7] 图表渲染成功 (attempt=' + (attempt||0) + ')');
+        return ok;
+    }
+
+    function initAnomaly() {
+        try { renderAnomalyTable(); } catch(e) { console.error('[Dashboard] 异常表渲染失败:', e.message); }
+    }
+
+    function fullInit() {
+        if (_initDone) return;
+        _initDone = true;
+        initKPIs();
+        initCharts(0);
+        initAnomaly();
+        try { AutoRefresh.init(); } catch(e) { console.error('[Dashboard] AutoRefresh 初始化失败:', e.message); }
+        try { updateNextUpdate(); } catch(e) { console.error('[Dashboard] updateNextUpdate 失败:', e.message); }
+    }
+
+    // ---- 多层回退渲染机制 ----
+
+    // 策略0：document.readyState 已经是 interactive/complete 时立即执行
+    if (document.readyState === 'interactive' || document.readyState === 'complete') {
+        console.log('[Dashboard#v7] readyState=' + document.readyState + ', 立即初始化');
+        fullInit();
+    }
+
+    // 策略1：DOMContentLoaded
     document.addEventListener('DOMContentLoaded', function() {
-        renderKPIs();
+        console.log('[Dashboard#v7] DOMContentLoaded 触发');
+        fullInit();
+    });
 
-        function tryRenderVolumeCharts() {
-            if (typeof Chart === 'undefined') return false;
-            try {
-                renderAllCharts(document.getElementById('filter-period').value || '14');
-                return Object.keys(charts).length > 0;
-            } catch(e) {
-                console.error('[Dashboard] 图表渲染失败:', e.message);
-                return false;
-            }
+    // 策略2：Safari pageshow（bfcache 恢复时不触发 DOMContentLoaded）
+    window.addEventListener('pageshow', function(e) {
+        console.log('[Dashboard#v7] pageshow 触发 (persisted=' + (e.persisted || false) + ')');
+        if (e.persisted) {
+            // bfcache 恢复：重新初始化
+            _initDone = false;
+            _kpiRendered = false;
         }
+        fullInit();
+    });
 
-        // 首次渲染（数据量分析模块默认可见）
-        if (!tryRenderVolumeCharts()) {
-            console.warn('[Dashboard] 首次渲染未成功，准备 fallback');
-        }
+    // 策略3：window.onload
+    window.addEventListener('load', function() {
+        setTimeout(function() { initCharts(1); }, 100);
+        setTimeout(function() { initCharts(2); }, 200);
+        setTimeout(function() { initCharts(3); }, 500);
+    });
 
-        // 安全网1：window.onload 后再次检查
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                if (typeof Chart !== 'undefined' && Object.keys(charts).length === 0) {
-                    console.warn('[Dashboard] window.onload 补渲染图表');
-                    tryRenderVolumeCharts();
-                }
-            }, 100);
+    // 策略4：requestAnimationFrame（页面可见且布局完成）
+    var _rafTried = false;
+    function rafInit() {
+        if (_rafTried) return;
+        _rafTried = true;
+        requestAnimationFrame(function() {
+            initCharts('r0');
+            // 再等一帧确保布局完成
+            requestAnimationFrame(function() {
+                initCharts('r1');
+            });
         });
+    }
+    if (typeof requestAnimationFrame !== 'undefined') {
+        rafInit();
+    }
 
-        // 安全网2：延迟 800ms 再次检查，兼容某些浏览器异步渲染时序
-        setTimeout(function() {
-            if (typeof Chart !== 'undefined' && Object.keys(charts).length === 0) {
-                console.warn('[Dashboard] 延迟 800ms 补渲染图表');
-                tryRenderVolumeCharts();
-            }
-        }, 800);
+    // 策略5：延迟回退（1s, 2s, 3s）
+    [1000, 2000, 3000].forEach(function(ms) {
+        setTimeout(function() { initCharts('t' + ms); }, ms);
+    });
 
-        renderAnomalyTable();
-        AutoRefresh.init();
-        updateNextUpdate();
+    // 策略6：首次用户交互时补渲染
+    var _interactionTried = false;
+    function onFirstInteraction() {
+        if (_interactionTried) return;
+        _interactionTried = true;
+        ['click', 'touchstart', 'scroll'].forEach(function(evt) {
+            document.removeEventListener(evt, onFirstInteraction);
+            window.removeEventListener(evt, onFirstInteraction);
+        });
+        setTimeout(function() { initCharts('interact'); }, 200);
+    }
+    ['click', 'touchstart', 'scroll'].forEach(function(evt) {
+        document.addEventListener(evt, onFirstInteraction, { once: true, passive: true });
     });
 
     // 提取为独立函数以便复用
