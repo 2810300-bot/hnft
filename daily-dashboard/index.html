@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>餐厨垃圾收运量数据可视化看板</title>
-    <!-- Chart.js: 四层回退，确保国内/国际网络均可加载 -->
-    <!-- 1. jsdelivr 中国镜像 (fastly) -->
-    <script src="https://fastly.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
-        onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';s.onerror=function(){var s2=document.createElement('script');s2.src='https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js';document.head.appendChild(s2);};document.head.appendChild(s);"></script>
+    <!-- Chart.js 由底部程序化加载器处理（多CDN回退 + 轮询等待） -->
     <style>
         :root {
             --bg-primary: #f5f6fa;
@@ -450,7 +447,7 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-06-30 10:35</span>
+                    数据更新: <span id="data-date">2026-06-30 11:37</span>
                 </div>
                     <div class="next-update" id="next-update-container">
                         下次更新: <span id="next-update">--</span>
@@ -1279,45 +1276,92 @@
     // ============================================================
     // 初始化
     // ============================================================
-    document.addEventListener('DOMContentLoaded', function() {
+    // ============================================================
+    // 程序化 Chart.js 加载器（替代不可靠的 script onerror 链）
+    // 多CDN顺序回退 + 轮询等待 + 超时回退
+    // ============================================================
+    (function initApp() {
+        var CDN_LIST = [
+            'https://fastly.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
+            'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
+            'https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js',
+            'https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.0/chart.umd.min.js',
+        ];
+        var cdnIdx = 0;
+        var chartWaitStart = 0;
+        var chartWaitTimer = null;
+
+        // KPI 先渲染（不依赖 Chart.js）
         renderKPIs();
 
-        // 检测 Chart.js 是否已加载
-        if (typeof Chart === 'undefined') {
-            console.warn('[Dashboard] Chart.js 未加载，图表区域将显示提示信息');
-            // 在所有 chart-wrapper 中显示加载失败提示
-            document.querySelectorAll('.chart-wrapper').forEach(function(el) {
-                el.style.display = 'flex';
-                el.style.alignItems = 'center';
-                el.style.justifyContent = 'center';
-                el.innerHTML = '<div style="text-align:center;color:#6c757d;padding:20px;">'
-                    + '<div style="font-size:32px;margin-bottom:8px;">📊</div>'
-                    + '<div>图表组件加载失败</div>'
-                    + '<div style="font-size:12px;margin-top:4px;">请检查网络连接后刷新页面</div>'
-                    + '<button onclick="location.reload()" style="margin-top:12px;padding:6px 16px;background:#4C72B0;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;">刷新页面</button>'
-                    + '</div>';
-            });
-            // 仍然渲染表格（不依赖Chart.js）
+        function loadNextCDN() {
+            if (cdnIdx >= CDN_LIST.length) {
+                // 所有 CDN 的 script.onload 都未触发，开始轮询
+                waitForChartJS(Date.now());
+                return;
+            }
+            var s = document.createElement('script');
+            s.src = CDN_LIST[cdnIdx];
+            s.onload = function() {
+                // script 已下载，立即轮询检测 Chart 全局变量
+                waitForChartJS(Date.now());
+            };
+            s.onerror = function() {
+                cdnIdx++;
+                loadNextCDN();
+            };
+            document.head.appendChild(s);
+        }
+
+        function waitForChartJS(startTime) {
+            if (typeof Chart !== 'undefined') {
+                onChartReady();
+                return;
+            }
+            if (Date.now() - startTime > 12000) {
+                onChartFailed();
+                return;
+            }
+            chartWaitTimer = setTimeout(function() { waitForChartJS(startTime); }, 200);
+        }
+
+        function onChartReady() {
+            if (chartWaitTimer) clearTimeout(chartWaitTimer);
+            try {
+                renderAllCharts('14');
+            } catch(e) {
+                console.error('[Dashboard] 图表渲染失败:', e.message);
+            }
             renderAnomalyTable();
             AutoRefresh.init();
             updateNextUpdate();
-            return;
         }
 
-        try {
-            renderAllCharts('14');
-        } catch(e) {
-            console.error('[Dashboard] 图表渲染失败:', e.message);
+        function onChartFailed() {
+            if (chartWaitTimer) clearTimeout(chartWaitTimer);
+            console.warn('[Dashboard] Chart.js 加载失败（所有CDN不可用）');
+            // 在所有 chart-wrapper 中显示错误提示
+            document.querySelectorAll('.chart-wrapper').forEach(function(el) {
+                // 隐藏原有 canvas（保留引用，避免后续代码报错）
+                var canvas = el.querySelector('canvas');
+                if (canvas) canvas.style.display = 'none';
+                // 追加错误提示（不覆盖 innerHTML，保留 canvas DOM 引用）
+                var errDiv = document.createElement('div');
+                errDiv.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.95);z-index:100;flex-direction:column;';
+                errDiv.innerHTML = '<div style="font-size:32px;margin-bottom:8px;">📊</div>'
+                    + '<div style="color:#6c757d;">图表组件加载失败</div>'
+                    + '<div style="font-size:12px;color:#94a3b8;margin-top:4px;">CDN 不可用，请检查网络后刷新</div>'
+                    + '<button onclick="location.reload()" style="margin-top:12px;padding:6px 16px;background:#4C72B0;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;">刷新页面</button>';
+                el.appendChild(errDiv);
+            });
+            renderAnomalyTable();
+            AutoRefresh.init();
+            updateNextUpdate();
         }
 
-        // 异常分析模块的图表延迟到切换时再创建（避免在隐藏 canvas 上渲染）
-        // renderSeverityPie() 由 switchModule('anomaly') 触发
-        // 但异常明细表不需要 Chart.js，可以立即渲染
-        renderAnomalyTable();
-
-        AutoRefresh.init();
-        updateNextUpdate();
-    });
+        // 启动 CDN 加载链
+        loadNextCDN();
+    })();
 
     // 提取为独立函数以便复用
     function updateNextUpdate() {
