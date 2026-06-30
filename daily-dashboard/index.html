@@ -473,7 +473,7 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-06-30 12:28</span>
+                    数据更新: <span id="data-date">2026-06-30 12:44</span>
                 </div>
                     <div class="next-update" id="next-update-container">
                         下次更新: <span id="next-update">--</span>
@@ -1331,8 +1331,9 @@
     })();
 
     // ============================================================
-    // 初始化 v7.0（Chart.js 已内嵌，无需外部加载）
+    // 初始化 v7.1（Chart.js 已内嵌，无需外部加载）
     // Safari 兼容：pageshow + readyState + requestAnimationFrame 多层回退
+    // v7.1 核心修复：fullInit 内 charts 延迟至 rAF×2（Safari inline script 阻塞 → canvas 0尺寸）
     // ============================================================
     var _initDone = false;
     var _kpiRendered = false;
@@ -1341,6 +1342,15 @@
         if (typeof Chart === 'undefined') return false;
         try {
             renderAllCharts(document.getElementById('filter-period').value || '14');
+            // Safari 关键修复：验证 canvas 实际尺寸
+            // inline script 阻塞渲染时 canvas 可能尚未布局（offsetWidth/offsetHeight=0）
+            // 此时 Chart.js 仍会创建图表但不可见 → 所有重试被 charts.length>0 跳过
+            var canvas = document.getElementById('chart-daily-trend');
+            if (canvas && (canvas.offsetWidth === 0 || canvas.offsetHeight === 0)) {
+                console.warn('[Dashboard#v7.1] Canvas 尺寸为0 (Safari 渲染未完成)，销毁重试');
+                destroyCharts();
+                return false;
+            }
             return Object.keys(charts).length > 0;
         } catch(e) {
             console.error('[Dashboard] 图表渲染失败:', e.message);
@@ -1377,10 +1387,21 @@
         if (_initDone) return;
         _initDone = true;
         initKPIs();
-        initCharts(0);
         initAnomaly();
         try { AutoRefresh.init(); } catch(e) { console.error('[Dashboard] AutoRefresh 初始化失败:', e.message); }
         try { updateNextUpdate(); } catch(e) { console.error('[Dashboard] updateNextUpdate 失败:', e.message); }
+
+        // v7.1: 图表渲染延迟至 rAF×2 确保 Canvas 布局完成
+        // Safari 中 inline script 阻塞渲染，canvas 可能尚未布局（offsetWidth/offsetHeight=0）
+        if (typeof requestAnimationFrame !== 'undefined') {
+            requestAnimationFrame(function() {
+                requestAnimationFrame(function() {
+                    initCharts(0);
+                });
+            });
+        } else {
+            setTimeout(function() { initCharts(0); }, 50);
+        }
     }
 
     // ---- 多层回退渲染机制 ----
