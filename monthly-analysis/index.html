@@ -260,12 +260,16 @@ body {
     <div class="header-meta">
       <span>📅 报告月: 6月1日 - 6月30日</span>
       <span>🔢 已加载 30 天数据（覆盖 5 周）, <em style=\"color:#fbbf24;\">1 天待上传</em></span>
-      <span>🔄 生成于 2026-06-30 15:39:25</span>
+      <span>🔍 数据质量: 90/100</span>
+      <span>🔄 生成于 2026-06-30 16:17:31</span>
     </div>
   </div>
 </header>
 
 <div class="main-container">
+
+  <!-- v3.1: 数据质量警报 -->
+  <div id="quality-alert" style="display:none;"></div>
 
   <!-- KPI Cards -->
   <div class="kpi-row" id="kpi-row"></div>
@@ -352,8 +356,8 @@ body {
 // Data (embedded from Python)
 // ============================================================
 const MONTHLY_DATA = {
-  "schema_version": 1,
-  "generated_at": "2026-06-30 15:39:25",
+  "schema_version": 2,
+  "generated_at": "2026-06-30 16:17:31",
   "month": "2026-06",
   "year": 2026,
   "month_num": 6,
@@ -376,9 +380,9 @@ const MONTHLY_DATA = {
   "total_kg": 5661513,
   "total_ton": 5661.5,
   "total_trips": 1217,
-  "avg_daily_kg": 188717,
-  "avg_daily_ton": 188.7,
-  "avg_daily_trips": 40.6,
+  "avg_daily_kg": 195225,
+  "avg_daily_ton": 195.2,
+  "avg_daily_trips": 42.0,
   "peak": {
     "date": "6月5日",
     "weekday": "周五",
@@ -393,11 +397,11 @@ const MONTHLY_DATA = {
     "ton": 165.2,
     "trips": 37
   },
-  "prev_month_total_ton": 5661.5,
-  "mom_change_ton": 0.0,
-  "mom_change_pct": 0.0,
-  "trend": "flat",
-  "trend_label": "环比持平",
+  "prev_month_total_ton": 0,
+  "mom_change_ton": 0,
+  "mom_change_pct": null,
+  "trend": "down",
+  "trend_label": "-85.2%",
   "daily": [
     {
       "date": "6月1日",
@@ -618,7 +622,7 @@ const MONTHLY_DATA = {
       "total_ton": 1410.9,
       "avg_daily": 201.6,
       "total_trips": 299,
-      "date_range": "",
+      "date_range": "6月1日 - 6月7日",
       "trend_label": "",
       "trend_color": "#4C72B0"
     },
@@ -627,67 +631,67 @@ const MONTHLY_DATA = {
       "total_ton": 1338.5,
       "avg_daily": 191.2,
       "total_trips": 292,
-      "date_range": "",
-      "trend_label": "",
-      "trend_color": "#4C72B0"
+      "date_range": "6月8日 - 6月14日",
+      "trend_label": "-5.1%",
+      "trend_color": "#e15759"
     },
     {
       "week": 25,
       "total_ton": 1311.8,
       "avg_daily": 187.4,
       "total_trips": 285,
-      "date_range": "",
-      "trend_label": "",
-      "trend_color": "#4C72B0"
+      "date_range": "6月15日 - 6月21日",
+      "trend_label": "-2.0%",
+      "trend_color": "#e15759"
     },
     {
       "week": 26,
       "total_ton": 1393.4,
       "avg_daily": 199.1,
       "total_trips": 298,
-      "date_range": "",
-      "trend_label": "",
-      "trend_color": "#4C72B0"
+      "date_range": "6月22日 - 6月28日",
+      "trend_label": "+6.2%",
+      "trend_color": "#16a34a"
     },
     {
       "week": 27,
       "total_ton": 206.9,
-      "avg_daily": 103.4,
+      "avg_daily": 206.9,
       "total_trips": 43,
-      "date_range": "",
-      "trend_label": "",
-      "trend_color": "#4C72B0"
+      "date_range": "6月29日 - 6月30日",
+      "trend_label": "-85.2%",
+      "trend_color": "#e15759"
     }
   ],
   "regions": [
     {
       "name": "岳阳楼区",
       "kg": 3356761,
-      "trips": 29,
+      "trips": 720,
       "avg_per_day_kg": 115750
     },
     {
       "name": "开发区",
       "kg": 1286522,
-      "trips": 29,
+      "trips": 298,
       "avg_per_day_kg": 44363
     },
     {
       "name": "君山区",
       "kg": 396650,
-      "trips": 29,
+      "trips": 66,
       "avg_per_day_kg": 13678
     },
     {
       "name": "南湖新区",
       "kg": 383040,
-      "trips": 28,
+      "trips": 74,
       "avg_per_day_kg": 13208
     },
     {
       "name": "临港新区",
       "kg": 238540,
-      "trips": 29,
+      "trips": 59,
       "avg_per_day_kg": 8226
     }
   ],
@@ -701,9 +705,9 @@ const MONTHLY_DATA = {
       "count": 5
     },
     "周二": {
-      "avg_kg": 162110,
-      "avg_ton": 162.1,
-      "count": 5
+      "avg_kg": 202638,
+      "avg_ton": 202.6,
+      "count": 4
     },
     "周三": {
       "avg_kg": 196705,
@@ -730,11 +734,30 @@ const MONTHLY_DATA = {
       "avg_ton": 180.7,
       "count": 4
     },
-    "workday_avg_kg": 192368,
-    "workday_avg_ton": 192.4,
+    "workday_avg_kg": 201528,
+    "workday_avg_ton": 201.5,
     "weekend_avg_kg": 178678,
     "weekend_avg_ton": 178.7,
-    "weekend_drop_pct": 7.1
+    "weekend_drop_pct": 11.3
+  },
+  "data_quality": {
+    "is_valid": true,
+    "quality_score": 90,
+    "severity": "WARNING",
+    "error_count": 0,
+    "warning_count": 2,
+    "errors": [],
+    "warnings": [
+      {
+        "field": "vehicles",
+        "message": "车辆排名数据不可用（kdocs 模式暂不支持）"
+      },
+      {
+        "field": "daily.pending",
+        "message": "待上传日期 (1天): 6月30日"
+      }
+    ],
+    "summary": "数据覆盖: 29/30天有效 | 待上传: 1天(6月30日) | 警告: 2项 | 质量评分: 90/100"
   }
 };
 
@@ -819,6 +842,41 @@ function renderKPIs() {
         '以下 ' + d.pending_count + ' 天数据尚未上传：' + pendingBadges +
         '。数据上传后将自动纳入统计。' +
       '</div>';
+  }
+  
+  // v3.1: 数据质量警报
+  var dq = d.data_quality || {};
+  if (dq.severity === 'ERROR' || dq.severity === 'WARNING') {
+    var qa = document.getElementById('quality-alert');
+    qa.style.display = 'block';
+    var severityBg = dq.severity === 'ERROR' ? 'linear-gradient(135deg, #fee2e2, #fecaca)' : 'linear-gradient(135deg, #fef3c7, #fde68a)';
+    var severityBorder = dq.severity === 'ERROR' ? '#f87171' : '#fbbf24';
+    var severityColor = dq.severity === 'ERROR' ? '#991b1b' : '#92400e';
+    var severityIcon = dq.severity === 'ERROR' ? '&#x274C;' : '&#x26A0;';
+    
+    var qualityHtml = '<div style="background:' + severityBg + ';border:1px solid ' + severityBorder + ';border-radius:14px;padding:14px 20px;margin-bottom:20px;font-size:13px;color:' + severityColor + ';">' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">' +
+        '<span style="font-size:20px;">' + severityIcon + '</span>' +
+        '<strong>数据质量评分: ' + dq.quality_score + '/100</strong>' +
+        '<span style="font-size:12px;opacity:0.7;">(' + dq.summary + ')</span>' +
+      '</div>';
+    
+    if (dq.errors && dq.errors.length > 0) {
+      qualityHtml += '<div style="margin-top:8px;padding-left:30px;">';
+      dq.errors.forEach(function(e) {
+        qualityHtml += '<div style="margin:4px 0;color:#991b1b;">&#x1F534; [' + e.field + '] ' + e.message + '</div>';
+      });
+      qualityHtml += '</div>';
+    }
+    if (dq.warnings && dq.warnings.length > 0) {
+      qualityHtml += '<div style="margin-top:8px;padding-left:30px;">';
+      dq.warnings.forEach(function(w) {
+        qualityHtml += '<div style="margin:4px 0;color:#92400e;">&#x26A0; [' + w.field + '] ' + w.message + '</div>';
+      });
+      qualityHtml += '</div>';
+    }
+    qualityHtml += '</div>';
+    qa.innerHTML = qualityHtml;
   }
 }
 
