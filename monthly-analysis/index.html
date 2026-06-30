@@ -256,12 +256,12 @@ body {
 <header class="site-header">
   <div class="header-content">
     <h1>📊 厨余垃圾收运量 · 月度数据分析</h1>
-    <div class="subtitle">岳阳市厨余垃圾资源化利用和无害化处置项目</div>
+    <div class="subtitle">岳阳市厨余垃圾资源化利用和无害化处置项目（花果畈收运数据）</div>
     <div class="header-meta">
       <span>📅 报告月: 6月1日 - 6月30日</span>
-      <span>🔢 已加载 30 天数据（覆盖 5 周）, <em style=\"color:#fbbf24;\">1 天待上传</em></span>
-      <span>🔍 数据质量: 95/100</span>
-      <span>🔄 生成于 2026-06-30 16:34:54</span>
+      <span>🔢 已加载 30 天数据（覆盖 5 周）</span>
+      <span>🔍 数据质量: 100/100</span>
+      <span>🔄 生成于 2026-07-01 07:52:37</span>
     </div>
   </div>
 </header>
@@ -357,7 +357,7 @@ body {
 // ============================================================
 const MONTHLY_DATA = {
   "schema_version": 2,
-  "generated_at": "2026-06-30 16:34:54",
+  "generated_at": "2026-07-01 07:52:37",
   "month": "2026-06",
   "year": 2026,
   "month_num": 6,
@@ -365,11 +365,9 @@ const MONTHLY_DATA = {
   "date_range": "6月1日 - 6月30日",
   "days_in_month": 30,
   "data_days": 30,
-  "pending_dates": [
-    "6月30日"
-  ],
-  "pending_count": 1,
-  "has_pending": true,
+  "pending_dates": [],
+  "pending_count": 0,
+  "has_pending": false,
   "weeks_covered": [
     23,
     24,
@@ -377,12 +375,12 @@ const MONTHLY_DATA = {
     26,
     27
   ],
-  "total_kg": 5661513,
-  "total_ton": 5661.5,
-  "total_trips": 1217,
-  "avg_daily_kg": 195225,
-  "avg_daily_ton": 195.2,
-  "avg_daily_trips": 42.0,
+  "total_kg": 5860553,
+  "total_ton": 5860.6,
+  "total_trips": 1262,
+  "avg_daily_kg": 195352,
+  "avg_daily_ton": 195.4,
+  "avg_daily_trips": 42.1,
   "peak": {
     "date": "6月5日",
     "weekday": "周五",
@@ -401,7 +399,7 @@ const MONTHLY_DATA = {
   "mom_change_ton": 0,
   "mom_change_pct": null,
   "trend": "down",
-  "trend_label": "-85.2%",
+  "trend_label": "-70.9%",
   "daily": [
     {
       "date": "6月1日",
@@ -609,11 +607,9 @@ const MONTHLY_DATA = {
     {
       "date": "6月30日",
       "weekday": "周二",
-      "total_kg": 0,
-      "trips": 0,
-      "week": 27,
-      "pending": true,
-      "pending_reason": "数据待上传"
+      "total_kg": 199040,
+      "trips": 45,
+      "week": 27
     }
   ],
   "weekly_breakdown": [
@@ -655,47 +651,61 @@ const MONTHLY_DATA = {
     },
     {
       "week": 27,
-      "total_ton": 206.9,
-      "avg_daily": 206.9,
-      "total_trips": 43,
+      "total_ton": 405.9,
+      "avg_daily": 202.9,
+      "total_trips": 88,
       "date_range": "6月29日 - 6月30日",
-      "trend_label": "-85.2%",
+      "trend_label": "-70.9%",
       "trend_color": "#e15759"
     }
   ],
   "regions": [
     {
       "name": "岳阳楼区",
-      "kg": 3356761,
-      "trips": 720,
-      "avg_per_day_kg": 115750
+      "kg": 3483661,
+      "trips": 749,
+      "avg_per_day_kg": 116122
     },
     {
       "name": "开发区",
-      "kg": 1286522,
-      "trips": 298,
-      "avg_per_day_kg": 44363
+      "kg": 1318102,
+      "trips": 306,
+      "avg_per_day_kg": 43937
     },
     {
       "name": "君山区",
-      "kg": 396650,
-      "trips": 66,
-      "avg_per_day_kg": 13678
+      "kg": 413530,
+      "trips": 69,
+      "avg_per_day_kg": 13784
     },
     {
       "name": "南湖新区",
-      "kg": 383040,
-      "trips": 74,
-      "avg_per_day_kg": 13208
+      "kg": 399830,
+      "trips": 77,
+      "avg_per_day_kg": 13328
     },
     {
       "name": "临港新区",
-      "kg": 238540,
-      "trips": 59,
-      "avg_per_day_kg": 8226
+      "kg": 245430,
+      "trips": 61,
+      "avg_per_day_kg": 8181
     }
   ],
   "vehicles_top10": [
+    {
+      "plate": "湘FC5523",
+      "kg": 422320,
+      "trips": 67,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 6303
+    },
+    {
+      "plate": "湘FB9498",
+      "kg": 419395,
+      "trips": 97,
+      "unit": "岳阳楼区",
+      "avg_per_trip": 4324
+    },
     {
       "plate": "湘FA8040",
       "kg": 418492,
@@ -704,139 +714,125 @@ const MONTHLY_DATA = {
       "avg_per_trip": 4982
     },
     {
-      "plate": "湘FC5523",
-      "kg": 415530,
-      "trips": 66,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 6296
-    },
-    {
-      "plate": "湘FB9498",
-      "kg": 400945,
-      "trips": 93,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 4311
-    },
-    {
       "plate": "湘FA3040",
-      "kg": 386270,
-      "trips": 85,
+      "kg": 400270,
+      "trips": 88,
       "unit": "岳阳楼区",
-      "avg_per_trip": 4544
+      "avg_per_trip": 4549
     },
     {
       "plate": "湘FA9847",
-      "kg": 383040,
-      "trips": 74,
+      "kg": 399830,
+      "trips": 77,
       "unit": "南湖新区",
-      "avg_per_trip": 5176
+      "avg_per_trip": 5193
     },
     {
       "plate": "湘F86680",
-      "kg": 366406,
-      "trips": 91,
+      "kg": 378646,
+      "trips": 94,
       "unit": "岳阳楼区",
-      "avg_per_trip": 4026
+      "avg_per_trip": 4028
     },
     {
       "plate": "湘FB0252",
-      "kg": 365540,
-      "trips": 79,
+      "kg": 374480,
+      "trips": 81,
       "unit": "开发区",
-      "avg_per_trip": 4627
+      "avg_per_trip": 4623
     },
     {
       "plate": "湘FC1673",
-      "kg": 351510,
-      "trips": 77,
+      "kg": 365420,
+      "trips": 80,
       "unit": "岳阳楼区",
-      "avg_per_trip": 4565
+      "avg_per_trip": 4568
     },
     {
       "plate": "湘FB6266",
-      "kg": 337340,
-      "trips": 69,
+      "kg": 352020,
+      "trips": 72,
       "unit": "岳阳楼区",
       "avg_per_trip": 4889
     },
     {
       "plate": "湘FB8611",
-      "kg": 259760,
-      "trips": 66,
+      "kg": 267970,
+      "trips": 68,
       "unit": "岳阳楼区",
-      "avg_per_trip": 3936
+      "avg_per_trip": 3941
     }
   ],
   "vehicles_bottom10": [
     {
       "plate": "湘FB9409",
-      "kg": 29890,
-      "trips": 5,
+      "kg": 34870,
+      "trips": 6,
       "unit": "岳阳楼区",
-      "avg_per_trip": 5978
+      "avg_per_trip": 5812
     },
     {
       "plate": "湘FA5403",
-      "kg": 90890,
-      "trips": 29,
+      "kg": 94240,
+      "trips": 30,
       "unit": "岳阳楼区",
-      "avg_per_trip": 3134
+      "avg_per_trip": 3141
     },
     {
       "plate": "湘FB3975",
-      "kg": 147450,
-      "trips": 29,
+      "kg": 152810,
+      "trips": 30,
       "unit": "岳阳楼区",
-      "avg_per_trip": 5084
+      "avg_per_trip": 5094
     },
     {
       "plate": "湘FB9046",
-      "kg": 161160,
-      "trips": 51,
+      "kg": 164220,
+      "trips": 52,
       "unit": "开发区",
-      "avg_per_trip": 3160
+      "avg_per_trip": 3158
     },
     {
       "plate": "湘FA8340",
-      "kg": 163510,
-      "trips": 47,
+      "kg": 170270,
+      "trips": 49,
       "unit": "开发区",
-      "avg_per_trip": 3479
+      "avg_per_trip": 3475
     },
     {
       "plate": "湘FB7351",
-      "kg": 171590,
-      "trips": 42,
+      "kg": 179190,
+      "trips": 44,
       "unit": "岳阳楼区",
-      "avg_per_trip": 4085
+      "avg_per_trip": 4072
     },
     {
       "plate": "湘FC3710",
-      "kg": 174660,
-      "trips": 38,
+      "kg": 182940,
+      "trips": 40,
       "unit": "开发区",
-      "avg_per_trip": 4596
+      "avg_per_trip": 4574
     },
     {
       "plate": "湘FB0388",
-      "kg": 192250,
-      "trips": 37,
+      "kg": 197160,
+      "trips": 38,
       "unit": "岳阳楼区",
-      "avg_per_trip": 5196
+      "avg_per_trip": 5188
     },
     {
       "plate": "湘FC8698",
-      "kg": 198090,
-      "trips": 32,
+      "kg": 204590,
+      "trips": 33,
       "unit": "君山区",
-      "avg_per_trip": 6190
+      "avg_per_trip": 6200
     },
     {
       "plate": "湘FA8342",
-      "kg": 198560,
-      "trips": 34,
+      "kg": 208940,
+      "trips": 36,
       "unit": "君山区",
-      "avg_per_trip": 5840
+      "avg_per_trip": 5804
     }
   ],
   "vehicle_count": 22,
@@ -847,9 +843,9 @@ const MONTHLY_DATA = {
       "count": 5
     },
     "周二": {
-      "avg_kg": 202638,
-      "avg_ton": 202.6,
-      "count": 4
+      "avg_kg": 201918,
+      "avg_ton": 201.9,
+      "count": 5
     },
     "周三": {
       "avg_kg": 196705,
@@ -876,26 +872,21 @@ const MONTHLY_DATA = {
       "avg_ton": 180.7,
       "count": 4
     },
-    "workday_avg_kg": 201528,
-    "workday_avg_ton": 201.5,
+    "workday_avg_kg": 201415,
+    "workday_avg_ton": 201.4,
     "weekend_avg_kg": 178678,
     "weekend_avg_ton": 178.7,
     "weekend_drop_pct": 11.3
   },
   "data_quality": {
     "is_valid": true,
-    "quality_score": 95,
-    "severity": "WARNING",
+    "quality_score": 100,
+    "severity": "OK",
     "error_count": 0,
-    "warning_count": 1,
+    "warning_count": 0,
     "errors": [],
-    "warnings": [
-      {
-        "field": "daily.pending",
-        "message": "待上传日期 (1天): 6月30日"
-      }
-    ],
-    "summary": "数据覆盖: 29/30天有效 | 待上传: 1天(6月30日) | 警告: 1项 | 质量评分: 95/100"
+    "warnings": [],
+    "summary": "数据覆盖: 30/30天有效 | 质量评分: 100/100"
   }
 };
 
