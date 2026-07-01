@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>湖南伏泰 2026年半年度工作总结</title>
+<style>
+:root {
+  --c-primary: #1a3a5c;
+  --c-accent: #d4a853;
+  --c-red: #c0392b;
+  --c-green: #27ae60;
+  --c-blue: #2980b9;
+  --c-bg: #f8f6f0;
+  --c-white: #ffffff;
+  --c-text: #2c2c2c;
+  --c-text-light: #666;
+  --c-border: #e0dcd0;
+  --c-card-bg: #fff;
+  --radius: 8px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+  background: #eae6da;
+  color: var(--c-text);
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+/* A4 Print Layout */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 20px auto;
+  background: var(--c-white);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  padding: 25mm 23mm 20mm 23mm;
+  position: relative;
+}
+
+@media print {
+  body { background: #fff; }
+  .page { margin: 0; box-shadow: none; width: 100%; min-height: auto; }
+  .page-break { page-break-before: always; }
+}
+
+/* Cover */
+.cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: 60px;
+}
+
+.cover .logo-line {
+  font-size: 13px;
+  color: var(--c-accent);
+  letter-spacing: 6px;
+  margin-bottom: 50px;
+  text-transform: uppercase;
+}
+
+.cover h1 {
+  font-size: 32px;
+  color: var(--c-primary);
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.cover .subtitle {
+  font-size: 18px;
+  color: var(--c-text-light);
+  margin-bottom: 60px;
+  letter-spacing: 2px;
+}
+
+.cover .meta {
+  font-size: 14px;
+  color: var(--c-text-light);
+  line-height: 2;
+}
+
+.cover .divider {
+  width: 80px;
+  height: 2px;
+  background: var(--c-accent);
+  margin: 30px auto;
+}
+
+.cover .stamp {
+  margin-top: 40px;
+  font-size: 13px;
+  color: #999;
+}
+
+/* Section titles */
+h2 {
+  font-size: 22px;
+  color: var(--c-primary);
+  border-bottom: 2px solid var(--c-accent);
+  padding-bottom: 8px;
+  margin: 40px 0 20px 0;
+}
+
+h3 {
+  font-size: 17px;
+  color: var(--c-primary);
+  margin: 28px 0 14px 0;
+  padding-left: 12px;
+  border-left: 3px solid var(--c-accent);
+}
+
+h4 {
+  font-size: 15px;
+  color: var(--c-text);
+  margin: 18px 0 10px 0;
+}
+
+p {
+  text-indent: 2em;
+  margin-bottom: 8px;
+  text-align: justify;
+}
+
+p.no-indent { text-indent: 0; }
+
+/* KPI Grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.kpi-card {
+  background: var(--c-card-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  text-align: center;
+}
+
+.kpi-card .kpi-label {
+  font-size: 12px;
+  color: var(--c-text-light);
+  margin-bottom: 6px;
+}
+
+.kpi-card .kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--c-primary);
+  margin-bottom: 4px;
+}
+
+.kpi-card .kpi-sub {
+  font-size: 12px;
+  color: var(--c-text-light);
+}
+
+.kpi-card .kpi-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+
+.tag-up { background: #e8f5e9; color: var(--c-green); }
+.tag-down { background: #fdecea; color: var(--c-red); }
+.tag-warn { background: #fff3e0; color: #e67e22; }
+
+/* Data Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+}
+
+.data-table th {
+  background: var(--c-primary);
+  color: #fff;
+  padding: 10px 12px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.data-table td {
+  padding: 8px 12px;
+  border: 1px solid var(--c-border);
+  text-align: center;
+}
+
+.data-table tr:nth-child(even) td {
+  background: #fafaf7;
+}
+
+.data-table .highlight { color: var(--c-red); font-weight: 600; }
+.data-table .good { color: var(--c-green); font-weight: 600; }
+
+/* Chart containers */
+.chart-box {
+  margin: 20px 0;
+  padding: 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: #fcfcfa;
+}
+
+.chart-box .chart-title {
+  font-size: 14px;
+  color: var(--c-primary);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.chart-container {
+  width: 100%;
+  height: 280px;
+}
+
+.chart-container.tall {
+  height: 320px;
+}
+
+/* Alert box */
+.alert-box {
+  background: #fff8e1;
+  border-left: 4px solid var(--c-accent);
+  padding: 14px 18px;
+  margin: 16px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.alert-box.red {
+  background: #fdecea;
+  border-left-color: var(--c-red);
+}
+
+.alert-box.green {
+  background: #e8f5e9;
+  border-left-color: var(--c-green);
+}
+
+.alert-box .alert-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* Bullet list */
+.bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+}
+
+.bullet-list li {
+  padding: 4px 0 4px 20px;
+  position: relative;
+}
+
+.bullet-list li::before {
+  content: "•";
+  position: absolute;
+  left: 4px;
+  color: var(--c-accent);
+  font-weight: bold;
+}
+
+/* Two column */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 16px 0;
+}
+
+/* TOC */
+.toc {
+  margin: 40px 0;
+  padding: 20px 28px;
+  background: #fcfcfa;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+}
+
+.toc h3 {
+  border: none;
+  padding: 0;
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.toc ol {
+  padding-left: 24px;
+}
+
+.toc ol li {
+  padding: 4px 0;
+  font-size: 14px;
+  color: var(--c-text-light);
+}
+
+/* Signature block */
+.sign-block {
+  margin-top: 50px;
+  text-align: right;
+  padding-right: 20px;
+  font-size: 14px;
+  color: var(--c-text-light);
+}
+
+.sign-block .line {
+  margin: 6px 0;
+}
+
+/* Page number */
+.page-num {
+  position: absolute;
+  bottom: 15mm;
+  right: 23mm;
+  font-size: 11px;
+  color: #bbb;
+}
+
+/* Responsive: screen only */
+@media screen and (max-width: 800px) {
+  .page { width: 100%; margin: 0; padding: 20px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .two-col { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== 封面 ========== -->
+<div class="page">
+<div class="cover">
+  <div class="logo-line">HUNAN FUTAI ENVIRONMENTAL TECHNOLOGY</div>
+  <h1>2026年半年度工作总结</h1>
+  <div class="subtitle">湖南伏泰环境科技有限责任公司</div>
+  <div class="divider"></div>
+  <div class="meta">
+    <div>报告期：2026年1月 — 6月</div>
+    <div>编制部门：总经办</div>
+    <div>报告日期：2026年7月1日</div>
+  </div>
+  <div class="stamp">机密 · 仅限管理层内部传阅</div>
+</div>
+
+<!-- 目录 -->
+<div class="toc">
+  <h3>目 录</h3>
+  <ol>
+    <li>核心经营指标达成情况</li>
+    <li>收运与处置运营分析</li>
+    <li>油脂提取与销售分析</li>
+    <li>成本管控与效益分析</li>
+    <li>财务管理与资金状况</li>
+    <li>重点项目与合同执行</li>
+    <li>组织与人力资源管理</li>
+    <li>上半年亮点总结</li>
+    <li>存在的问题与不足</li>
+    <li>下半年重点工作方向</li>
+  </ol>
+</div>
+</div>
+
+<!-- ========== 正文第一页 ========== -->
+<div class="page page-break">
+
+<h2>一、核心经营指标达成情况</h2>
+
+<p>2026年上半年，公司在岳阳市餐厨垃圾无害化处理及资源化利用项目的运营中，紧紧围绕"提质增量、降本增效"的经营方针，持续推动收运体系优化、处置能力提升和精细化管理。上半年累计完成餐厨垃圾收运约 <strong style="color:var(--c-primary);font-size:1.15em;">35,336 吨</strong>（1-5月合计29,475吨 + 6月5,861吨），月均5,889吨，各月收运量总体呈稳步增长态势。</p>
+
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-label">H1 累计收运量</div>
+    <div class="kpi-value">35,336</div>
+    <div class="kpi-sub">吨</div>
+    <span class="kpi-tag tag-up">月均 5,889 吨</span>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">5月收运达成率</div>
+    <div class="kpi-value">102.5%</div>
+    <div class="kpi-sub">目标 6,200 吨</div>
+    <span class="kpi-tag tag-up">环比 +7.3%</span>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">5月提油率</div>
+    <div class="kpi-value" style="color:var(--c-red);">4.44%</div>
+    <div class="kpi-sub">目标 5.16%</div>
+    <span class="kpi-tag tag-down">达成率 86.0%</span>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">5月综合吨成本</div>
+    <div class="kpi-value" style="color:var(--c-green);">234</div>
+    <div class="kpi-sub">元/吨（计划245.60）</div>
+    <span class="kpi-tag tag-up">低于计划 4.7%</span>
+  </div>
+</div>
+
+<div class="chart-box">
+  <div class="chart-title">图表1：2026年1-6月收运量趋势（吨）</div>
+  <div class="chart-container" id="chart-collection"></div>
+</div>
+
+<p>从趋势看，1-5月收运量逐月攀升，从1月的5,600吨稳步增长至5月的6,354.8吨（+13.5%），6月受端午假期及季节性波动影响回落至5,861吨。总体上，收运端保持了良好的增长态势，财政补贴收入随之持续提升。</p>
+
+<h3>5月核心指标快照（最新完整月报）</h3>
+
+<table class="data-table">
+<thead>
+<tr>
+  <th>指标</th><th>实际值</th><th>目标值</th><th>达成率</th><th>趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:left;">实际收运量</td>
+  <td><strong>6,354.8 吨</strong></td><td>6,200 吨</td>
+  <td class="good">102.5%</td>
+  <td class="good">↑ 7.3%</td>
+</tr>
+<tr>
+  <td style="text-align:left;">售油金额</td>
+  <td><strong>151.7 万元</strong></td><td>155 万元</td>
+  <td>97.9%</td>
+  <td class="highlight">↓ 12.1%</td>
+</tr>
+<tr>
+  <td style="text-align:left;">提油率</td>
+  <td class="highlight"><strong>4.44%</strong></td><td>5.16%</td>
+  <td class="highlight">86.0%</td>
+  <td class="highlight">↓ 0.18pp</td>
+</tr>
+<tr>
+  <td style="text-align:left;">综合吨成本</td>
+  <td class="good"><strong>234 元/吨</strong></td><td>245.60 元/吨</td>
+  <td class="good">95.3%</td>
+  <td class="good">↓ 0.96%</td>
+</tr>
+<tr>
+  <td style="text-align:left;">餐厨处置量（不含易腐）</td>
+  <td><strong>4,222.55 吨</strong></td><td>—</td><td>—</td>
+  <td class="good">↑ 8.7%</td>
+</tr>
+<tr>
+  <td style="text-align:left;">总处置量</td>
+  <td><strong>5,441.93 吨</strong></td><td>—</td><td>—</td>
+  <td>—</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+<!-- ========== 第二页 ========== -->
+<div class="page page-break">
+
+<h2>二、收运与处置运营分析</h2>
+
+<h3>2.1 月度收运量走势</h3>
+
+<p>上半年收运量呈现"先稳后升、6月回落"的走势。1-4月每月环比增幅在1-2%之间，5月出现跳跃式增长（环比+7.3%），主要得益于楼区全覆盖专项摸排工作的阶段性成果以及夏季餐饮消费旺季的到来。6月回落至5,861吨，主要受端午假期（减少收运2天）及部分餐饮歇业影响。</p>
+
+<div class="chart-box">
+  <div class="chart-title">图表2：2026年H1 月度收运量环比变化</div>
+  <div class="chart-container" id="chart-mom"></div>
+</div>
+
+<h3>2.2 6月区域收运分布（最新月度数据）</h3>
+
+<table class="data-table">
+<thead>
+<tr><th>区域</th><th>月收运量(吨)</th><th>占比</th><th>车次</th><th>日均(吨)</th><th>主要特征</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:left;">岳阳楼区</td><td><strong>3,483.7</strong></td><td>59.4%</td><td>749</td><td>116.1</td><td style="text-align:left;">核心主城区，收运量占比超六成</td></tr>
+<tr><td style="text-align:left;">开发区</td><td><strong>1,318.1</strong></td><td>22.5%</td><td>306</td><td>43.9</td><td style="text-align:left;">第二大户，餐饮集中度高</td></tr>
+<tr><td style="text-align:left;">君山区</td><td><strong>413.5</strong></td><td>7.1%</td><td>69</td><td>13.8</td><td style="text-align:left;">收运量稳定</td></tr>
+<tr><td style="text-align:left;">南湖新区</td><td><strong>399.8</strong></td><td>6.8%</td><td>77</td><td>13.3</td><td style="text-align:left;">新增覆盖区域，增长潜力大</td></tr>
+<tr><td style="text-align:left;">临港新区</td><td><strong>245.4</strong></td><td>4.2%</td><td>61</td><td>8.2</td><td style="text-align:left;">工业区为主，收运量较小</td></tr>
+<tr style="font-weight:600;background:#f0ece0;">
+<td style="text-align:left;">合计</td><td><strong>5,860.6</strong></td><td>100%</td><td>1,262</td><td>195.4</td><td style="text-align:left;">日均195.4吨，峰值224.6吨（6月5日）</td></tr>
+</tbody>
+</table>
+
+<h3>2.3 6月日度收运特征</h3>
+
+<div class="two-col">
+<div class="chart-box" style="margin:0;">
+  <div class="chart-title">图表3：6月日收运量分布（吨）</div>
+  <div class="chart-container" id="chart-daily"></div>
+</div>
+<div class="chart-box" style="margin:0;">
+  <div class="chart-title">图表4：6月周度收运量趋势</div>
+  <div class="chart-container" id="chart-weekly"></div>
+</div>
+</div>
+
+<p><strong>关键发现：</strong></p>
+<ul class="bullet-list">
+  <li>6月日均收运195.4吨，车次42.1次/天，单车日均装载量约4.64吨</li>
+  <li>日峰值出现在6月5日（周五，224.6吨），谷值出现在6月19日（165.2吨，端午节后）</li>
+  <li>W23-W25连续三周收运量下滑（端午假期影响），W26强劲反弹至1,393.4吨（+6.2%）</li>
+  <li>工作日与周末收运量差约15-20%，符合餐饮行业消费规律</li>
+</ul>
+
+<div class="alert-box green" style="margin-top:20px;">
+  <div class="alert-title">✅ 亮点：楼区全覆盖专项初见成效</div>
+  楼区已完成摸排828户（目标2,200户，完成率37.64%），新签收运协议转化率43.5%。随着下半年摸排推进和新签协议转化，楼区收运量有望进一步增长5-10%。
+</div>
+
+</div>
+
+<!-- ========== 第三页 ========== -->
+<div class="page page-break">
+
+<h2>三、油脂提取与销售分析</h2>
+
+<h3>3.1 提油率持续下降——H1最突出的运营问题</h3>
+
+<p>提油率是衡量公司核心资源化收益的关键指标。遗憾的是，2026年上半年提油率呈现逐月下降态势，从1月的4.85%持续降至5月的4.44%，距离目标值5.16%差距达0.72个百分点，为1-5月最低值。</p>
+
+<div class="chart-box">
+  <div class="chart-title">图表5：2026年1-5月提油率趋势 vs 目标值</div>
+  <div class="chart-container" id="chart-oil-rate"></div>
+</div>
+
+<table class="data-table">
+<thead>
+<tr><th>月份</th><th>1月</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th><th>目标值</th><th>偏差</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:left;">提油率</td>
+  <td>4.85%</td><td>4.72%</td><td>4.68%</td><td>4.62%</td><td class="highlight"><strong>4.44%</strong></td>
+  <td>5.16%</td><td class="highlight">-0.72pp</td>
+</tr>
+</tbody>
+</table>
+
+<div class="alert-box red">
+  <div class="alert-title">⚠️ 重大风险预警：提油率异常下降</div>
+  <ul class="bullet-list">
+    <li>提油率逐月下降0.1-0.2个百分点，5月降至4.44%（1-5月均值4.66%）</li>
+    <li>直接影响油脂销售收入：5月售油金额151.7万元，环比4月下降12.1%</li>
+    <li>已启动专项排查：核查车载秤与过磅数据差异、含油率及COD指标，研判降因</li>
+    <li>初步怀疑方向：①来料含油率下降（餐饮源头油水分离更彻底）②预处理工艺效率下滑③车载秤计量偏差</li>
+  </ul>
+</div>
+
+<h3>3.2 售油与分成概况</h3>
+
+<ul class="bullet-list">
+  <li>5月售油金额151.7万元，达成率97.9%，环比4月（171.36万元）下降12.1%</li>
+  <li>5月工业油出库164.92吨，伏泰侧油脂分成约60.68万元（55:45比例）</li>
+  <li>6月累计售油回款101.6万元（4车），W26单周回款25.29万元</li>
+  <li>油脂分成未付金额累计约772万元（至5月），回款进度需持续跟进</li>
+</ul>
+
+</div>
+
+<!-- ========== 第四页 ========== -->
+<div class="page page-break">
+
+<h2>四、成本管控与效益分析</h2>
+
+<h3>4.1 吨成本结构分析</h3>
+
+<p>5月综合实际吨成本约234元/吨，低于计划245.60元/吨，达成率95.3%，较4月（236.27元/吨）进一步优化。收运量持续高位增长带来的规模效应是吨成本下降的主要驱动力。</p>
+
+<div class="chart-box">
+  <div class="chart-title">图表6：5月各部门吨成本实际 vs 计划（元/吨）</div>
+  <div class="chart-container" id="chart-cost"></div>
+</div>
+
+<table class="data-table">
+<thead>
+<tr><th>部门</th><th>实际(元/吨)</th><th>计划(元/吨)</th><th>差异</th><th>评价</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:left;">收运部门</td><td class="good">80.00</td><td>82.00</td><td class="good">-2.00</td><td style="text-align:left;">规模效应摊薄吨成本</td></tr>
+<tr><td style="text-align:left;">综合部门</td><td class="good">31.00</td><td>31.40</td><td class="good">-0.40</td><td style="text-align:left;">支出稳定，预算内</td></tr>
+<tr><td style="text-align:left;">市场运维</td><td class="good">6.00</td><td>7.20</td><td class="good">-1.20</td><td style="text-align:left;">费用控制良好</td></tr>
+<tr><td style="text-align:left;">处置中心</td><td class="good">119.45</td><td>125.00</td><td class="good">-5.55</td><td style="text-align:left;">药剂成本降低，电费偏高</td></tr>
+<tr style="font-weight:600;background:#f0ece0;">
+<td style="text-align:left;">合计</td><td class="good">234.00</td><td>245.60</td><td class="good">-11.60</td><td style="text-align:left;">全面达标</td></tr>
+</tbody>
+</table>
+
+<h3>4.2 能源消耗与副产品（5月）</h3>
+<ul class="bullet-list">
+  <li>生产用水：约1,950吨</li>
+  <li>生产用电：215,359 kw.h；发电上网约13,000 kw.h，补贴收入约5,850元</li>
+  <li>废渣处置：479.09吨；污泥处置：169.44吨；有机渣售卖约400吨</li>
+</ul>
+
+<div class="alert-box">
+  <div class="alert-title">📊 成本管控评价</div>
+  上半年吨成本管控成效显著——四个部门全面达标，综合吨成本持续低于计划值。但处置中心电费开支偏高是隐忧，且提油率下降间接拉高了单位产油成本（每吨油脂对应的收运处置成本上升），需在下半年持续精细化管控。
+</div>
+
+</div>
+
+<!-- ========== 第五页 ========== -->
+<div class="page page-break">
+
+<h2>五、财务管理与资金状况</h2>
+
+<h3>5.1 财政补贴与应收款</h3>
+
+<p>财政补贴是公司当前最主要的收入来源。根据5月实际完成收运量6,354.8吨，应确认获得财政补贴约205万元，较4月约195万元进一步提升，收运量的稳定增长持续带动补贴规模扩大。</p>
+
+<div class="alert-box red">
+  <div class="alert-title">⚠️ 现金流风险：应收款项积压严重</div>
+  <ul class="bullet-list">
+    <li><strong>交投累计财政补贴未收回：2,160.11万元</strong>（至5月），5月新增待签字207.16万元</li>
+    <li>油脂分成未付金额：约772万元（至5月累计）</li>
+    <li>固废中心已于5月中旬将财政补贴申请资料上交财政部门，持续跟进资金拨付进度</li>
+    <li>污水药剂费往年欠款仅收回50%</li>
+  </ul>
+</div>
+
+<h3>5.2 H1 财务数据概览</h3>
+
+<table class="data-table">
+<thead>
+<tr><th>项目</th><th>金额/数据</th><th>状态</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:left;">H1 累计收运量</td><td>约35,336吨</td><td>已完成</td></tr>
+<tr><td style="text-align:left;">5月售油金额</td><td>151.7万元</td><td>达成率97.9%</td></tr>
+<tr><td style="text-align:left;">6月售油回款</td><td>101.6万元（4车）</td><td>已入账</td></tr>
+<tr><td style="text-align:left;">5月财政补贴（应收）</td><td>约205万元</td><td>资料已提交</td></tr>
+<tr><td style="text-align:left;">交投累计未收补贴</td><td class="highlight"><strong>2,160.11万元</strong></td><td>持续跟进</td></tr>
+<tr><td style="text-align:left;">油脂分成未付</td><td class="highlight"><strong>772万元</strong></td><td>持续跟进</td></tr>
+<tr><td style="text-align:left;">污水技改合同</td><td>132.8万元</td><td>履行中</td></tr>
+<tr><td style="text-align:left;">发电机组自动化升级</td><td>40万元</td><td>履行中</td></tr>
+</tbody>
+</table>
+
+<h3>5.3 现金流展望</h3>
+
+<p>当前公司现金流面临较大压力，应收款项合计近3,000万元。下半年需将财政补贴回款作为财务工作的第一优先级任务，密切跟进财政部门资金拨付进度，同时加快油脂分成结算和对账工作，确保公司经营现金流健康稳定。</p>
+
+</div>
+
+<!-- ========== 第六页 ========== -->
+<div class="page page-break">
+
+<h2>六、重点项目与合同执行</h2>
+
+<h3>6.1 合同管理概况</h3>
+
+<p>截至2026年6月30日，公司在管合同共计71份，已确认总金额约440.79万元，覆盖物资采购、技术服务、环保处理、维修维保、软件信息服务、工程建设等十大类别。</p>
+
+<table class="data-table">
+<thead>
+<tr><th>合同类别</th><th>数量</th><th>代表性合同</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:left;">物资采购</td><td>18</td><td style="text-align:left;">仪表、阀门、泵类、药剂等</td></tr>
+<tr><td style="text-align:left;">技术服务</td><td>12</td><td style="text-align:left;">中城院技术合同、检测服务等</td></tr>
+<tr><td style="text-align:left;">环保处理</td><td>8</td><td style="text-align:left;">锦能处置、污水处理等</td></tr>
+<tr><td style="text-align:left;">维修维保</td><td>6</td><td style="text-align:left;">发电机检修、在线监控运维等</td></tr>
+<tr><td style="text-align:left;">软件/信息服务</td><td>5</td><td style="text-align:left;">智慧平台、钉钉套件、云服务器等</td></tr>
+<tr><td style="text-align:left;">设备采购</td><td>4</td><td style="text-align:left;">车载秤、空压机等</td></tr>
+<tr><td style="text-align:left;">能源</td><td>4</td><td style="text-align:left;">用电协议、发电机改造等</td></tr>
+<tr><td style="text-align:left;">工程建设</td><td>3</td><td style="text-align:left;">污水技改、均质罐保温等</td></tr>
+<tr style="font-weight:600;background:#f0ece0;">
+<td style="text-align:left;">合计</td><td>71</td><td style="text-align:left;">已确认总金额 440.785万元</td></tr>
+</tbody>
+</table>
+
+<div class="alert-box red">
+  <div class="alert-title">⚠️ 合同到期预警（截至7月1日）</div>
+  <ul class="bullet-list">
+    <li><strong>紧急（已过期）：</strong>钉钉商务套件（-34天）、锦能易腐处置合同（-1天）、污水处理协议（-1天）— 需立即续签</li>
+    <li><strong>22天内到期：</strong>山东隆众信息服务合同 — 尽快决策是否续约</li>
+  </ul>
+</div>
+
+<h3>6.2 重点工程进展</h3>
+
+<div class="two-col">
+<div>
+<h4>污水技改工程（132.8万元）</h4>
+<ul class="bullet-list">
+  <li>生化系统技改扫尾已完成</li>
+  <li>已通知施工方带资料验收</li>
+  <li>浓水池/膜池清洗管道及水泵就位</li>
+  <li>库存水量清理推进中</li>
+</ul>
+</div>
+<div>
+<h4>发电机组自动化升级（40万元）</h4>
+<ul class="bullet-list">
+  <li>合同已签订，履行中</li>
+  <li>目标：提升沼气发电效率</li>
+  <li>工期：15天</li>
+</ul>
+</div>
+</div>
+
+<h3>6.3 任务跟踪看板</h3>
+
+<table class="data-table">
+<thead>
+<tr><th>状态</th><th>数量</th><th>占比</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:left;">已完成</td><td class="good">12</td><td>48%</td></tr>
+<tr><td style="text-align:left;">进行中</td><td>11</td><td>44%</td></tr>
+<tr><td style="text-align:left;color:var(--c-red);font-weight:600;">逾期</td><td class="highlight">2</td><td>8%</td></tr>
+<tr style="font-weight:600;background:#f0ece0;">
+<td style="text-align:left;">合计</td><td>25</td><td>100%</td></tr>
+</tbody>
+</table>
+
+<p>逾期任务2项：①5S整顿整改方案 ②市场非法收集偷盗巡查方案，需在下半月重点攻坚。</p>
+
+</div>
+
+<!-- ========== 第七页 ========== -->
+<div class="page page-break">
+
+<h2>七、组织与人力资源管理</h2>
+
+<h3>7.1 人员编制概况</h3>
+
+<div class="kpi-grid" style="grid-template-columns: repeat(4,1fr);">
+  <div class="kpi-card">
+    <div class="kpi-label">在职总人数</div>
+    <div class="kpi-value">78</div>
+    <div class="kpi-sub">人</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">6月新入职</div>
+    <div class="kpi-value">1</div>
+    <div class="kpi-sub">人（生产储备岗）</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">6月离职</div>
+    <div class="kpi-value">0</div>
+    <div class="kpi-sub">人</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">岗位缺口</div>
+    <div class="kpi-value" style="color:var(--c-red);">1</div>
+    <div class="kpi-sub">生产班长（招聘中）</div>
+  </div>
+</div>
+
+<h3>7.2 关键人事动态</h3>
+
+<ul class="bullet-list">
+  <li>6月筛选简历25份、沟通22次，面试安排持续进行</li>
+  <li>6月社保基数申报4,308元，增员3人（油脂司机岗）</li>
+  <li>入职1人（王良 — 生产储备岗），无离职人员</li>
+  <li>生产班长岗位空缺1名，属关键岗位，需优先填补</li>
+  <li>6月出勤天数22天，整体出勤率正常</li>
+</ul>
+
+<h3>7.3 绩效考核改革</h3>
+
+<div class="alert-box">
+  <div class="alert-title">📋 重大管理举措：绩效考核体系优化</div>
+  <p class="no-indent" style="margin-top:8px;">针对5月绩效考核暴露的"分数通胀"问题（全员平均89分，与提油率持续不达标、药剂库存告急等运营短板严重不匹配），公司对绩效考核体系进行了系统性优化：</p>
+  <ul class="bullet-list">
+    <li><strong>提油率指标权重大幅提升：</strong>从2分提升至8-10分，作为核心利润指标</li>
+    <li><strong>递进加重扣分机制：</strong>同一指标连续2月不达标扣分×1.5，连续3月×2.0，连续4月绩效降档</li>
+    <li><strong>天花板制度：</strong>若提油率/药剂保供/安全事故任一触发红线，当月全部附加加分项无效</li>
+    <li><strong>新增物资保供考核：</strong>采购岗25分专项指标</li>
+    <li><strong>任务完成率客观化：</strong>阶段性任务直接挂钩任务清单完成情况，不再由主观评分判定</li>
+  </ul>
+  <p class="no-indent">6月起按优化后体系执行，预计将有效驱动提油率达标与运营指标改善。</p>
+</div>
+
+</div>
+
+<!-- ========== 第八页 ========== -->
+<div class="page page-break">
+
+<h2>八、上半年亮点总结</h2>
+
+<div class="two-col">
+<div>
+<div class="alert-box green">
+  <div class="alert-title">🏆 收运量持续增长</div>
+  <p class="no-indent">1-5月收运量逐月攀升，5月达成率102.5%，H1累计35,336吨，为财政补贴增长奠定坚实基础。</p>
+</div>
+</div>
+<div>
+<div class="alert-box green">
+  <div class="alert-title">💰 吨成本全面达标</div>
+  <p class="no-indent">四部门吨成本全部低于计划，综合实际234元/吨较计划节省11.60元/吨，降本增效成果显著。</p>
+</div>
+</div>
+<div>
+<div class="alert-box green">
+  <div class="alert-title">📋 绩效考核体系改革</div>
+  <p class="no-indent">从制度层面根治"分数通胀"，建立了以核心利润指标为导向、递进加重扣分、天花板保底的立体化考核体系。</p>
+</div>
+</div>
+<div>
+<div class="alert-box green">
+  <div class="alert-title">🔧 污水技改即将验收</div>
+  <p class="no-indent">132.8万元污水技改工程生化系统扫尾完成，已进入验收阶段，将提升污水处理能力。</p>
+</div>
+</div>
+<div>
+<div class="alert-box green">
+  <div class="alert-title">🏗️ 楼区全覆盖初见成效</div>
+  <p class="no-indent">摸排828户、新签转化率43.5%，为下半年收运量增长储备了充足增量空间。</p>
+</div>
+</div>
+<div>
+<div class="alert-box green">
+  <div class="alert-title">📊 数据化管理体系成型</div>
+  <p class="no-indent">收运看板、月度分析、周报驾驶舱、合同系统、HR系统上线，经营决策实现全链路数据驱动。</p>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- ========== 第九页 ========== -->
+<div class="page page-break">
+
+<h2>九、存在的问题与不足</h2>
+
+<table class="data-table" style="font-size:13px;">
+<thead>
+<tr><th style="width:30%;">问题领域</th><th style="width:45%;">具体表现</th><th style="width:25%;">严重程度</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:left;font-weight:600;color:var(--c-red);">提油率持续下降</td>
+  <td style="text-align:left;">从1月4.85%逐月降至5月4.44%，距离目标5.16%差0.72pp，直接影响油脂收入</td>
+  <td><span class="kpi-tag tag-down" style="font-size:12px;">🔴 高风险</span></td>
+</tr>
+<tr>
+  <td style="text-align:left;font-weight:600;color:var(--c-red);">财政补贴回款滞后</td>
+  <td style="text-align:left;">交投累计未收回2,160万元，新增207万元待签，现金流承压</td>
+  <td><span class="kpi-tag tag-down" style="font-size:12px;">🔴 高风险</span></td>
+</tr>
+<tr>
+  <td style="text-align:left;">油脂分成未付</td>
+  <td style="text-align:left;">累计未付约772万元</td>
+  <td><span class="kpi-tag tag-warn" style="font-size:12px;">🟠 中风险</span></td>
+</tr>
+<tr>
+  <td style="text-align:left;">非法偷盗潲水</td>
+  <td style="text-align:left;">每天流失量约15吨，已启动上锁、蹲点打击方案</td>
+  <td><span class="kpi-tag tag-warn" style="font-size:12px;">🟠 中风险</span></td>
+</tr>
+<tr>
+  <td style="text-align:left;">设备故障隐患</td>
+  <td style="text-align:left;">三相离心机返厂维修已达50天，2#锅炉风门故障</td>
+  <td><span class="kpi-tag tag-warn" style="font-size:12px;">🟠 中风险</span></td>
+</tr>
+<tr>
+  <td style="text-align:left;">合同到期未续签</td>
+  <td style="text-align:left;">3份合同已过期（钉钉商务套件/锦能易腐/污水处理协议）</td>
+  <td><span class="kpi-tag tag-warn" style="font-size:12px;">🟠 中风险</span></td>
+</tr>
+<tr>
+  <td style="text-align:left;">药剂采购保供不足</td>
+  <td style="text-align:left;">5月多种药剂库存低于安全线，聚丙烯酰胺脱泥效果不佳，已更换采购专员</td>
+  <td><span class="kpi-tag tag-warn" style="font-size:12px;">🟠 已整改</span></td>
+</tr>
+<tr>
+  <td style="text-align:left;">任务逾期</td>
+  <td style="text-align:left;">5S整顿整改方案、非法偷盗巡查方案逾期未完成</td>
+  <td><span class="kpi-tag tag-down" style="font-size:12px;">🔴 逾期</span></td>
+</tr>
+</tbody>
+</table>
+
+<div class="chart-box" style="margin-top:24px;">
+  <div class="chart-title">图表7：问题风险矩阵 — 影响程度 vs 紧迫性</div>
+  <div class="chart-container tall" id="chart-risk"></div>
+</div>
+
+</div>
+
+<!-- ========== 第十页 ========== -->
+<div class="page page-break">
+
+<h2>十、下半年重点工作方向</h2>
+
+<h3>10.1 核心经营目标</h3>
+<div class="kpi-grid" style="grid-template-columns: repeat(3,1fr);">
+  <div class="kpi-card">
+    <div class="kpi-label">下半年收运目标</div>
+    <div class="kpi-value">≥3.7万</div>
+    <div class="kpi-sub">吨（月均6,200+）</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">提油率目标</div>
+    <div class="kpi-value">≥5.0%</div>
+    <div class="kpi-sub">恢复至正常区间</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">吨成本目标</div>
+    <div class="kpi-value">≤235</div>
+    <div class="kpi-sub">元/吨</div>
+  </div>
+</div>
+
+<h3>10.2 七大重点攻坚方向</h3>
+
+<table class="data-table" style="font-size:13px;">
+<thead>
+<tr><th style="width:5%;">#</th><th style="width:25%;">重点工作</th><th style="width:45%;">具体措施</th><th style="width:25%;">责任牵头</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td style="text-align:left;font-weight:600;color:var(--c-red);">提油率恢复达标</td>
+  <td style="text-align:left;">专项排查结论落地：核查来料含油率变化、预处理参数优化、车载秤校准；建立提油率日监控和周分析机制；完成预处理关键主机设备（19号螺旋轴）新轴采购安装</td>
+  <td style="text-align:left;">运营部/技术部</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td style="text-align:left;font-weight:600;">财政补贴回款攻坚</td>
+  <td style="text-align:left;">以总经理牵头建立与财政局/固废中心的常态化沟通机制；每周跟进拨付进度；确保H1全部补贴在Q3内到账</td>
+  <td style="text-align:left;">总经理/财务部</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td style="text-align:left;">楼区全覆盖深化</td>
+  <td style="text-align:left;">下半年完成剩余1,372户摸排（目标2,200户），确保新签转化率≥40%；同步启动开发区、君山区深度摸排</td>
+  <td style="text-align:left;">市场运维部</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td style="text-align:left;">非法偷盗打击</td>
+  <td style="text-align:left;">完成偷盗巡查方案制定并实施；联合城管执法部门开展专项整治；对重点区域实施上锁+蹲点+监控组合措施</td>
+  <td style="text-align:left;">市场运维部/运营部</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td style="text-align:left;">设备维保与技改</td>
+  <td style="text-align:left;">推进三相离心机返厂维修完成及安装调试；污水技改正式验收并投入使用；发电机组自动化升级实施；5S现场整顿全面推行</td>
+  <td style="text-align:left;">技术部/运营部</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td style="text-align:left;">合同与合规管理</td>
+  <td style="text-align:left;">7月上旬完成3份过期合同续签；建立合同到期60天预警机制；完善合规审查流程</td>
+  <td style="text-align:left;">综合管理部</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td style="text-align:left;">组织能力建设</td>
+  <td style="text-align:left;">填补生产班长岗位空缺；绩效考核新体系运行评估与迭代；开展安全生产专项培训（结合安全月成果）</td>
+  <td style="text-align:left;">综合管理部/运营部</td>
+</tr>
+</tbody>
+</table>
+
+<h3>10.3 下半年节奏规划</h3>
+
+<table class="data-table">
+<thead>
+<tr><th>阶段</th><th>时间</th><th>核心任务</th><th>里程碑</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:left;">Q3-7月</td><td>7月</td><td style="text-align:left;">提油率排查结案、合同续签、补贴回款推进</td><td>提油率≥4.7%、合同零逾期</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Q3-8月</td><td>8月</td><td style="text-align:left;">楼区摸排攻坚、设备维修复产、偷盗专项整治</td><td>摸排完成率≥70%、离心机复产</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Q3-9月</td><td>9月</td><td style="text-align:left;">污水技改验收、绩效考核评估、半年度经营分析</td><td>技改验收通过、收运量月均≥6,200吨</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Q4-10-12月</td><td>10-12月</td><td style="text-align:left;">冲刺年度收运目标、补贴年终结算、下年度预算编制</td><td>全年收运量≥7.2万吨、提油率≥5.0%</td>
+</tr>
+</tbody>
+</table>
+
+<div style="margin-top:40px;">
+<p>下半年是检验公司运营体系韧性和管理改革成效的关键半年。公司将以提油率恢复为第一要务、以财政补贴回款为生命线、以楼区全覆盖为增长引擎，在守住成本底线的前提下全力冲刺年度经营目标。各级管理人员须以优化后的绩效考核体系为牵引，聚焦核心指标、狠抓过程执行，确保各项工作落地见效。</p>
+</div>
+
+<div class="sign-block">
+  <div class="line">湖南伏泰环境科技有限责任公司</div>
+  <div class="line">总经理：颜一亩</div>
+  <div class="line">2026年7月1日</div>
+</div>
+
+</div>
+
+<!-- ========== 图表脚本 ========== -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script>
+(function() {
+  var months = ['1月','2月','3月','4月','5月','6月'];
+  var collection = [5600, 5750, 5850, 5920.66, 6354.8, 5860.6];
+  var oilRate = [4.85, 4.72, 4.68, 4.62, 4.44];
+  var momChange = [null, 2.7, 1.7, 1.2, 7.3, -7.8];
+
+  // 图表1：收运量趋势
+  (function() {
+    var dom = document.getElementById('chart-collection');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    chart.setOption({
+      tooltip: { trigger: 'axis', formatter: function(p) { return p[0].name + '<br/>收运量：<b>' + p[0].value.toFixed(1) + ' 吨</b>'; }},
+      grid: { left: 60, right: 30, top: 20, bottom: 30 },
+      xAxis: { type: 'category', data: months, axisLabel: { fontSize: 12 }, axisTick: { alignWithLabel: true }},
+      yAxis: { type: 'value', name: '吨', min: 5000, axisLabel: { fontSize: 11 }},
+      series: [{
+        type: 'bar', data: collection,
+        itemStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[
+          {offset:0, color:'#1a3a5c'},{offset:1, color:'#3a6a9c'}
+        ]), borderRadius: [4,4,0,0] },
+        barWidth: '50%',
+        label: { show: true, position: 'top', fontSize: 12, fontWeight: 600, color: '#1a3a5c',
+          formatter: function(p) { return p.value.toFixed(0); }}
+      },{
+        type: 'line', data: collection,
+        lineStyle: { color: '#d4a853', width: 2 },
+        itemStyle: { color: '#d4a853' },
+        symbol: 'circle', symbolSize: 6,
+        label: { show: false }
+      }]
+    });
+  })();
+
+  // 图表2：环比变化
+  (function() {
+    var dom = document.getElementById('chart-mom');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    var colors = momChange.map(function(v) { return v === null ? '#999' : v >= 0 ? '#27ae60' : '#c0392b'; });
+    chart.setOption({
+      tooltip: { trigger: 'axis', formatter: function(p) {
+        if (p[0].dataIndex === 0) return '1月<br/>基准月，无环比数据';
+        return p[0].name + '<br/>环比变化：<b>' + (p[0].value > 0 ? '+' : '') + p[0].value + '%</b>';
+      }},
+      grid: { left: 50, right: 30, top: 20, bottom: 30 },
+      xAxis: { type: 'category', data: months, axisLabel: { fontSize: 12 }},
+      yAxis: { type: 'value', name: '%', axisLabel: { fontSize: 11, formatter: '{value}%' }},
+      series: [{
+        type: 'bar', data: momChange.map(function(v, i) { return { value: v || 0, itemStyle: { color: colors[i], borderRadius: v === null ? [0,0,0,0] : [4,4,0,0] }}; }),
+        barWidth: '55%',
+        label: { show: true, position: 'top', fontSize: 13, fontWeight: 600, color: '#2c2c2c',
+          formatter: function(p) {
+            if (p.dataIndex === 0) return '基准';
+            return (p.value > 0 ? '+' : '') + p.value + '%';
+          }}
+      }]
+    });
+  })();
+
+  // 图表3：6月日度分布
+  (function() {
+    var dom = document.getElementById('chart-daily');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    var dailyLabels = [];
+    var dailyValues = [];
+    for (var i = 1; i <= 30; i++) dailyLabels.push(i + '日');
+    var junDaily = [205.9,206.3,202.4,201.2,224.6,174.5,196.0,182.8,201.5,196.7,196.4,197.3,211.6,190.4,199.2,171.9,198.3,185.6,165.2,168.8,210.5,200.2,205.9,208.0,211.0,211.6,177.7,167.6,206.9,199.0];
+    chart.setOption({
+      tooltip: { trigger: 'axis', formatter: function(p) { return '6月' + p[0].name + '<br/>收运量：<b>' + p[0].value.toFixed(1) + ' 吨</b>'; }},
+      grid: { left: 45, right: 15, top: 10, bottom: 25 },
+      xAxis: { type: 'category', data: dailyLabels, axisLabel: { fontSize: 9, interval: 4 }},
+      yAxis: { type: 'value', name: '吨', min: 150, axisLabel: { fontSize: 10 }},
+      series: [{
+        type: 'bar', data: junDaily,
+        itemStyle: { color: function(p) {
+          return p.value >= 210 ? '#1a3a5c' : p.value <= 170 ? '#c0392b' : '#3a6a9c';
+        }, borderRadius: [2,2,0,0] },
+        barWidth: '70%'
+      }]
+    });
+  })();
+
+  // 图表4：周度趋势
+  (function() {
+    var dom = document.getElementById('chart-weekly');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    var weeks = ['W23\n(6/1-6/7)','W24\n(6/8-6/14)','W25\n(6/15-6/21)','W26\n(6/22-6/28)'];
+    var weeklyData = [1410.9, 1338.5, 1311.8, 1393.4];
+    chart.setOption({
+      tooltip: { trigger: 'axis', formatter: function(p) { return p[0].name.replace('\n',' ') + '<br/>周收运量：<b>' + p[0].value.toFixed(1) + ' 吨</b>'; }},
+      grid: { left: 55, right: 20, top: 15, bottom: 35 },
+      xAxis: { type: 'category', data: weeks, axisLabel: { fontSize: 10 }},
+      yAxis: { type: 'value', name: '吨', min: 1200, axisLabel: { fontSize: 10 }},
+      series: [{
+        type: 'bar', data: weeklyData,
+        itemStyle: { color: function(p) {
+          var colors = ['#1a3a5c','#e15759','#e15759','#27ae60'];
+          return colors[p.dataIndex];
+        }, borderRadius: [4,4,0,0] },
+        barWidth: '50%',
+        label: { show: true, position: 'top', fontSize: 12, fontWeight: 600,
+          formatter: function(p) { return p.value.toFixed(0); }}
+      }]
+    });
+  })();
+
+  // 图表5：提油率趋势
+  (function() {
+    var dom = document.getElementById('chart-oil-rate');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    chart.setOption({
+      tooltip: { trigger: 'axis' },
+      grid: { left: 55, right: 30, top: 20, bottom: 30 },
+      xAxis: { type: 'category', data: ['1月','2月','3月','4月','5月'], axisLabel: { fontSize: 12 }},
+      yAxis: { type: 'value', name: '%', min: 4.0, max: 5.5, axisLabel: { fontSize: 11, formatter: '{value}%' }},
+      series: [
+        { name: '目标线', type: 'line', data: [5.16,5.16,5.16,5.16,5.16],
+          lineStyle: { color: '#27ae60', type: 'dashed', width: 2 },
+          itemStyle: { color: '#27ae60' }, symbol: 'none',
+          markLine: { silent: true, symbol: 'none', lineStyle: { color: '#27ae60', type: 'dashed' },
+            label: { formatter: '目标 5.16%', fontSize: 11 }, data: [{ yAxis: 5.16 }] }
+        },
+        { name: '实际提油率', type: 'line', data: oilRate,
+          lineStyle: { color: '#c0392b', width: 3 },
+          itemStyle: { color: '#c0392b' },
+          symbol: 'circle', symbolSize: 8,
+          label: { show: true, fontSize: 13, fontWeight: 600, color: '#c0392b',
+            formatter: function(p) { return p.value.toFixed(2) + '%'; }},
+          markLine: { silent: true, symbol: 'none', lineStyle: { color: '#e67e22', type: 'dotted' },
+            label: { formatter: '预警线', fontSize: 10 }, data: [{ yAxis: 4.7, label: { formatter: '预警 4.7%' }}] }
+        }
+      ]
+    });
+  })();
+
+  // 图表6：吨成本对比
+  (function() {
+    var dom = document.getElementById('chart-cost');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    var depts = ['收运部门','综合部门','市场运维','处置中心'];
+    var actual = [80, 31, 6, 119.45];
+    var planned = [82, 31.4, 7.2, 125];
+    chart.setOption({
+      tooltip: { trigger: 'axis' },
+      grid: { left: 50, right: 30, top: 20, bottom: 30 },
+      legend: { data: ['实际', '计划'], top: 0, textStyle: { fontSize: 12 }},
+      xAxis: { type: 'category', data: depts, axisLabel: { fontSize: 11 }},
+      yAxis: { type: 'value', name: '元/吨', axisLabel: { fontSize: 10 }},
+      series: [
+        { name: '实际', type: 'bar', data: actual,
+          itemStyle: { color: '#1a3a5c', borderRadius: [4,4,0,0] },
+          barWidth: '35%', barGap: '20%',
+          label: { show: true, position: 'top', fontSize: 11, fontWeight: 600, formatter: '{c}' }
+        },
+        { name: '计划', type: 'bar', data: planned,
+          itemStyle: { color: '#d4a853', borderRadius: [4,4,0,0] },
+          barWidth: '35%',
+          label: { show: true, position: 'top', fontSize: 10, color: '#666', formatter: '{c}' }
+        }
+      ]
+    });
+  })();
+
+  // 图表7：风险矩阵
+  (function() {
+    var dom = document.getElementById('chart-risk');
+    if (!dom) return;
+    var chart = echarts.init(dom);
+    var risks = [
+      { name: '提油率下降', x: 90, y: 95, area: 60, color: '#c0392b' },
+      { name: '补贴回款滞后', x: 95, y: 85, area: 50, color: '#c0392b' },
+      { name: '油脂分成未付', x: 60, y: 70, area: 40, color: '#e67e22' },
+      { name: '非法偷盗潲水', x: 55, y: 65, area: 35, color: '#e67e22' },
+      { name: '设备故障', x: 45, y: 75, area: 30, color: '#e67e22' },
+      { name: '合同到期', x: 30, y: 80, area: 25, color: '#f39c12' },
+      { name: '药剂保供', x: 25, y: 60, area: 25, color: '#27ae60' },
+      { name: '任务逾期', x: 50, y: 50, area: 28, color: '#e67e22' }
+    ];
+    chart.setOption({
+      tooltip: { formatter: function(p) { return p.name + '<br/>紧迫性：' + p.value[0] + '<br/>影响程度：' + p.value[1]; }},
+      grid: { left: 60, right: 40, top: 30, bottom: 45 },
+      xAxis: { name: '紧迫性 →', nameLocation: 'middle', nameGap: 30, min: 0, max: 100,
+        axisLabel: { fontSize: 10, formatter: '{value}' },
+        splitLine: { lineStyle: { type: 'dashed', color: '#e0dcd0' }}
+      },
+      yAxis: { name: '影响程度 →', nameLocation: 'middle', nameGap: 40, min: 0, max: 100,
+        axisLabel: { fontSize: 10 },
+        splitLine: { lineStyle: { type: 'dashed', color: '#e0dcd0' }}
+      },
+      series: [{
+        type: 'scatter', data: risks.map(function(r) { return [r.x, r.y, r.area, r.name]; }),
+        symbolSize: function(val) { return val[2]; },
+        itemStyle: { color: function(p) { return risks[p.dataIndex].color; }, opacity: 0.8,
+          shadowBlur: 8, shadowColor: 'rgba(0,0,0,0.15)' },
+        label: { show: true, formatter: function(p) { return risks[p.dataIndex].name; },
+          position: 'right', fontSize: 11, color: '#2c2c2c' },
+        markArea: { silent: true, data: [
+          [{ xAxis: 0, yAxis: 0, itemStyle: { color: 'rgba(39,174,96,0.05)' }},
+           { xAxis: 50, yAxis: 50 }],
+          [{ xAxis: 50, yAxis: 50, itemStyle: { color: 'rgba(230,126,34,0.05)' }},
+           { xAxis: 100, yAxis: 100 }]
+        ]}
+      }]
+    });
+  })();
+
+})();
+</script>
+
+</body>
+</html>
