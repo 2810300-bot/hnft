@@ -942,9 +942,9 @@ function renderKPIs() {
     '</div>' +
     '<div class="kpi-card">' +
       '<div class="label">环比变化</div>' +
-      '<div class="value" style="color:' + (d.mom_change_ton > 0 ? 'var(--accent-green)' : 'var(--accent-red))') + '">' +
-        (d.mom_change_ton > 0 ? '+' : '') + d.mom_change_ton + '<span class="unit">吨</span></div>' +
-      '<div class="sub ' + momClass + '">' + momSign + (d.mom_change_pct !== null ? d.mom_change_pct : '--') + '%</div>' +
+      '<div class="value" style="color:' + (d.prev_month_total_ton === 0 ? '#94a3b8' : d.mom_change_ton > 0 ? 'var(--accent-green)' : d.mom_change_ton < 0 ? 'var(--accent-red)' : '#94a3b8') + '">' +
+        (d.prev_month_total_ton === 0 ? '-' : (d.mom_change_ton > 0 ? '+' : '') + d.mom_change_ton) + '<span class="unit">吨</span></div>' +
+      '<div class="sub ' + (d.prev_month_total_ton === 0 ? '' : momClass) + '">' + (d.prev_month_total_ton === 0 ? '暂无上月数据' : momSign + (d.mom_change_pct !== null ? d.mom_change_pct : '--') + '%') + '</div>' +
     '</div>' +
     '<div class="kpi-card">' +
       '<div class="label">周均收运量</div>' +
@@ -1138,7 +1138,8 @@ function renderCharts() {
             callbacks: {
               label: function(ctx) {
                 const r = d.regions[ctx.dataIndex];
-                return r.name + ': ' + fmtTon(r.kg, 1) + '吨 (' + r.pct + '%)';
+                const pct = (r.kg / d.total_kg * 100).toFixed(1);
+                return r.name + ': ' + fmtTon(r.kg, 1) + '吨 (' + pct + '%)';
               }
             }
           }
@@ -1212,12 +1213,14 @@ function renderTables() {
   // Regions
   document.getElementById('region-table-body').innerHTML = d.regions.map(function(r, i) {
     const color = CHART_COLORS[i % CHART_COLORS.length];
+    const pct = (r.kg / d.total_kg * 100).toFixed(1);
+    const avgPerTrip = Math.round(r.kg / r.trips);
     return '<tr>' +
       '<td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + color + ';margin-right:8px;"></span>' + r.name + '</td>' +
       '<td><strong>' + fmtTon(r.kg, 1) + '</strong></td>' +
-      '<td>' + r.pct + '%</td>' +
+      '<td>' + pct + '%</td>' +
       '<td>' + r.trips + '</td>' +
-      '<td>' + fmtNum(r.avg_per_trip) + '</td>' +
+      '<td>' + fmtNum(avgPerTrip) + '</td>' +
     '</tr>';
   }).join('');
 
