@@ -600,39 +600,21 @@
             <span class="card-arrow">→</span>
         </a>
 
-        <div class="dashboard-card aggregate-card">
+        <a href="anomaly-system/" class="dashboard-card">
             <span class="card-accent red"></span>
-            <div class="aggregate-header">
-                <div class="aggregate-icon">🔍</div>
-                <div class="aggregate-title-group">
-                    <div class="card-title">餐厨垃圾收运量异常分析系统</div>
-                    <div class="aggregate-subtitle">商户级偏差检测、异常告警与数据管理一体化平台</div>
-                </div>
+            <div class="card-icon" style="background:#fee2e2;">🔍</div>
+            <div class="card-title">餐厨垃圾收运量异常分析系统</div>
+            <div class="card-desc">
+                商户级偏差检测、异常分级告警（±30%轻微 / ±50%中度 / >50%严重）、
+                工单自动派发与状态跟踪。覆盖工单管理、商户收运分析、数据导入三大模块。
             </div>
-            <div class="aggregate-modules">
-                <a href="anomaly-system/work-orders/" class="module-entry">
-                    <div class="module-icon">🔔</div>
-                    <div class="module-info">
-                        <div class="module-name">收运异常工单 <span class="module-arrow">→</span></div>
-                        <div class="module-desc">商户级偏差检测、异常分级告警、工单自动派发与状态跟踪</div>
-                    </div>
-                </a>
-                <a href="anomaly-system/merchant-dashboard/" class="module-entry">
-                    <div class="module-icon">🏪</div>
-                    <div class="module-info">
-                        <div class="module-name">商户收运分析 <span class="module-arrow">→</span></div>
-                        <div class="module-desc">每日实际量 vs 基准量对比、偏差趋势追踪、基准自动校准</div>
-                    </div>
-                </a>
-                <a href="anomaly-system/data-import/" class="module-entry">
-                    <div class="module-icon">📥</div>
-                    <div class="module-info">
-                        <div class="module-name">数据导入中心 <span class="module-arrow">→</span></div>
-                        <div class="module-desc">商户档案管理、人员区域映射、收运数据批量导入</div>
-                    </div>
-                </a>
+            <div class="card-meta">
+                <span class="card-tag update-freq">🕐 每日 06:30 自动分析</span>
+                <span class="card-tag">🔔 异常告警</span>
+                <span class="card-tag">🚛 商户级分析</span>
             </div>
-        </div>
+            <span class="card-arrow">→</span>
+        </a>
 
     </div>
 
@@ -660,9 +642,7 @@ document.getElementById('build-timestamp').textContent = new Date().toLocaleStri
         { name: '合同管理', path: 'contract-system/', el: null },
         { name: '任务跟踪', path: 'task-tracker/', el: null },
         { name: '人事管理', path: 'hr-system/', el: null },
-        { name: '异常分析系统', path: 'anomaly-system/work-orders/', el: null },
-        { name: '商户看板', path: 'anomaly-system/merchant-dashboard/', el: null },
-        { name: '数据导入', path: 'anomaly-system/data-import/', el: null },
+        { name: '异常分析系统', path: 'anomaly-system/', el: null },
     ];
 
     for (const d of dashboards) {

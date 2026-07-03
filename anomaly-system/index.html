@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>餐厨垃圾收运量异常分析系统</title>
+    <style>
+        :root {
+            --bg: #f0f2f5;
+            --card-bg: #ffffff;
+            --header-bg: #7f1d1d;
+            --header-bg2: #991b1b;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #fecaca;
+            --radius: 14px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+            --shadow-hover: 0 4px 12px rgba(0,0,0,0.1), 0 8px 32px rgba(0,0,0,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .site-header {
+            background: linear-gradient(135deg, var(--header-bg), var(--header-bg2));
+            color: var(--text-light);
+            padding: 36px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .site-header::after {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .header-content {
+            max-width: 960px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .header-content h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .header-content .subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 13px;
+            margin-top: 16px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #fff; }
+
+        /* Main */
+        .main-container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 24px 48px;
+        }
+
+        /* Section */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Module cards */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .module-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            box-shadow: var(--shadow);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .module-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(0,0,0,0.08);
+        }
+        .module-card .card-accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+        .accent-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+        .accent-cyan { background: linear-gradient(90deg, #0891b2, #22d3ee); }
+        .accent-purple { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+
+        .module-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .module-card:nth-child(1) .module-icon { background: #fee2e2; }
+        .module-card:nth-child(2) .module-icon { background: #cffafe; }
+        .module-card:nth-child(3) .module-icon { background: #ede9fe; }
+
+        .module-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        .module-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        .module-enter {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 20px;
+            background: #f1f5f9;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.2s;
+            margin-top: auto;
+        }
+        .module-card:hover .module-enter {
+            background: #1e293b;
+            color: #fff;
+        }
+
+        /* System overview */
+        .overview-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            box-shadow: var(--shadow);
+            margin-bottom: 32px;
+        }
+        .overview-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .overview-item {
+            padding: 14px 16px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .overview-item .label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .overview-item .value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Footer */
+        .site-footer {
+            text-align: center;
+            padding: 32px 24px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 48px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .site-header { padding: 24px 20px; }
+            .header-content h1 { font-size: 22px; }
+            .modules-grid { grid-template-columns: 1fr; }
+            .main-container { padding: 20px 16px 32px; }
+        }
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .modules-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-content">
+        <h1>🔍 餐厨垃圾收运量异常分析系统</h1>
+        <div class="subtitle">商户级偏差检测 · 异常告警 · 数据管理 — 一体化运营平台</div>
+        <a href="../" class="back-link">← 返回数据看板中心</a>
+    </div>
+</header>
+
+<div class="main-container">
+
+    <!-- 系统概览 -->
+    <div class="overview-section">
+        <h3>📋 系统概览</h3>
+        <div class="overview-grid">
+            <div class="overview-item">
+                <div class="label">检测维度</div>
+                <div class="value">商户级日收运量偏差</div>
+            </div>
+            <div class="overview-item">
+                <div class="label">数据源</div>
+                <div class="value">车载蓝牙称重数据</div>
+            </div>
+            <div class="overview-item">
+                <div class="label">异常分级</div>
+                <div class="value">正常 / 轻微 / 中度 / 严重</div>
+            </div>
+            <div class="overview-item">
+                <div class="label">自动化调度</div>
+                <div class="value">每日 06:30 自动分析</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 功能模块入口 -->
+    <div class="section-title">
+        <span>⚡</span> 功能模块
+    </div>
+    <div class="modules-grid">
+        <a href="work-orders/" class="module-card">
+            <span class="card-accent accent-red"></span>
+            <div class="module-icon">🔔</div>
+            <div class="module-title">收运异常工单</div>
+            <div class="module-desc">
+                商户级偏差自动检测、异常分级告警（±30%轻微 / ±50%中度 / >50%严重）、
+                工单自动派发与状态跟踪（待处理→处理中→已闭环）。
+            </div>
+            <span class="module-enter">进入模块 →</span>
+        </a>
+
+        <a href="merchant-dashboard/" class="module-card">
+            <span class="card-accent accent-cyan"></span>
+            <div class="module-icon">🏪</div>
+            <div class="module-title">商户收运分析</div>
+            <div class="module-desc">
+                每日实际收运量 vs 基准产生量可视化对比、7天偏差趋势追踪、
+                商户基准量滚动中位数自动校准、置信区间展示。
+            </div>
+            <span class="module-enter">进入模块 →</span>
+        </a>
+
+        <a href="data-import/" class="module-card">
+            <span class="card-accent accent-purple"></span>
+            <div class="module-icon">📥</div>
+            <div class="module-title">数据导入中心</div>
+            <div class="module-desc">
+                商户基础档案管理（名称/区域/基准量）、人员与区域映射配置、
+                收运数据批量导入与历史数据回溯。
+            </div>
+            <span class="module-enter">进入模块 →</span>
+        </a>
+    </div>
+
+</div>
+
+<footer class="site-footer">
+    <p>&copy; 2026 湖南伏泰环境科技有限责任公司 · 花果畈餐厨垃圾处理项目</p>
+</footer>
+
+</body>
+</html>
