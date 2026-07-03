@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商户收运量分析看板</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<style>
+:root { --bg:#f0f2f5;--card-bg:#fff;--header-bg:#1a1a2e;--header-bg2:#16213e;--text:#1e293b;--text2:#64748b;--text-light:#e2e8f0;
+    --green:#16a34a;--blue:#4C72B0;--orange:#f97316;--red:#dc2626;--yellow:#eab308;--purple:#8172B3;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,0.06); }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);}
+.back-link{position:fixed;top:16px;left:24px;z-index:100;background:var(--header-bg);color:var(--text-light);padding:8px 16px;border-radius:6px;text-decoration:none;font-size:14px;}
+.site-header{background:linear-gradient(135deg,var(--header-bg),var(--header-bg2));color:var(--text-light);padding:28px 32px 20px;}
+.site-header h1{font-size:22px;margin-bottom:4px;}
+.site-header .subtitle{font-size:13px;color:rgba(255,255,255,0.55);}
+.main{max-width:1200px;margin:0 auto;padding:24px;}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px;}
+.kpi-card{background:var(--card-bg);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);text-align:center;}
+.kpi-card .label{font-size:12px;color:var(--text2);margin-bottom:4px;}
+.kpi-card .value{font-size:28px;font-weight:700;}
+.kpi-card.anomaly .value{color:var(--red);}
+
+.chart-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px;}
+.chart-container{background:var(--card-bg);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
+.chart-container h3{font-size:14px;font-weight:600;margin-bottom:14px;}
+.chart-container canvas{max-height:280px;}
+
+.merchant-list{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.list-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #f0f0f0;}
+.list-header h3{font-size:15px;}
+.list-header select, .list-header input{padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;}
+
+.merchant-row{display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background .15s;gap:14px;flex-wrap:wrap;}
+.merchant-row:hover{background:#f8fafc;}
+.merchant-row:last-child{border-bottom:none;}
+.mr-name{width:140px;font-weight:600;font-size:14px;flex-shrink:0;}
+.mr-region{width:70px;font-size:12px;color:var(--text2);flex-shrink:0;}
+.mr-bar-container{flex:1;min-width:200px;}
+.mr-bar-bg{height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden;position:relative;}
+.mr-bar-fill{height:100%;border-radius:4px;transition:width .3s;}
+.mr-bar-fill.normal{background:var(--green);}
+.mr-bar-fill.mild{background:var(--yellow);}
+.mr-bar-fill.moderate{background:var(--orange);}
+.mr-bar-fill.severe{background:var(--red);}
+.mr-bar-fill.no_data{background:#d1d5db;}
+.mr-baseline{position:absolute;top:-2px;width:2px;height:12px;background:var(--blue);border-radius:1px;}
+.mr-deviation{width:80px;text-align:right;font-size:14px;font-weight:600;flex-shrink:0;}
+.mr-status{width:60px;text-align:center;flex-shrink:0;}
+.mr-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;}
+.badge-normal{background:#dcfce7;color:#166534;}
+.badge-mild{background:#fef9c3;color:#854d0e;}
+.badge-moderate{background:#fff7ed;color:#9a3412;}
+.badge-severe{background:#fee2e2;color:#991b1b;}
+.badge-nodata{background:#f3f4f6;color:#6b7280;}
+
+.detail-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:200;justify-content:center;align-items:center;}
+.detail-modal.active{display:flex;}
+.modal-content{background:var(--card-bg);border-radius:var(--radius);padding:28px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,0.2);}
+.modal-content h2{font-size:18px;margin-bottom:16px;}
+.modal-close{float:right;background:none;border:none;font-size:24px;cursor:pointer;color:var(--text2);}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.modal-item .lbl{font-size:12px;color:var(--text2);}
+.modal-item .v{font-size:15px;font-weight:500;}
+.sparkline-container{margin-top:16px;}
+.empty{text-align:center;padding:60px 20px;color:var(--text2);}
+.footer{text-align:center;color:var(--text2);font-size:12px;padding:24px;}
+@media(max-width:768px){.chart-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<a href="../../" class="back-link">← 返回首页</a>
+<div class="site-header">
+    <h1>🏪 商户收运量分析看板</h1>
+    <div class="subtitle">各商户每日实际量 vs 基准量对比 · 偏差趋势追踪 · 基准自动校准 | 数据截至 2026-07-03 11:27</div>
+</div>
+<div class="main">
+    <div class="kpi-row" id="kpi-row"></div>
+    <div class="chart-row">
+        <div class="chart-container">
+            <h3>📈 每日总收运量趋势（近30天）</h3>
+            <canvas id="trend-chart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>📊 今日异常分布</h3>
+            <canvas id="distribution-chart"></canvas>
+        </div>
+    </div>
+    <div class="merchant-list">
+        <div class="list-header">
+            <h3>商户收运详情</h3>
+            <div style="display:flex;gap:8px;">
+                <input type="text" id="search-input" placeholder="搜索商户名" oninput="filterMerchants()">
+                <select id="region-filter" onchange="filterMerchants()"><option value="all">全部区域</option></select>
+            </div>
+        </div>
+        <div id="merchant-container"></div>
+    </div>
+    <div class="footer">餐厨垃圾收运量异常分析系统 · 自动生成</div>
+</div>
+<div class="detail-modal" id="detail-modal" onclick="closeDetail(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeDetail()">&times;</button>
+        <h2 id="modal-title"></h2>
+        <div class="modal-grid" id="modal-grid"></div>
+        <div class="sparkline-container">
+            <canvas id="sparkline-chart" style="max-height:180px;"></canvas>
+        </div>
+    </div>
+</div>
+<script>
+const MERCHANTS = [{"id": "M001", "name": "巴陵食府", "region": "岳阳楼区", "category": "餐饮", "baseline_kg": 42.8, "confidence": "medium", "today_actual": 44.4, "today_deviation": 3.74, "today_level": "normal", "history_7": [44.4], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M002", "name": "君山宾馆", "region": "君山区", "category": "酒店", "baseline_kg": 121.2, "confidence": "medium", "today_actual": 110.6, "today_deviation": -8.75, "today_level": "normal", "history_7": [110.6], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M003", "name": "开发区职工食堂", "region": "开发区", "category": "食堂", "baseline_kg": 89.4, "confidence": "medium", "today_actual": 89.4, "today_deviation": -1.22, "today_level": "normal", "history_7": [89.4], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M004", "name": "云溪学校食堂", "region": "临港新区", "category": "食堂", "baseline_kg": 56.0, "confidence": "low", "today_actual": 62.9, "today_deviation": -6.4, "today_level": "normal", "history_7": [62.9], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M005", "name": "南湖灶台故事", "region": "南湖新区", "category": "餐饮", "baseline_kg": 28.5, "confidence": "medium", "today_actual": 29.4, "today_deviation": -6.96, "today_level": "normal", "history_7": [29.4], "history_dates_7": ["2026-07-03"], "total_days": 1}];
+const DAILY_TOTALS = {dates: ["2026-07-03"], totals: [336.7]};
+const SUMMARY = {total:5, collected:5, anomaly:0, missing:0};
+let sparklineChart = null;
+let levelOrder = {'severe':0,'moderate':1,'mild':2,'normal':3,'no_data':4};
+
+function init() {
+    document.getElementById('kpi-row').innerHTML = `
+        <div class="kpi-card"><div class="label">在档商户</div><div class="value">${SUMMARY.total}</div></div>
+        <div class="kpi-card"><div class="label">今日收运</div><div class="value" style="color:var(--blue)">${SUMMARY.collected}</div></div>
+        <div class="kpi-card"><div class="label">未收运</div><div class="value" style="color:var(--yellow)">${SUMMARY.missing}</div></div>
+        <div class="kpi-card anomaly"><div class="label">异常商户</div><div class="value">${SUMMARY.anomaly}</div></div>
+    `;
+    const regions = [...new Set(MERCHANTS.map(m=>m.region).filter(Boolean))].sort();
+    const rs = document.getElementById('region-filter');
+    regions.forEach(r=>{const o=document.createElement('option');o.value=r;o.textContent=r;rs.appendChild(o);});
+    renderTrendChart();
+    renderDistributionChart();
+    filterMerchants();
+}
+
+function renderTrendChart() {
+    new Chart(document.getElementById('trend-chart'),{
+        type:'line',
+        data:{labels:DAILY_TOTALS.dates,datasets:[{label:'日总收运量(kg)',data:DAILY_TOTALS.totals,borderColor:'#4C72B0',backgroundColor:'rgba(76,114,176,0.1)',fill:true,tension:0.3,pointRadius:2}]},
+        options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+    });
+}
+
+function renderDistributionChart() {
+    const counts = {normal:0,mild:0,moderate:0,severe:0,no_data:0};
+    MERCHANTS.forEach(m=>counts[m.today_level]++);
+    new Chart(document.getElementById('distribution-chart'),{
+        type:'doughnut',
+        data:{labels:['正常','轻微偏差','中度偏差','严重偏差','无数据'],datasets:[{data:[counts.normal,counts.mild,counts.moderate,counts.severe,counts.no_data],backgroundColor:['#16a34a','#eab308','#f97316','#dc2626','#d1d5db'],borderColor:'#fff',borderWidth:2}]},
+        options:{responsive:true,maintainAspectRatio:true,cutout:'60%',plugins:{legend:{position:'right',labels:{usePointStyle:true,font:{size:11},padding:10}}}}
+    });
+}
+
+function filterMerchants() {
+    const q = (document.getElementById('search-input').value||'').toLowerCase();
+    const r = document.getElementById('region-filter').value;
+    let list = MERCHANTS.filter(m=>{
+        if (r!=='all' && m.region!==r) return false;
+        if (q && !m.name.toLowerCase().includes(q)) return false;
+        return true;
+    });
+    list.sort((a,b)=>levelOrder[a.today_level]-levelOrder[b.today_level]);
+    const container = document.getElementById('merchant-container');
+    const maxActual = Math.max(...list.map(m=>Math.max(m.today_actual||0, m.baseline_kg||0)), 1);
+    container.innerHTML = list.map(m=>{
+        const actual = m.today_actual;
+        const baseline = m.baseline_kg;
+        const pct = actual!==null && baseline>0 ? ((actual-baseline)/baseline*100).toFixed(1) : null;
+        const lvl = m.today_level;
+        const levelClass = 'badge-'+lvl;
+        const levelLabel = {normal:'正常',mild:'轻微',moderate:'中度',severe:'严重',no_data:'无数据'}[lvl]||lvl;
+        const barWidth = actual!==null ? Math.min((actual/maxActual*100),100) : 0;
+        const baselinePos = baseline>0 ? (baseline/maxActual*100) : 0;
+        const devText = pct!==null ? (pct>=0?`↑${pct}%`:`↓${Math.abs(pct)}%`) : '-';
+        const devColor = lvl==='severe'?'var(--red)':lvl==='moderate'?'var(--orange)':lvl==='mild'?'var(--yellow)':'var(--green)';
+        return `<div class="merchant-row" onclick="showDetail('${m.id}')">
+            <div class="mr-name">${m.name}</div>
+            <div class="mr-region">📍${m.region}</div>
+            <div class="mr-bar-container">
+                <div class="mr-bar-bg">
+                    <div class="mr-bar-fill ${lvl}" style="width:${barWidth}%"></div>
+                    ${baseline>0?`<div class="mr-baseline" style="left:${baselinePos}%"></div>`:''}
+                </div>
+                <div style="font-size:10px;color:var(--text2);margin-top:2px;">实际 ${actual||'-'}kg / 基准 ${baseline}kg</div>
+            </div>
+            <div class="mr-deviation" style="color:${devColor}">${devText}</div>
+            <div class="mr-status"><span class="mr-badge ${levelClass}">${levelLabel}</span></div>
+        </div>`;
+    }).join('');
+}
+
+function showDetail(mid) {
+    const m = MERCHANTS.find(x=>x.id===mid);
+    if (!m) return;
+    document.getElementById('modal-title').textContent = m.name + ' · ' + m.region;
+    document.getElementById('modal-grid').innerHTML = `
+        <div class="modal-item"><div class="lbl">商户类型</div><div class="v">${m.category}</div></div>
+        <div class="modal-item"><div class="lbl">基准产生量</div><div class="v">${m.baseline_kg} kg/日</div></div>
+        <div class="modal-item"><div class="lbl">置信度</div><div class="v">${m.confidence}</div></div>
+        <div class="modal-item"><div class="lbl">数据天数</div><div class="v">${m.total_days}</div></div>
+        <div class="modal-item"><div class="lbl">今日收运</div><div class="v">${m.today_actual||'-'} ${m.today_actual?'kg':''}</div></div>
+        <div class="modal-item"><div class="lbl">今日偏差</div><div class="v">${m.today_deviation!==null?(m.today_deviation>=0?'↑':'↓')+Math.abs(m.today_deviation).toFixed(1)+'%':'-'}</div></div>
+    `;
+    if (sparklineChart) sparklineChart.destroy();
+    if (m.history_dates_7.length > 0) {
+        const ctx = document.getElementById('sparkline-chart').getContext('2d');
+        sparklineChart = new Chart(ctx, {
+            type:'line',
+            data:{labels:m.history_dates_7,datasets:[{label:'实际收运量(kg)',data:m.history_7,borderColor:'#4C72B0',tension:0.3,pointRadius:3},{label:'基准',data:Array(7).fill(m.baseline_kg),borderColor:'#dc2626',borderDash:[5,5],pointRadius:0,fill:false}]},
+            options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'top'}}}
+        });
+    }
+    document.getElementById('detail-modal').classList.add('active');
+}
+
+function closeDetail(e) {
+    if (e && e.target !== document.getElementById('detail-modal')) return;
+    document.getElementById('detail-modal').classList.remove('active');
+    if (sparklineChart) { sparklineChart.destroy(); sparklineChart = null; }
+}
+
+init();
+</script>
+</body>
+</html>
