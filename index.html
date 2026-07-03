@@ -317,11 +317,129 @@
                 gap: 12px;
                 flex-direction: column;
             }
+            .aggregate-modules {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .aggregate-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .aggregate-modules {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media print {
             .site-header { background: #333 !important; -webkit-print-color-adjust: exact; }
             .dashboard-card { break-inside: avoid; border: 1px solid #ccc; }
+        }
+
+        /* ── 聚合卡片（二级目录导航） ── */
+        .aggregate-card {
+            grid-column: 1 / -1;
+            padding: 24px 28px 28px;
+            cursor: default;
+        }
+        .aggregate-card:hover {
+            transform: translateY(-2px);
+        }
+        .aggregate-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .aggregate-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #fee2e2;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .aggregate-title-group {
+            flex: 1;
+        }
+        .aggregate-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-top: 4px;
+        }
+
+        /* ── 子模块入口 ── */
+        .aggregate-modules {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .module-entry {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 18px 16px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .module-entry:hover {
+            background: #ffffff;
+            border-color: #cbd5e1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+        .module-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            font-size: 18px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .module-entry:nth-child(1) .module-icon { background: #fee2e2; }
+        .module-entry:nth-child(2) .module-icon { background: #cffafe; }
+        .module-entry:nth-child(3) .module-icon { background: #ede9fe; }
+        .module-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .module-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .module-arrow {
+            font-size: 14px;
+            color: #94a3b8;
+            transition: transform 0.2s, color 0.2s;
+        }
+        .module-entry:hover .module-arrow {
+            transform: translateX(4px);
+            color: var(--text);
+        }
+        .module-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -482,53 +600,39 @@
             <span class="card-arrow">→</span>
         </a>
 
-        <a href="anomaly-system/work-orders/" class="dashboard-card">
+        <div class="dashboard-card aggregate-card">
             <span class="card-accent red"></span>
-            <div class="card-icon" style="background:#fee2e2;">🔔</div>
-            <div class="card-title">收运异常工单系统</div>
-            <div class="card-desc">
-                商户级收运量偏差检测、异常分级告警、工单自动派发。
-                覆盖所有在档商户，支持待处理/处理中/已闭环全流程状态跟踪。
+            <div class="aggregate-header">
+                <div class="aggregate-icon">🔍</div>
+                <div class="aggregate-title-group">
+                    <div class="card-title">餐厨垃圾收运量异常分析系统</div>
+                    <div class="aggregate-subtitle">商户级偏差检测、异常告警与数据管理一体化平台</div>
+                </div>
             </div>
-            <div class="card-meta">
-                <span class="card-tag update-freq">🕐 每日 06:30 刷新</span>
-                <span class="card-tag">🚨 自动告警</span>
-                <span class="card-tag">📋 工单跟踪</span>
+            <div class="aggregate-modules">
+                <a href="anomaly-system/work-orders/" class="module-entry">
+                    <div class="module-icon">🔔</div>
+                    <div class="module-info">
+                        <div class="module-name">收运异常工单 <span class="module-arrow">→</span></div>
+                        <div class="module-desc">商户级偏差检测、异常分级告警、工单自动派发与状态跟踪</div>
+                    </div>
+                </a>
+                <a href="anomaly-system/merchant-dashboard/" class="module-entry">
+                    <div class="module-icon">🏪</div>
+                    <div class="module-info">
+                        <div class="module-name">商户收运分析 <span class="module-arrow">→</span></div>
+                        <div class="module-desc">每日实际量 vs 基准量对比、偏差趋势追踪、基准自动校准</div>
+                    </div>
+                </a>
+                <a href="anomaly-system/data-import/" class="module-entry">
+                    <div class="module-icon">📥</div>
+                    <div class="module-info">
+                        <div class="module-name">数据导入中心 <span class="module-arrow">→</span></div>
+                        <div class="module-desc">商户档案管理、人员区域映射、收运数据批量导入</div>
+                    </div>
+                </a>
             </div>
-            <span class="card-arrow">→</span>
-        </a>
-
-        <a href="anomaly-system/merchant-dashboard/" class="dashboard-card">
-            <span class="card-accent" style="background:linear-gradient(90deg,#0891b2,#22d3ee)"></span>
-            <div class="card-icon" style="background:#cffafe;">🏪</div>
-            <div class="card-title">商户收运量分析看板</div>
-            <div class="card-desc">
-                各商户每日实际量 vs 基准量对比、偏差趋势追踪、周模式分析。
-                商户档案管理与基准自动校准。
-            </div>
-            <div class="card-meta">
-                <span class="card-tag update-freq">🕐 每日 06:30 刷新</span>
-                <span class="card-tag">📈 趋势分析</span>
-                <span class="card-tag">🏪 商户维度</span>
-            </div>
-            <span class="card-arrow">→</span>
-        </a>
-
-        <a href="anomaly-system/data-import/" class="dashboard-card">
-            <span class="card-accent" style="background:linear-gradient(90deg,#6366f1,#a78bfa)"></span>
-            <div class="card-icon" style="background:#ede9fe;">📥</div>
-            <div class="card-title">数据导入工具</div>
-            <div class="card-desc">
-                商户档案管理、人员区域映射配置、每日收运数据批量导入。
-                支持CSV上传、JSON编辑，辅助数据初始化与日常维护。
-            </div>
-            <div class="card-meta">
-                <span class="card-tag">📁 CSV导入</span>
-                <span class="card-tag">👥 人员配置</span>
-                <span class="card-tag">🔧 数据维护</span>
-            </div>
-            <span class="card-arrow">→</span>
-        </a>
+        </div>
 
     </div>
 
@@ -556,8 +660,9 @@ document.getElementById('build-timestamp').textContent = new Date().toLocaleStri
         { name: '合同管理', path: 'contract-system/', el: null },
         { name: '任务跟踪', path: 'task-tracker/', el: null },
         { name: '人事管理', path: 'hr-system/', el: null },
-        { name: '异常工单', path: 'anomaly-system/work-orders/', el: null },
+        { name: '异常分析系统', path: 'anomaly-system/work-orders/', el: null },
         { name: '商户看板', path: 'anomaly-system/merchant-dashboard/', el: null },
+        { name: '数据导入', path: 'anomaly-system/data-import/', el: null },
     ];
 
     for (const d of dashboards) {
