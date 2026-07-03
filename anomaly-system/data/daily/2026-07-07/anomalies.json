@@ -1,0 +1,22 @@
+{
+  "report_date": "2026-07-07",
+  "generated_at": "2026-07-03T11:25:51+08:00",
+  "work_order_candidates": [
+    {
+      "merchant_id": "M001",
+      "merchant_name": "巴陵食府",
+      "collection_date": "2026-07-07",
+      "actual_weight_kg": 20.0,
+      "scale_id": "SCALE-01",
+      "vehicle_id": "湘FA8347",
+      "collection_time": "2026-07-07T08:15:00+08:00",
+      "driver": "张师傅",
+      "baseline_weight_kg": 42.8,
+      "deviation_pct": -53.27,
+      "deviation_level": "severe",
+      "deviation_direction": "偏低",
+      "baseline_confidence": "medium",
+      "region": "岳阳楼区"
+    }
+  ]
+}
