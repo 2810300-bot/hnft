@@ -1,6 +1,6 @@
 {
   "date": "2026-07-03",
-  "generated_at": "2026-07-03T11:25:30+08:00",
+  "generated_at": "2026-07-03T20:25:52+08:00",
   "records": [
     {
       "merchant_id": "M002",
@@ -19,38 +19,6 @@
       "region": "君山区"
     },
     {
-      "merchant_id": "M005",
-      "merchant_name": "南湖灶台故事",
-      "collection_date": "2026-07-03",
-      "actual_weight_kg": 29.4,
-      "scale_id": "SCALE-05",
-      "vehicle_id": "湘FE1234",
-      "collection_time": "2026-07-03T12:55:00+08:00",
-      "driver": "陈师傅",
-      "baseline_weight_kg": 31.6,
-      "deviation_pct": -6.96,
-      "deviation_level": "normal",
-      "deviation_direction": "偏低",
-      "baseline_confidence": "low",
-      "region": "南湖新区"
-    },
-    {
-      "merchant_id": "M004",
-      "merchant_name": "云溪学校食堂",
-      "collection_date": "2026-07-03",
-      "actual_weight_kg": 62.9,
-      "scale_id": "SCALE-04",
-      "vehicle_id": "湘FD3789",
-      "collection_time": "2026-07-03T11:45:00+08:00",
-      "driver": "赵师傅",
-      "baseline_weight_kg": 67.2,
-      "deviation_pct": -6.4,
-      "deviation_level": "normal",
-      "deviation_direction": "偏低",
-      "baseline_confidence": "low",
-      "region": "临港新区"
-    },
-    {
       "merchant_id": "M001",
       "merchant_name": "巴陵食府",
       "collection_date": "2026-07-03",
@@ -67,6 +35,38 @@
       "region": "岳阳楼区"
     },
     {
+      "merchant_id": "M005",
+      "merchant_name": "南湖灶台故事",
+      "collection_date": "2026-07-03",
+      "actual_weight_kg": 29.4,
+      "scale_id": "SCALE-05",
+      "vehicle_id": "湘FE1234",
+      "collection_time": "2026-07-03T12:55:00+08:00",
+      "driver": "陈师傅",
+      "baseline_weight_kg": 28.5,
+      "deviation_pct": 3.16,
+      "deviation_level": "normal",
+      "deviation_direction": "偏高",
+      "baseline_confidence": "medium",
+      "region": "南湖新区"
+    },
+    {
+      "merchant_id": "M004",
+      "merchant_name": "云溪学校食堂",
+      "collection_date": "2026-07-03",
+      "actual_weight_kg": 62.9,
+      "scale_id": "SCALE-04",
+      "vehicle_id": "湘FD3789",
+      "collection_time": "2026-07-03T11:45:00+08:00",
+      "driver": "赵师傅",
+      "baseline_weight_kg": 62.9,
+      "deviation_pct": 0.0,
+      "deviation_level": "normal",
+      "deviation_direction": "正常",
+      "baseline_confidence": "medium",
+      "region": "临港新区"
+    },
+    {
       "merchant_id": "M003",
       "merchant_name": "开发区职工食堂",
       "collection_date": "2026-07-03",
@@ -75,11 +75,11 @@
       "vehicle_id": "湘FC2456",
       "collection_time": "2026-07-03T10:35:00+08:00",
       "driver": "王师傅",
-      "baseline_weight_kg": 90.5,
-      "deviation_pct": -1.22,
+      "baseline_weight_kg": 89.4,
+      "deviation_pct": 0.0,
       "deviation_level": "normal",
-      "deviation_direction": "偏低",
-      "baseline_confidence": "low",
+      "deviation_direction": "正常",
+      "baseline_confidence": "medium",
       "region": "开发区"
     }
   ],
