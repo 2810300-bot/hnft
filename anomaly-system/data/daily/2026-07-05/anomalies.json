@@ -1,0 +1,58 @@
+{
+  "report_date": "2026-07-05",
+  "generated_at": "2026-07-03T11:25:45+08:00",
+  "work_order_candidates": [
+    {
+      "merchant_id": "M003",
+      "merchant_name": "开发区职工食堂",
+      "collection_date": "2026-07-05",
+      "actual_weight_kg": 0,
+      "baseline_weight_kg": 90.5,
+      "deviation_pct": -100.0,
+      "deviation_level": "severe",
+      "deviation_direction": "偏低",
+      "baseline_confidence": "low",
+      "scale_id": "SCALE-03",
+      "vehicle_id": "",
+      "collection_time": "",
+      "driver": "",
+      "status": "missing",
+      "notes": "当日未收运",
+      "region": "开发区"
+    },
+    {
+      "merchant_id": "M005",
+      "merchant_name": "南湖灶台故事",
+      "collection_date": "2026-07-05",
+      "actual_weight_kg": 0,
+      "baseline_weight_kg": 31.6,
+      "deviation_pct": -100.0,
+      "deviation_level": "severe",
+      "deviation_direction": "偏低",
+      "baseline_confidence": "low",
+      "scale_id": "SCALE-05",
+      "vehicle_id": "",
+      "collection_time": "",
+      "driver": "",
+      "status": "missing",
+      "notes": "当日未收运",
+      "region": "南湖新区"
+    },
+    {
+      "merchant_id": "M001",
+      "merchant_name": "巴陵食府",
+      "collection_date": "2026-07-05",
+      "actual_weight_kg": 26.7,
+      "scale_id": "SCALE-01",
+      "vehicle_id": "湘FA8347",
+      "collection_time": "2026-07-05T08:15:00+08:00",
+      "driver": "张师傅",
+      "baseline_weight_kg": 42.8,
+      "deviation_pct": -37.62,
+      "deviation_level": "moderate",
+      "deviation_direction": "偏低",
+      "baseline_confidence": "medium",
+      "region": "岳阳楼区"
+    }
+  ]
+}
