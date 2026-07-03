@@ -1,0 +1,40 @@
+{
+  "report_date": "2026-07-04",
+  "generated_at": "2026-07-03T11:25:35+08:00",
+  "work_order_candidates": [
+    {
+      "merchant_id": "M004",
+      "merchant_name": "云溪学校食堂",
+      "collection_date": "2026-07-04",
+      "actual_weight_kg": 0,
+      "baseline_weight_kg": 67.2,
+      "deviation_pct": -100.0,
+      "deviation_level": "severe",
+      "deviation_direction": "偏低",
+      "baseline_confidence": "low",
+      "scale_id": "SCALE-04",
+      "vehicle_id": "",
+      "collection_time": "",
+      "driver": "",
+      "status": "missing",
+      "notes": "当日未收运",
+      "region": "临港新区"
+    },
+    {
+      "merchant_id": "M003",
+      "merchant_name": "开发区职工食堂",
+      "collection_date": "2026-07-04",
+      "actual_weight_kg": 124.6,
+      "scale_id": "SCALE-03",
+      "vehicle_id": "湘FC2456",
+      "collection_time": "2026-07-04T10:35:00+08:00",
+      "driver": "王师傅",
+      "baseline_weight_kg": 90.5,
+      "deviation_pct": 37.68,
+      "deviation_level": "moderate",
+      "deviation_direction": "偏高",
+      "baseline_confidence": "low",
+      "region": "开发区"
+    }
+  ]
+}
