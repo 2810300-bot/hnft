@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "last_computed": "2026-07-03T11:25:52+08:00",
+  "computation_method": "auto",
+  "baselines": {
+    "M001": {
+      "daily_kg": 42.8,
+      "confidence": "medium",
+      "data_days": 7,
+      "weekly_avg": [
+        0.84,
+        0.54,
+        1.25,
+        1.27,
+        1.21,
+        1.16,
+        0.73
+      ],
+      "last_updated": "2026-07-03",
+      "method": "rolling_7day_median",
+      "merchant_name": "巴陵食府"
+    },
+    "M002": {
+      "daily_kg": 121.2,
+      "confidence": "medium",
+      "data_days": 7,
+      "weekly_avg": [
+        0.88,
+        1.07,
+        0.83,
+        1.33,
+        0.83,
+        1.14,
+        0.91
+      ],
+      "last_updated": "2026-07-03",
+      "method": "rolling_7day_median",
+      "merchant_name": "君山宾馆"
+    },
+    "M003": {
+      "daily_kg": 89.4,
+      "confidence": "medium",
+      "data_days": 7,
+      "weekly_avg": [
+        1.18,
+        1.03,
+        1.44,
+        0.59,
+        1.15,
+        1.61,
+        0.0
+      ],
+      "last_updated": "2026-07-03",
+      "method": "rolling_7day_median",
+      "merchant_name": "开发区职工食堂"
+    },
+    "M004": {
+      "daily_kg": 56.0,
+      "confidence": "low",
+      "data_days": 6,
+      "weekly_avg": [],
+      "last_updated": "2026-07-03",
+      "method": "simple_average",
+      "merchant_name": "云溪学校食堂"
+    },
+    "M005": {
+      "daily_kg": 28.5,
+      "confidence": "medium",
+      "data_days": 7,
+      "weekly_avg": [
+        1.19,
+        1.05,
+        0.98,
+        1.64,
+        1.09,
+        1.04,
+        0.0
+      ],
+      "last_updated": "2026-07-03",
+      "method": "rolling_7day_median",
+      "merchant_name": "南湖灶台故事"
+    }
+  }
+}
