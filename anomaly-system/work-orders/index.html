@@ -27,7 +27,9 @@ body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Mi
 .site-header .timestamp { display:inline-block; margin-top:8px; font-size:12px; color:rgba(255,255,255,0.35); }
 .main { max-width:1200px; margin:0 auto; padding:24px; }
 .kpi-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin-bottom:20px; }
-.kpi-card { background:var(--card-bg); border-radius:var(--radius); padding:18px 20px; box-shadow:var(--shadow); text-align:center; }
+.kpi-card { background:var(--card-bg); border-radius:var(--radius); padding:18px 20px; box-shadow:var(--shadow); text-align:center; cursor:pointer; transition:transform .15s,border-color .15s,box-shadow .15s; border-left:3px solid transparent; }
+.kpi-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.1); }
+.kpi-card.active { box-shadow:0 0 0 2px var(--blue),0 4px 12px rgba(76,114,176,0.25); }
 .kpi-card .label { font-size:12px; color:var(--text2); margin-bottom:4px; }
 .kpi-card .value { font-size:28px; font-weight:700; }
 .kpi-card.severe .value { color:var(--red); }
@@ -130,11 +132,11 @@ function init() {
     const counts = {pending:5,in_progress:3,resolved:3,dismissed:0};
     const severeCount = WORK_ORDERS.filter(w=>w.level==='severe' && w.status==='pending').length;
     const html = `
-        <div class="kpi-card pending"><div class="label">待处理</div><div class="value" style="color:#92400e">${counts.pending}</div></div>
-        <div class="kpi-card inprogress"><div class="label">处理中</div><div class="value">${counts.in_progress}</div></div>
-        <div class="kpi-card resolved"><div class="label">已闭环</div><div class="value">${counts.resolved}</div></div>
-        <div class="kpi-card"><div class="label">已驳回</div><div class="value" style="color:#6b7280">${counts.dismissed}</div></div>
-        <div class="kpi-card severe"><div class="label">严重待处理</div><div class="value">${severeCount}</div></div>
+        <div class="kpi-card pending" data-filter="status:pending" onclick="kpiFilter(this)"><div class="label">待处理</div><div class="value" style="color:#92400e">${counts.pending}</div></div>
+        <div class="kpi-card inprogress" data-filter="status:in_progress" onclick="kpiFilter(this)"><div class="label">处理中</div><div class="value">${counts.in_progress}</div></div>
+        <div class="kpi-card resolved" data-filter="status:resolved" onclick="kpiFilter(this)"><div class="label">已闭环</div><div class="value">${counts.resolved}</div></div>
+        <div class="kpi-card" data-filter="status:dismissed" style="border-left-color:#9ca3af" onclick="kpiFilter(this)"><div class="label">已驳回</div><div class="value" style="color:#6b7280">${counts.dismissed}</div></div>
+        <div class="kpi-card severe" data-filter="severe:pending" onclick="kpiFilter(this)"><div class="label">严重待处理</div><div class="value">${severeCount}</div></div>
     `;
     document.getElementById('kpi-row').innerHTML = html;
 
@@ -168,6 +170,31 @@ function renderStatusChart() {
     });
 }
 
+function kpiFilter(el) {
+    const filter = el.dataset.filter;
+    // Toggle active state
+    const wasActive = el.classList.contains('active');
+    document.querySelectorAll('.kpi-card').forEach(c => c.classList.remove('active'));
+    if (wasActive) {
+        // Deselect → show all
+        document.getElementById('filter-status').value = 'all';
+        document.getElementById('filter-level').value = 'all';
+        applyFilters();
+        return;
+    }
+    el.classList.add('active');
+
+    const [type, val] = filter.split(':');
+    if (type === 'status') {
+        document.getElementById('filter-status').value = val;
+        document.getElementById('filter-level').value = 'all';
+    } else if (type === 'severe') {
+        document.getElementById('filter-status').value = val;
+        document.getElementById('filter-level').value = 'severe';
+    }
+    applyFilters();
+}
+
 function applyFilters() {
     const status = document.getElementById('filter-status').value;
     const level = document.getElementById('filter-level').value;
@@ -184,6 +211,9 @@ function applyFilters() {
 
     // Sort by created_at desc
     filtered.sort((a,b) => b.created_at.localeCompare(a.created_at));
+
+    // Sync KPI card active state
+    document.querySelectorAll('.kpi-card').forEach(c => c.classList.remove('active'));
 
     renderList();
 }
