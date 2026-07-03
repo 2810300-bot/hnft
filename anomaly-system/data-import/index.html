@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据导入工具</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<style>
+:root { --bg:#f0f2f5;--card-bg:#fff;--header-bg:#1a1a2e;--header-bg2:#16213e;--text:#1e293b;--text2:#64748b;--text-light:#e2e8f0;
+    --green:#16a34a;--blue:#4C72B0;--orange:#f97316;--red:#dc2626;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,0.06); }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);}
+.back-link{position:fixed;top:16px;left:24px;z-index:100;background:var(--header-bg);color:var(--text-light);padding:8px 16px;border-radius:6px;text-decoration:none;font-size:14px;}
+.site-header{background:linear-gradient(135deg,var(--header-bg),var(--header-bg2));color:var(--text-light);padding:28px 32px 20px;}
+.site-header h1{font-size:22px;margin-bottom:4px;}
+.site-header .subtitle{font-size:13px;color:rgba(255,255,255,0.55);}
+.main{max-width:960px;margin:0 auto;padding:24px;}
+
+.tabs{display:flex;gap:0;margin-bottom:0;background:var(--card-bg);border-radius:var(--radius) var(--radius) 0 0;box-shadow:var(--shadow);}
+.tab{padding:14px 24px;cursor:pointer;font-size:14px;font-weight:500;color:var(--text2);border-bottom:3px solid transparent;transition:all .2s;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);}
+.tab-content{display:none;background:var(--card-bg);border-radius:0 0 var(--radius) var(--radius);padding:24px;box-shadow:var(--shadow);}
+.tab-content.active{display:block;}
+
+.section{margin-bottom:24px;}
+.section h3{font-size:15px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f0f0f0;}
+.section p{font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.7;}
+
+.template-link{display:inline-block;padding:8px 16px;background:var(--blue);color:#fff;border-radius:6px;text-decoration:none;font-size:13px;margin-bottom:12px;}
+
+.csv-preview{width:100%;overflow-x:auto;margin:12px 0;}
+.csv-preview table{width:100%;border-collapse:collapse;font-size:12px;}
+.csv-preview th,.csv-preview td{padding:8px 10px;border:1px solid #e5e7eb;text-align:left;}
+.csv-preview th{background:#f9fafb;font-weight:600;color:var(--text2);}
+.csv-preview tr:hover{background:#f8fafc;}
+
+.upload-area{border:2px dashed #d1d5db;border-radius:var(--radius);padding:40px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px;}
+.upload-area:hover{border-color:var(--blue);background:#f8fafc;}
+.upload-area .icon{font-size:36px;margin-bottom:8px;}
+.upload-area .hint{font-size:14px;color:var(--text2);}
+.upload-area .hint small{display:block;margin-top:4px;color:var(--text2);}
+
+textarea{width:100%;height:200px;padding:12px;border:1px solid #d1d5db;border-radius:6px;font-family:monospace;font-size:13px;resize:vertical;margin:8px 0;}
+
+.btn{padding:8px 18px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:500;margin-right:8px;}
+.btn-primary{background:var(--blue);color:#fff;}
+.btn-success{background:var(--green);color:#fff;}
+.btn-outline{background:transparent;border:1px solid #d1d5db;color:var(--text);}
+.btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+.editable-table{width:100%;border-collapse:collapse;font-size:13px;}
+.editable-table th{text-align:left;padding:8px 10px;background:#f9fafb;border-bottom:2px solid #e5e7eb;font-weight:600;color:var(--text2);}
+.editable-table td{padding:6px 10px;border-bottom:1px solid #f0f0f0;}
+.editable-table input{border:1px solid #e5e7eb;border-radius:4px;padding:5px 8px;font-size:13px;width:100%;}
+.editable-table input:focus{outline:none;border-color:var(--blue);}
+
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:8px;color:#fff;font-size:14px;z-index:300;animation:slideUp .3s;}
+.toast.success{background:var(--green);}
+.toast.error{background:var(--red);}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+
+code{background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:12px;}
+pre{background:#1e293b;color:#e2e8f0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;margin:12px 0;}
+</style>
+</head>
+<body>
+<a href="../../" class="back-link">← 返回首页</a>
+<div class="site-header">
+    <h1>📥 数据导入工具</h1>
+    <div class="subtitle">商户档案管理 · 人员区域映射 · 每日收运数据导入 · CSV批量操作</div>
+</div>
+<div class="main">
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('merchants')">🛒 商户管理</div>
+        <div class="tab" onclick="switchTab('personnel')">👥 人员映射</div>
+        <div class="tab" onclick="switchTab('daily')">📊 每日数据</div>
+        <div class="tab" onclick="switchTab('export')">💾 JSON导出</div>
+    </div>
+
+    <!-- Tab 1: Merchants -->
+    <div class="tab-content active" id="tab-merchants">
+        <div class="section">
+            <h3>商户批量导入（CSV）</h3>
+            <p>下载模板填写商户信息后上传。支持一次导入多个商户。</p>
+            <a class="template-link" download href="data:text/csv;charset=utf-8,id,name,category,subcategory,address,region,responsible_person,scale_id,baseline_daily_kg,status%0AM006,洞庭渔港,餐饮,特色餐饮,岳阳楼区巴陵西路99号,岳阳楼区,李慧,SCALE-06,55,active%0AM007,临港中学食堂,食堂,学校食堂,临港新区云港路10号,临港新区,卢梁,SCALE-07,70,active">📋 下载商户CSV模板</a>
+            <p><small>模板含2条示例数据，替换为实际数据后上传。必填字段: <code>id</code> <code>name</code> <code>region</code> <code>responsible_person</code></small></p>
+        </div>
+        <div class="upload-area" id="upload-merchant" ondrop="handleDrop(event,'merchant')" ondragover="event.preventDefault()">
+            <div class="icon">📁</div>
+            <div class="hint">拖拽CSV文件到此处 或 点击选择文件<small>支持 .csv 格式</small></div>
+            <input type="file" id="file-merchant" accept=".csv" hidden onchange="handleFile(event,'merchant')">
+        </div>
+        <div style="display:none" id="merchant-parse-area">
+            <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px;">
+                <span style="font-size:13px;font-weight:600;">预览:</span>
+                <span style="font-size:12px;color:var(--text2);" id="merchant-count"></span>
+            </div>
+            <div class="csv-preview" id="merchant-preview"></div>
+            <div style="margin-top:12px;">
+                <textarea id="merchant-json-output" readonly placeholder="转换后的JSON将显示在这里..."></textarea>
+                <button class="btn btn-primary" onclick="copyToInput('merchant')">📋 复制JSON</button>
+                <span style="font-size:12px;color:var(--text2);margin-left:8px;">复制后通过WorkBuddy写入 merchants.json</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 2: Personnel -->
+    <div class="tab-content" id="tab-personnel">
+        <div class="section">
+            <h3>人员-区域映射编辑</h3>
+            <p>配置各区域的主责任人、备份责任人和钉钉UserID。保存后通过WorkBuddy更新 <code>personnel_mapping.json</code></p>
+        </div>
+        <div style="overflow-x:auto;">
+            <table class="editable-table">
+                <thead>
+                    <tr>
+                        <th>区域</th>
+                        <th>主责任人</th>
+                        <th>备份责任人</th>
+                        <th>钉钉UserID</th>
+                        <th>部门</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>岳阳楼区</td><td><input value="李慧"></td><td><input value="龙冠学"></td><td><input value="" placeholder="待配置"></td><td><input value="收运部"></td>
+                    </tr>
+                    <tr>
+                        <td>君山区</td><td><input value="葛红兵"></td><td><input value="李真"></td><td><input value="" placeholder="待配置"></td><td><input value="运维业务部"></td>
+                    </tr>
+                    <tr>
+                        <td>开发区</td><td><input value="李真"></td><td><input value="卢梁"></td><td><input value="" placeholder="待配置"></td><td><input value="运维业务部"></td>
+                    </tr>
+                    <tr>
+                        <td>临港新区</td><td><input value="卢梁"></td><td><input value="葛红兵"></td><td><input value="" placeholder="待配置"></td><td><input value="采购部"></td>
+                    </tr>
+                    <tr>
+                        <td>南湖新区</td><td><input value="龙冠学"></td><td><input value="李慧"></td><td><input value="" placeholder="待配置"></td><td><input value="PMO部"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top:16px;">
+            <button class="btn btn-primary" onclick="generatePersonnelJSON()">📋 生成JSON并复制</button>
+            <span style="font-size:12px;color:var(--text2);margin-left:8px;">复制后通过WorkBuddy写入 personnel_mapping.json</span>
+        </div>
+        <div id="personnel-output" style="display:none;margin-top:16px;">
+            <textarea id="personnel-json-output" readonly></textarea>
+        </div>
+    </div>
+
+    <!-- Tab 3: Daily Data -->
+    <div class="tab-content" id="tab-daily">
+        <div class="section">
+            <h3>每日收运数据导入（CSV）</h3>
+            <p>上传蓝牙称每日收运数据。数据将写入 <code>anomaly-system/data/daily/{YYYY-MM-DD}/records.json</code></p>
+            <a class="template-link" download href="data:text/csv;charset=utf-8,merchant_id,merchant_name,collection_date,actual_weight_kg,scale_id,vehicle_id,collection_time,driver%0AM001,巴陵食府,2026-07-03,48.5,SCALE-01,湘FA8347,08:15,张师傅%0AM002,君山宾馆,2026-07-03,118.0,SCALE-02,湘FB8611,09:30,李师傅">📋 下载每日收运CSV模板</a>
+            <p><small>日期格式: YYYY-MM-DD。时间格式: HH:MM。必填: <code>merchant_id</code> <code>collection_date</code> <code>actual_weight_kg</code></small></p>
+        </div>
+        <div class="upload-area" id="upload-daily" ondrop="handleDrop(event,'daily')" ondragover="event.preventDefault()">
+            <div class="icon">📊</div>
+            <div class="hint">拖拽CSV文件到此处 或 点击选择文件<small>支持 .csv 格式</small></div>
+            <input type="file" id="file-daily" accept=".csv" hidden onchange="handleFile(event,'daily')">
+        </div>
+        <div style="margin-top:16px;">
+            <label style="font-size:14px;font-weight:600;">或手动粘贴JSON:</label>
+            <textarea id="daily-json-input" placeholder='粘贴收运记录JSON格式数据...&#10;&#10;示例:&#10;{&#10;  "date": "2026-07-03",&#10;  "records": [&#10;    {"merchant_id":"M001","merchant_name":"巴陵食府","collection_date":"2026-07-03","actual_weight_kg":48.5,"scale_id":"SCALE-01","vehicle_id":"湘FA8347","collection_time":"08:15","driver":"张师傅"}&#10;  ]&#10;}'></textarea>
+            <button class="btn btn-primary" onclick="validateDailyJSON()">✅ 校验JSON</button>
+            <span style="font-size:12px;color:var(--text2);margin-left:8px;" id="daily-validate-result"></span>
+        </div>
+    </div>
+
+    <!-- Tab 4: Export -->
+    <div class="tab-content" id="tab-export">
+        <div class="section">
+            <h3>数据查询与导出</h3>
+            <p>查看各数据文件的当前内容，可复制用于备份或迁移。</p>
+        </div>
+        <div style="display:grid;gap:12px;">
+            <div><button class="btn btn-outline" onclick="loadJSON('../data/merchants.json','export-area')">📋 商户档案 (merchants.json)</button></div>
+            <div><button class="btn btn-outline" onclick="loadJSON('../data/baselines.json','export-area')">📊 基准档案 (baselines.json)</button></div>
+            <div><button class="btn btn-outline" onclick="loadJSON('../data/personnel_mapping.json','export-area')">👥 人员映射 (personnel_mapping.json)</button></div>
+            <div><button class="btn btn-outline" onclick="loadJSON('../data/work_orders.json','export-area')">📝 工单数据 (work_orders.json)</button></div>
+        </div>
+        <pre id="export-area" style="margin-top:16px;max-height:400px;overflow:auto;">点击上方按钮加载数据...</pre>
+    </div>
+</div>
+
+<script>
+// Tab switcher
+function switchTab(name) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelector(`.tab:nth-${name === 'merchants' ? '1' : name === 'personnel' ? '2' : name === 'daily' ? '3' : '4'}-child(1)`).classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+}
+
+// Click to trigger file input
+document.getElementById('upload-merchant').onclick = () => document.getElementById('file-merchant').click();
+document.getElementById('upload-daily').onclick = () => document.getElementById('file-daily').click();
+
+function handleDrop(e, type) {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) parseCSV(file, type);
+}
+
+function handleFile(e, type) {
+    const file = e.target.files[0];
+    if (file) parseCSV(file, type);
+}
+
+function parseCSV(file, type) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const text = e.target.result;
+        const lines = text.trim().split('\n');
+        if (lines.length < 2) { showToast('CSV格式错误：至少需要表头+1行数据', 'error'); return; }
+        const headers = lines[0].split(',').map(h => h.trim());
+        const rows = [];
+        for (let i = 1; i < lines.length; i++) {
+            const vals = lines[i].split(',').map(v => v.trim());
+            const row = {};
+            headers.forEach((h, j) => { row[h] = vals[j] || ''; });
+            rows.push(row);
+        }
+        if (type === 'merchant') showMerchantPreview(rows);
+        else if (type === 'daily') showDailyPreview(rows);
+    };
+    reader.readAsText(file);
+}
+
+function showMerchantPreview(rows) {
+    document.getElementById('merchant-parse-area').style.display = 'block';
+    document.getElementById('merchant-count').textContent = rows.length + ' 条记录';
+    const headers = Object.keys(rows[0] || {});
+    let html = '<table><thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+    rows.forEach(r => {
+        html += '<tr>' + headers.map(h => `<td>${r[h]||''}</td>`).join('') + '</tr>';
+    });
+    html += '</tbody></table>';
+    document.getElementById('merchant-preview').innerHTML = html;
+    document.getElementById('merchant-json-output').value = JSON.stringify(rows, null, 2);
+}
+
+function showDailyPreview(rows) {
+    const json = {
+        date: rows[0]?.collection_date || '',
+        source: 'csv_import',
+        records: rows.map(r => ({
+            merchant_id: r.merchant_id,
+            merchant_name: r.merchant_name,
+            collection_date: r.collection_date,
+            actual_weight_kg: parseFloat(r.actual_weight_kg) || 0,
+            scale_id: r.scale_id || '',
+            vehicle_id: r.vehicle_id || '',
+            collection_time: r.collection_time ? r.collection_date + 'T' + r.collection_time + ':00+08:00' : '',
+            driver: r.driver || '',
+        })),
+    };
+    document.getElementById('daily-json-input').value = JSON.stringify(json, null, 2);
+    showToast('CSV解析成功，已填入JSON区域', 'success');
+}
+
+function copyToInput(type) {
+    const id = type === 'merchant' ? 'merchant-json-output' : 'daily-json-input';
+    const el = document.getElementById(id);
+    el.select();
+    document.execCommand('copy');
+    showToast('已复制到剪贴板，可使用WorkBuddy命令写入文件', 'success');
+}
+
+function generatePersonnelJSON() {
+    const rows = document.querySelectorAll('#tab-personnel .editable-table tbody tr');
+    const regions = {};
+    rows.forEach(tr => {
+        const cells = tr.querySelectorAll('input');
+        const region = tr.querySelector('td').textContent.trim();
+        regions[region] = {
+            primary: cells[0].value,
+            backup: cells[1].value,
+            dingtalk_userid: cells[2].value,
+            department: cells[3].value,
+        };
+    });
+    const json = { schema_version: 1, last_updated: new Date().toISOString(), regions, notification: { moderate_batch: true, severe_instant: true, urgent_escalation_hours: 24, escalation_to: '颜一亩' } };
+    document.getElementById('personnel-output').style.display = 'block';
+    document.getElementById('personnel-json-output').value = JSON.stringify(json, null, 2);
+    document.getElementById('personnel-json-output').select();
+    document.execCommand('copy');
+    showToast('JSON已生成并复制到剪贴板', 'success');
+}
+
+function validateDailyJSON() {
+    try {
+        const json = JSON.parse(document.getElementById('daily-json-input').value);
+        if (!json.date || !json.records) throw new Error('缺少 date 或 records 字段');
+        json.records.forEach((r, i) => {
+            if (!r.merchant_id) throw new Error(`第${i+1}条记录缺少 merchant_id`);
+            if (!r.actual_weight_kg && r.actual_weight_kg !== 0) throw new Error(`第${i+1}条记录缺少 actual_weight_kg`);
+        });
+        document.getElementById('daily-validate-result').textContent = `✅ 校验通过！${json.records.length} 条记录，日期: ${json.date}`;
+        showToast(`校验通过: ${json.records.length} 条记录`, 'success');
+    } catch(e) {
+        document.getElementById('daily-validate-result').textContent = `❌ ${e.message}`;
+        showToast('数据格式有误: ' + e.message, 'error');
+    }
+}
+
+async function loadJSON(url, targetId) {
+    try {
+        const resp = await fetch(url);
+        const data = await resp.json();
+        document.getElementById(targetId).textContent = JSON.stringify(data, null, 2);
+    } catch(e) {
+        document.getElementById(targetId).textContent = '加载失败: ' + e.message;
+    }
+}
+
+function showToast(msg, type) {
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+</script>
+</body>
+</html>
