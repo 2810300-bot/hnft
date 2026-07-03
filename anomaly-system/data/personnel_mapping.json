@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "last_updated": "2026-07-03T10:00:00+08:00",
+  "regions": {
+    "岳阳楼区": {
+      "primary": "李慧",
+      "backup": "龙冠学",
+      "dingtalk_userid": "",
+      "department": "收运部"
+    },
+    "君山区": {
+      "primary": "葛红兵",
+      "backup": "李真",
+      "dingtalk_userid": "",
+      "department": "运维业务部"
+    },
+    "开发区": {
+      "primary": "李真",
+      "backup": "卢梁",
+      "dingtalk_userid": "",
+      "department": "运维业务部"
+    },
+    "临港新区": {
+      "primary": "卢梁",
+      "backup": "葛红兵",
+      "dingtalk_userid": "",
+      "department": "采购部"
+    },
+    "南湖新区": {
+      "primary": "龙冠学",
+      "backup": "李慧",
+      "dingtalk_userid": "",
+      "department": "PMO部"
+    }
+  },
+  "notification": {
+    "moderate_batch": true,
+    "severe_instant": true,
+    "urgent_escalation_hours": 24,
+    "escalation_to": "颜一亩"
+  }
+}
