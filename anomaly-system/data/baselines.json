@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "last_computed": "2026-07-03T11:25:52+08:00",
+  "last_computed": "2026-07-03T20:25:52+08:00",
   "computation_method": "auto",
   "baselines": {
     "M001": {
@@ -55,12 +55,20 @@
       "merchant_name": "开发区职工食堂"
     },
     "M004": {
-      "daily_kg": 56.0,
-      "confidence": "low",
-      "data_days": 6,
-      "weekly_avg": [],
+      "daily_kg": 62.9,
+      "confidence": "medium",
+      "data_days": 7,
+      "weekly_avg": [
+        1.54,
+        1.4,
+        1.46,
+        0.0,
+        1.31,
+        0.0,
+        1.28
+      ],
       "last_updated": "2026-07-03",
-      "method": "simple_average",
+      "method": "rolling_7day_median",
       "merchant_name": "云溪学校食堂"
     },
     "M005": {
