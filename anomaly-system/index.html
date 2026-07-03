@@ -66,6 +66,12 @@
             font-size: 14px;
             color: rgba(255,255,255,0.6);
         }
+        .header-content .project-subtitle {
+            font-size: 12.5px;
+            color: rgba(255,255,255,0.42);
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
         .back-link {
             display: inline-flex;
             align-items: center;
@@ -233,6 +239,8 @@
         @media (max-width: 768px) {
             .site-header { padding: 24px 20px; }
             .header-content h1 { font-size: 22px; }
+            .header-content .subtitle { font-size: 13px; }
+            .header-content .project-subtitle { font-size: 12px; }
             .modules-grid { grid-template-columns: 1fr; }
             .main-container { padding: 20px 16px 32px; }
         }
@@ -247,6 +255,7 @@
     <div class="header-content">
         <h1>🔍 餐厨垃圾收运量异常分析系统</h1>
         <div class="subtitle">商户级偏差检测 · 异常告警 · 数据管理 — 一体化运营平台</div>
+        <div class="project-subtitle">岳阳市厨余垃圾资源化利用和无害化处置项目</div>
         <a href="../" class="back-link">← 返回数据看板中心</a>
     </div>
 </header>
