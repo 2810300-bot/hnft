@@ -13,13 +13,10 @@
     --green:#16a34a;--blue:#4C72B0;--orange:#f97316;--red:#dc2626;--yellow:#eab308;--purple:#8172B3;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,0.06); }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);}
-.back-link{display:inline-flex;align-items:center;gap:4px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;transition:color .2s;margin-bottom:6px;}
-.back-link:hover{color:#fff;}
-.site-header{background:linear-gradient(135deg,var(--header-bg),var(--header-bg2));color:var(--text-light);padding:32px 40px 28px;}
-.site-header h1{font-size:26px;font-weight:700;letter-spacing:.5px;margin-bottom:10px;}
-.site-header .subtitle{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.7;}
-.site-header .subtitle span{display:inline-block;}
-.site-header .timestamp{display:inline-block;margin-top:8px;font-size:12px;color:rgba(255,255,255,0.35);}
+.back-link{position:fixed;top:16px;left:24px;z-index:100;background:var(--header-bg);color:var(--text-light);padding:8px 16px;border-radius:6px;text-decoration:none;font-size:14px;}
+.site-header{background:linear-gradient(135deg,var(--header-bg),var(--header-bg2));color:var(--text-light);padding:28px 32px 20px;}
+.site-header h1{font-size:22px;margin-bottom:4px;}
+.site-header .subtitle{font-size:13px;color:rgba(255,255,255,0.55);}
 .main{max-width:1200px;margin:0 auto;padding:24px;}
 .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px;}
 .kpi-card{background:var(--card-bg);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);text-align:center;}
@@ -75,15 +72,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 </style>
 </head>
 <body>
+<a href="../../" class="back-link">← 返回首页</a>
 <div class="site-header">
-    <a href="../" class="back-link">← 返回异常分析系统</a>
-    <h1>🏪 商户收运分析</h1>
-    <div class="subtitle">
-        <span>每日实际量 vs 基准量对比</span> ·
-        <span>偏差趋势追踪</span> ·
-        <span>基准自动校准</span>
-    </div>
-    <div class="timestamp">数据截至 2026-07-03 12:33</div>
+    <h1>🏪 商户收运量分析看板</h1>
+    <div class="subtitle">各商户每日实际量 vs 基准量对比 · 偏差趋势追踪 · 基准自动校准 | 数据截至 2026-07-03 20:26</div>
 </div>
 <div class="main">
     <div class="kpi-row" id="kpi-row"></div>
@@ -120,7 +112,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
     </div>
 </div>
 <script>
-const MERCHANTS = [{"id": "M001", "name": "巴陵食府", "region": "岳阳楼区", "category": "餐饮", "baseline_kg": 42.8, "confidence": "medium", "today_actual": 44.4, "today_deviation": 3.74, "today_level": "normal", "history_7": [44.4], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M002", "name": "君山宾馆", "region": "君山区", "category": "酒店", "baseline_kg": 121.2, "confidence": "medium", "today_actual": 110.6, "today_deviation": -8.75, "today_level": "normal", "history_7": [110.6], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M003", "name": "开发区职工食堂", "region": "开发区", "category": "食堂", "baseline_kg": 89.4, "confidence": "medium", "today_actual": 89.4, "today_deviation": -1.22, "today_level": "normal", "history_7": [89.4], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M004", "name": "云溪学校食堂", "region": "临港新区", "category": "食堂", "baseline_kg": 56.0, "confidence": "low", "today_actual": 62.9, "today_deviation": -6.4, "today_level": "normal", "history_7": [62.9], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M005", "name": "南湖灶台故事", "region": "南湖新区", "category": "餐饮", "baseline_kg": 28.5, "confidence": "medium", "today_actual": 29.4, "today_deviation": -6.96, "today_level": "normal", "history_7": [29.4], "history_dates_7": ["2026-07-03"], "total_days": 1}];
+const MERCHANTS = [{"id": "M001", "name": "巴陵食府", "region": "岳阳楼区", "category": "餐饮", "baseline_kg": 42.8, "confidence": "medium", "today_actual": 44.4, "today_deviation": 3.74, "today_level": "normal", "history_7": [44.4], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M002", "name": "君山宾馆", "region": "君山区", "category": "酒店", "baseline_kg": 121.2, "confidence": "medium", "today_actual": 110.6, "today_deviation": -8.75, "today_level": "normal", "history_7": [110.6], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M003", "name": "开发区职工食堂", "region": "开发区", "category": "食堂", "baseline_kg": 89.4, "confidence": "medium", "today_actual": 89.4, "today_deviation": 0.0, "today_level": "normal", "history_7": [89.4], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M004", "name": "云溪学校食堂", "region": "临港新区", "category": "食堂", "baseline_kg": 62.9, "confidence": "medium", "today_actual": 62.9, "today_deviation": 0.0, "today_level": "normal", "history_7": [62.9], "history_dates_7": ["2026-07-03"], "total_days": 1}, {"id": "M005", "name": "南湖灶台故事", "region": "南湖新区", "category": "餐饮", "baseline_kg": 28.5, "confidence": "medium", "today_actual": 29.4, "today_deviation": 3.16, "today_level": "normal", "history_7": [29.4], "history_dates_7": ["2026-07-03"], "total_days": 1}];
 const DAILY_TOTALS = {dates: ["2026-07-03"], totals: [336.7]};
 const SUMMARY = {total:5, collected:5, anomaly:0, missing:0};
 let sparklineChart = null;
