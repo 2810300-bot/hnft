@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "deviation_levels": {
+    "normal": {
+      "min": -15,
+      "max": 15,
+      "label": "正常",
+      "color": "#16a34a",
+      "generate_work_order": false
+    },
+    "mild": {
+      "min": -30,
+      "max": 30,
+      "label": "轻微偏差",
+      "color": "#eab308",
+      "generate_work_order": false
+    },
+    "moderate": {
+      "min": -50,
+      "max": 50,
+      "label": "中度偏差",
+      "color": "#f97316",
+      "generate_work_order": true,
+      "urgent_notify": false
+    },
+    "severe": {
+      "min": null,
+      "max": null,
+      "label": "严重偏差",
+      "color": "#dc2626",
+      "generate_work_order": true,
+      "urgent_notify": true
+    }
+  },
+  "baseline": {
+    "min_data_days_for_auto": 7,
+    "rolling_window_days": 30,
+    "method_1to6": "simple_average",
+    "method_7to29": "rolling_7day_median",
+    "method_30plus": "rolling_30day_median_times_weekly_pattern",
+    "use_weekly_pattern": true
+  },
+  "notifications": {
+    "dingtalk_enabled": false,
+    "moderate_batch_notify": true,
+    "severe_instant_notify": true,
+    "moderate": {
+      "batch_by": "person",
+      "max_items_per_message": 10
+    },
+    "severe": {
+      "at_person": true,
+      "at_escalation": true
+    }
+  }
+}
