@@ -160,6 +160,7 @@
         .card-accent.blue { background: linear-gradient(90deg, #4C72B0, #6B8FD4); }
         .card-accent.cyan { background: linear-gradient(90deg, #0891b2, #22d3ee); }
         .card-accent.orange { background: linear-gradient(90deg, #DD8452, #f59e0b); }
+        .card-accent.red { background: linear-gradient(90deg, #dc2626, #f87171); }
 
         .card-icon {
             width: 48px;
@@ -481,6 +482,54 @@
             <span class="card-arrow">→</span>
         </a>
 
+        <a href="anomaly-system/work-orders/" class="dashboard-card">
+            <span class="card-accent red"></span>
+            <div class="card-icon" style="background:#fee2e2;">🔔</div>
+            <div class="card-title">收运异常工单系统</div>
+            <div class="card-desc">
+                商户级收运量偏差检测、异常分级告警、工单自动派发。
+                覆盖所有在档商户，支持待处理/处理中/已闭环全流程状态跟踪。
+            </div>
+            <div class="card-meta">
+                <span class="card-tag update-freq">🕐 每日 06:30 刷新</span>
+                <span class="card-tag">🚨 自动告警</span>
+                <span class="card-tag">📋 工单跟踪</span>
+            </div>
+            <span class="card-arrow">→</span>
+        </a>
+
+        <a href="anomaly-system/merchant-dashboard/" class="dashboard-card">
+            <span class="card-accent" style="background:linear-gradient(90deg,#0891b2,#22d3ee)"></span>
+            <div class="card-icon" style="background:#cffafe;">🏪</div>
+            <div class="card-title">商户收运量分析看板</div>
+            <div class="card-desc">
+                各商户每日实际量 vs 基准量对比、偏差趋势追踪、周模式分析。
+                商户档案管理与基准自动校准。
+            </div>
+            <div class="card-meta">
+                <span class="card-tag update-freq">🕐 每日 06:30 刷新</span>
+                <span class="card-tag">📈 趋势分析</span>
+                <span class="card-tag">🏪 商户维度</span>
+            </div>
+            <span class="card-arrow">→</span>
+        </a>
+
+        <a href="anomaly-system/data-import/" class="dashboard-card">
+            <span class="card-accent" style="background:linear-gradient(90deg,#6366f1,#a78bfa)"></span>
+            <div class="card-icon" style="background:#ede9fe;">📥</div>
+            <div class="card-title">数据导入工具</div>
+            <div class="card-desc">
+                商户档案管理、人员区域映射配置、每日收运数据批量导入。
+                支持CSV上传、JSON编辑，辅助数据初始化与日常维护。
+            </div>
+            <div class="card-meta">
+                <span class="card-tag">📁 CSV导入</span>
+                <span class="card-tag">👥 人员配置</span>
+                <span class="card-tag">🔧 数据维护</span>
+            </div>
+            <span class="card-arrow">→</span>
+        </a>
+
     </div>
 
 
@@ -507,6 +556,8 @@ document.getElementById('build-timestamp').textContent = new Date().toLocaleStri
         { name: '合同管理', path: 'contract-system/', el: null },
         { name: '任务跟踪', path: 'task-tracker/', el: null },
         { name: '人事管理', path: 'hr-system/', el: null },
+        { name: '异常工单', path: 'anomaly-system/work-orders/', el: null },
+        { name: '商户看板', path: 'anomaly-system/merchant-dashboard/', el: null },
     ];
 
     for (const d of dashboards) {
