@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "last_updated": "2026-07-03T10:00:00+08:00",
+  "merchants": [
+    {
+      "id": "M001",
+      "name": "巴陵食府",
+      "category": "餐饮",
+      "subcategory": "中餐",
+      "address": "岳阳楼区洞庭北路128号",
+      "region": "岳阳楼区",
+      "responsible_person": "李慧",
+      "scale_id": "SCALE-01",
+      "baseline_daily_kg": 45.0,
+      "status": "active",
+      "created_at": "2026-07-01",
+      "updated_at": "2026-07-01"
+    },
+    {
+      "id": "M002",
+      "name": "君山宾馆",
+      "category": "酒店",
+      "subcategory": "星级酒店",
+      "address": "君山区挂口路56号",
+      "region": "君山区",
+      "responsible_person": "葛红兵",
+      "scale_id": "SCALE-02",
+      "baseline_daily_kg": 120.0,
+      "status": "active",
+      "created_at": "2026-07-01",
+      "updated_at": "2026-07-01"
+    },
+    {
+      "id": "M003",
+      "name": "开发区职工食堂",
+      "category": "食堂",
+      "subcategory": "企业食堂",
+      "address": "经济技术开发区巴陵东路188号",
+      "region": "开发区",
+      "responsible_person": "李真",
+      "scale_id": "SCALE-03",
+      "baseline_daily_kg": 85.0,
+      "status": "active",
+      "created_at": "2026-07-01",
+      "updated_at": "2026-07-01"
+    },
+    {
+      "id": "M004",
+      "name": "云溪学校食堂",
+      "category": "食堂",
+      "subcategory": "学校食堂",
+      "address": "临港新区云溪大道22号",
+      "region": "临港新区",
+      "responsible_person": "卢梁",
+      "scale_id": "SCALE-04",
+      "baseline_daily_kg": 65.0,
+      "status": "active",
+      "created_at": "2026-07-01",
+      "updated_at": "2026-07-01"
+    },
+    {
+      "id": "M005",
+      "name": "南湖灶台故事",
+      "category": "餐饮",
+      "subcategory": "特色餐饮",
+      "address": "南湖新区求索西路76号",
+      "region": "南湖新区",
+      "responsible_person": "龙冠学",
+      "scale_id": "SCALE-05",
+      "baseline_daily_kg": 30.0,
+      "status": "active",
+      "created_at": "2026-07-01",
+      "updated_at": "2026-07-01"
+    }
+  ]
+}
