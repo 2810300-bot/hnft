@@ -1,0 +1,401 @@
+{
+  "schema_version": 1,
+  "last_updated": "2026-07-03T11:27:35+08:00",
+  "work_orders": [
+    {
+      "id": "WO-20260704-001",
+      "created_at": "2026-07-03T11:26:02+08:00",
+      "collection_date": "2026-07-04",
+      "merchant_id": "M004",
+      "merchant_name": "云溪学校食堂",
+      "region": "临港新区",
+      "actual_weight_kg": 0,
+      "baseline_weight_kg": 67.2,
+      "deviation_pct": -100.0,
+      "deviation_direction": "偏低",
+      "level": "severe",
+      "status": "in_progress",
+      "assigned_to": "卢梁",
+      "assigned_dept": "采购部",
+      "backup": "葛红兵",
+      "status_history": [
+        {
+          "status": "pending",
+          "timestamp": "2026-07-03T11:26:02+08:00",
+          "operator": "system"
+        },
+        {
+          "status": "in_progress",
+          "timestamp": "2026-07-03T11:27:14+08:00",
+          "operator": "system"
+        }
+      ],
+      "resolution": null,
+      "resolution_notes": "蓝牙秤设备电池耗尽，已更换电池，明日恢复",
+      "resolved_at": null,
+      "notified_at": null,
+      "anomaly_type": "missing",
+      "notes": "当日未收运"
+    },
+    {
+      "id": "WO-20260704-002",
+      "created_at": "2026-07-03T11:26:02+08:00",
+      "collection_date": "2026-07-04",
+      "merchant_id": "M003",
+      "merchant_name": "开发区职工食堂",
+      "region": "开发区",
+      "actual_weight_kg": 124.6,
+      "baseline_weight_kg": 90.5,
+      "deviation_pct": 37.68,
+      "deviation_direction": "偏高",
+      "level": "moderate",
+      "status": "resolved",
+      "assigned_to": "李真",
+      "assigned_dept": "运维业务部",
+      "backup": "卢梁",
+      "status_history": [
+        {
+          "status": "pending",
+          "timestamp": "2026-07-03T11:26:02+08:00",
+          "operator": "system"
+        },
+        {
+          "status": "in_progress",
+          "timestamp": "2026-07-03T11:27:34+08:00",
+          "operator": "system"
+        },
+        {
+          "status": "resolved",
+          "timestamp": "2026-07-03T11:27:35+08:00",
+          "operator": "system"
+        }
+      ],
+      "resolution": {
+        "operator": "system",
+        "notes": "已核实：当日有300人大型会议加餐，属正常波动",
+        "resolved_at": "2026-07-03T11:27:35+08:00"
+      },
+      "resolution_notes": "已核实：当日有300人大型会议加餐，属正常波动",
+      "resolved_at": "2026-07-03T11:27:35+08:00",
+      "notified_at": null,
+      "anomaly_type": "deviation",
+      "notes": ""
+    },
+    {
+      "id": "WO-20260705-001",
+      "created_at": "2026-07-03T11:26:02+08:00",
+      "collection_date": "2026-07-05",
+      "merchant_id": "M003",
+      "merchant_name": "开发区职工食堂",
+      "region": "开发区",
+      "actual_weight_kg": 0,
+      "baseline_weight_kg": 90.5,
+      "deviation_pct": -100.0,
+      "deviation_direction": "偏低",
+      "level": "severe",
+      "status": "resolved",
+      "assigned_to": "李真",
+      "assigned_dept": "运维业务部",
+      "backup": "卢梁",
+      "status_history": [
+        {
+          "status": "pending",
+          "timestamp": "2026-07-03T11:26:02+08:00",
+          "operator": "system"
+        },
+        {
+          "status": "in_progress",
+          "timestamp": "2026-07-03T11:27:35+08:00",
+          "operator": "system"
+        },
+        {
+          "status": "resolved",
+          "timestamp": "2026-07-03T11:27:35+08:00",
+          "operator": "system"
+        }
+      ],
+      "resolution": {
+        "operator": "system",
+        "notes": "商户确认正常收运，系统数据采集异常已修复",
+        "resolved_at": "2026-07-03T11:27:35+08:00"
+      },
+      "resolution_notes": "商户确认正常收运，系统数据采集异常已修复",
+      "resolved_at": "2026-07-03T11:27:35+08:00",
+      "notified_at": null,
+      "anomaly_type": "missing",
+      "notes": "当日未收运"
+    },
+    {
+      "id": "WO-20260705-002",
+      "created_at": "2026-07-03T11:26:02+08:00",
+      "collection_date": "2026-07-05",
+      "merchant_id": "M005",
+      "merchant_name": "南湖灶台故事",
+      "region": "南湖新区",
+      "actual_weight_kg": 0,
+      "baseline_weight_kg": 31.6,
+      "deviation_pct": -100.0,
+      "deviation_direction": "偏低",
+      "level": "severe",
+      "status": "pending",
+      "assigned_to": "龙冠学",
+      "assigned_dept": "PMO部",
+      "backup": "李慧",
+      "status_history": [
+        {
+          "status": "pending",
+          "timestamp": "2026-07-03T11:26:02+08:00",
+          "operator": "system"
+        }
+      ],
+      "resolution": null,
+      "resolution_notes": null,
+      "resolved_at": null,
+      "notified_at": null,
+      "anomaly_type": "missing",
+      "notes": "当日未收运"
+    },
+    {
+      "id": "WO-20260705-003",
+      "created_at": "2026-07-03T11:26:02+08:00",
+      "collection_date": "2026-07-05",
+      "merchant_id": "M001",
+      "merchant_name": "巴陵食府",
+      "region": "岳阳楼区",
+      "actual_weight_kg": 26.7,
+      "baseline_weight_kg": 42.8,
+      "deviation_pct": -37.62,
+      "deviation_direction": "偏低",
+      "level": "moderate",
+      "status": "resolved",
+      "assigned_to": "李慧",
+      "assigned_dept": "收运部",
+      "backup": "龙冠学",
+      "status_history": [
+        {
+          "status": "pending",
+          "timestamp": "2026-07-03T11:26:02+08:00",
+          "operator": "system"
+        },
+        {
+          "status": "in_progress",
+          "timestamp": "2026-07-03T11:27:35+08:00",
+          "operator": "system"
+        },
+        {
+          "status": "resolved",
+          "timestamp": "2026-07-03T11:27:35+08:00",
+          "operator": "system"
+        }
+      ],
+      "resolution": {
+        "operator": "system",
+        "notes": "商户局部装修中，厨余量预计2周后恢复",
+        "resolved_at": "2026-07-03T11:27:35+08:00"
+      },
+      "resolution_notes": "商户局部装修中，厨余量预计2周后恢复",
+      "resolved_at": "2026-07-03T11:27:35+08:00",
+      "notified_at": null,
+      "anomaly_type": "deviation",
+      "notes": ""
+    },
+    {
+      "id": "WO-20260706-001",
+      "created_at": "2026-07-03T11:26:02+08:00",
+      "collection_date": "2026-07-06",
+      "merchant_id": "M004",
+      "merchant_name": "云溪学校食堂",
+      "region": "临港新区",
+      "actual_weight_kg": 74.1,
+      "baseline_weight_kg": 56.0,
+      "deviation_pct": 32.32,
+      "deviation_direction": "偏高",
+      "level": "moderate",
+      "status": "in_progress",
+      "assigned_to": "卢梁",
+      "assigned_dept": "采购部",
+      "backup": "葛红兵",
+      "status_history": [
+        {
+          "status": "pending",
+          "timestamp": "2026-07-03T11:26:02+08:00",
+          "operator": "system"
+        },
+        {
+          "status": "in_progress",
+          "timestamp": "2026-07-03T11:27:23+08:00",
+          "operator": "system"
+        }
+      ],
+      "resolution": null,
+      "resolution_notes": "正在联系商户确认当日活动记录",
+      "resolved_at": null,
+      "notified_at": null,
+      "anomaly_type": "deviation",
+      "notes": ""
+    },
+    {
+      "id": "WO-20260707-001",
+      "created_at": "2026-07-03T11:26:02+08:00",
+      "collection_date": "2026-07-07",
+      "merchant_id": "M001",
+      "merchant_name": "巴陵食府",
+      "region": "岳阳楼区",
+      "actual_weight_kg": 20.0,
+      "baseline_weight_kg": 42.8,
+      "deviation_pct": -53.27,
+      "deviation_direction": "偏低",
+      "level": "severe",
+      "status": "in_progress",
+      "assigned_to": "李慧",
+      "assigned_dept": "收运部",
+      "backup": "龙冠学",
+      "status_history": [
+        {
+          "status": "pending",
+          "timestamp": "2026-07-03T11:26:02+08:00",
+          "operator": "system"
+        },
+        {
+          "status": "in_progress",
+          "timestamp": "2026-07-03T11:27:23+08:00",
+          "operator": "system"
+        }
+      ],
+      "resolution": null,
+      "resolution_notes": "已到场查看，商户停业装修中",
+      "resolved_at": null,
+      "notified_at": null,
+      "anomaly_type": "deviation",
+      "notes": ""
+    },
+    {
+      "id": "WO-20260709-001",
+      "created_at": "2026-07-03T11:26:02+08:00",
+      "collection_date": "2026-07-09",
+      "merchant_id": "M004",
+      "merchant_name": "云溪学校食堂",
+      "region": "临港新区",
+      "actual_weight_kg": 0,
+      "baseline_weight_kg": 56.0,
+      "deviation_pct": -100.0,
+      "deviation_direction": "偏低",
+      "level": "severe",
+      "status": "pending",
+      "assigned_to": "卢梁",
+      "assigned_dept": "采购部",
+      "backup": "葛红兵",
+      "status_history": [
+        {
+          "status": "pending",
+          "timestamp": "2026-07-03T11:26:02+08:00",
+          "operator": "system"
+        }
+      ],
+      "resolution": null,
+      "resolution_notes": null,
+      "resolved_at": null,
+      "notified_at": null,
+      "anomaly_type": "missing",
+      "notes": "当日未收运"
+    },
+    {
+      "id": "WO-20260709-002",
+      "created_at": "2026-07-03T11:26:02+08:00",
+      "collection_date": "2026-07-09",
+      "merchant_id": "M005",
+      "merchant_name": "南湖灶台故事",
+      "region": "南湖新区",
+      "actual_weight_kg": 44.5,
+      "baseline_weight_kg": 28.5,
+      "deviation_pct": 56.14,
+      "deviation_direction": "偏高",
+      "level": "severe",
+      "status": "pending",
+      "assigned_to": "龙冠学",
+      "assigned_dept": "PMO部",
+      "backup": "李慧",
+      "status_history": [
+        {
+          "status": "pending",
+          "timestamp": "2026-07-03T11:26:02+08:00",
+          "operator": "system"
+        }
+      ],
+      "resolution": null,
+      "resolution_notes": null,
+      "resolved_at": null,
+      "notified_at": null,
+      "anomaly_type": "deviation",
+      "notes": ""
+    },
+    {
+      "id": "WO-20260709-003",
+      "created_at": "2026-07-03T11:26:02+08:00",
+      "collection_date": "2026-07-09",
+      "merchant_id": "M003",
+      "merchant_name": "开发区职工食堂",
+      "region": "开发区",
+      "actual_weight_kg": 45.5,
+      "baseline_weight_kg": 89.4,
+      "deviation_pct": -49.11,
+      "deviation_direction": "偏低",
+      "level": "moderate",
+      "status": "pending",
+      "assigned_to": "李真",
+      "assigned_dept": "运维业务部",
+      "backup": "卢梁",
+      "status_history": [
+        {
+          "status": "pending",
+          "timestamp": "2026-07-03T11:26:02+08:00",
+          "operator": "system"
+        }
+      ],
+      "resolution": null,
+      "resolution_notes": null,
+      "resolved_at": null,
+      "notified_at": null,
+      "anomaly_type": "deviation",
+      "notes": ""
+    },
+    {
+      "id": "WO-20260709-004",
+      "created_at": "2026-07-03T11:26:02+08:00",
+      "collection_date": "2026-07-09",
+      "merchant_id": "M002",
+      "merchant_name": "君山宾馆",
+      "region": "君山区",
+      "actual_weight_kg": 176.7,
+      "baseline_weight_kg": 121.2,
+      "deviation_pct": 45.79,
+      "deviation_direction": "偏高",
+      "level": "moderate",
+      "status": "pending",
+      "assigned_to": "葛红兵",
+      "assigned_dept": "运维业务部",
+      "backup": "李真",
+      "status_history": [
+        {
+          "status": "pending",
+          "timestamp": "2026-07-03T11:26:02+08:00",
+          "operator": "system"
+        }
+      ],
+      "resolution": null,
+      "resolution_notes": null,
+      "resolved_at": null,
+      "notified_at": null,
+      "anomaly_type": "deviation",
+      "notes": ""
+    }
+  ],
+  "archive": {
+    "resolved_count": 3,
+    "dismissed_count": 0,
+    "total_closed": 3,
+    "pending_count": 5,
+    "in_progress_count": 3,
+    "avg_resolution_days": 0.0
+  }
+}
