@@ -1,17 +1,17 @@
 {
   "report_date": "2026-07-04",
-  "generated_at": "2026-07-03T11:25:35+08:00",
+  "generated_at": "2026-07-04T20:25:20+08:00",
   "work_order_candidates": [
     {
       "merchant_id": "M004",
       "merchant_name": "云溪学校食堂",
       "collection_date": "2026-07-04",
       "actual_weight_kg": 0,
-      "baseline_weight_kg": 67.2,
+      "baseline_weight_kg": 62.9,
       "deviation_pct": -100.0,
       "deviation_level": "severe",
       "deviation_direction": "偏低",
-      "baseline_confidence": "low",
+      "baseline_confidence": "medium",
       "scale_id": "SCALE-04",
       "vehicle_id": "",
       "collection_time": "",
@@ -29,11 +29,11 @@
       "vehicle_id": "湘FC2456",
       "collection_time": "2026-07-04T10:35:00+08:00",
       "driver": "王师傅",
-      "baseline_weight_kg": 90.5,
-      "deviation_pct": 37.68,
+      "baseline_weight_kg": 89.4,
+      "deviation_pct": 39.37,
       "deviation_level": "moderate",
       "deviation_direction": "偏高",
-      "baseline_confidence": "low",
+      "baseline_confidence": "medium",
       "region": "开发区"
     }
   ]
