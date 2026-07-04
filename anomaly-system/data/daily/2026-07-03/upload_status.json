@@ -1,0 +1,37 @@
+{
+  "uploads": [
+    {
+      "target_date": "unknown",
+      "file_path": "/Users/mac/.workbuddy/hnft-site/anomaly-system/data/daily/2026-07-03/report.md",
+      "file_name": "report.md",
+      "status": "SKIPPED_INVALID",
+      "media_id": null,
+      "error_message": "缺少必需章节: '数据概览'; 缺少必需章节: '异常检测'; 未检测到日期标记（X月X日）; 未检测到生成时间戳",
+      "is_duplicate": false,
+      "skipped": false,
+      "timestamp": "2026-07-03T20:32:41.150657"
+    },
+    {
+      "target_date": "unknown",
+      "file_path": "/Users/mac/.workbuddy/hnft-site/anomaly-system/data/daily/2026-07-03/report_ima.md",
+      "file_name": "report_ima.md",
+      "status": "SKIPPED_INVALID",
+      "media_id": null,
+      "error_message": "未检测到生成时间戳",
+      "is_duplicate": false,
+      "skipped": false,
+      "timestamp": "2026-07-03T20:33:28.314564"
+    },
+    {
+      "target_date": "unknown",
+      "file_path": "/Users/mac/.workbuddy/hnft-site/anomaly-system/data/daily/2026-07-03/report_ima.md",
+      "file_name": "report_ima.md",
+      "status": "SUCCESS",
+      "media_id": "markdown_5466ec66752d38169003699aa971cb1e_6dc0343a155849557065b732fe2b96ba7424059205752436",
+      "error_message": null,
+      "is_duplicate": false,
+      "skipped": false,
+      "timestamp": "2026-07-03T20:34:02.841530"
+    }
+  ]
+}
