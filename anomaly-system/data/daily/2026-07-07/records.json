@@ -1,6 +1,6 @@
 {
   "date": "2026-07-07",
-  "generated_at": "2026-07-03T11:25:51+08:00",
+  "generated_at": "2026-07-07T14:06:54+08:00",
   "records": [
     {
       "merchant_id": "M001",
@@ -17,22 +17,6 @@
       "deviation_direction": "偏低",
       "baseline_confidence": "medium",
       "region": "岳阳楼区"
-    },
-    {
-      "merchant_id": "M004",
-      "merchant_name": "云溪学校食堂",
-      "collection_date": "2026-07-07",
-      "actual_weight_kg": 67.3,
-      "scale_id": "SCALE-04",
-      "vehicle_id": "湘FD3789",
-      "collection_time": "2026-07-07T11:45:00+08:00",
-      "driver": "赵师傅",
-      "baseline_weight_kg": 56.0,
-      "deviation_pct": 20.18,
-      "deviation_level": "mild",
-      "deviation_direction": "偏高",
-      "baseline_confidence": "low",
-      "region": "临港新区"
     },
     {
       "merchant_id": "M002",
@@ -67,6 +51,22 @@
       "region": "开发区"
     },
     {
+      "merchant_id": "M004",
+      "merchant_name": "云溪学校食堂",
+      "collection_date": "2026-07-07",
+      "actual_weight_kg": 67.3,
+      "scale_id": "SCALE-04",
+      "vehicle_id": "湘FD3789",
+      "collection_time": "2026-07-07T11:45:00+08:00",
+      "driver": "赵师傅",
+      "baseline_weight_kg": 62.9,
+      "deviation_pct": 7.0,
+      "deviation_level": "normal",
+      "deviation_direction": "偏高",
+      "baseline_confidence": "medium",
+      "region": "临港新区"
+    },
+    {
       "merchant_id": "M005",
       "merchant_name": "南湖灶台故事",
       "collection_date": "2026-07-07",
@@ -87,8 +87,8 @@
     "total_merchants": 5,
     "collected_count": 5,
     "missing_count": 0,
-    "normal_count": 2,
-    "mild_count": 2,
+    "normal_count": 3,
+    "mild_count": 1,
     "moderate_count": 0,
     "severe_count": 1,
     "severe_missing_count": 0,
