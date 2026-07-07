@@ -75,7 +75,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 <a href="../../" class="back-link">← 返回首页</a>
 <div class="site-header">
     <h1>🏪 商户收运量分析看板</h1>
-    <div class="subtitle">各商户每日实际量 vs 基准量对比 · 偏差趋势追踪 · 基准自动校准 | 数据截至 2026-07-04 20:25</div>
+    <div class="subtitle">各商户每日实际量 vs 基准量对比 · 偏差趋势追踪 · 基准自动校准 | 数据截至 2026-07-07 14:07</div>
 </div>
 <div class="main">
     <div class="kpi-row" id="kpi-row"></div>
@@ -112,9 +112,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
     </div>
 </div>
 <script>
-const MERCHANTS = [{"id": "M001", "name": "巴陵食府", "region": "岳阳楼区", "category": "餐饮", "baseline_kg": 42.8, "confidence": "medium", "today_actual": 42.8, "today_deviation": 0.0, "today_level": "normal", "history_7": [42.8, 44.4], "history_dates_7": ["2026-07-04", "2026-07-03"], "total_days": 2}, {"id": "M002", "name": "君山宾馆", "region": "君山区", "category": "酒店", "baseline_kg": 121.2, "confidence": "medium", "today_actual": 151.6, "today_deviation": 25.08, "today_level": "mild", "history_7": [151.6, 110.6], "history_dates_7": ["2026-07-04", "2026-07-03"], "total_days": 2}, {"id": "M003", "name": "开发区职工食堂", "region": "开发区", "category": "食堂", "baseline_kg": 89.4, "confidence": "medium", "today_actual": 124.6, "today_deviation": 39.37, "today_level": "moderate", "history_7": [124.6, 89.4], "history_dates_7": ["2026-07-04", "2026-07-03"], "total_days": 2}, {"id": "M004", "name": "云溪学校食堂", "region": "临港新区", "category": "食堂", "baseline_kg": 62.9, "confidence": "medium", "today_actual": 0, "today_deviation": -100.0, "today_level": "severe", "history_7": [0, 62.9], "history_dates_7": ["2026-07-04", "2026-07-03"], "total_days": 2}, {"id": "M005", "name": "南湖灶台故事", "region": "南湖新区", "category": "餐饮", "baseline_kg": 28.5, "confidence": "medium", "today_actual": 28.2, "today_deviation": -1.05, "today_level": "normal", "history_7": [28.2, 29.4], "history_dates_7": ["2026-07-04", "2026-07-03"], "total_days": 2}];
-const DAILY_TOTALS = {dates: ["2026-07-03", "2026-07-04"], totals: [336.7, 347.2]};
-const SUMMARY = {total:5, collected:5, anomaly:2, missing:0};
+const MERCHANTS = [{"id": "M001", "name": "巴陵食府", "region": "岳阳楼区", "category": "餐饮", "baseline_kg": 42.8, "confidence": "medium", "today_actual": 20.0, "today_deviation": -53.27, "today_level": "severe", "history_7": [20.0, 30.9, 26.7, 42.8, 44.4], "history_dates_7": ["2026-07-07", "2026-07-06", "2026-07-05", "2026-07-04", "2026-07-03"], "total_days": 5}, {"id": "M002", "name": "君山宾馆", "region": "君山区", "category": "酒店", "baseline_kg": 121.2, "confidence": "medium", "today_actual": 141.7, "today_deviation": 16.91, "today_level": "mild", "history_7": [141.7, 117.2, 121.2, 151.6, 110.6], "history_dates_7": ["2026-07-07", "2026-07-06", "2026-07-05", "2026-07-04", "2026-07-03"], "total_days": 5}, {"id": "M003", "name": "开发区职工食堂", "region": "开发区", "category": "食堂", "baseline_kg": 89.4, "confidence": "medium", "today_actual": 80.2, "today_deviation": -10.29, "today_level": "normal", "history_7": [80.2, 91.2, 0, 124.6, 89.4], "history_dates_7": ["2026-07-07", "2026-07-06", "2026-07-05", "2026-07-04", "2026-07-03"], "total_days": 5}, {"id": "M004", "name": "云溪学校食堂", "region": "临港新区", "category": "食堂", "baseline_kg": 62.9, "confidence": "medium", "today_actual": 67.3, "today_deviation": 7.0, "today_level": "normal", "history_7": [67.3, 74.1, 61.6, 0, 62.9], "history_dates_7": ["2026-07-07", "2026-07-06", "2026-07-05", "2026-07-04", "2026-07-03"], "total_days": 5}, {"id": "M005", "name": "南湖灶台故事", "region": "南湖新区", "category": "餐饮", "baseline_kg": 28.5, "confidence": "medium", "today_actual": 28.5, "today_deviation": 0.0, "today_level": "normal", "history_7": [28.5, 32.3, 0, 28.2, 29.4], "history_dates_7": ["2026-07-07", "2026-07-06", "2026-07-05", "2026-07-04", "2026-07-03"], "total_days": 5}];
+const DAILY_TOTALS = {dates: ["2026-07-03", "2026-07-04", "2026-07-05", "2026-07-06", "2026-07-07"], totals: [336.7, 347.2, 209.5, 345.7, 337.7]};
+const SUMMARY = {total:5, collected:5, anomaly:1, missing:0};
 let sparklineChart = null;
 let levelOrder = {'severe':0,'moderate':1,'mild':2,'normal':3,'no_data':4};
 
