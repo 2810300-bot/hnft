@@ -1,0 +1,15 @@
+{
+  "uploads": [
+    {
+      "target_date": "unknown",
+      "file_path": "/Users/mac/.workbuddy/hnft-site/anomaly-system/data/daily/2026-07-04/report.md",
+      "file_name": "report.md",
+      "status": "SUCCESS",
+      "media_id": "markdown_5466ec66752d38169003699aa971cb1e_1130ded6d878ed9cfbede5426247b0657424059205752436",
+      "error_message": null,
+      "is_duplicate": false,
+      "skipped": false,
+      "timestamp": "2026-07-04T20:26:38.994110"
+    }
+  ]
+}
