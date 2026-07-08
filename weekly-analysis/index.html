@@ -553,7 +553,7 @@ function renderMonthlyKPI(weeks) {
     ? (latestChange > 0 ? '+' : '') + fmtPct(latestChange)
     : '基线';
 
-  // 上一周数据（用于累计周收运量卡片）
+  // 上一周数据（用于上周收运量卡片）
   var prevWeek = weeks.length > 1 ? weeks[1] : weeks[0];
   var prevDateRange = prevWeek.date_range || '';
   // 转换成 2026-06-22 至 2026-06-28 格式
@@ -566,7 +566,7 @@ function renderMonthlyKPI(weeks) {
 
   document.getElementById('monthly-kpi').innerHTML =
     '<div class="kpi-card">' +
-      '<div class="label">累计周收运量（上周）</div>' +
+      '<div class="label">上周收运量</div>' +
       '<div class="value">' + fmtNum(prevWeek.total_ton || 0, 1) + '<span class="unit">吨</span></div>' +
       '<div class="sub">📅 ' + isoDates + '</div>' +
     '</div>' +
