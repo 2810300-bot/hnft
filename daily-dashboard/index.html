@@ -184,6 +184,18 @@
             color: var(--text-secondary);
             margin-top: 2px;
         }
+        .kpi-date {
+            display: inline-block;
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: #f0f2f5;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+            vertical-align: middle;
+            font-weight: 500;
+            white-space: nowrap;
+        }
 
         /* Module Tabs */
         .module-tabs {
@@ -454,7 +466,7 @@
                 <div class="header-actions">
                     <div class="refresh-badge">
                     <span class="refresh-dot"></span>
-                    数据更新: <span id="data-date">2026-07-08 12:02</span>
+                    数据更新: <span id="data-date">2026-07-08 12:13</span>
                 </div>
                     <div class="next-update" id="next-update-container">
                         下次更新: <span id="next-update">--</span>
@@ -709,10 +721,12 @@
         document.getElementById('kpi-prev-week-sub').textContent = prevWeekText;
 
         // 本周日均收运
+        const weekAvgEl = document.getElementById('kpi-week-avg');
         if (WEEK_PENDING) {
-            document.getElementById('kpi-week-avg').innerHTML = '<span style="color:var(--warning);font-size:24px;">' + PENDING_HINT + '</span><span class="kpi-unit">/日</span>';
+            weekAvgEl.innerHTML = '<span style="color:var(--warning);font-size:24px;">' + PENDING_HINT + '</span><span class="kpi-unit">/日</span>';
         } else {
-            document.getElementById('kpi-week-avg').innerHTML = formatWeight(KPI.week_avg) + '<span class="kpi-unit">/日</span>';
+            const yd = KPI.yesterday_date || '--';
+            weekAvgEl.innerHTML = formatWeight(KPI.week_avg) + '<span class="kpi-unit">/日</span><span class="kpi-date">上日日期：' + yd + '</span>';
         }
         document.getElementById('kpi-month-avg').textContent =
             '月均 ' + formatWeight(KPI.month_avg) + '/日';
