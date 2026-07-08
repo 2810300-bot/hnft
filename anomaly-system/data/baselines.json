@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "last_computed": "2026-07-07T14:06:54+08:00",
+  "last_computed": "2026-07-08T20:25:33+08:00",
   "computation_method": "auto",
   "baselines": {
     "M001": {
@@ -16,7 +16,7 @@
         1.16,
         0.73
       ],
-      "last_updated": "2026-07-07",
+      "last_updated": "2026-07-08",
       "method": "rolling_7day_median",
       "merchant_name": "巴陵食府"
     },
@@ -33,7 +33,7 @@
         1.14,
         0.91
       ],
-      "last_updated": "2026-07-07",
+      "last_updated": "2026-07-08",
       "method": "rolling_7day_median",
       "merchant_name": "君山宾馆"
     },
@@ -50,7 +50,7 @@
         1.61,
         0.0
       ],
-      "last_updated": "2026-07-07",
+      "last_updated": "2026-07-08",
       "method": "rolling_7day_median",
       "merchant_name": "开发区职工食堂"
     },
@@ -67,7 +67,7 @@
         0.0,
         1.28
       ],
-      "last_updated": "2026-07-07",
+      "last_updated": "2026-07-08",
       "method": "rolling_7day_median",
       "merchant_name": "云溪学校食堂"
     },
@@ -84,7 +84,7 @@
         1.04,
         0.0
       ],
-      "last_updated": "2026-07-07",
+      "last_updated": "2026-07-08",
       "method": "rolling_7day_median",
       "merchant_name": "南湖灶台故事"
     }
