@@ -535,11 +535,9 @@ function renderMonthlyKPI(weeks) {
   var totalTrips = weeks.reduce(function(s, w) { return s + (w.total_trips || 0); }, 0);
   var totalDays = weeks.reduce(function(s, w) { return s + (w.days_with_data || w.days || 7); }, 0);
 
-  // 日均收运量基于最近 4 周更准确
-  var recentWeeks = weeks.slice(0, Math.min(4, weeks.length));
-  var recentTon = recentWeeks.reduce(function(s, w) { return s + (w.total_ton || 0); }, 0);
-  var recentDays = recentWeeks.reduce(function(s, w) { return s + (w.days_with_data || w.days || 7); }, 0);
-  var avgDaily = recentDays > 0 ? recentTon / recentDays : 0;
+  // 日均收运量基于全部数据完整统计
+  var totalTon = weeks.reduce(function(s, w) { return s + (w.total_ton || 0); }, 0);
+  var avgDaily = totalDays > 0 ? totalTon / totalDays : 0;
 
   var peaks = weeks.map(function(w) { return (w.peak || {}).ton || 0; }).filter(Boolean);
   var valleys = weeks.map(function(w) { return (w.valley || {}).ton || 0; }).filter(Boolean);
@@ -553,27 +551,26 @@ function renderMonthlyKPI(weeks) {
     ? (latestChange > 0 ? '+' : '') + fmtPct(latestChange)
     : '基线';
 
-  // 上一周数据（用于上周收运量卡片）
-  var prevWeek = weeks.length > 1 ? weeks[1] : weeks[0];
-  var prevDateRange = prevWeek.date_range || '';
-  // 转换成 2026-06-22 至 2026-06-28 格式
+  // 上周收运量 — 取最新完整周数据
+  var targetWeek = weeks[0] || {};
+  var targetDateRange = targetWeek.date_range || '';
   var isoDates = '';
-  if (prevWeek.date_start && prevWeek.date_end) {
-    isoDates = prevWeek.date_start + ' 至 ' + prevWeek.date_end;
+  if (targetWeek.date_start && targetWeek.date_end) {
+    isoDates = targetWeek.date_start + ' 至 ' + targetWeek.date_end;
   } else {
-    isoDates = prevDateRange;
+    isoDates = targetDateRange;
   }
 
   document.getElementById('monthly-kpi').innerHTML =
     '<div class="kpi-card">' +
       '<div class="label">上周收运量</div>' +
-      '<div class="value">' + fmtNum(prevWeek.total_ton || 0, 1) + '<span class="unit">吨</span></div>' +
+      '<div class="value">' + fmtNum(targetWeek.total_ton || 0, 1) + '<span class="unit">吨</span></div>' +
       '<div class="sub">📅 ' + isoDates + '</div>' +
     '</div>' +
     '<div class="kpi-card">' +
       '<div class="label">日均收运量</div>' +
       '<div class="value">' + fmtNum(avgDaily, 1) + '<span class="unit">吨/日</span></div>' +
-      '<div class="sub">近4周日均 · ' + recentWeeks.length + '周' + totalTrips + ' 车次</div>' +
+      '<div class="sub">全部' + weeks.length + '周数据 · ' + totalTrips + ' 车次 · ' + totalDays + ' 天</div>' +
     '</div>' +
     '<div class="kpi-card">' +
       '<div class="label">最新周趋势</div>' +
