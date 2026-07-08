@@ -1,6 +1,6 @@
 {
   "date": "2026-07-08",
-  "generated_at": "2026-07-03T11:25:51+08:00",
+  "generated_at": "2026-07-08T20:25:33+08:00",
   "records": [
     {
       "merchant_id": "M003",
@@ -27,11 +27,11 @@
       "vehicle_id": "湘FD3789",
       "collection_time": "2026-07-08T11:45:00+08:00",
       "driver": "赵师傅",
-      "baseline_weight_kg": 56.0,
-      "deviation_pct": 24.82,
-      "deviation_level": "mild",
+      "baseline_weight_kg": 62.9,
+      "deviation_pct": 11.13,
+      "deviation_level": "normal",
       "deviation_direction": "偏高",
-      "baseline_confidence": "low",
+      "baseline_confidence": "medium",
       "region": "临港新区"
     },
     {
@@ -87,8 +87,8 @@
     "total_merchants": 5,
     "collected_count": 5,
     "missing_count": 0,
-    "normal_count": 3,
-    "mild_count": 2,
+    "normal_count": 4,
+    "mild_count": 1,
     "moderate_count": 0,
     "severe_count": 0,
     "severe_missing_count": 0,
