@@ -44,10 +44,17 @@ body {
   padding: 10px 24px;
   font-size: 13px;
   color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap:8px;
 }
 .breadcrumb-bar a { color: var(--accent-blue); text-decoration: none; font-weight: 500; }
 .breadcrumb-bar a:hover { text-decoration: underline; }
 .breadcrumb-bar .sep { color: #94a3b8; margin: 0 8px; }
+.btn-export {
+  background: var(--accent-blue); color: #fff; border: none;
+  padding: 6px 16px; border-radius: 6px; font-size: 12px; cursor: pointer;
+  font-weight: 500; transition: opacity 0.2s;
+}
+.btn-export:hover { opacity: 0.9; }
 
 /* Header */
 .site-header {
@@ -93,7 +100,7 @@ body {
   display: flex; align-items: center; gap: 10px;
 }
 
-/* Monthly KPI row */
+/* KPI row */
 .kpi-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -117,6 +124,37 @@ body {
 .kpi-card .unit { font-size: 14px; color: var(--text-secondary); margin-left: 2px; font-weight: 400; }
 .kpi-card .sub { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
 
+/* Multi-week trend card */
+.trend-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 24px;
+  margin-bottom: 28px;
+}
+.trend-card h3 {
+  font-size: 16px; font-weight: 700;
+  margin-bottom: 12px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-light);
+}
+.trend-card canvas { max-height: 320px; }
+
+/* Anomaly alert banner */
+.alert-banner {
+  background: linear-gradient(135deg, #fef2f2 0%, #fff5f5 100%);
+  border: 1px solid #fecaca;
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin-bottom: 28px;
+  display: none;
+}
+.alert-banner.visible { display: flex; align-items: flex-start; gap: 12px; }
+.alert-banner .alert-icon { font-size: 20px; flex-shrink: 0; }
+.alert-banner .alert-content { flex: 1; }
+.alert-banner .alert-title { font-size: 14px; font-weight: 700; color: #991b1b; margin-bottom: 4px; }
+.alert-banner .alert-list { font-size: 13px; color: #b91c1c; line-height: 1.8; }
+.alert-banner .alert-list li { margin-left: 16px; }
+
 /* Report list */
 .report-list {
   display: flex;
@@ -134,15 +172,13 @@ body {
   transition: box-shadow 0.25s ease;
   border-left: 5px solid transparent;
 }
-.week-card:hover {
-  box-shadow: var(--shadow-hover);
-}
+.week-card:hover { box-shadow: var(--shadow-hover); }
 .week-card.rebound { border-left-color: var(--accent-green); }
 .week-card.valley { border-left-color: var(--accent-red); }
 .week-card.decline { border-left-color: var(--accent-orange); }
 .week-card.baseline { border-left-color: var(--accent-blue); }
 
-/* Card header - always visible */
+/* Card header */
 .card-header {
   display: flex;
   align-items: center;
@@ -154,30 +190,20 @@ body {
 }
 .card-header:hover { background: #f8fafc; }
 .card-header .week-badge {
-  font-size: 20px;
-  font-weight: 700;
-  min-width: 80px;
-  text-align: center;
+  font-size: 20px; font-weight: 700;
+  min-width: 80px; text-align: center;
 }
-.card-header .week-info {
-  flex: 1;
-  min-width: 0;
-}
+.card-header .week-info { flex: 1; min-width: 0; }
 .card-header .week-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 2px;
+  font-size: 16px; font-weight: 700;
+  color: var(--text); margin-bottom: 2px;
+  display: flex; align-items: center; gap: 8px;
 }
 .card-header .week-dates {
-  font-size: 13px;
-  color: var(--text-secondary);
+  font-size: 13px; color: var(--text-secondary);
 }
 .card-header .mini-kpis {
-  display: flex;
-  gap: 24px;
-  align-items: center;
-  flex-shrink: 0;
+  display: flex; gap: 24px; align-items: center; flex-shrink: 0;
 }
 .mini-kpi { text-align: right; }
 .mini-kpi .mk-label { font-size: 11px; color: var(--text-secondary); }
@@ -189,34 +215,40 @@ body {
 .mk-change.neutral { color: var(--text-secondary); }
 
 .card-expand-icon {
-  font-size: 14px;
-  color: var(--text-secondary);
+  font-size: 14px; color: var(--text-secondary);
   transition: transform 0.3s ease;
-  width: 24px;
-  text-align: center;
-  flex-shrink: 0;
+  width: 24px; text-align: center; flex-shrink: 0;
 }
 .week-card.expanded .card-expand-icon { transform: rotate(180deg); }
 
-/* Card summary (always visible when collapsed) */
+/* Anomaly dot in card header */
+.anomaly-dot {
+  display: inline-block; width: 8px; height: 8px;
+  border-radius: 50%; margin-left: 4px;
+  animation: pulse-dot 2s infinite;
+}
+.anomaly-dot.high { background: var(--accent-red); }
+.anomaly-dot.medium { background: var(--accent-orange); }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Card summary */
 .card-summary {
   padding: 0 24px 16px;
   font-size: 13px;
   color: var(--text-secondary);
   line-height: 1.7;
   border-bottom: 1px solid var(--border-light);
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
+  display: flex; align-items: flex-start; gap: 8px;
 }
 .card-summary .trend-dot {
   width: 8px; height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-top: 6px;
+  border-radius: 50%; flex-shrink: 0; margin-top: 6px;
 }
 
-/* Card body - expanded content */
+/* Card body */
 .card-body {
   display: none;
   padding: 20px 24px 24px;
@@ -225,7 +257,7 @@ body {
 .week-card.expanded .card-body { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Inside expanded body */
+/* Charts */
 .body-chart-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -246,6 +278,14 @@ body {
 .body-chart-card canvas { max-height: 300px; }
 .body-chart-card.full { grid-column: 1 / -1; }
 
+/* Region donut chart */
+.region-donut-row {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
 /* Detail table */
 .detail-table {
   width: 100%;
@@ -255,27 +295,18 @@ body {
 }
 .detail-table th {
   background: #f8fafc;
-  text-align: left;
-  padding: 10px 14px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 2px solid var(--border);
+  text-align: left; padding: 10px 14px;
+  font-weight: 600; color: var(--text-secondary);
+  font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.5px; border-bottom: 2px solid var(--border);
 }
-.detail-table td {
-  padding: 9px 14px;
-  border-bottom: 1px solid var(--border-light);
-}
+.detail-table td { padding: 9px 14px; border-bottom: 1px solid var(--border-light); }
 .detail-table tr:last-child td { border-bottom: none; }
 .detail-table tr:hover td { background: #f8fafc; }
 .detail-table .total-row td {
-  font-weight: 700;
-  background: #f8fafc;
+  font-weight: 700; background: #f8fafc;
   border-top: 2px solid var(--border);
 }
-
 .peak-cell { color: var(--accent-red); font-weight: 600; }
 .valley-cell { color: var(--accent-green); font-weight: 600; }
 
@@ -283,61 +314,42 @@ body {
 .bottom10-card {
   background: linear-gradient(135deg, #fef2f2 0%, #fff5f5 100%);
   border: 1px solid #fecaca;
-  border-radius: 10px;
-  padding: 16px;
-  margin-top: 16px;
+  border-radius: 10px; padding: 16px; margin-top: 16px;
 }
 .bottom10-card h4 {
   font-size: 14px; font-weight: 600;
-  margin-bottom: 10px;
-  color: #b91c1c;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #fecaca;
+  margin-bottom: 10px; color: #b91c1c;
+  padding-bottom: 8px; border-bottom: 1px solid #fecaca;
   display: flex; align-items: center; gap: 8px;
 }
-.bottom10-card .warn-icon { font-size: 18px; }
 .vehicle-table .warn-row td { background: #fef2f2; }
 .vehicle-table .warn-row:hover td { background: #fee2e2; }
 .vehicle-table .decline-reasons {
-  font-size: 11px;
-  color: #b91c1c;
-  max-width: 260px;
-  line-height: 1.5;
+  font-size: 11px; color: #b91c1c; max-width: 260px; line-height: 1.5;
 }
 .vehicle-table .mom-down { color: #b91c1c; font-weight: 600; }
 .vehicle-table .mom-up { color: #16a34a; }
 .vehicle-table .mom-neutral { color: #64748b; }
-.vehicle-table th { white-space: nowrap; }
-.vehicle-table td { white-space: nowrap; }
-.vehicle-table td.reason-cell { white-space: normal; }
 
 /* Dual ranking row */
 .ranking-duo {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 16px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-top: 16px;
 }
 .ranking-card {
-  border-radius: 10px;
-  padding: 16px;
+  border-radius: 10px; padding: 16px;
   border: 1px solid var(--border-light);
 }
 .ranking-card.top { background: #f0fdf4; border-color: #bbf7d0; }
 .ranking-card.bottom { background: #fef2f2; border-color: #fecaca; }
 .ranking-card h4 {
   font-size: 14px; font-weight: 600;
-  margin-bottom: 10px;
-  padding-bottom: 8px;
+  margin-bottom: 10px; padding-bottom: 8px;
   border-bottom: 1px solid;
   display: flex; align-items: center; gap: 8px;
 }
 .ranking-card.top h4 { color: #166534; border-color: #bbf7d0; }
 .ranking-card.bottom h4 { color: #991b1b; border-color: #fecaca; }
-
-@media (max-width: 768px) {
-  .ranking-duo { grid-template-columns: 1fr; }
-}
 
 .section-subtitle {
   font-size: 14px; font-weight: 600;
@@ -354,16 +366,23 @@ body {
 .anomaly-bar .seg {
   height: 6px; border-radius: 3px;
 }
+.anomaly-bar .seg.high { background: var(--accent-red); }
 .anomaly-bar .seg.medium { background: var(--accent-orange); }
 .anomaly-bar .seg.low { background: #94a3b8; }
 .anomaly-bar .label { font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
 
+/* Missing data badge */
+.missing-badge {
+  display: inline-block;
+  background: #fef2f2; color: #991b1b;
+  font-size: 11px; padding: 1px 6px;
+  border-radius: 3px; margin-left: 4px;
+}
+
 /* Footer */
 .site-footer {
-  text-align: center;
-  padding: 24px;
-  color: var(--text-secondary);
-  font-size: 12px;
+  text-align: center; padding: 24px;
+  color: var(--text-secondary); font-size: 12px;
   border-top: 1px solid var(--border);
 }
 
@@ -389,6 +408,8 @@ body {
   .card-header { flex-wrap: wrap; gap: 10px; padding: 14px 16px; }
   .card-header .mini-kpis { width: 100%; justify-content: space-around; }
   .body-chart-row { grid-template-columns: 1fr; }
+  .region-donut-row { grid-template-columns: 1fr; }
+  .ranking-duo { grid-template-columns: 1fr; }
   .main-container { padding: 16px 12px 32px; }
   .card-summary { padding: 0 16px 12px; }
   .card-body { padding: 12px 16px 20px; }
@@ -403,9 +424,15 @@ body {
 <body>
 
 <div class="breadcrumb-bar">
-  <a href="../">🏠 看板中心</a>
-  <span class="sep">/</span>
-  <span>厨余垃圾收运量周数据分析</span>
+  <div>
+    <a href="../">🏠 看板中心</a>
+    <span class="sep">/</span>
+    <span>厨余垃圾收运量周数据分析</span>
+  </div>
+  <div style="display:flex;gap:8px;">
+    <button class="btn-export" onclick="exportCSV()" title="导出 CSV">📥 导出 CSV</button>
+    <button class="btn-export" onclick="window.print()" title="打印报告">🖨️ 打印</button>
+  </div>
 </div>
 
 <header class="site-header">
@@ -413,7 +440,7 @@ body {
     <h1>📋 厨余垃圾收运量周数据分析</h1>
     <div class="header-meta">
       <span>岳阳市厨余垃圾资源化利用和无害化处置项目</span>
-      <span>📊 数据来源：金山文档「每日收运数据」</span>
+      <span>📊 数据来源：金山文档「每日收运数据」+ 异常检测系统</span>
       <span id="data-status">🔄 加载中…</span>
     </div>
   </div>
@@ -421,8 +448,23 @@ body {
 
 <div class="main-container">
 
+  <!-- Alert Banner -->
+  <div class="alert-banner" id="alert-banner">
+    <span class="alert-icon">⚠️</span>
+    <div class="alert-content">
+      <div class="alert-title">最新周异常告警</div>
+      <ul class="alert-list" id="alert-list"></ul>
+    </div>
+  </div>
+
   <!-- Monthly KPI -->
   <div class="kpi-row" id="monthly-kpi"></div>
+
+  <!-- Multi-week trend chart -->
+  <div class="trend-card">
+    <h3>📈 多周收运量趋势（环比变化）</h3>
+    <canvas id="trend-chart"></canvas>
+  </div>
 
   <!-- Report list -->
   <div class="section-title">
@@ -445,19 +487,11 @@ body {
 
 <!-- ==================== Scripts ==================== -->
 <script>
-// ---- Constants ----
-const DATA_BASE = '.';
-const WEEK_FILES = {
-  23: 'w23_data.json',
-  24: 'w24_data.json',
-  25: 'w25_data.json',
-  26: 'w26_data.json'
-};
-
 // ---- State ----
-let allWeeks = [];
-let expandedWeek = null;
-let activeChart = null;  // single chart instance, reused
+var allWeeks = [];
+var expandedWeek = null;
+var trendChart = null;
+var dailyChart = null;
 
 // ---- Utilities ----
 function fmtNum(n, d) {
@@ -467,12 +501,27 @@ function fmtNum(n, d) {
 }
 function fmtPct(n) { return (Number(n) || 0).toFixed(1) + '%'; }
 
+// ---- Auto-discover available week files ----
+async function discoverWeekFiles() {
+  // Try to load w23_data.json through w40_data.json
+  var available = [];
+  for (var w = 23; w <= 40; w++) {
+    var file = 'w' + String(w).padStart(2, '0') + '_data.json';
+    try {
+      var resp = await fetch(file + '?ts=' + Date.now(), { method: 'HEAD' });
+      if (resp.ok) available.push(w);
+    } catch (e) {
+      // File doesn't exist
+    }
+  }
+  return available;
+}
+
 // ---- Load data for a specific week ----
 async function loadWeekData(weekNum) {
-  const file = WEEK_FILES[weekNum];
-  if (!file) return null;
+  var file = 'w' + String(weekNum).padStart(2, '0') + '_data.json';
   try {
-    const resp = await fetch(DATA_BASE + '/' + file + '?ts=' + Date.now());
+    var resp = await fetch(file + '?ts=' + Date.now());
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     return resp.json();
   } catch (e) {
@@ -483,39 +532,137 @@ async function loadWeekData(weekNum) {
 
 // ---- Render monthly KPI ----
 function renderMonthlyKPI(weeks) {
-  const totalTon = weeks.reduce(function(s, w) { return s + w.total_ton; }, 0);
-  const totalTrips = weeks.reduce(function(s, w) { return s + w.total_trips; }, 0);
-  const avgDaily = totalTon / (weeks.length * 7);
-  const peaks = weeks.map(function(w) { return w.peak.ton; });
-  const valleys = weeks.map(function(w) { return w.valley.ton; });
-  const maxPeak = Math.max.apply(null, peaks);
-  const minValley = Math.min.apply(null, valleys);
+  var totalTon = weeks.reduce(function(s, w) { return s + (w.total_ton || 0); }, 0);
+  var totalTrips = weeks.reduce(function(s, w) { return s + (w.total_trips || 0); }, 0);
+  var totalDays = weeks.reduce(function(s, w) { return s + (w.days_with_data || w.days || 7); }, 0);
+  var avgDaily = totalDays > 0 ? totalTon / totalDays : 0;
+
+  var peaks = weeks.map(function(w) { return (w.peak || {}).ton || 0; }).filter(Boolean);
+  var valleys = weeks.map(function(w) { return (w.valley || {}).ton || 0; }).filter(Boolean);
+  var maxPeak = peaks.length > 0 ? Math.max.apply(null, peaks) : 0;
+  var minValley = valleys.length > 0 ? Math.min.apply(null, valleys) : 0;
+
+  var latestWeek = weeks[0] || {};
+  var latestTrend = latestWeek.trend_label || '-';
+  var latestChange = latestWeek.change_pct;
+  var changeSign = latestChange !== null && latestChange !== undefined
+    ? (latestChange > 0 ? '+' : '') + fmtPct(latestChange)
+    : '基线';
 
   document.getElementById('monthly-kpi').innerHTML =
     '<div class="kpi-card">' +
-      '<div class="label">6月总收运量</div>' +
+      '<div class="label">累计周收运量</div>' +
       '<div class="value">' + fmtNum(totalTon, 1) + '<span class="unit">吨</span></div>' +
-      '<div class="sub">目标 6140吨 · 完成率 ' + (totalTon / 6140 * 100).toFixed(1) + '%</div>' +
+      '<div class="sub">共 ' + weeks.length + ' 周数据 · ' + totalTrips + ' 车次</div>' +
     '</div>' +
     '<div class="kpi-card">' +
       '<div class="label">日均收运量</div>' +
       '<div class="value">' + fmtNum(avgDaily, 1) + '<span class="unit">吨/日</span></div>' +
-      '<div class="sub">总车次 ' + totalTrips + ' · 日均 ' + (totalTrips / 28).toFixed(1) + ' 车次</div>' +
+      '<div class="sub">日均 ' + (totalTrips / Math.max(totalDays, 1)).toFixed(1) + ' 车次</div>' +
     '</div>' +
     '<div class="kpi-card">' +
-      '<div class="label">月内单日峰值</div>' +
-      '<div class="value">' + fmtNum(maxPeak, 1) + '<span class="unit">吨</span></div>' +
-      '<div class="sub">' + weeks.filter(function(w) { return Math.abs(w.peak.ton - maxPeak) < 0.01; }).map(function(w) { return w.peak.date; }).join('、') + '</div>' +
+      '<div class="label">最新周趋势</div>' +
+      '<div class="value" style="color:' + (latestWeek.trend_color || '#4C72B0') + '">' + latestTrend + '</div>' +
+      '<div class="sub">环比 ' + changeSign + ' · ' + (latestWeek.label || '') + '</div>' +
     '</div>' +
     '<div class="kpi-card">' +
-      '<div class="label">月内单日谷值</div>' +
-      '<div class="value">' + fmtNum(minValley, 1) + '<span class="unit">吨</span></div>' +
-      '<div class="sub">' + weeks.filter(function(w) { return Math.abs(w.valley.ton - minValley) < 0.01; }).map(function(w) { return w.valley.date; }).join('、') + '</div>' +
+      '<div class="label">单日峰值 / 谷值</div>' +
+      '<div class="value">' + fmtNum(maxPeak, 1) + ' / ' + fmtNum(minValley, 1) + '<span class="unit">吨</span></div>' +
+      '<div class="sub">峰值 ' + (latestWeek.peak ? latestWeek.peak.date : '-') + ' · 谷值 ' + (latestWeek.valley ? latestWeek.valley.date : '-') + '</div>' +
     '</div>';
+}
+
+// ---- Render multi-week trend chart ----
+function renderTrendChart(weeks) {
+  var canvas = document.getElementById('trend-chart');
+  if (!canvas) return;
+
+  if (trendChart) { trendChart.destroy(); trendChart = null; }
+
+  var labels = weeks.map(function(w) { return w.label || ('第' + w.week + '周'); });
+  var values = weeks.map(function(w) { return w.total_ton || 0; });
+  var changes = weeks.map(function(w) { return w.change_pct; });
+  var colors = weeks.map(function(w) { return w.trend_color || '#4C72B0'; });
+
+  trendChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        type: 'bar',
+        label: '周收运量 (吨)',
+        data: values,
+        backgroundColor: colors.map(function(c) { return c + '99'; }),
+        borderColor: colors,
+        borderWidth: 2,
+        borderRadius: 6,
+        yAxisID: 'y',
+        order: 2
+      }, {
+        type: 'line',
+        label: '环比变化率 (%)',
+        data: changes,
+        borderColor: '#DD8452',
+        backgroundColor: 'transparent',
+        borderWidth: 2.5,
+        pointRadius: 5,
+        pointBackgroundColor: function(ctx) {
+          var v = ctx.raw;
+          if (v === null || v === undefined) return '#999';
+          return v >= 0 ? '#16a34a' : '#e15759';
+        },
+        tension: 0.3,
+        yAxisID: 'y1',
+        order: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top' },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              if (ctx.datasetIndex === 0) {
+                return '收运量: ' + fmtNum(ctx.raw, 1) + ' 吨';
+              }
+              if (ctx.raw === null) return '环比: 基线';
+              return '环比: ' + (ctx.raw > 0 ? '+' : '') + fmtPct(ctx.raw);
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          type: 'linear',
+          position: 'left',
+          title: { display: true, text: '收运量 (吨)' },
+          beginAtZero: false,
+          grid: { color: '#e2e8f0' }
+        },
+        y1: {
+          type: 'linear',
+          position: 'right',
+          title: { display: true, text: '环比变化率 (%)' },
+          grid: { drawOnChartArea: false },
+          ticks: { callback: function(v) { return (v > 0 ? '+' : '') + v.toFixed(1) + '%'; } }
+        }
+      }
+    }
+  });
 }
 
 // ---- Render week card header ----
 function renderCardHeader(w, idx) {
+  var hasAnomaly = (w.anomalies_medium || 0) + (w.anomalies_high || 0) > 0;
+  var anomalyDot = '';
+  if (hasAnomaly) {
+    var levelClass = (w.anomalies_high || 0) > 0 ? 'high' : 'medium';
+    anomalyDot = '<span class="anomaly-dot ' + levelClass + '" title="' + w.anomalies_total + ' 项异常"></span>';
+  }
+
   var changeHtml = '';
   if (w.change_pct !== null && w.change_pct !== undefined) {
     var cls = w.change_pct > 0 ? 'up' : 'down';
@@ -525,29 +672,34 @@ function renderCardHeader(w, idx) {
     changeHtml = '<div class="mk-change neutral">基线周</div>';
   }
 
+  var missingBadge = '';
+  if (w.missing_days && w.missing_days.length > 0) {
+    missingBadge = '<span class="missing-badge">缺失' + w.missing_days.length + '天</span>';
+  }
+
   return '<div class="card-header" onclick="toggleWeek(' + w.week + ', this)">' +
-    '<div class="week-badge" style="color:' + w.trend_color + '">第' + w.week + '周</div>' +
+    '<div class="week-badge" style="color:' + (w.trend_color || '#4C72B0') + '">第' + w.week + '周</div>' +
     '<div class="week-info">' +
-      '<div class="week-title">第' + w.week + '周 · ' + w.trend_label + '</div>' +
-      '<div class="week-dates">📅 ' + w.date_range + '（' + w.days + '天）</div>' +
+      '<div class="week-title">' + (w.trend_label || '') + anomalyDot + missingBadge + '</div>' +
+      '<div class="week-dates">📅 ' + (w.date_range || '') + '（' + (w.days_with_data || w.days || 7) + '天）</div>' +
     '</div>' +
     '<div class="mini-kpis">' +
       '<div class="mini-kpi">' +
         '<div class="mk-label">周收运量</div>' +
-        '<div class="mk-value">' + fmtNum(w.total_ton, 1) + '<span class="mk-unit"> 吨</span></div>' +
+        '<div class="mk-value">' + fmtNum(w.total_ton || 0, 1) + '<span class="mk-unit"> 吨</span></div>' +
         changeHtml +
       '</div>' +
       '<div class="mini-kpi">' +
         '<div class="mk-label">日均</div>' +
-        '<div class="mk-value">' + fmtNum(w.avg_daily_ton, 1) + '<span class="mk-unit"> 吨</span></div>' +
-        '<div class="mk-change neutral">' + w.total_trips + ' 车次</div>' +
+        '<div class="mk-value">' + fmtNum(w.avg_daily_ton || 0, 1) + '<span class="mk-unit"> 吨</span></div>' +
+        '<div class="mk-change neutral">' + (w.total_trips || 0) + ' 车次</div>' +
       '</div>' +
     '</div>' +
     '<span class="card-expand-icon">▼</span>' +
   '</div>' +
   '<div class="card-summary">' +
-    '<span class="trend-dot" style="background:' + w.trend_color + '"></span>' +
-    '<span>' + w.summary + '</span>' +
+    '<span class="trend-dot" style="background:' + (w.trend_color || '#4C72B0') + '"></span>' +
+    '<span>' + (w.summary || '暂无总结') + '</span>' +
   '</div>' +
   '<div class="card-body" id="body-' + w.week + '">' +
     '<div style="text-align:center;padding:24px;color:var(--text-secondary);">点击展开以加载详细数据...</div>' +
@@ -556,20 +708,29 @@ function renderCardHeader(w, idx) {
 
 // ---- Render daily detail table ----
 function renderDailyTable(w) {
-  var rows = w.daily.map(function(d) {
-    var changeCell = d.change_pct === null ? '<td>-</td>' :
-      '<td style="color:' + (d.change_pct > 0 ? 'var(--accent-red)' : (d.change_pct < 0 ? 'var(--accent-green)' : 'var(--text-secondary)')) + '">' +
-      (d.change_pct > 0 ? '+' : '') + d.change_pct.toFixed(1) + '%</td>';
+  var peakKg = (w.peak || {}).kg || 0;
+  var valleyKg = (w.valley || {}).kg || 0;
+
+  var rows = (w.daily || []).map(function(d) {
+    var changeCell = '';
+    if (d.missing) {
+      changeCell = '<td style="color:#b91c1c;">⚠️ 缺失</td>';
+    } else if (d.change_pct === null || d.change_pct === undefined) {
+      changeCell = '<td>-</td>';
+    } else {
+      changeCell = '<td style="color:' + (d.change_pct > 0 ? 'var(--accent-red)' : (d.change_pct < 0 ? 'var(--accent-green)' : 'var(--text-secondary)')) + '">' +
+        (d.change_pct > 0 ? '+' : '') + d.change_pct.toFixed(1) + '%</td>';
+    }
 
     var rowClass = '';
-    if (d.total === w.peak.kg) rowClass = ' peak-cell';
-    else if (d.total === w.valley.kg) rowClass = ' valley-cell';
+    if (d.total === peakKg && peakKg > 0) rowClass = ' peak-cell';
+    else if (d.total === valleyKg && valleyKg > 0) rowClass = ' valley-cell';
 
     return '<tr class="' + rowClass + '">' +
       '<td>' + d.date + '</td>' +
       '<td>' + d.weekday + '</td>' +
-      '<td>' + fmtNum(d.total) + '</td>' +
-      '<td>' + d.trips + '</td>' +
+      '<td>' + (d.missing ? '<span style="color:#94a3b8;">-</span>' : fmtNum(d.total)) + '</td>' +
+      '<td>' + (d.missing ? '<span style="color:#94a3b8;">-</span>' : d.trips) + '</td>' +
       changeCell +
       '</tr>';
   }).join('');
@@ -579,60 +740,108 @@ function renderDailyTable(w) {
     '<tbody>' + rows +
     '<tr class="total-row">' +
       '<td><strong>合计/均值</strong></td>' +
-      '<td>' + w.days + '天</td>' +
+      '<td>' + (w.days_with_data || w.days || 7) + '天</td>' +
       '<td><strong>' + fmtNum(w.total_kg) + '</strong></td>' +
-      '<td><strong>' + w.total_trips + '</strong></td>' +
+      '<td><strong>' + (w.total_trips || 0) + '</strong></td>' +
       '<td>日均 ' + fmtNum(w.avg_daily_kg) + ' kg</td>' +
     '</tr></tbody></table>';
 }
 
-// ---- Render region table (W26 only for now) ----
-function renderRegionTable(w) {
+// ---- Render region donut chart ----
+var regionChartInstances = {};
+
+function renderRegionDonut(w) {
   if (!w.regions || w.regions.length === 0) return '';
+
+  var canvasId = 'region-donut-' + w.week;
+  var colors = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f'];
+  var labels = w.regions.map(function(r) { return r.name; });
+  var values = w.regions.map(function(r) { return r.kg; });
+
+  // Table rows
   var rows = w.regions.map(function(r, i) {
-    var colors = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f'];
     return '<tr>' +
       '<td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + colors[i] + ';margin-right:8px;"></span>' + r.name + '</td>' +
       '<td>' + fmtNum(r.kg) + '</td>' +
-      '<td>' + r.pct.toFixed(1) + '%</td>' +
-      '<td>' + r.trips + '</td>' +
+      '<td>' + (r.pct || 0).toFixed(1) + '%</td>' +
+      '<td>' + (r.trips || 0) + '</td>' +
       '<td>' + fmtNum(r.avg_per_trip) + '</td>' +
       '</tr>';
   }).join('');
-  return '<div class="section-subtitle">🏘️ 各区域收运量明细</div>' +
-    '<table class="detail-table">' +
-    '<thead><tr><th>区域</th><th>周总量 (kg)</th><th>占比</th><th>车次</th><th>车均 (kg)</th></tr></thead>' +
-    '<tbody>' + rows + '</tbody></table>';
+
+  var html = '<div class="section-subtitle">🏘️ 各区域收运量明细</div>' +
+    '<div class="region-donut-row">' +
+      '<div class="body-chart-card"><h4>区域占比分布</h4><canvas id="' + canvasId + '"></canvas></div>' +
+      '<div class="body-chart-card"><h4>明细</h4>' +
+        '<table class="detail-table" style="font-size:12px;">' +
+        '<thead><tr><th>区域</th><th>周总量(kg)</th><th>占比</th><th>车次</th><th>车均(kg)</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody></table>' +
+      '</div>' +
+    '</div>';
+
+  // Render donut chart after DOM update
+  setTimeout(function() {
+    var canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    if (regionChartInstances[w.week]) { regionChartInstances[w.week].destroy(); }
+    regionChartInstances[w.week] = new Chart(canvas, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values,
+          backgroundColor: colors.slice(0, labels.length),
+          borderWidth: 2,
+          borderColor: '#fff'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 } } },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                var total = values.reduce(function(a, b) { return a + b; }, 0);
+                var pct = total > 0 ? (ctx.raw / total * 100).toFixed(1) : 0;
+                return ctx.label + ': ' + fmtNum(ctx.raw) + ' kg (' + pct + '%)';
+              }
+            }
+          }
+        }
+      }
+    });
+  }, 150);
+
+  return html;
 }
 
 // ---- Render top 10 vehicle table ----
 function renderTopVehicleTable(w) {
   if (!w.vehicles_top10 || w.vehicles_top10.length === 0) return '';
   var rows = w.vehicles_top10.map(function(v, idx) {
-    var rank = v.rank || (idx + 1);
     return '<tr>' +
-      '<td>' + rank + '</td>' +
+      '<td>' + (idx + 1) + '</td>' +
       '<td><strong>' + v.plate + '</strong></td>' +
-      '<td>' + fmtNum(v.total_kg || v.kg) + '</td>' +
-      '<td>' + (v.total_trips || v.trips) + '</td>' +
+      '<td>' + fmtNum(v.total_kg) + '</td>' +
+      '<td>' + (v.total_trips || 0) + '</td>' +
       '<td>' + fmtNum(v.avg_per_trip) + '</td>' +
-      '<td>' + (v.attendance || v.days_active + '/7') + '</td>' +
+      '<td>' + (v.attendance || '') + '</td>' +
       '</tr>';
   }).join('');
   return '<table class="detail-table vehicle-table">' +
-    '<thead><tr><th>#</th><th>车牌号</th><th>周总量 (kg)</th><th>车次</th><th>车均 (kg)</th><th>出勤</th></tr></thead>' +
+    '<thead><tr><th>#</th><th>车牌号</th><th>周总量(kg)</th><th>车次</th><th>车均(kg)</th><th>出勤</th></tr></thead>' +
     '<tbody>' + rows + '</tbody></table>';
 }
 
 // ---- Render bottom 10 vehicle table with reasons ----
 function renderBottomVehicleTable(w) {
   if (!w.vehicles_bottom10 || w.vehicles_bottom10.length === 0) return '';
-  
-  var weekAvg = w.total_kg / w.total_trips;  // overall weekly average per trip
-  
+
   var rows = w.vehicles_bottom10.map(function(v, idx) {
-    var kg = v.total_kg || v.kg;
-    var trips = v.total_trips || v.trips;
+    var kg = v.total_kg || 0;
+    var trips = v.total_trips || 0;
     var momHtml = '';
     if (v.mom_change_pct !== null && v.mom_change_pct !== undefined) {
       if (v.mom_change_pct > 0) {
@@ -645,46 +854,46 @@ function renderBottomVehicleTable(w) {
     } else {
       momHtml = '<span class="mom-neutral">基线</span>';
     }
-    
+
     var reasons = v.decline_reasons || [];
-    var reasonsHtml = reasons.length > 0 
+    var reasonsHtml = reasons.length > 0
       ? reasons.map(function(r) { return '<span style="display:inline-block;background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;margin:1px;font-size:11px;">' + r + '</span>'; }).join(' ')
       : '<span style="color:#64748b;">正常</span>';
-    
+
     return '<tr class="warn-row">' +
       '<td style="color:#991b1b;font-weight:700;">' + (10 - idx) + '</td>' +
       '<td><strong>' + v.plate + '</strong><div style="font-size:11px;color:#64748b;">' + (v.unit || '') + '</div></td>' +
       '<td>' + fmtNum(kg) + '</td>' +
       '<td>' + trips + '</td>' +
       '<td>' + fmtNum(v.avg_per_trip) + '</td>' +
-      '<td>' + (v.attendance || v.days_active + '/7') + '</td>' +
+      '<td>' + (v.attendance || '') + '</td>' +
       '<td>' + momHtml + '</td>' +
       '<td class="reason-cell"><div class="decline-reasons">' + reasonsHtml + '</div></td>' +
       '</tr>';
   }).join('');
-  
+
   return '<div class="ranking-card bottom">' +
-    '<h4>⚠️ 运力后10名·需关注车辆</h4>' +
+    '<h4>⚠️ 运力后10名 · 需关注车辆</h4>' +
     '<div style="font-size:11px;color:#991b1b;margin-bottom:8px;">🔍 排名依据：周收运总量(kg) │ 环比变化｜出勤率｜车均装载量</div>' +
     '<table class="detail-table vehicle-table">' +
     '<thead><tr><th>#</th><th>车牌号</th><th>周总量(kg)</th><th>车次</th><th>车均(kg)</th><th>出勤</th><th>环比</th><th>下滑原因</th></tr></thead>' +
     '<tbody>' + rows + '</tbody></table></div>';
 }
 
-// ---- Render combined vehicle rankings (top + bottom side by side) ----
+// ---- Render combined vehicle rankings ----
 function renderVehicleRankings(w) {
   var hasTop = w.vehicles_top10 && w.vehicles_top10.length > 0;
   var hasBottom = w.vehicles_bottom10 && w.vehicles_bottom10.length > 0;
-  
+
   if (!hasTop && !hasBottom) return '';
-  
+
   var html = '<div class="section-subtitle">🚛 运力排名分析</div>';
-  
+
   if (hasTop && hasBottom) {
     html += '<div class="ranking-duo">' +
       '<div class="ranking-card top">' +
         '<h4>🏆 运力TOP10 · 高效车辆</h4>' +
-        '<div style="font-size:11px;color:#166534;margin-bottom:8px;">📊 排名依据：周收运总量(kg) │ 车均装载量 │ 出勤率</div>' +
+        '<div style="font-size:11px;color:#166534;margin-bottom:8px;">📊 排名依据：周收运总量 │ 车均装载量 │ 出勤率</div>' +
         renderTopVehicleTable(w) +
       '</div>' +
       renderBottomVehicleTable(w) +
@@ -692,42 +901,41 @@ function renderVehicleRankings(w) {
   } else if (hasTop) {
     html += '<div class="ranking-card top" style="margin-top:16px;">' +
       '<h4>🏆 运力TOP10 · 高效车辆</h4>' +
-      '<div style="font-size:11px;color:#166534;margin-bottom:8px;">📊 排名依据：周收运总量(kg) │ 车均装载量 │ 出勤率</div>' +
       renderTopVehicleTable(w) +
     '</div>';
   } else if (hasBottom) {
     html += renderBottomVehicleTable(w);
   }
-  
+
   return html;
 }
 
 // ---- Render daily chart ----
 function renderDailyChart(w) {
-  var labels = w.daily.map(function(d) { return d.date; });
-  var values = w.daily.map(function(d) { return d.total; });
-  var trips = w.daily.map(function(d) { return d.trips; });
-  var bgColors = w.daily.map(function(d) {
-    if (d.total === w.peak.kg) return 'rgba(225,87,89,0.7)';
-    if (d.total === w.valley.kg) return 'rgba(89,161,79,0.7)';
+  var canvas = document.getElementById('daily-chart-' + w.week);
+  if (!canvas) return;
+  if (dailyChart) { dailyChart.destroy(); dailyChart = null; }
+
+  var labels = (w.daily || []).map(function(d) { return d.date; });
+  var values = (w.daily || []).map(function(d) { return d.missing ? null : d.total; });
+  var trips = (w.daily || []).map(function(d) { return d.trips || 0; });
+  var peakKg = (w.peak || {}).kg || 0;
+  var valleyKg = (w.valley || {}).kg || 0;
+
+  var bgColors = (w.daily || []).map(function(d) {
+    if (d.missing) return 'rgba(160,160,160,0.3)';
+    if (d.total === peakKg && peakKg > 0) return 'rgba(225,87,89,0.7)';
+    if (d.total === valleyKg && valleyKg > 0) return 'rgba(89,161,79,0.7)';
     return 'rgba(76,114,176,0.6)';
   });
-  var borderColors = w.daily.map(function(d) {
-    if (d.total === w.peak.kg) return '#e15759';
-    if (d.total === w.valley.kg) return '#59a14f';
+  var borderColors = (w.daily || []).map(function(d) {
+    if (d.missing) return '#aaa';
+    if (d.total === peakKg && peakKg > 0) return '#e15759';
+    if (d.total === valleyKg && valleyKg > 0) return '#59a14f';
     return '#4C72B0';
   });
 
-  var canvas = document.getElementById('daily-chart-' + w.week);
-  if (!canvas) return;
-
-  // Destroy existing chart if any
-  if (activeChart) {
-    activeChart.destroy();
-    activeChart = null;
-  }
-
-  activeChart = new Chart(canvas, {
+  dailyChart = new Chart(canvas, {
     type: 'bar',
     data: {
       labels: labels,
@@ -737,7 +945,8 @@ function renderDailyChart(w) {
         backgroundColor: bgColors,
         borderColor: borderColors,
         borderWidth: 1,
-        borderRadius: 6
+        borderRadius: 6,
+        skipNull: true
       }]
     },
     options: {
@@ -749,6 +958,7 @@ function renderDailyChart(w) {
           callbacks: {
             label: function(ctx) {
               var idx = ctx.dataIndex;
+              if (ctx.raw === null) return '数据缺失';
               return '收运量: ' + fmtNum(ctx.raw) + ' kg · ' + trips[idx] + ' 车次';
             }
           }
@@ -766,20 +976,46 @@ function renderDailyChart(w) {
 
 // ---- Anomaly visualization ----
 function renderAnomalyBar(w) {
-  var total = w.anomalies_total;
-  var med = w.anomalies_medium;
-  var low = w.anomalies_low;
-  var medPct = (med / total * 100).toFixed(0);
-  var lowPct = (low / total * 100).toFixed(0);
-  return '<div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">' +
-    '异常检测：共 <strong>' + total + '</strong> 项 ' +
-    '<span style="color:var(--accent-orange);">中危 ' + med + '</span> · ' +
-    '<span style="color:#94a3b8;">低危 ' + low + '</span>' +
-    '<div class="anomaly-bar">' +
-    '<span class="seg medium" style="width:' + medPct + '%"></span>' +
-    '<span class="seg low" style="width:' + lowPct + '%"></span>' +
-    '<span class="label">中危 ' + medPct + '% | 低危 ' + lowPct + '%</span>' +
-    '</div></div>';
+  var total = w.anomalies_total || 0;
+  if (total === 0) {
+    return '<div style="font-size:12px;color:var(--accent-green);margin-top:4px;">✅ 本周未检测到异常</div>';
+  }
+  var high = w.anomalies_high || 0;
+  var med = w.anomalies_medium || 0;
+  var low = w.anomalies_low || 0;
+  var highPct = total > 0 ? (high / total * 100).toFixed(0) : 0;
+  var medPct = total > 0 ? (med / total * 100).toFixed(0) : 0;
+  var lowPct = total > 0 ? (low / total * 100).toFixed(0) : 0;
+
+  var html = '<div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">' +
+    '异常检测：共 <strong>' + total + '</strong> 项 ';
+
+  if (high > 0) html += '<span style="color:var(--accent-red);">高危 ' + high + '</span> · ';
+  if (med > 0) html += '<span style="color:var(--accent-orange);">中危 ' + med + '</span> · ';
+  if (low > 0) html += '<span style="color:#94a3b8;">低危 ' + low + '</span>';
+
+  html += '<div class="anomaly-bar">';
+  if (high > 0) html += '<span class="seg high" style="width:' + highPct + '%"></span>';
+  if (med > 0) html += '<span class="seg medium" style="width:' + medPct + '%"></span>';
+  if (low > 0) html += '<span class="seg low" style="width:' + lowPct + '%"></span>';
+  html += '<span class="label">高危' + highPct + '% | 中危' + medPct + '% | 低危' + lowPct + '%</span>';
+  html += '</div></div>';
+
+  return html;
+}
+
+// ---- Weekly anomalies detail ----
+function renderWeeklyAnomalies(w) {
+  var anomalies = w.weekly_anomalies || [];
+  if (anomalies.length === 0) return '';
+
+  var html = '<div class="section-subtitle" style="color:#b91c1c;">⚠️ 周级异常详情</div><ul style="font-size:13px;color:#b91c1c;line-height:1.8;margin-left:16px;">';
+  anomalies.forEach(function(a) {
+    var emoji = { high: '🔴', medium: '🟡', low: '🟢' }[a.level] || '⚪';
+    html += '<li>' + emoji + ' [' + a.type + '] ' + (typeof a.message === 'string' ? a.message : '') + '</li>';
+  });
+  html += '</ul>';
+  return html;
 }
 
 // ---- Toggle week expansion ----
@@ -788,25 +1024,24 @@ async function toggleWeek(weekNum, headerEl) {
   var body = document.getElementById('body-' + weekNum);
 
   if (card.classList.contains('expanded')) {
-    // Collapse
     card.classList.remove('expanded');
-    if (activeChart) { activeChart.destroy(); activeChart = null; }
+    if (dailyChart) { dailyChart.destroy(); dailyChart = null; }
     expandedWeek = null;
     return;
   }
 
-  // Collapse any previously expanded
+  // Collapse previous
   if (expandedWeek !== null) {
     var prevCard = document.querySelector('.week-card.expanded');
     if (prevCard) prevCard.classList.remove('expanded');
-    if (activeChart) { activeChart.destroy(); activeChart = null; }
+    if (dailyChart) { dailyChart.destroy(); dailyChart = null; }
+    // Clean up region charts
+    if (regionChartInstances[expandedWeek]) { regionChartInstances[expandedWeek].destroy(); delete regionChartInstances[expandedWeek]; }
   }
 
-  // Expand this one
   card.classList.add('expanded');
   expandedWeek = weekNum;
 
-  // Load data if not yet loaded
   if (body.getAttribute('data-loaded') !== 'true') {
     body.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-secondary);"><div class="spinner"></div><p>加载第' + weekNum + '周详细数据...</p></div>';
 
@@ -816,7 +1051,6 @@ async function toggleWeek(weekNum, headerEl) {
       return;
     }
 
-    // Merge into allWeeks if not there
     var existing = allWeeks.filter(function(x) { return x.week === weekNum; });
     if (existing.length === 0) allWeeks.push(w);
 
@@ -827,64 +1061,152 @@ async function toggleWeek(weekNum, headerEl) {
         '<div class="body-chart-card"><h4>📋 每日收运明细</h4>' + renderDailyTable(w) + '</div>' +
       '</div>' +
       renderAnomalyBar(w) +
-      renderRegionTable(w) +
+      renderWeeklyAnomalies(w) +
+      renderRegionDonut(w) +
       renderVehicleRankings(w);
 
-    // Render chart
     setTimeout(function() { renderDailyChart(w); }, 100);
   } else {
-    // Re-render chart (may have been destroyed)
     var w = allWeeks.filter(function(x) { return x.week === weekNum; })[0];
     if (w) {
       setTimeout(function() { renderDailyChart(w); }, 100);
+      // Re-render region donut
+      if (regionChartInstances[weekNum]) { regionChartInstances[weekNum].destroy(); }
+      if (w.regions && w.regions.length > 0) {
+        // The donut was already rendered in the body, re-trigger
+        var regionSection = document.getElementById('body-' + weekNum).querySelector('.region-donut-row');
+        if (regionSection) {
+          regionSection.remove();
+          var regionHtml = renderRegionDonut(w);
+          document.getElementById('body-' + weekNum).querySelector('.body-chart-row').insertAdjacentHTML('afterend', regionHtml);
+        }
+      }
     }
   }
 }
 
+// ---- Alert banner for latest week ----
+function renderAlertBanner(latestWeek) {
+  var anomalies = latestWeek.weekly_anomalies || [];
+  var highAnomalies = anomalies.filter(function(a) { return a.level === 'high'; });
+  var medAnomalies = anomalies.filter(function(a) { return a.level === 'medium'; });
+
+  if (highAnomalies.length === 0 && medAnomalies.length === 0 && (latestWeek.missing_days || []).length === 0) {
+    return;
+  }
+
+  var banner = document.getElementById('alert-banner');
+  var list = document.getElementById('alert-list');
+  var items = [];
+
+  highAnomalies.forEach(function(a) {
+    items.push('🔴 ' + a.message);
+  });
+  medAnomalies.forEach(function(a) {
+    items.push('🟡 ' + a.message);
+  });
+  if (latestWeek.missing_days && latestWeek.missing_days.length > 0) {
+    items.push('⚠️ 数据缺失: ' + latestWeek.missing_days.join(', '));
+  }
+
+  if (items.length > 0) {
+    list.innerHTML = items.map(function(i) { return '<li>' + i + '</li>'; }).join('');
+    banner.classList.add('visible');
+  }
+}
+
+// ---- CSV Export ----
+function exportCSV() {
+  if (allWeeks.length === 0) {
+    alert('暂无数据可导出');
+    return;
+  }
+
+  var headers = ['周次', '日期范围', '周收运量(吨)', '日均收运量(吨)', '车次', '车辆数', '环比变化率(%)', '趋势', '峰值日期', '峰值(吨)', '谷值日期', '谷值(吨)', '异常总数', '中危', '低危', '数据缺失天数', '总结'];
+  var rows = allWeeks.map(function(w) {
+    return [
+      '第' + w.week + '周',
+      w.date_range || '',
+      w.total_ton || 0,
+      w.avg_daily_ton || 0,
+      w.total_trips || 0,
+      w.vehicle_count || 0,
+      w.change_pct !== null && w.change_pct !== undefined ? w.change_pct : '',
+      w.trend_label || '',
+      (w.peak || {}).date || '',
+      (w.peak || {}).ton || 0,
+      (w.valley || {}).date || '',
+      (w.valley || {}).ton || 0,
+      w.anomalies_total || 0,
+      w.anomalies_medium || 0,
+      w.anomalies_low || 0,
+      (w.missing_days || []).length,
+      '"' + (w.summary || '').replace(/"/g, '""') + '"'
+    ];
+  });
+
+  var csvContent = '\uFEFF' + headers.join(',') + '\n' + rows.map(function(r) { return r.join(','); }).join('\n');
+  var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = '厨余收运周数据汇总_' + new Date().toISOString().slice(0, 10) + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 // ---- Main init ----
 async function init() {
-  // Load reports.json for the index
-  var weeksData = [];
-  var weekNums = [26, 25, 24, 23];  // Reverse chronological
+  var available = await discoverWeekFiles();
 
-  // Load summary data for all weeks (just header info)
-  for (var i = 0; i < weekNums.length; i++) {
-    try {
-      var w = await loadWeekData(weekNums[i]);
-      if (w) weeksData.push(w);
-    } catch (e) {
-      console.warn('Failed to load W' + weekNums[i], e);
-    }
+  if (available.length === 0) {
+    document.getElementById('report-list').innerHTML =
+      '<div class="loading-placeholder"><p>暂无报告数据（请先在金山文档中添加每日收运数据）</p></div>';
+    document.getElementById('data-status').textContent = '⚠️ 未找到数据文件';
+    return;
+  }
+
+  // Sort descending (latest first)
+  available.sort(function(a, b) { return b - a; });
+
+  // Load all weeks
+  var weeksData = [];
+  for (var i = 0; i < available.length; i++) {
+    var w = await loadWeekData(available[i]);
+    if (w) weeksData.push(w);
   }
 
   if (weeksData.length === 0) {
     document.getElementById('report-list').innerHTML =
-      '<div class="loading-placeholder"><p>暂无报告数据</p></div>';
+      '<div class="loading-placeholder"><p>数据加载失败，请稍后重试</p></div>';
     document.getElementById('data-status').textContent = '⚠️ 数据加载失败';
     return;
   }
 
   allWeeks = weeksData;
-
-  // Sort reverse chronological (W26 first)
   allWeeks.sort(function(a, b) { return b.week - a.week; });
 
-  // Render monthly KPI
+  // KPI
   renderMonthlyKPI(allWeeks);
 
-  // Render report list
-  document.getElementById('report-count').textContent =
-    '共 ' + allWeeks.length + ' 周报告 · 按时间倒序排列';
+  // Multi-week trend
+  renderTrendChart(allWeeks);
+
+  // Alert for latest week
+  renderAlertBanner(allWeeks[0]);
+
+  // Report list
+  document.getElementById('report-count').textContent = '共 ' + allWeeks.length + ' 周报告 · 按时间倒序';
 
   var listHtml = allWeeks.map(function(w) {
-    return '<div class="week-card ' + w.trend + '">' + renderCardHeader(w) + '</div>';
+    return '<div class="week-card ' + (w.trend || 'baseline') + '">' + renderCardHeader(w) + '</div>';
   }).join('');
-
   document.getElementById('report-list').innerHTML = listHtml;
-  document.getElementById('data-status').textContent =
-    '✅ 已加载 ' + allWeeks.length + ' 周数据';
+  document.getElementById('data-status').textContent = '✅ 已加载 ' + allWeeks.length + ' 周数据 · 最新: ' + (allWeeks[0].date_range || '');
 
-  // Auto-expand the most recent week (W26 by default)
+  // Auto-expand latest week
   var firstCard = document.querySelector('.week-card');
   if (firstCard) {
     var firstHeader = firstCard.querySelector('.card-header');
@@ -894,7 +1216,6 @@ async function init() {
   }
 }
 
-// Start
 document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
