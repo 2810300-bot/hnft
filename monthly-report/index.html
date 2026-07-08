@@ -243,14 +243,7 @@
         .trend-badge.up { color: #16a34a; background: #f0fdf4; }
         .trend-badge.down { color: #ef4444; background: #fef2f2; }
 
-        /* Refresh indicator pulse */
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-        .pulse-dot {
-            animation: pulse-dot 1.5s ease-in-out infinite;
-        }
+        /* Refresh indicator pulse — removed (no auto-refresh) */
 
         /* Scrollbar styling */
         ::-webkit-scrollbar { width: 8px; }
@@ -262,6 +255,136 @@
         @media (max-width: 768px) {
             .metric-value { font-size: 28px !important; }
         }
+
+        /* Password Gate */
+        #password-gate {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #f8fafc;
+            z-index: 10001;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s ease;
+        }
+        #password-gate.hidden { opacity: 0; pointer-events: none; }
+        .password-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08), 0 10px 24px rgba(0,0,0,0.06);
+            padding: 40px 36px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        .password-icon-wrap {
+            width: 64px; height: 64px;
+            margin: 0 auto 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #16a34a 0%, #0891b2 100%);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .password-icon-wrap i { color: #fff; font-size: 28px; }
+        .password-title {
+            font-size: 20px; font-weight: 700; color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .password-subtitle {
+            font-size: 13px; color: #94a3b8;
+            margin-bottom: 24px;
+        }
+        .password-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 4px;
+            color: #1e293b;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .password-input:focus { border-color: #16a34a; }
+        .password-btn {
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px;
+            background: linear-gradient(135deg, #16a34a 0%, #0891b2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+        .password-btn:hover { opacity: 0.9; }
+        .password-error {
+            margin-top: 12px;
+            color: #ef4444;
+            font-size: 13px;
+            min-height: 18px;
+            transition: opacity 0.3s ease;
+        }
+
+        /* History Archive */
+        .history-item {
+            margin-bottom: 12px;
+        }
+        .history-link, .history-link-disabled {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            text-decoration: none;
+            transition: background-color 0.15s ease, box-shadow 0.15s ease;
+            cursor: pointer;
+        }
+        .history-link:hover {
+            background: #f1f5f9;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .history-link-disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .history-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .history-link .history-title i { color: #16a34a; }
+        .history-link-disabled .history-title i { color: #94a3b8; }
+        .history-meta {
+            font-size: 13px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .history-badge {
+            background: #f1f5f9;
+            color: #64748b;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .history-tip {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #94a3b8;
+            text-align: center;
+        }
+        .history-tip i { margin-right: 4px; }
     </style>
 </head>
 <body>
@@ -271,6 +394,88 @@
     <div class="loader"></div>
     <div class="loader-text">正在加载月度总结报告...</div>
 </div>
+
+<!-- Password Gate -->
+<div id="password-gate">
+    <div class="password-card">
+        <div class="password-icon-wrap">
+            <i class="fas fa-lock"></i>
+        </div>
+        <div class="password-title">访问验证</div>
+        <div class="password-subtitle">请输入密码以查看月度经营总结报告</div>
+        <input type="password" id="password-input" class="password-input" placeholder="输入密码" autocomplete="off">
+        <button id="password-submit" class="password-btn">进入报告</button>
+        <div id="password-error" class="password-error"></div>
+    </div>
+</div>
+
+<!-- Password Gate Script (最早执行) -->
+<script>
+(function() {
+    'use strict';
+    // 默认密码：hnft，后续可改为SHA-256哈希校验
+    var PASSWORD = 'hnft';
+    var STORAGE_KEY = 'monthly_dashboard_unlocked';
+
+    function isUnlocked() {
+        try {
+            return localStorage.getItem(STORAGE_KEY) === 'true';
+        } catch(e) {
+            return false;
+        }
+    }
+
+    function unlockAndShow() {
+        var gate = document.getElementById('password-gate');
+        if (gate) {
+            gate.classList.add('hidden');
+            setTimeout(function() { gate.style.display = 'none'; }, 400);
+        }
+        try { localStorage.setItem(STORAGE_KEY, 'true'); } catch(e) {}
+    }
+
+    function showError(msg) {
+        var el = document.getElementById('password-error');
+        if (el) {
+            el.textContent = msg;
+            el.style.opacity = '1';
+            setTimeout(function() {
+                el.style.opacity = '0';
+            }, 3000);
+        }
+    }
+
+    function verify() {
+        var input = document.getElementById('password-input');
+        if (!input) return;
+        if (input.value === PASSWORD) {
+            unlockAndShow();
+        } else {
+            showError('密码错误，请重试');
+            input.value = '';
+            input.focus();
+        }
+    }
+
+    // 页面加载时若已解锁则直接放行
+    if (isUnlocked()) {
+        unlockAndShow();
+    } else {
+        // 绑定事件
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.getElementById('password-submit');
+            var input = document.getElementById('password-input');
+            if (btn) btn.addEventListener('click', verify);
+            if (input) {
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') verify();
+                });
+                input.focus();
+            }
+        });
+    }
+})();
+</script>
 
 <!-- Report Data JSON -->
 <script id="report-data" type="application/json">
@@ -511,10 +716,9 @@
                         <div id="hdr-date" class="text-xs text-slate-400"></div>
                     </div>
                     <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
-                        <span class="w-2 h-2 rounded-full bg-brand-green pulse-dot"></span>
-                        <i class="fas fa-sync-alt text-brand-green text-xs"></i>
-                        <span class="text-xs text-slate-500">刷新</span>
-                        <span id="refresh-countdown" class="text-xs font-mono font-bold text-brand-green">5:00</span>
+                        <span class="w-2 h-2 rounded-full bg-brand-green"></span>
+                        <i class="fas fa-lock text-brand-green text-xs"></i>
+                        <span class="text-xs text-slate-500">已验证访问</span>
                     </div>
                 </div>
             </div>
@@ -576,6 +780,17 @@
             </div>
         </section>
 
+        <!-- History Archive -->
+        <section class="mb-8">
+            <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+                <i class="fas fa-history text-brand-cyan"></i>
+                历史报告归档
+            </h3>
+            <div id="history-container">
+                <!-- History links rendered by JS -->
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -587,8 +802,8 @@
                     <span>最后更新：<span id="footer-updated" class="text-slate-500 font-medium"></span></span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>页面每5分钟自动刷新</span>
+                    <i class="fas fa-hand-pointer"></i>
+                    <span>手动刷新页面以查看最新数据</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <i class="fas fa-copyright"></i>
@@ -605,7 +820,7 @@
     'use strict';
 
     // ========================================
-    // 0. Error Recovery
+    // 0. Error Recovery (无自动重试，仅手动刷新)
     // ========================================
     function showError(msg) {
         document.getElementById('loading-overlay').style.display = 'none';
@@ -615,17 +830,9 @@
                 <div style="font-size:48px;margin-bottom:16px;">⚠️</div>
                 <h2 style="color:#dc2626;margin-bottom:12px;">数据加载失败</h2>
                 <p style="color:#64748b;margin-bottom:8px;">${msg}</p>
-                <p style="color:#94a3b8;font-size:13px;">请稍后刷新页面重试，或联系管理员检查数据源。</p>
-                <div id="error-countdown" style="margin-top:20px;color:#16a34a;font-size:14px;"></div>
+                <p style="color:#94a3b8;font-size:13px;">请刷新页面重试，或联系管理员检查数据源。</p>
+                <div style="margin-top:20px;color:#16a34a;font-size:14px;">点击浏览器刷新按钮即可重试</div>
             </div>`;
-        // Auto-retry after 30 seconds
-        let retrySec = 30;
-        const cd = document.getElementById('error-countdown');
-        const timer = setInterval(function() {
-            retrySec--;
-            if (cd) cd.textContent = retrySec + ' 秒后自动重试...';
-            if (retrySec <= 0) { clearInterval(timer); location.reload(); }
-        }, 1000);
     }
 
     // ========================================
@@ -953,87 +1160,33 @@
     });
 
     // ========================================
-    // 6. Smart Data Refresh — poll data.json for changes
+    // 6. 历史报告归档区域渲染（无自动刷新，仅手动操作）
     // ========================================
-    const REFRESH_INTERVAL = 5 * 60 * 1000; // re-check every 5 minutes
-    let countdown = REFRESH_INTERVAL / 1000;
-    let lastDataHash = '';
-
-    // Compute a simple hash of the embedded JSON for change detection
-    function computeDataHash() {
-        let s = '';
-        s += JSON.stringify(reportData.key_metrics);
-        s += JSON.stringify(reportData.monthly_trend);
-        s += reportData.last_updated;
-        return s.length + '_' + s.replace(/[^a-z0-9]/gi, '').substring(0, 50);
+    var historyReports = [
+        { period: '2026年5月', file: '2026年5月总结报告.html', date: '2026年6月10日', available: false },
+        { period: '2026年6月', file: '2026年6月总结报告.html', date: '2026年7月8日', available: true }
+    ];
+    var historyEl = document.getElementById('history-container');
+    if (historyEl) {
+        var html = '';
+        historyReports.forEach(function(r) {
+            var linkHtml;
+            if (r.available) {
+                linkHtml = '<a href="' + r.file + '" class="history-link">' +
+                    '<span class="history-title"><i class="fas fa-file-alt"></i> ' + r.period + '总结报告</span>' +
+                    '<span class="history-meta">编制日期：' + r.date + ' <i class="fas fa-arrow-right"></i></span>' +
+                    '</a>';
+            } else {
+                linkHtml = '<span class="history-link history-link-disabled">' +
+                    '<span class="history-title"><i class="fas fa-file-alt"></i> ' + r.period + '总结报告</span>' +
+                    '<span class="history-meta">编制日期：' + r.date + ' <span class="history-badge">待发布</span></span>' +
+                    '</span>';
+            }
+            html += '<div class="history-item">' + linkHtml + '</div>';
+        });
+        html += '<p class="history-tip"><i class="fas fa-info-circle"></i> 历史报告HTML版本将随各月发布同步上线</p>';
+        historyEl.innerHTML = html;
     }
-    lastDataHash = computeDataHash();
-
-    function updateCountdown() {
-        const minutes = Math.floor(countdown / 60);
-        const seconds = countdown % 60;
-        const el = document.getElementById('refresh-countdown');
-        if (el) {
-            el.textContent = minutes + ':' + seconds.toString().padStart(2, '0');
-        }
-        countdown--;
-        if (countdown < 0) {
-            checkForUpdates();
-            countdown = REFRESH_INTERVAL / 1000; // reset countdown
-        }
-    }
-
-    function checkForUpdates() {
-        // Fetch data.json with cache-busting to detect changes
-        fetch('data.json?t=' + Date.now(), { cache: 'no-store' })
-            .then(function(resp) {
-                if (!resp.ok) throw new Error('HTTP ' + resp.status);
-                return resp.json();
-            })
-            .then(function(newData) {
-                // Compute hash of new data
-                let s = '';
-                s += JSON.stringify(newData.key_metrics);
-                s += JSON.stringify(newData.monthly_trend);
-                s += newData.last_updated;
-                var newHash = s.length + '_' + s.replace(/[^a-z0-9]/gi, '').substring(0, 50);
-
-                if (newHash !== lastDataHash) {
-                    // Data has been updated! Show notification then reload.
-                    showUpdateNotification(newData.last_updated);
-                }
-            })
-            .catch(function(err) {
-                // data.json not available or fetch failed — just reload page as fallback
-                console.log('Data check skipped:', err.message);
-                location.reload();
-            });
-    }
-
-    function showUpdateNotification(newTime) {
-        // Show a toast/banner before reloading
-        var banner = document.createElement('div');
-        banner.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:10000;' +
-            'background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;' +
-            'box-shadow:0 4px 16px rgba(22,163,74,0.4);display:flex;align-items:center;gap:8px;animation:slideDown 0.4s ease;';
-        banner.innerHTML = '<i class="fas fa-check-circle"></i> 检测到数据更新，正在刷新...';
-        document.body.appendChild(banner);
-
-        // Add slideDown animation if not exists
-        if (!document.getElementById('anim-slide-down')) {
-            var style = document.createElement('style');
-            style.id = 'anim-slide-down';
-            style.textContent = '@keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-20px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}';
-            document.head.appendChild(style);
-        }
-
-        setTimeout(function() {
-            location.reload();
-        }, 1500);
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
 
     // ========================================
     // 7. Show App, Hide Loading
