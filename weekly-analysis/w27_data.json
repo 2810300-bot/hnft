@@ -1,0 +1,2250 @@
+{
+  "total_kg": 1260950,
+  "total_ton": 1261.0,
+  "total_trips": 276,
+  "avg_daily_kg": 180135,
+  "avg_daily_ton": 180.1,
+  "days_with_data": 7,
+  "missing_days": [],
+  "zero_days": [],
+  "peak_day": [
+    "2026-07-02",
+    {
+      "kg": 207620,
+      "trips": 45,
+      "vehicles": 45
+    }
+  ],
+  "valley_day": [
+    "2026-07-01",
+    {
+      "kg": 103660,
+      "trips": 25,
+      "vehicles": 25
+    }
+  ],
+  "vehicles": [
+    {
+      "plate": "湘FA9847",
+      "unit": "南湖新区餐厨",
+      "total_kg": 109200,
+      "total_trips": 20,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 11090.0,
+          "waste_weight_kg": 6110.0,
+          "entry_time": "2026-6-29 14:21"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 10960.0,
+          "waste_weight_kg": 5980.0,
+          "entry_time": "2026-6-29 18:40"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 9950.0,
+          "waste_weight_kg": 4970.0,
+          "entry_time": "2026-6-29 21:34"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 11060.0,
+          "waste_weight_kg": 6080.0,
+          "entry_time": "2026-6-30 14:20"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 9630.0,
+          "waste_weight_kg": 4650.0,
+          "entry_time": "2026-6-30 18:13"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 11040.0,
+          "waste_weight_kg": 6060.0,
+          "entry_time": "2026-6-30 21:36"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 11160.0,
+          "waste_weight_kg": 6180.0,
+          "entry_time": "2026-7-1 18:37"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 10290.0,
+          "waste_weight_kg": 5310.0,
+          "entry_time": "2026-7-1 22:23"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 10940.0,
+          "waste_weight_kg": 5960.0,
+          "entry_time": "2026-7-2 14:15"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 10170.0,
+          "waste_weight_kg": 5190.0,
+          "entry_time": "2026-7-2 16:58"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 10380.0,
+          "waste_weight_kg": 5400.0,
+          "entry_time": "2026-7-2 20:40"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 10890.0,
+          "waste_weight_kg": 5910.0,
+          "entry_time": "2026-7-3 13:39"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 10380.0,
+          "waste_weight_kg": 5400.0,
+          "entry_time": "2026-7-3 16:47"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 9440.0,
+          "waste_weight_kg": 4460.0,
+          "entry_time": "2026-7-3 20:48"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 9720.0,
+          "waste_weight_kg": 4740.0,
+          "entry_time": "2026-7-4 15:36"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 10900.0,
+          "waste_weight_kg": 5920.0,
+          "entry_time": "2026-7-4 18:09"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 9950.0,
+          "waste_weight_kg": 4970.0,
+          "entry_time": "2026-7-4 21:05"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 10910.0,
+          "waste_weight_kg": 5930.0,
+          "entry_time": "2026-7-5 13:00"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 10480.0,
+          "waste_weight_kg": 5500.0,
+          "entry_time": "2026-7-5 17:58"
+        },
+        {
+          "unit": "南湖新区餐厨",
+          "plate": "湘FA9847",
+          "entry_weight_kg": 9460.0,
+          "waste_weight_kg": 4480.0,
+          "entry_time": "2026-7-5 21:08"
+        }
+      ]
+    },
+    {
+      "plate": "湘FA8347",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 102430,
+      "total_trips": 29,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 12910.0,
+          "waste_weight_kg": 6860.0,
+          "entry_time": "2026-6-29 17:56"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8670.0,
+          "waste_weight_kg": 2620.0,
+          "entry_time": "2026-6-30 4:30"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8190.0,
+          "waste_weight_kg": 2140.0,
+          "entry_time": "2026-6-30 8:03"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8540.0,
+          "waste_weight_kg": 2490.0,
+          "entry_time": "2026-6-30 15:20"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8720.0,
+          "waste_weight_kg": 2670.0,
+          "entry_time": "2026-6-30 17:39"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 13090.0,
+          "waste_weight_kg": 7040.0,
+          "entry_time": "2026-6-30 20:03"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8580.0,
+          "waste_weight_kg": 2530.0,
+          "entry_time": "2026-7-1 4:55"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8580.0,
+          "waste_weight_kg": 2530.0,
+          "entry_time": "2026-7-1 7:12"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8800.0,
+          "waste_weight_kg": 2750.0,
+          "entry_time": "2026-7-1 17:04"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8360.0,
+          "waste_weight_kg": 2310.0,
+          "entry_time": "2026-7-2 4:28"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8880.0,
+          "waste_weight_kg": 2830.0,
+          "entry_time": "2026-7-2 7:36"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8360.0,
+          "waste_weight_kg": 2310.0,
+          "entry_time": "2026-7-2 14:46"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8910.0,
+          "waste_weight_kg": 2860.0,
+          "entry_time": "2026-7-2 16:53"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 13250.0,
+          "waste_weight_kg": 7200.0,
+          "entry_time": "2026-7-2 19:24"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8670.0,
+          "waste_weight_kg": 2620.0,
+          "entry_time": "2026-7-3 4:43"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8650.0,
+          "waste_weight_kg": 2600.0,
+          "entry_time": "2026-7-3 7:21"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8550.0,
+          "waste_weight_kg": 2500.0,
+          "entry_time": "2026-7-3 14:29"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 9240.0,
+          "waste_weight_kg": 3190.0,
+          "entry_time": "2026-7-3 17:25"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 12680.0,
+          "waste_weight_kg": 6630.0,
+          "entry_time": "2026-7-3 21:00"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8840.0,
+          "waste_weight_kg": 2790.0,
+          "entry_time": "2026-7-4 4:56"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 9030.0,
+          "waste_weight_kg": 2980.0,
+          "entry_time": "2026-7-4 7:50"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8740.0,
+          "waste_weight_kg": 2690.0,
+          "entry_time": "2026-7-4 15:58"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 9010.0,
+          "waste_weight_kg": 2960.0,
+          "entry_time": "2026-7-4 18:01"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 13320.0,
+          "waste_weight_kg": 7270.0,
+          "entry_time": "2026-7-4 20:40"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8630.0,
+          "waste_weight_kg": 2580.0,
+          "entry_time": "2026-7-5 4:36"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8630.0,
+          "waste_weight_kg": 2580.0,
+          "entry_time": "2026-7-5 7:19"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8540.0,
+          "waste_weight_kg": 2490.0,
+          "entry_time": "2026-7-5 15:12"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 8870.0,
+          "waste_weight_kg": 2820.0,
+          "entry_time": "2026-7-5 18:32"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA8347",
+          "entry_weight_kg": 12640.0,
+          "waste_weight_kg": 6590.0,
+          "entry_time": "2026-7-5 21:03"
+        }
+      ]
+    },
+    {
+      "plate": "湘FA3040",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 97740,
+      "total_trips": 20,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 13350.0,
+          "waste_weight_kg": 4990.0,
+          "entry_time": "2026-6-29 5:46"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 12630.0,
+          "waste_weight_kg": 4270.0,
+          "entry_time": "2026-6-29 15:40"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 13070.0,
+          "waste_weight_kg": 4710.0,
+          "entry_time": "2026-6-29 21:28"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 13390.0,
+          "waste_weight_kg": 5030.0,
+          "entry_time": "2026-6-30 5:51"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 13040.0,
+          "waste_weight_kg": 4680.0,
+          "entry_time": "2026-6-30 16:09"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 12650.0,
+          "waste_weight_kg": 4290.0,
+          "entry_time": "2026-6-30 17:51"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 14040.0,
+          "waste_weight_kg": 5680.0,
+          "entry_time": "2026-7-1 5:48"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 12550.0,
+          "waste_weight_kg": 4190.0,
+          "entry_time": "2026-7-1 21:36"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 14190.0,
+          "waste_weight_kg": 5830.0,
+          "entry_time": "2026-7-2 5:45"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 12860.0,
+          "waste_weight_kg": 4500.0,
+          "entry_time": "2026-7-2 15:31"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 12970.0,
+          "waste_weight_kg": 4610.0,
+          "entry_time": "2026-7-2 17:52"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 14770.0,
+          "waste_weight_kg": 6410.0,
+          "entry_time": "2026-7-3 6:01"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 13020.0,
+          "waste_weight_kg": 4660.0,
+          "entry_time": "2026-7-3 15:57"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 12720.0,
+          "waste_weight_kg": 4360.0,
+          "entry_time": "2026-7-3 19:41"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 14090.0,
+          "waste_weight_kg": 5730.0,
+          "entry_time": "2026-7-4 5:48"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 13000.0,
+          "waste_weight_kg": 4640.0,
+          "entry_time": "2026-7-4 15:40"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 12600.0,
+          "waste_weight_kg": 4240.0,
+          "entry_time": "2026-7-4 17:09"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 14570.0,
+          "waste_weight_kg": 6210.0,
+          "entry_time": "2026-7-5 5:55"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 13030.0,
+          "waste_weight_kg": 4670.0,
+          "entry_time": "2026-7-5 16:39"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA3040",
+          "entry_weight_kg": 12400.0,
+          "waste_weight_kg": 4040.0,
+          "entry_time": "2026-7-5 18:07"
+        }
+      ]
+    },
+    {
+      "plate": "湘FB0252",
+      "unit": "开发区餐厨",
+      "total_kg": 89770,
+      "total_trips": 17,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10360.0,
+          "waste_weight_kg": 5380.0,
+          "entry_time": "2026-6-29 14:53"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 9660.0,
+          "waste_weight_kg": 4680.0,
+          "entry_time": "2026-6-29 22:33"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 9560.0,
+          "waste_weight_kg": 4580.0,
+          "entry_time": "2026-6-30 15:01"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 9340.0,
+          "waste_weight_kg": 4360.0,
+          "entry_time": "2026-6-30 22:20"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10270.0,
+          "waste_weight_kg": 5290.0,
+          "entry_time": "2026-7-1 22:17"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10820.0,
+          "waste_weight_kg": 5840.0,
+          "entry_time": "2026-7-2 11:45"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10340.0,
+          "waste_weight_kg": 5360.0,
+          "entry_time": "2026-7-2 14:29"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10090.0,
+          "waste_weight_kg": 5110.0,
+          "entry_time": "2026-7-2 21:43"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10860.0,
+          "waste_weight_kg": 5880.0,
+          "entry_time": "2026-7-3 12:08"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10450.0,
+          "waste_weight_kg": 5470.0,
+          "entry_time": "2026-7-3 14:44"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10040.0,
+          "waste_weight_kg": 5060.0,
+          "entry_time": "2026-7-3 22:25"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10840.0,
+          "waste_weight_kg": 5860.0,
+          "entry_time": "2026-7-4 12:16"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10540.0,
+          "waste_weight_kg": 5560.0,
+          "entry_time": "2026-7-4 14:45"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10080.0,
+          "waste_weight_kg": 5100.0,
+          "entry_time": "2026-7-4 22:22"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10830.0,
+          "waste_weight_kg": 5850.0,
+          "entry_time": "2026-7-5 13:44"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10290.0,
+          "waste_weight_kg": 5310.0,
+          "entry_time": "2026-7-5 15:43"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB0252",
+          "entry_weight_kg": 10060.0,
+          "waste_weight_kg": 5080.0,
+          "entry_time": "2026-7-5 22:11"
+        }
+      ]
+    },
+    {
+      "plate": "湘FB9498",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 83340,
+      "total_trips": 18,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 8340.0,
+          "waste_weight_kg": 3360.0,
+          "entry_time": "2026-6-29 1:05"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 10900.0,
+          "waste_weight_kg": 5920.0,
+          "entry_time": "2026-6-29 12:00"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 10590.0,
+          "waste_weight_kg": 5610.0,
+          "entry_time": "2026-6-29 15:28"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 9100.0,
+          "waste_weight_kg": 4120.0,
+          "entry_time": "2026-6-29 21:56"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 8180.0,
+          "waste_weight_kg": 3200.0,
+          "entry_time": "2026-6-30 0:59"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 10870.0,
+          "waste_weight_kg": 5890.0,
+          "entry_time": "2026-6-30 12:17"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 10630.0,
+          "waste_weight_kg": 5650.0,
+          "entry_time": "2026-6-30 16:09"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 8690.0,
+          "waste_weight_kg": 3710.0,
+          "entry_time": "2026-6-30 22:03"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 7670.0,
+          "waste_weight_kg": 2690.0,
+          "entry_time": "2026-7-1 0:34"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 9860.0,
+          "waste_weight_kg": 4880.0,
+          "entry_time": "2026-7-1 16:42"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 9990.0,
+          "waste_weight_kg": 5010.0,
+          "entry_time": "2026-7-1 23:40"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 10430.0,
+          "waste_weight_kg": 5450.0,
+          "entry_time": "2026-7-2 16:02"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 10290.0,
+          "waste_weight_kg": 5310.0,
+          "entry_time": "2026-7-3 0:15"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 10370.0,
+          "waste_weight_kg": 5390.0,
+          "entry_time": "2026-7-3 18:27"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 8620.0,
+          "waste_weight_kg": 3640.0,
+          "entry_time": "2026-7-3 21:50"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 10150.0,
+          "waste_weight_kg": 5170.0,
+          "entry_time": "2026-7-4 21:50"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 8520.0,
+          "waste_weight_kg": 3540.0,
+          "entry_time": "2026-7-5 0:31"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9498",
+          "entry_weight_kg": 9780.0,
+          "waste_weight_kg": 4800.0,
+          "entry_time": "2026-7-5 21:57"
+        }
+      ]
+    },
+    {
+      "plate": "湘FC1673",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 82420,
+      "total_trips": 18,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9850.0,
+          "waste_weight_kg": 4870.0,
+          "entry_time": "2026-6-29 14:06"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9770.0,
+          "waste_weight_kg": 4790.0,
+          "entry_time": "2026-6-29 18:12"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9050.0,
+          "waste_weight_kg": 4070.0,
+          "entry_time": "2026-6-29 22:41"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9670.0,
+          "waste_weight_kg": 4690.0,
+          "entry_time": "2026-6-30 14:06"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9580.0,
+          "waste_weight_kg": 4600.0,
+          "entry_time": "2026-6-30 18:16"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9600.0,
+          "waste_weight_kg": 4620.0,
+          "entry_time": "2026-6-30 23:06"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9380.0,
+          "waste_weight_kg": 4400.0,
+          "entry_time": "2026-7-1 18:07"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 8990.0,
+          "waste_weight_kg": 4010.0,
+          "entry_time": "2026-7-1 22:36"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 10120.0,
+          "waste_weight_kg": 5140.0,
+          "entry_time": "2026-7-2 14:31"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9520.0,
+          "waste_weight_kg": 4540.0,
+          "entry_time": "2026-7-2 18:33"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9460.0,
+          "waste_weight_kg": 4480.0,
+          "entry_time": "2026-7-2 22:40"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9640.0,
+          "waste_weight_kg": 4660.0,
+          "entry_time": "2026-7-3 14:15"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9740.0,
+          "waste_weight_kg": 4760.0,
+          "entry_time": "2026-7-3 18:12"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9960.0,
+          "waste_weight_kg": 4980.0,
+          "entry_time": "2026-7-3 23:05"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9790.0,
+          "waste_weight_kg": 4810.0,
+          "entry_time": "2026-7-4 16:46"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9690.0,
+          "waste_weight_kg": 4710.0,
+          "entry_time": "2026-7-4 23:12"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9240.0,
+          "waste_weight_kg": 4260.0,
+          "entry_time": "2026-7-5 15:48"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC1673",
+          "entry_weight_kg": 9010.0,
+          "waste_weight_kg": 4030.0,
+          "entry_time": "2026-7-5 22:36"
+        }
+      ]
+    },
+    {
+      "plate": "湘FC5523",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 80790,
+      "total_trips": 12,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 12660.0,
+          "waste_weight_kg": 6610.0,
+          "entry_time": "2026-6-29 17:04"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 13000.0,
+          "waste_weight_kg": 6950.0,
+          "entry_time": "2026-6-29 23:45"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 12840.0,
+          "waste_weight_kg": 6790.0,
+          "entry_time": "2026-6-30 17:10"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 12650.0,
+          "waste_weight_kg": 6600.0,
+          "entry_time": "2026-7-1 19:26"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 12810.0,
+          "waste_weight_kg": 6760.0,
+          "entry_time": "2026-7-2 0:28"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 12900.0,
+          "waste_weight_kg": 6850.0,
+          "entry_time": "2026-7-2 22:50"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 12940.0,
+          "waste_weight_kg": 6890.0,
+          "entry_time": "2026-7-3 15:28"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 12960.0,
+          "waste_weight_kg": 6910.0,
+          "entry_time": "2026-7-3 21:40"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 12870.0,
+          "waste_weight_kg": 6820.0,
+          "entry_time": "2026-7-4 12:28"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 12650.0,
+          "waste_weight_kg": 6600.0,
+          "entry_time": "2026-7-4 19:07"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 12280.0,
+          "waste_weight_kg": 6230.0,
+          "entry_time": "2026-7-5 0:43"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FC5523",
+          "entry_weight_kg": 12830.0,
+          "waste_weight_kg": 6780.0,
+          "entry_time": "2026-7-5 16:02"
+        }
+      ]
+    },
+    {
+      "plate": "湘FB6266",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 80310,
+      "total_trips": 17,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 10530.0,
+          "waste_weight_kg": 5550.0,
+          "entry_time": "2026-6-29 13:32"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 10980.0,
+          "waste_weight_kg": 6000.0,
+          "entry_time": "2026-6-29 19:52"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 8310.0,
+          "waste_weight_kg": 3330.0,
+          "entry_time": "2026-6-30 0:26"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 10320.0,
+          "waste_weight_kg": 5340.0,
+          "entry_time": "2026-6-30 13:49"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 10990.0,
+          "waste_weight_kg": 6010.0,
+          "entry_time": "2026-6-30 19:45"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 7830.0,
+          "waste_weight_kg": 2850.0,
+          "entry_time": "2026-7-1 0:29"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 10990.0,
+          "waste_weight_kg": 6010.0,
+          "entry_time": "2026-7-1 19:44"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 8090.0,
+          "waste_weight_kg": 3110.0,
+          "entry_time": "2026-7-2 0:30"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 10840.0,
+          "waste_weight_kg": 5860.0,
+          "entry_time": "2026-7-2 12:20"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 10710.0,
+          "waste_weight_kg": 5730.0,
+          "entry_time": "2026-7-2 18:10"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 8040.0,
+          "waste_weight_kg": 3060.0,
+          "entry_time": "2026-7-2 23:24"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 10880.0,
+          "waste_weight_kg": 5900.0,
+          "entry_time": "2026-7-3 13:42"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 10700.0,
+          "waste_weight_kg": 5720.0,
+          "entry_time": "2026-7-3 19:48"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 8370.0,
+          "waste_weight_kg": 3390.0,
+          "entry_time": "2026-7-3 23:42"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 10940.0,
+          "waste_weight_kg": 5960.0,
+          "entry_time": "2026-7-4 13:13"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 7890.0,
+          "waste_weight_kg": 2910.0,
+          "entry_time": "2026-7-4 21:59"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB6266",
+          "entry_weight_kg": 8560.0,
+          "waste_weight_kg": 3580.0,
+          "entry_time": "2026-7-5 22:26"
+        }
+      ]
+    },
+    {
+      "plate": "湘F86680",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 77830,
+      "total_trips": 18,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 8570.0,
+          "waste_weight_kg": 3590.0,
+          "entry_time": "2026-6-29 12:06"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 10740.0,
+          "waste_weight_kg": 5760.0,
+          "entry_time": "2026-6-29 17:57"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 9030.0,
+          "waste_weight_kg": 4050.0,
+          "entry_time": "2026-6-29 22:56"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 7820.0,
+          "waste_weight_kg": 2840.0,
+          "entry_time": "2026-6-30 12:30"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 10760.0,
+          "waste_weight_kg": 5780.0,
+          "entry_time": "2026-6-30 17:58"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 8600.0,
+          "waste_weight_kg": 3620.0,
+          "entry_time": "2026-6-30 22:51"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 10590.0,
+          "waste_weight_kg": 5610.0,
+          "entry_time": "2026-7-1 18:01"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 8750.0,
+          "waste_weight_kg": 3770.0,
+          "entry_time": "2026-7-1 22:56"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 7920.0,
+          "waste_weight_kg": 2940.0,
+          "entry_time": "2026-7-2 12:12"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 10700.0,
+          "waste_weight_kg": 5720.0,
+          "entry_time": "2026-7-2 17:58"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 8670.0,
+          "waste_weight_kg": 3690.0,
+          "entry_time": "2026-7-2 22:47"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 7810.0,
+          "waste_weight_kg": 2830.0,
+          "entry_time": "2026-7-3 12:05"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 10690.0,
+          "waste_weight_kg": 5710.0,
+          "entry_time": "2026-7-3 18:00"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 9780.0,
+          "waste_weight_kg": 4800.0,
+          "entry_time": "2026-7-4 0:39"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 8730.0,
+          "waste_weight_kg": 3750.0,
+          "entry_time": "2026-7-4 16:08"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 10140.0,
+          "waste_weight_kg": 5160.0,
+          "entry_time": "2026-7-4 23:35"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 9540.0,
+          "waste_weight_kg": 4560.0,
+          "entry_time": "2026-7-5 16:05"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘F86680",
+          "entry_weight_kg": 8630.0,
+          "waste_weight_kg": 3650.0,
+          "entry_time": "2026-7-5 22:41"
+        }
+      ]
+    },
+    {
+      "plate": "湘FB8611",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 67970,
+      "total_trips": 17,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10030.0,
+          "waste_weight_kg": 3980.0,
+          "entry_time": "2026-6-29 1:21"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10600.0,
+          "waste_weight_kg": 4550.0,
+          "entry_time": "2026-6-29 15:44"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 9450.0,
+          "waste_weight_kg": 3400.0,
+          "entry_time": "2026-6-29 22:21"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10120.0,
+          "waste_weight_kg": 4070.0,
+          "entry_time": "2026-6-30 1:12"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10190.0,
+          "waste_weight_kg": 4140.0,
+          "entry_time": "2026-6-30 16:35"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 8410.0,
+          "waste_weight_kg": 2360.0,
+          "entry_time": "2026-7-1 16:50"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10380.0,
+          "waste_weight_kg": 4330.0,
+          "entry_time": "2026-7-2 6:26"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10010.0,
+          "waste_weight_kg": 3960.0,
+          "entry_time": "2026-7-2 16:22"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10820.0,
+          "waste_weight_kg": 4770.0,
+          "entry_time": "2026-7-2 23:29"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10550.0,
+          "waste_weight_kg": 4500.0,
+          "entry_time": "2026-7-3 15:29"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 9250.0,
+          "waste_weight_kg": 3200.0,
+          "entry_time": "2026-7-3 17:59"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10100.0,
+          "waste_weight_kg": 4050.0,
+          "entry_time": "2026-7-3 23:53"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10500.0,
+          "waste_weight_kg": 4450.0,
+          "entry_time": "2026-7-4 16:46"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 9880.0,
+          "waste_weight_kg": 3830.0,
+          "entry_time": "2026-7-5 14:02"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10860.0,
+          "waste_weight_kg": 4810.0,
+          "entry_time": "2026-7-5 16:54"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 9580.0,
+          "waste_weight_kg": 3530.0,
+          "entry_time": "2026-7-5 18:52"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB8611",
+          "entry_weight_kg": 10090.0,
+          "waste_weight_kg": 4040.0,
+          "entry_time": "2026-7-5 23:47"
+        }
+      ]
+    },
+    {
+      "plate": "湘FC8698",
+      "unit": "岳阳君山区餐厨",
+      "total_kg": 54030,
+      "total_trips": 9,
+      "days_active": 6,
+      "records": [
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FC8698",
+          "entry_weight_kg": 12600.0,
+          "waste_weight_kg": 6550.0,
+          "entry_time": "2026-6-29 9:16"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FC8698",
+          "entry_weight_kg": 12550.0,
+          "waste_weight_kg": 6500.0,
+          "entry_time": "2026-6-30 16:57"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FC8698",
+          "entry_weight_kg": 11280.0,
+          "waste_weight_kg": 5230.0,
+          "entry_time": "2026-7-2 17:01"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FC8698",
+          "entry_weight_kg": 11650.0,
+          "waste_weight_kg": 5600.0,
+          "entry_time": "2026-7-3 10:07"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FC8698",
+          "entry_weight_kg": 12330.0,
+          "waste_weight_kg": 6280.0,
+          "entry_time": "2026-7-3 16:46"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FC8698",
+          "entry_weight_kg": 11890.0,
+          "waste_weight_kg": 5840.0,
+          "entry_time": "2026-7-4 9:57"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FC8698",
+          "entry_weight_kg": 11900.0,
+          "waste_weight_kg": 5850.0,
+          "entry_time": "2026-7-4 14:44"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FC8698",
+          "entry_weight_kg": 11600.0,
+          "waste_weight_kg": 5550.0,
+          "entry_time": "2026-7-5 9:44"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FC8698",
+          "entry_weight_kg": 12680.0,
+          "waste_weight_kg": 6630.0,
+          "entry_time": "2026-7-5 14:48"
+        }
+      ]
+    },
+    {
+      "plate": "湘FB2060",
+      "unit": "临港新区餐厨",
+      "total_kg": 53030,
+      "total_trips": 14,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 9400.0,
+          "waste_weight_kg": 4420.0,
+          "entry_time": "2026-6-29 18:41"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 7050.0,
+          "waste_weight_kg": 2070.0,
+          "entry_time": "2026-6-29 22:34"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 9570.0,
+          "waste_weight_kg": 4590.0,
+          "entry_time": "2026-6-30 18:46"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 7280.0,
+          "waste_weight_kg": 2300.0,
+          "entry_time": "2026-6-30 22:35"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 9660.0,
+          "waste_weight_kg": 4680.0,
+          "entry_time": "2026-7-1 18:25"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 6920.0,
+          "waste_weight_kg": 1940.0,
+          "entry_time": "2026-7-1 22:28"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 10300.0,
+          "waste_weight_kg": 5320.0,
+          "entry_time": "2026-7-2 18:30"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 8070.0,
+          "waste_weight_kg": 3090.0,
+          "entry_time": "2026-7-2 22:36"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 10530.0,
+          "waste_weight_kg": 5550.0,
+          "entry_time": "2026-7-3 18:37"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 8370.0,
+          "waste_weight_kg": 3390.0,
+          "entry_time": "2026-7-3 22:33"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 10030.0,
+          "waste_weight_kg": 5050.0,
+          "entry_time": "2026-7-4 18:22"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 8270.0,
+          "waste_weight_kg": 3290.0,
+          "entry_time": "2026-7-4 22:34"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 8720.0,
+          "waste_weight_kg": 3740.0,
+          "entry_time": "2026-7-5 18:19"
+        },
+        {
+          "unit": "临港新区餐厨",
+          "plate": "湘FB2060",
+          "entry_weight_kg": 8580.0,
+          "waste_weight_kg": 3600.0,
+          "entry_time": "2026-7-5 22:20"
+        }
+      ]
+    },
+    {
+      "plate": "湘FC3710",
+      "unit": "开发区餐厨",
+      "total_kg": 45380,
+      "total_trips": 10,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FC3710",
+          "entry_weight_kg": 9600.0,
+          "waste_weight_kg": 4620.0,
+          "entry_time": "2026-6-29 14:01"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FC3710",
+          "entry_weight_kg": 9630.0,
+          "waste_weight_kg": 4650.0,
+          "entry_time": "2026-6-30 13:22"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FC3710",
+          "entry_weight_kg": 8610.0,
+          "waste_weight_kg": 3630.0,
+          "entry_time": "2026-6-30 19:07"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FC3710",
+          "entry_weight_kg": 10400.0,
+          "waste_weight_kg": 5420.0,
+          "entry_time": "2026-7-1 14:50"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FC3710",
+          "entry_weight_kg": 9590.0,
+          "waste_weight_kg": 4610.0,
+          "entry_time": "2026-7-2 12:36"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FC3710",
+          "entry_weight_kg": 9470.0,
+          "waste_weight_kg": 4490.0,
+          "entry_time": "2026-7-2 16:23"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FC3710",
+          "entry_weight_kg": 10280.0,
+          "waste_weight_kg": 5300.0,
+          "entry_time": "2026-7-3 14:19"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FC3710",
+          "entry_weight_kg": 8020.0,
+          "waste_weight_kg": 3040.0,
+          "entry_time": "2026-7-3 18:05"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FC3710",
+          "entry_weight_kg": 9760.0,
+          "waste_weight_kg": 4780.0,
+          "entry_time": "2026-7-4 16:39"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FC3710",
+          "entry_weight_kg": 9820.0,
+          "waste_weight_kg": 4840.0,
+          "entry_time": "2026-7-5 18:23"
+        }
+      ]
+    },
+    {
+      "plate": "湘FB7351",
+      "unit": "开发区餐厨",
+      "total_kg": 37140,
+      "total_trips": 9,
+      "days_active": 6,
+      "records": [
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB7351",
+          "entry_weight_kg": 8940.0,
+          "waste_weight_kg": 3960.0,
+          "entry_time": "2026-6-29 13:16"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB7351",
+          "entry_weight_kg": 8350.0,
+          "waste_weight_kg": 3370.0,
+          "entry_time": "2026-6-29 16:55"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB7351",
+          "entry_weight_kg": 8790.0,
+          "waste_weight_kg": 3810.0,
+          "entry_time": "2026-6-30 13:15"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB7351",
+          "entry_weight_kg": 8770.0,
+          "waste_weight_kg": 3790.0,
+          "entry_time": "2026-6-30 16:53"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB7351",
+          "entry_weight_kg": 10160.0,
+          "waste_weight_kg": 5180.0,
+          "entry_time": "2026-7-2 13:16"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB7351",
+          "entry_weight_kg": 8630.0,
+          "waste_weight_kg": 3650.0,
+          "entry_time": "2026-7-2 16:57"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB7351",
+          "entry_weight_kg": 10240.0,
+          "waste_weight_kg": 5260.0,
+          "entry_time": "2026-7-3 14:41"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB7351",
+          "entry_weight_kg": 9980.0,
+          "waste_weight_kg": 5000.0,
+          "entry_time": "2026-7-4 16:07"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FB7351",
+          "entry_weight_kg": 8100.0,
+          "waste_weight_kg": 3120.0,
+          "entry_time": "2026-7-5 16:15"
+        }
+      ]
+    },
+    {
+      "plate": "湘FA8340",
+      "unit": "开发区餐厨",
+      "total_kg": 35270,
+      "total_trips": 11,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8340",
+          "entry_weight_kg": 9610.0,
+          "waste_weight_kg": 4630.0,
+          "entry_time": "2026-6-29 13:49"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8340",
+          "entry_weight_kg": 7520.0,
+          "waste_weight_kg": 2540.0,
+          "entry_time": "2026-6-29 20:09"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8340",
+          "entry_weight_kg": 9170.0,
+          "waste_weight_kg": 4190.0,
+          "entry_time": "2026-6-30 13:52"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8340",
+          "entry_weight_kg": 7550.0,
+          "waste_weight_kg": 2570.0,
+          "entry_time": "2026-6-30 20:15"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8340",
+          "entry_weight_kg": 7380.0,
+          "waste_weight_kg": 2400.0,
+          "entry_time": "2026-7-1 20:11"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8340",
+          "entry_weight_kg": 9190.0,
+          "waste_weight_kg": 4210.0,
+          "entry_time": "2026-7-2 13:47"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8340",
+          "entry_weight_kg": 7470.0,
+          "waste_weight_kg": 2490.0,
+          "entry_time": "2026-7-2 20:07"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8340",
+          "entry_weight_kg": 9270.0,
+          "waste_weight_kg": 4290.0,
+          "entry_time": "2026-7-3 13:50"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8340",
+          "entry_weight_kg": 7620.0,
+          "waste_weight_kg": 2640.0,
+          "entry_time": "2026-7-3 20:06"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8340",
+          "entry_weight_kg": 8050.0,
+          "waste_weight_kg": 3070.0,
+          "entry_time": "2026-7-4 20:11"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8340",
+          "entry_weight_kg": 7220.0,
+          "waste_weight_kg": 2240.0,
+          "entry_time": "2026-7-5 20:20"
+        }
+      ]
+    },
+    {
+      "plate": "湘FB3975",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 30810,
+      "total_trips": 6,
+      "days_active": 6,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB3975",
+          "entry_weight_kg": 10210.0,
+          "waste_weight_kg": 5230.0,
+          "entry_time": "2026-6-29 15:39"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB3975",
+          "entry_weight_kg": 10340.0,
+          "waste_weight_kg": 5360.0,
+          "entry_time": "2026-6-30 15:53"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB3975",
+          "entry_weight_kg": 10360.0,
+          "waste_weight_kg": 5380.0,
+          "entry_time": "2026-7-2 14:07"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB3975",
+          "entry_weight_kg": 10100.0,
+          "waste_weight_kg": 5120.0,
+          "entry_time": "2026-7-3 15:10"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB3975",
+          "entry_weight_kg": 10120.0,
+          "waste_weight_kg": 5140.0,
+          "entry_time": "2026-7-4 15:30"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB3975",
+          "entry_weight_kg": 9560.0,
+          "waste_weight_kg": 4580.0,
+          "entry_time": "2026-7-5 15:28"
+        }
+      ]
+    },
+    {
+      "plate": "湘FB0388",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 30180,
+      "total_trips": 6,
+      "days_active": 6,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB0388",
+          "entry_weight_kg": 10020.0,
+          "waste_weight_kg": 5040.0,
+          "entry_time": "2026-6-29 16:00"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB0388",
+          "entry_weight_kg": 9890.0,
+          "waste_weight_kg": 4910.0,
+          "entry_time": "2026-6-30 16:42"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB0388",
+          "entry_weight_kg": 9970.0,
+          "waste_weight_kg": 4990.0,
+          "entry_time": "2026-7-2 16:18"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB0388",
+          "entry_weight_kg": 10530.0,
+          "waste_weight_kg": 5550.0,
+          "entry_time": "2026-7-3 16:14"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB0388",
+          "entry_weight_kg": 10250.0,
+          "waste_weight_kg": 5270.0,
+          "entry_time": "2026-7-4 15:05"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB0388",
+          "entry_weight_kg": 9400.0,
+          "waste_weight_kg": 4420.0,
+          "entry_time": "2026-7-5 14:59"
+        }
+      ]
+    },
+    {
+      "plate": "湘FA8342",
+      "unit": "岳阳君山区餐厨",
+      "total_kg": 28150,
+      "total_trips": 5,
+      "days_active": 3,
+      "records": [
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FA8342",
+          "entry_weight_kg": 12880.0,
+          "waste_weight_kg": 6830.0,
+          "entry_time": "2026-6-29 16:05"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FA8342",
+          "entry_weight_kg": 11130.0,
+          "waste_weight_kg": 5080.0,
+          "entry_time": "2026-6-30 8:54"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FA8342",
+          "entry_weight_kg": 11350.0,
+          "waste_weight_kg": 5300.0,
+          "entry_time": "2026-6-30 12:21"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FA8342",
+          "entry_weight_kg": 11050.0,
+          "waste_weight_kg": 5000.0,
+          "entry_time": "2026-7-2 11:41"
+        },
+        {
+          "unit": "岳阳君山区餐厨",
+          "plate": "湘FA8342",
+          "entry_weight_kg": 11990.0,
+          "waste_weight_kg": 5940.0,
+          "entry_time": "2026-7-2 19:20"
+        }
+      ]
+    },
+    {
+      "plate": "湘FB9046",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 27760,
+      "total_trips": 8,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9046",
+          "entry_weight_kg": 8840.0,
+          "waste_weight_kg": 3860.0,
+          "entry_time": "2026-6-29 16:01"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9046",
+          "entry_weight_kg": 8040.0,
+          "waste_weight_kg": 3060.0,
+          "entry_time": "2026-6-30 10:31"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9046",
+          "entry_weight_kg": 8400.0,
+          "waste_weight_kg": 3420.0,
+          "entry_time": "2026-7-1 21:08"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9046",
+          "entry_weight_kg": 8030.0,
+          "waste_weight_kg": 3050.0,
+          "entry_time": "2026-7-2 10:58"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9046",
+          "entry_weight_kg": 8300.0,
+          "waste_weight_kg": 3320.0,
+          "entry_time": "2026-7-3 10:34"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9046",
+          "entry_weight_kg": 8310.0,
+          "waste_weight_kg": 3330.0,
+          "entry_time": "2026-7-4 10:34"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9046",
+          "entry_weight_kg": 8430.0,
+          "waste_weight_kg": 3450.0,
+          "entry_time": "2026-7-4 16:24"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9046",
+          "entry_weight_kg": 9250.0,
+          "waste_weight_kg": 4270.0,
+          "entry_time": "2026-7-5 9:20"
+        }
+      ]
+    },
+    {
+      "plate": "湘FA5403",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 23250,
+      "total_trips": 7,
+      "days_active": 7,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA5403",
+          "entry_weight_kg": 8330.0,
+          "waste_weight_kg": 3470.0,
+          "entry_time": "2026-6-29 21:30"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA5403",
+          "entry_weight_kg": 8210.0,
+          "waste_weight_kg": 3350.0,
+          "entry_time": "2026-6-30 21:56"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA5403",
+          "entry_weight_kg": 8010.0,
+          "waste_weight_kg": 3150.0,
+          "entry_time": "2026-7-1 21:34"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA5403",
+          "entry_weight_kg": 8150.0,
+          "waste_weight_kg": 3290.0,
+          "entry_time": "2026-7-2 21:17"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA5403",
+          "entry_weight_kg": 8650.0,
+          "waste_weight_kg": 3790.0,
+          "entry_time": "2026-7-3 22:01"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA5403",
+          "entry_weight_kg": 8250.0,
+          "waste_weight_kg": 3390.0,
+          "entry_time": "2026-7-4 21:18"
+        },
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FA5403",
+          "entry_weight_kg": 7670.0,
+          "waste_weight_kg": 2810.0,
+          "entry_time": "2026-7-5 18:39"
+        }
+      ]
+    },
+    {
+      "plate": "湘FA8040",
+      "unit": "开发区餐厨",
+      "total_kg": 19170,
+      "total_trips": 4,
+      "days_active": 1,
+      "records": [
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8040",
+          "entry_weight_kg": 12710.0,
+          "waste_weight_kg": 4450.0,
+          "entry_time": "2026-6-29 0:17"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8040",
+          "entry_weight_kg": 13400.0,
+          "waste_weight_kg": 5140.0,
+          "entry_time": "2026-6-29 4:33"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8040",
+          "entry_weight_kg": 13590.0,
+          "waste_weight_kg": 5330.0,
+          "entry_time": "2026-6-29 13:07"
+        },
+        {
+          "unit": "开发区餐厨",
+          "plate": "湘FA8040",
+          "entry_weight_kg": 12510.0,
+          "waste_weight_kg": 4250.0,
+          "entry_time": "2026-6-29 17:55"
+        }
+      ]
+    },
+    {
+      "plate": "湘FB9409",
+      "unit": "岳阳楼区餐厨",
+      "total_kg": 4980,
+      "total_trips": 1,
+      "days_active": 1,
+      "records": [
+        {
+          "unit": "岳阳楼区餐厨",
+          "plate": "湘FB9409",
+          "entry_weight_kg": 11030.0,
+          "waste_weight_kg": 4980.0,
+          "entry_time": "2026-6-30 14:31"
+        }
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "name": "岳阳楼区餐厨",
+      "kg": 789810,
+      "ton": 789.8,
+      "trips": 177,
+      "vehicle_count": 13,
+      "pct": 62.6
+    },
+    {
+      "name": "开发区餐厨",
+      "kg": 226730,
+      "ton": 226.7,
+      "trips": 51,
+      "vehicle_count": 5,
+      "pct": 18.0
+    },
+    {
+      "name": "南湖新区餐厨",
+      "kg": 109200,
+      "ton": 109.2,
+      "trips": 20,
+      "vehicle_count": 1,
+      "pct": 8.7
+    },
+    {
+      "name": "岳阳君山区餐厨",
+      "kg": 82180,
+      "ton": 82.2,
+      "trips": 14,
+      "vehicle_count": 2,
+      "pct": 6.5
+    },
+    {
+      "name": "临港新区餐厨",
+      "kg": 53030,
+      "ton": 53.0,
+      "trips": 14,
+      "vehicle_count": 1,
+      "pct": 4.2
+    }
+  ],
+  "daily": [
+    {
+      "date": "2026-06-29",
+      "weekday": "周一",
+      "total": 206890,
+      "trips": 43
+    },
+    {
+      "date": "2026-06-30",
+      "weekday": "周二",
+      "total": 199040,
+      "trips": 45
+    },
+    {
+      "date": "2026-07-01",
+      "weekday": "周三",
+      "total": 103660,
+      "trips": 25
+    },
+    {
+      "date": "2026-07-02",
+      "weekday": "周四",
+      "total": 207620,
+      "trips": 45
+    },
+    {
+      "date": "2026-07-03",
+      "weekday": "周五",
+      "total": 202120,
+      "trips": 43
+    },
+    {
+      "date": "2026-07-04",
+      "weekday": "周六",
+      "total": 174050,
+      "trips": 37
+    },
+    {
+      "date": "2026-07-05",
+      "weekday": "周日",
+      "total": 167570,
+      "trips": 38
+    }
+  ],
+  "change_ton": -120.9,
+  "change_pct": -8.7,
+  "prev_week": "W26",
+  "week": "W27",
+  "date_range": "6月29日 ~ 7月5日",
+  "generated": "2026-07-08"
+}
