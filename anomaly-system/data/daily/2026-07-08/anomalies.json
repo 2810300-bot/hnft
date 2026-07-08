@@ -1,0 +1,22 @@
+{
+  "date": "2026-07-08",
+  "anomalies": [
+    {
+      "merchant_id": "M003",
+      "merchant_name": "开发区职工食堂",
+      "collection_date": "2026-07-08",
+      "actual_weight_kg": 111.8,
+      "scale_id": "SCALE-03",
+      "vehicle_id": "湘FC2456",
+      "collection_time": "2026-07-08T10:35:00+08:00",
+      "driver": "王师傅",
+      "baseline_weight_kg": 89.4,
+      "deviation_pct": 25.06,
+      "deviation_level": "mild",
+      "deviation_direction": "偏高",
+      "baseline_confidence": "medium",
+      "region": "开发区"
+    }
+  ],
+  "total": 1
+}
