@@ -670,7 +670,7 @@ document.getElementById('build-timestamp').textContent = new Date().toLocaleStri
     hour12: false
 });
 
-// 自动检测看板是否可达（健康检查）
+// 自动检测看板是否可达（并行健康检查 + 超时控制）
 (async function healthCheck() {
     const dashboards = [
         { name: '收运量看板', path: 'daily-dashboard/', el: null },
@@ -682,14 +682,22 @@ document.getElementById('build-timestamp').textContent = new Date().toLocaleStri
         { name: '异常分析系统', path: 'anomaly-system/', el: null },
     ];
 
-    for (const d of dashboards) {
-        try {
-            const resp = await fetch(d.path, { method: 'HEAD', cache: 'no-store' });
-            // 标记状态...
-        } catch(e) {
-            // 忽略离线检查错误
-        }
+    // 并行探测，8s 总超时
+    var controller = new AbortController();
+    var timeoutId = setTimeout(function() { controller.abort(); }, 8000);
+
+    var probes = dashboards.map(function(d) {
+        return fetch(d.path, { method: 'HEAD', signal: controller.signal, cache: 'no-store' })
+            .then(function() { /* 可达 */ })
+            .catch(function() { /* 离线，静默忽略 */ });
+    });
+
+    try {
+        await Promise.allSettled(probes);
+    } catch(e) {
+        // 全部超时，静默忽略
     }
+    clearTimeout(timeoutId);
 })();
 </script>
 </body>

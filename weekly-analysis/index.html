@@ -501,33 +501,115 @@ function fmtNum(n, d) {
 }
 function fmtPct(n) { return (Number(n) || 0).toFixed(1) + '%'; }
 
-// ---- Auto-discover available week files ----
+// ---- Fetch with timeout ----
+function fetchWithTimeout(url, options, timeoutMs) {
+  var controller = new AbortController();
+  var signal = controller.signal;
+  var timeoutId = setTimeout(function() { controller.abort(); }, timeoutMs);
+  var fetchOpts = Object.assign({}, options, { signal: signal });
+  return fetch(url, fetchOpts).finally(function() { clearTimeout(timeoutId); });
+}
+
+// ---- Auto-discover available week files (parallel + timeout + fallback) ----
 async function discoverWeekFiles() {
-  // Try to load w23_data.json through w40_data.json
-  var available = [];
+  var DISCOVERY_TIMEOUT = 15000; // 15s total for all probes
+  var PER_REQ_TIMEOUT = 5000;    // 5s per request
+
+  // Phase 1: Parallel HEAD probes for w23-w40
+  var heads = [];
   for (var w = 23; w <= 40; w++) {
     var file = 'w' + String(w).padStart(2, '0') + '_data.json';
-    try {
-      var resp = await fetch(file + '?ts=' + Date.now(), { method: 'HEAD' });
-      if (resp.ok) available.push(w);
-    } catch (e) {
-      // File doesn't exist
+    heads.push(
+      fetchWithTimeout(file + '?ts=' + Date.now(), { method: 'HEAD' }, PER_REQ_TIMEOUT)
+        .then(function(resp) { return resp.ok ? w : null; })
+        .catch(function() { return null; })
+    );
+  }
+
+  var results = [];
+  try {
+    var racePromise = Promise.allSettled
+      ? Promise.allSettled(heads)
+      : Promise.all(heads.map(function(p) {
+          return p.then(function(v) { return { status: 'fulfilled', value: v }; })
+                  .catch(function(e) { return { status: 'rejected', reason: e }; });
+        }));
+    var timeoutPromise = new Promise(function(_, reject) {
+      setTimeout(function() { reject(new Error('discovery_timeout')); }, DISCOVERY_TIMEOUT);
+    });
+    results = await Promise.race([racePromise, timeoutPromise]);
+  } catch (e) {
+    // Discovery timeout — try fallback
+    results = [];
+  }
+
+  var available = [];
+  if (Array.isArray(results) && results.length > 0) {
+    for (var i = 0; i < results.length; i++) {
+      var r = results[i];
+      var week = (r.value !== undefined) ? r.value : null;
+      if (week !== null) available.push(week);
     }
   }
+
+  // Phase 2: If no files found via HEAD, try a single GET probe
+  if (available.length === 0) {
+    try {
+      var probe = await fetchWithTimeout('w23_data.json?ts=' + Date.now(), { method: 'GET' }, 10000);
+      if (probe.ok) {
+        // HEAD blocked but GET works — assume all known weeks exist
+        // Fall back to probing each week with GET (capped at 5 parallel)
+        var getHeads = [];
+        for (var w2 = 23; w2 <= 40; w2++) {
+          (function(wn) {
+            getHeads.push(
+              fetchWithTimeout('w' + String(wn).padStart(2, '0') + '_data.json?ts=' + Date.now(), { method: 'GET' }, 6000)
+                .then(function(resp2) { return resp2.ok ? wn : null; })
+                .catch(function() { return null; })
+            );
+          })(w2);
+        }
+        var getResults = await Promise.allSettled
+          ? Promise.allSettled(getHeads)
+          : Promise.all(getHeads.map(function(p) {
+              return p.then(function(v) { return { status: 'fulfilled', value: v }; })
+                      .catch(function(e) { return { status: 'rejected', reason: e }; });
+            }));
+        if (Array.isArray(getResults)) {
+          for (var j = 0; j < getResults.length; j++) {
+            var gr = getResults[j];
+            var gw = (gr.value !== undefined) ? gr.value : null;
+            if (gw !== null) available.push(gw);
+          }
+        }
+      }
+    } catch (e2) {
+      // All discovery methods failed
+    }
+  }
+
   return available;
 }
 
-// ---- Load data for a specific week ----
+// ---- Load data for a specific week (with retry) ----
 async function loadWeekData(weekNum) {
   var file = 'w' + String(weekNum).padStart(2, '0') + '_data.json';
-  try {
-    var resp = await fetch(file + '?ts=' + Date.now());
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    return resp.json();
-  } catch (e) {
-    console.warn('Failed to load week ' + weekNum + ':', e);
-    return null;
+  var maxRetries = 2;
+  for (var attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      var resp = await fetchWithTimeout(file + '?ts=' + Date.now(), {}, 15000);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      return await resp.json();
+    } catch (e) {
+      if (attempt === maxRetries - 1) {
+        console.warn('Failed to load week ' + weekNum + ':', e);
+        return null;
+      }
+      // Wait before retry
+      await new Promise(function(r) { setTimeout(r, 1000); });
+    }
   }
+  return null;
 }
 
 // ---- Render monthly KPI ----
@@ -1171,29 +1253,46 @@ function exportCSV() {
 
 // ---- Main init ----
 async function init() {
+  var statusEl = document.getElementById('data-status');
+
+  // Discovery phase
+  statusEl.textContent = '🔍 正在扫描可用数据…';
   var available = await discoverWeekFiles();
 
   if (available.length === 0) {
     document.getElementById('report-list').innerHTML =
-      '<div class="loading-placeholder"><p>暂无报告数据（请先在金山文档中添加每日收运数据）</p></div>';
-    document.getElementById('data-status').textContent = '⚠️ 未找到数据文件';
+      '<div class="loading-placeholder"><p>⚠️ 未找到数据文件</p><p style="font-size:13px;color:#94a3b8;margin-top:8px;">请确认数据源是否已就绪，或尝试刷新页面</p></div>';
+    statusEl.textContent = '⚠️ 未找到数据文件';
     return;
   }
 
   // Sort descending (latest first)
   available.sort(function(a, b) { return b - a; });
 
-  // Load all weeks
+  // Load all weeks in parallel (max 5 concurrent to avoid overwhelming slow connections)
+  statusEl.textContent = '📥 正在加载 ' + available.length + ' 周数据…';
   var weeksData = [];
-  for (var i = 0; i < available.length; i++) {
-    var w = await loadWeekData(available[i]);
-    if (w) weeksData.push(w);
+  var CONCURRENCY = 5;
+  for (var i = 0; i < available.length; i += CONCURRENCY) {
+    var batch = available.slice(i, i + CONCURRENCY);
+    var batchResults = await Promise.allSettled(
+      batch.map(function(wn) { return loadWeekData(wn); })
+    );
+    for (var j = 0; j < batchResults.length; j++) {
+      var result = batchResults[j];
+      if (result.status === 'fulfilled' && result.value) {
+        weeksData.push(result.value);
+      }
+    }
+    // Update progress
+    var loaded = weeksData.length;
+    statusEl.textContent = '📥 已加载 ' + loaded + '/' + available.length + ' 周数据…';
   }
 
   if (weeksData.length === 0) {
     document.getElementById('report-list').innerHTML =
-      '<div class="loading-placeholder"><p>数据加载失败，请稍后重试</p></div>';
-    document.getElementById('data-status').textContent = '⚠️ 数据加载失败';
+      '<div class="loading-placeholder"><p>⚠️ 数据加载失败</p><p style="font-size:13px;color:#94a3b8;margin-top:8px;">可尝试刷新页面或检查网络连接后重试</p></div>';
+    statusEl.textContent = '⚠️ 数据加载失败';
     return;
   }
 
