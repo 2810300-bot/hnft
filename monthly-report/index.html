@@ -516,6 +516,13 @@ body.locked .site-footer {
   opacity: 0.55;
   cursor: not-allowed;
 }
+.archive-item.active {
+  border-color: var(--accent-blue);
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 60%);
+}
+.archive-item.active .archive-title {
+  color: var(--accent-blue);
+}
 .archive-item .archive-title {
   font-size: 14px;
   font-weight: 600;
@@ -658,7 +665,7 @@ body.locked .site-footer {
   <!-- History Archive -->
   <div class="section-title">📚 历史报告归档</div>
   <div class="archive-grid" id="archive-container"></div>
-  <p class="archive-tip">ℹ️ 历史报告HTML版本将随各月发布同步上线</p>
+  <p class="archive-tip">ℹ️ 点击任意月份卡片可快速切换至该月详细报告</p>
 
 </div>
 
@@ -992,28 +999,22 @@ function renderCharts() {
 }
 
 function renderArchive() {
-  var historyReports = [
-    {period: '2026年1月', file: '2026年1月总结报告.html', date: '2026年2月3日', available: true},
-    {period: '2026年2月', file: '2026年2月总结报告.html', date: '2026年3月10日', available: true},
-    {period: '2026年3月', file: '2026年3月总结报告.html', date: '2026年4月10日', available: true},
-    {period: '2026年4月', file: '2026年4月总结报告.html', date: '2026年5月12日', available: true},
-    {period: '2026年5月', file: '2026年5月总结报告.html', date: '2026年6月17日', available: true},
-    {period: '2026年6月', file: 'index.html', date: '2026年7月8日', available: false}
-  ];
   var container = document.getElementById('archive-container');
   var html = '';
-  historyReports.forEach(function(r) {
-    if (r.available) {
-      html += '<a href="' + r.file + '" class="archive-item">' +
-        '<div class="archive-title"><span class="icon">📄</span> ' + r.period + '总结报告</div>' +
-        '<div class="archive-meta">编制日期：' + r.date + '</div>' +
-      '</a>';
-    } else {
-      html += '<span class="archive-item disabled">' +
-        '<div class="archive-title"><span class="icon">📄</span> ' + r.period + '总结报告</div>' +
-        '<div class="archive-meta">编制日期：' + r.date + ' <span class="archive-badge">待发布</span></div>' +
-      '</span>';
-    }
+  var monthNames = ['1月','2月','3月','4月','5月','6月'];
+  monthNames.forEach(function(name, idx) {
+    var mKey = String(idx + 1);
+    var mData = ALL_MONTHS_DATA[mKey];
+    if (!mData) return;
+    var isActive = (mKey === currentMonth);
+    var compileDate = mData.compile_date || '';
+    var period = mData.period || '';
+    html += '<div class="archive-item' + (isActive ? ' active' : '') + '" onclick="switchMonth(\'' + mKey + '\')" style="cursor:pointer;">' +
+      '<div class="archive-title"><span class="icon">' + (isActive ? '📍' : '📄') + '</span> ' + period + '总结报告</div>' +
+      '<div class="archive-meta">编制日期：' + compileDate +
+      (isActive ? ' <span class="archive-badge" style="background:#dbeafe;color:#4C72B0;">当前查看</span>' : '') +
+      '</div>' +
+    '</div>';
   });
   container.innerHTML = html;
 }
