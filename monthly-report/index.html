@@ -145,7 +145,6 @@ body {
 
 /* Hide page content when locked */
 body.locked .breadcrumb-bar,
-body.locked .month-nav,
 body.locked .site-header,
 body.locked .main-container,
 body.locked .site-footer {
@@ -163,49 +162,6 @@ body.locked .site-footer {
 .breadcrumb-bar a { color: var(--accent-blue); text-decoration: none; font-weight: 500; }
 .breadcrumb-bar a:hover { text-decoration: underline; }
 .breadcrumb-bar .sep { color: #94a3b8; margin: 0 8px; }
-
-/* ===== Month Navigation Tabs ===== */
-.month-nav {
-  background: var(--card-bg);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  display: flex;
-  gap: 4px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-.month-nav::-webkit-scrollbar { height: 4px; }
-.month-nav::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
-.month-tab {
-  padding: 12px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  border-bottom: 3px solid transparent;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-  position: relative;
-}
-.month-tab:hover { color: var(--accent-blue); background: #f8fafc; }
-.month-tab.active {
-  color: var(--accent-blue);
-  border-bottom-color: var(--accent-blue);
-  font-weight: 700;
-}
-.month-tab .badge {
-  display: inline-block;
-  margin-left: 6px;
-  padding: 1px 6px;
-  font-size: 10px;
-  font-weight: 600;
-  border-radius: 10px;
-  background: #e2e8f0;
-  color: var(--text-secondary);
-}
-.month-tab.active .badge { background: #dbeafe; color: var(--accent-blue); }
 
 /* ===== Header ===== */
 .site-header {
@@ -491,71 +447,6 @@ body.locked .site-footer {
   left: 12px;
 }
 
-/* ===== History Archive ===== */
-.archive-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-.archive-item {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 16px 18px;
-  text-decoration: none;
-  transition: all 0.2s;
-  box-shadow: var(--shadow);
-  display: block;
-}
-.archive-item:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-  border-color: var(--accent-blue);
-}
-.archive-item.disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-.archive-item.active {
-  border-color: var(--accent-blue);
-  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 60%);
-}
-.archive-item.active .archive-title {
-  color: var(--accent-blue);
-}
-.archive-item .archive-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
-}
-.archive-item:not(.disabled) .archive-title .icon { color: var(--accent-green); }
-.archive-item.disabled .archive-title .icon { color: var(--text-secondary); }
-.archive-item .archive-meta {
-  font-size: 12px;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.archive-item .archive-badge {
-  background: #f1f5f9;
-  color: var(--text-secondary);
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-}
-.archive-tip {
-  margin-top: 12px;
-  font-size: 12px;
-  color: var(--text-secondary);
-  text-align: center;
-}
-
 /* ===== Footer ===== */
 .site-footer {
   text-align: center;
@@ -579,11 +470,9 @@ body.locked .site-footer {
 @media (max-width: 768px) {
   .kpi-row { grid-template-columns: repeat(2, 1fr); }
   .chart-grid { grid-template-columns: 1fr; }
-  .archive-grid { grid-template-columns: 1fr; }
   .site-header { padding: 24px 20px; }
   .header-content h1 { font-size: 22px; }
   .main-container { padding: 20px 16px 32px; }
-  .month-tab { padding: 10px 14px; font-size: 13px; }
   .site-footer { flex-direction: column; gap: 8px; }
 }
 </style>
@@ -609,16 +498,6 @@ body.locked .site-footer {
 <div class="breadcrumb-bar">
   <a href="../">🏠 看板中心</a><span class="sep">/</span>
   <span>📊 月经营总结报告</span>
-</div>
-
-<!-- Month Navigation -->
-<div class="month-nav" id="month-nav">
-  <button class="month-tab" data-month="1">1月</button>
-  <button class="month-tab" data-month="2">2月</button>
-  <button class="month-tab" data-month="3">3月</button>
-  <button class="month-tab" data-month="4">4月</button>
-  <button class="month-tab" data-month="5">5月</button>
-  <button class="month-tab active" data-month="6">6月 <span class="badge">最新</span></button>
 </div>
 
 <!-- Header -->
@@ -661,11 +540,6 @@ body.locked .site-footer {
   <!-- Report Chapters -->
   <div class="section-title">📄 报告正文</div>
   <div id="chapters-container"></div>
-
-  <!-- History Archive -->
-  <div class="section-title">📚 历史报告归档</div>
-  <div class="archive-grid" id="archive-container"></div>
-  <p class="archive-tip">ℹ️ 点击任意月份卡片可快速切换至该月详细报告</p>
 
 </div>
 
@@ -756,17 +630,15 @@ document.addEventListener('DOMContentLoaded', function() {
 checkAuth();
 
 // ============================================================
-// Data & State
+// Data
 // ============================================================
-var ALL_MONTHS_DATA = {};
 var reportData;
-var currentMonth = '6';
 
 try {
   var dataEl = document.getElementById('all-report-data');
   if (!dataEl) throw new Error('缺少数据块元素');
-  ALL_MONTHS_DATA = JSON.parse(dataEl.textContent);
-  reportData = ALL_MONTHS_DATA['6'];
+  var allData = JSON.parse(dataEl.textContent);
+  reportData = allData['6'];
 } catch(e) {
   var mc = document.getElementById('main-container');
   if (mc) mc.innerHTML = '<div style="text-align:center;padding:60px;color:#dc2626;">数据加载失败：' + e.message + '</div>';
@@ -998,73 +870,17 @@ function renderCharts() {
   });
 }
 
-function renderArchive() {
-  var container = document.getElementById('archive-container');
-  var html = '';
-  var monthNames = ['1月','2月','3月','4月','5月','6月'];
-  monthNames.forEach(function(name, idx) {
-    var mKey = String(idx + 1);
-    var mData = ALL_MONTHS_DATA[mKey];
-    if (!mData) return;
-    var isActive = (mKey === currentMonth);
-    var compileDate = mData.compile_date || '';
-    var period = mData.period || '';
-    html += '<div class="archive-item' + (isActive ? ' active' : '') + '" onclick="switchMonth(\'' + mKey + '\')" style="cursor:pointer;">' +
-      '<div class="archive-title"><span class="icon">' + (isActive ? '📍' : '📄') + '</span> ' + period + '总结报告</div>' +
-      '<div class="archive-meta">编制日期：' + compileDate +
-      (isActive ? ' <span class="archive-badge" style="background:#dbeafe;color:#4C72B0;">当前查看</span>' : '') +
-      '</div>' +
-    '</div>';
-  });
-  container.innerHTML = html;
-}
-
-// ============================================================
-// Month Switching
-// ============================================================
-function switchMonth(monthKey) {
-  if (!ALL_MONTHS_DATA[monthKey]) return;
-  currentMonth = monthKey;
-  reportData = ALL_MONTHS_DATA[monthKey];
-
-  // Update month nav active state
-  document.querySelectorAll('.month-tab').forEach(function(tab) {
-    tab.classList.toggle('active', tab.getAttribute('data-month') === monthKey);
-  });
-
-  // Destroy old charts
-  destroyCharts();
-
-  // Re-render everything
-  renderHeader();
-  renderKPIs();
-  renderChapters();
-  renderCharts();
-  renderArchive();
-
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
 // ============================================================
 // Init
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
   if (!reportData) return;
 
-  // Bind month tab events
-  document.querySelectorAll('.month-tab').forEach(function(tab) {
-    tab.addEventListener('click', function() {
-      switchMonth(this.getAttribute('data-month'));
-    });
-  });
-
   // Initial render
   renderHeader();
   renderKPIs();
   renderChapters();
   renderCharts();
-  renderArchive();
 });
 </script>
 
