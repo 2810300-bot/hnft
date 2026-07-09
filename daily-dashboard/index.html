@@ -1266,7 +1266,6 @@
                 const s = {
                     tab: document.querySelector('.module-tab.active')?.getAttribute('onclick')?.match(/'([^']+)'/)?.[1] || 'volume',
                     period: document.getElementById('filter-period')?.value || '14',
-                    scrollY: window.scrollY,
                     savedAt: Date.now(),
                 };
                 localStorage.setItem(C.storageKey, JSON.stringify(s));
@@ -1280,7 +1279,7 @@
                 if (s.tab) switchModule(s.tab);
                 const f = document.getElementById('filter-period');
                 if (f && s.period) { f.value = s.period; updateCharts(); }
-                if (s.scrollY) setTimeout(() => window.scrollTo(0, s.scrollY), 100);
+                // 移除滚动位置恢复 — 页面初次加载始终显示顶部
             } catch(e) {}
         }
 
