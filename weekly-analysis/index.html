@@ -518,12 +518,14 @@ async function discoverWeekFiles() {
   // Phase 1: Parallel HEAD probes for w23-w40
   var heads = [];
   for (var w = 23; w <= 40; w++) {
-    var file = 'w' + String(w).padStart(2, '0') + '_data.json';
-    heads.push(
-      fetchWithTimeout(file + '?ts=' + Date.now(), { method: 'HEAD' }, PER_REQ_TIMEOUT)
-        .then(function(resp) { return resp.ok ? w : null; })
-        .catch(function() { return null; })
-    );
+    (function(wn) {
+      var file = 'w' + String(wn).padStart(2, '0') + '_data.json';
+      heads.push(
+        fetchWithTimeout(file + '?ts=' + Date.now(), { method: 'HEAD' }, PER_REQ_TIMEOUT)
+          .then(function(resp) { return resp.ok ? wn : null; })
+          .catch(function() { return null; })
+      );
+    })(w);
   }
 
   var results = [];
