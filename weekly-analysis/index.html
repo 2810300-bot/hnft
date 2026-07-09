@@ -512,16 +512,16 @@ function fetchWithTimeout(url, options, timeoutMs) {
 
 // ---- Auto-discover available week files (parallel + timeout + fallback) ----
 async function discoverWeekFiles() {
-  var DISCOVERY_TIMEOUT = 15000; // 15s total for all probes
-  var PER_REQ_TIMEOUT = 5000;    // 5s per request
+  var DISCOVERY_TIMEOUT = 20000; // 20s total for all probes
+  var PER_REQ_TIMEOUT = 6000;    // 6s per request
 
-  // Phase 1: Parallel HEAD probes for w23-w40
-  var heads = [];
+  // Phase 1: Parallel GET probes for w23-w40 (HEAD unreliable on GitHub Pages)
+  var probes = [];
   for (var w = 23; w <= 40; w++) {
     (function(wn) {
       var file = 'w' + String(wn).padStart(2, '0') + '_data.json';
-      heads.push(
-        fetchWithTimeout(file + '?ts=' + Date.now(), { method: 'HEAD' }, PER_REQ_TIMEOUT)
+      probes.push(
+        fetchWithTimeout(file + '?ts=' + Date.now(), { method: 'GET' }, PER_REQ_TIMEOUT)
           .then(function(resp) { return resp.ok ? wn : null; })
           .catch(function() { return null; })
       );
@@ -531,8 +531,8 @@ async function discoverWeekFiles() {
   var results = [];
   try {
     var racePromise = Promise.allSettled
-      ? Promise.allSettled(heads)
-      : Promise.all(heads.map(function(p) {
+      ? Promise.allSettled(probes)
+      : Promise.all(probes.map(function(p) {
           return p.then(function(v) { return { status: 'fulfilled', value: v }; })
                   .catch(function(e) { return { status: 'rejected', reason: e }; });
         }));
@@ -541,7 +541,7 @@ async function discoverWeekFiles() {
     });
     results = await Promise.race([racePromise, timeoutPromise]);
   } catch (e) {
-    // Discovery timeout — try fallback
+    // Discovery timeout
     results = [];
   }
 
@@ -551,42 +551,6 @@ async function discoverWeekFiles() {
       var r = results[i];
       var week = (r.value !== undefined) ? r.value : null;
       if (week !== null) available.push(week);
-    }
-  }
-
-  // Phase 2: If no files found via HEAD, try a single GET probe
-  if (available.length === 0) {
-    try {
-      var probe = await fetchWithTimeout('w23_data.json?ts=' + Date.now(), { method: 'GET' }, 10000);
-      if (probe.ok) {
-        // HEAD blocked but GET works — assume all known weeks exist
-        // Fall back to probing each week with GET (capped at 5 parallel)
-        var getHeads = [];
-        for (var w2 = 23; w2 <= 40; w2++) {
-          (function(wn) {
-            getHeads.push(
-              fetchWithTimeout('w' + String(wn).padStart(2, '0') + '_data.json?ts=' + Date.now(), { method: 'GET' }, 6000)
-                .then(function(resp2) { return resp2.ok ? wn : null; })
-                .catch(function() { return null; })
-            );
-          })(w2);
-        }
-        var getResults = await Promise.allSettled
-          ? Promise.allSettled(getHeads)
-          : Promise.all(getHeads.map(function(p) {
-              return p.then(function(v) { return { status: 'fulfilled', value: v }; })
-                      .catch(function(e) { return { status: 'rejected', reason: e }; });
-            }));
-        if (Array.isArray(getResults)) {
-          for (var j = 0; j < getResults.length; j++) {
-            var gr = getResults[j];
-            var gw = (gr.value !== undefined) ? gr.value : null;
-            if (gw !== null) available.push(gw);
-          }
-        }
-      }
-    } catch (e2) {
-      // All discovery methods failed
     }
   }
 
