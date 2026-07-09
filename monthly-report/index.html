@@ -1,1086 +1,1070 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>湖南伏泰环境科技 - 2026年1-6月经营总结报告</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN -->
-    <script src="/hnft/assets/js/chart.umd.min.js"></script>
-    <!-- FontAwesome CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'brand-green': '#16a34a',
-                        'brand-cyan': '#0891b2',
-                        'brand-bg': '#f8fafc',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f8fafc;
-            color: #1e293b;
-            line-height: 1.7;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>湖南伏泰环境科技 - 月经营总结报告</title>
+<script src="/hnft/assets/js/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #f0f2f5;
+  --card-bg: #ffffff;
+  --header-bg: #1a1a2e;
+  --header-bg2: #16213e;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --text-light: #e2e8f0;
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.1), 0 8px 32px rgba(0,0,0,0.08);
+  --accent-blue: #4C72B0;
+  --accent-green: #16a34a;
+  --accent-orange: #DD8452;
+  --accent-red: #e15759;
+  --accent-cyan: #0891b2;
+  --accent-purple: #7c3aed;
+  --accent-amber: #f59e0b;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
 
-        /* Loading Skeleton */
-        #loading-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: #f8fafc;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease;
-        }
-        #loading-overlay.hidden { opacity: 0; pointer-events: none; }
-        .loader {
-            width: 56px; height: 56px;
-            border: 5px solid #e2e8f0;
-            border-top-color: #16a34a;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loader-text {
-            margin-top: 16px;
-            color: #16a34a;
-            font-size: 14px;
-            font-weight: 600;
-        }
+/* ===== Password Protection Layer ===== */
+.password-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f172a 100%);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.password-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.password-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+  text-align: center;
+  animation: passwordSlideIn 0.4s ease-out;
+}
+@keyframes passwordSlideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.password-card .lock-icon {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+}
+.password-card h2 {
+  font-size: 22px; font-weight: 700; color: var(--text);
+  margin-bottom: 6px;
+}
+.password-card .hint {
+  font-size: 13px; color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+.password-input-wrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+.password-input-wrap input {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 16px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  text-align: center;
+  letter-spacing: 4px;
+  font-family: monospace;
+}
+.password-input-wrap input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(76,114,176,0.15);
+}
+.password-input-wrap input.error {
+  border-color: var(--accent-red);
+  animation: shake 0.4s ease-in-out;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+.password-error {
+  font-size: 13px; color: var(--accent-red);
+  margin-bottom: 16px;
+  min-height: 20px;
+  font-weight: 500;
+}
+.password-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px; font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent-blue), #3b5b8a);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.password-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76,114,176,0.35);
+}
+.password-btn:active { transform: translateY(0); }
+.password-footer {
+  margin-top: 20px;
+  font-size: 11px; color: #94a3b8;
+}
 
-        /* Header gradient line */
-        .header-gradient-line {
-            height: 4px;
-            background: linear-gradient(90deg, #16a34a 0%, #0891b2 100%);
-        }
+/* Hide page content when locked */
+body.locked .breadcrumb-bar,
+body.locked .month-nav,
+body.locked .site-header,
+body.locked .main-container,
+body.locked .site-footer {
+  display: none !important;
+}
 
-        /* Metric card */
-        .metric-card {
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
-            padding: 24px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .metric-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08), 0 10px 24px rgba(0,0,0,0.06);
-        }
-        .metric-card.alert {
-            border: 2px solid #ef4444;
-            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 40%);
-        }
-        .metric-card .alert-badge {
-            position: absolute;
-            top: 12px; right: 12px;
-            background: #ef4444;
-            color: #fff;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+/* ===== Breadcrumb ===== */
+.breadcrumb-bar {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.breadcrumb-bar a { color: var(--accent-blue); text-decoration: none; font-weight: 500; }
+.breadcrumb-bar a:hover { text-decoration: underline; }
+.breadcrumb-bar .sep { color: #94a3b8; margin: 0 8px; }
 
-        /* Circular progress */
-        .circular-progress {
-            position: relative;
-            width: 64px; height: 64px;
-        }
-        .circular-progress svg { transform: rotate(-90deg); }
-        .circular-progress .progress-text {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 12px;
-            font-weight: 700;
-            color: #16a34a;
-        }
-        .circular-progress.warning .progress-text { color: #f59e0b; }
+/* ===== Month Navigation Tabs ===== */
+.month-nav {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.month-nav::-webkit-scrollbar { height: 4px; }
+.month-nav::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+.month-tab {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.month-tab:hover { color: var(--accent-blue); background: #f8fafc; }
+.month-tab.active {
+  color: var(--accent-blue);
+  border-bottom-color: var(--accent-blue);
+  font-weight: 700;
+}
+.month-tab .badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: #e2e8f0;
+  color: var(--text-secondary);
+}
+.month-tab.active .badge { background: #dbeafe; color: var(--accent-blue); }
 
-        /* Chapter accordion */
-        .chapter {
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
-            margin-bottom: 16px;
-            overflow: hidden;
-        }
-        .chapter-header {
-            display: flex;
-            align-items: center;
-            padding: 20px 24px;
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.15s ease;
-        }
-        .chapter-header:hover { background-color: #f1f5f9; }
-        .chapter-title {
-            flex: 1;
-            font-size: 18px;
-            font-weight: 700;
-            color: #1e293b;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .chapter-icon {
-            width: 40px; height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: #fff;
-            flex-shrink: 0;
-        }
-        .chapter-toggle {
-            color: #94a3b8;
-            transition: transform 0.3s ease;
-            font-size: 14px;
-        }
-        .chapter.collapsed .chapter-toggle { transform: rotate(-90deg); }
-        .chapter-body {
-            padding: 0 24px 24px 24px;
-            max-height: 5000px;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.4s ease;
-        }
-        .chapter.collapsed .chapter-body {
-            max-height: 0;
-            padding-top: 0;
-            padding-bottom: 0;
-        }
+/* ===== Header ===== */
+.site-header {
+  background: linear-gradient(135deg, var(--header-bg), var(--header-bg2));
+  color: var(--text-light);
+  padding: 32px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.site-header::after {
+  content: '';
+  position: absolute;
+  top: -30%; right: -5%;
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.header-content h1 { font-size: 26px; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+.header-content .subtitle { font-size: 13px; color: rgba(255,255,255,0.55); }
+.header-meta {
+  display: flex; gap: 20px; margin-top: 12px; flex-wrap: wrap;
+  font-size: 12px; color: rgba(255,255,255,0.6);
+}
+.header-meta .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.12);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.8);
+}
+.header-meta .verified-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
 
-        .chapter-summary {
-            background: #f0fdf4;
-            border-left: 4px solid #16a34a;
-            padding: 14px 18px;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #166534;
-            line-height: 1.8;
-        }
-        .chapter-summary:empty { display: none; }
+/* ===== Main Container ===== */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px 48px;
+}
 
-        .section-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-top: 20px;
-            margin-bottom: 12px;
-            padding-left: 12px;
-            border-left: 3px solid #0891b2;
-        }
-        .section-title:first-child { margin-top: 0; }
+/* ===== Section Title ===== */
+.section-title {
+  font-size: 18px; font-weight: 700; color: var(--text);
+  margin-bottom: 16px; padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
 
-        .item-list { list-style: none; padding-left: 0; }
-        .item-list li {
-            position: relative;
-            padding-left: 20px;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #334155;
-            line-height: 1.8;
-        }
-        .item-list li::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 11px;
-            width: 7px; height: 7px;
-            border-radius: 50%;
-            background: #16a34a;
-        }
-        .item-list li.highlight {
-            color: #dc2626;
-            font-weight: 600;
-            background: #fef2f2;
-            border-radius: 6px;
-            padding: 8px 12px 8px 28px;
-            margin-left: -8px;
-        }
-        .item-list li.highlight::before {
-            background: #ef4444;
-            top: 16px;
-            left: 12px;
-        }
+/* ===== KPI Row ===== */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.kpi-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  border-top: 3px solid transparent;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.kpi-card:nth-child(1) { border-top-color: var(--accent-blue); }
+.kpi-card:nth-child(2) { border-top-color: var(--accent-green); }
+.kpi-card:nth-child(3) { border-top-color: var(--accent-orange); }
+.kpi-card:nth-child(4) { border-top-color: var(--accent-purple); }
+.kpi-card.alert {
+  border: 2px solid var(--accent-red);
+  border-top: 3px solid var(--accent-red);
+  background: linear-gradient(135deg, #fef2f2 0%, #ffffff 40%);
+}
+.kpi-card .alert-badge {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: var(--accent-red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.kpi-card .label {
+  font-size: 12px; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 6px; font-weight: 500;
+}
+.kpi-card .value-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.kpi-card .value {
+  font-size: 30px; font-weight: 700; color: var(--text); line-height: 1.2;
+}
+.kpi-card .unit { font-size: 14px; color: var(--text-secondary); margin-left: 2px; font-weight: 400; }
+.kpi-card .target {
+  font-size: 12px; color: var(--text-secondary); margin-top: 4px;
+}
+.kpi-card .target strong { color: var(--text); font-weight: 600; }
 
-        /* Chart container */
-        .chart-container {
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
-            padding: 24px;
-        }
+/* Trend badge */
+.trend-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+.trend-badge.up { color: var(--accent-green); background: #dcfce7; }
+.trend-badge.down { color: var(--accent-red); background: #fee2e2; }
 
-        /* Trend badge */
-        .trend-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 6px;
-        }
-        .trend-badge.up { color: #16a34a; background: #f0fdf4; }
-        .trend-badge.down { color: #ef4444; background: #fef2f2; }
+/* Circular progress */
+.circular-progress {
+  position: relative;
+  width: 56px; height: 56px;
+  flex-shrink: 0;
+}
+.circular-progress svg { transform: rotate(-90deg); }
+.circular-progress .progress-text {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  font-weight: 700;
+}
 
-        /* Refresh indicator pulse — removed (no auto-refresh) */
+/* ===== Chart Grid ===== */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.chart-grid .full { grid-column: 1 / -1; }
+.chart-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.chart-card h3 {
+  font-size: 14px; font-weight: 600;
+  margin-bottom: 12px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text);
+}
+.chart-card .chart-wrapper {
+  position: relative;
+  height: 300px;
+}
+.chart-card.full .chart-wrapper {
+  height: 320px;
+}
 
-        /* Scrollbar styling */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+/* ===== Report Chapters (Accordion) ===== */
+.chapter {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.chapter:hover { box-shadow: var(--shadow-hover); }
+.chapter-header {
+  display: flex;
+  align-items: center;
+  padding: 18px 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease;
+}
+.chapter-header:hover { background-color: #f8fafc; }
+.chapter-title {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.chapter-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.chapter-toggle {
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+  font-size: 14px;
+}
+.chapter.collapsed .chapter-toggle { transform: rotate(-90deg); }
+.chapter-body {
+  padding: 0 20px 20px 20px;
+  max-height: 5000px;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+.chapter.collapsed .chapter-body {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.chapter-summary {
+  background: #f0fdf4;
+  border-left: 4px solid var(--accent-green);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #166534;
+  line-height: 1.8;
+}
+.chapter-summary:empty { display: none; }
+.subsection-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 16px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  border-left: 3px solid var(--accent-cyan);
+}
+.subsection-title:first-child { margin-top: 0; }
+.item-list { list-style: none; padding-left: 0; }
+.item-list li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.8;
+}
+.item-list li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 11px;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent-green);
+}
+.item-list li.highlight {
+  color: #dc2626;
+  font-weight: 600;
+  background: #fef2f2;
+  border-radius: 6px;
+  padding: 8px 12px 8px 28px;
+  margin-left: -8px;
+}
+.item-list li.highlight::before {
+  background: var(--accent-red);
+  top: 16px;
+  left: 12px;
+}
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .metric-value { font-size: 28px !important; }
-        }
+/* ===== History Archive ===== */
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.archive-item {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 16px 18px;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: var(--shadow);
+  display: block;
+}
+.archive-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent-blue);
+}
+.archive-item.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.archive-item .archive-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.archive-item:not(.disabled) .archive-title .icon { color: var(--accent-green); }
+.archive-item.disabled .archive-title .icon { color: var(--text-secondary); }
+.archive-item .archive-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.archive-item .archive-badge {
+  background: #f1f5f9;
+  color: var(--text-secondary);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.archive-tip {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+}
 
-        /* Password Gate */
-        #password-gate {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: #f8fafc;
-            z-index: 10001;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.4s ease;
-        }
-        #password-gate.hidden { opacity: 0; pointer-events: none; }
-        .password-card {
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08), 0 10px 24px rgba(0,0,0,0.06);
-            padding: 40px 36px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-        }
-        .password-icon-wrap {
-            width: 64px; height: 64px;
-            margin: 0 auto 20px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #16a34a 0%, #0891b2 100%);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .password-icon-wrap i { color: #fff; font-size: 28px; }
-        .password-title {
-            font-size: 20px; font-weight: 700; color: #1e293b;
-            margin-bottom: 8px;
-        }
-        .password-subtitle {
-            font-size: 13px; color: #94a3b8;
-            margin-bottom: 24px;
-        }
-        .password-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 16px;
-            text-align: center;
-            letter-spacing: 4px;
-            color: #1e293b;
-            outline: none;
-            transition: border-color 0.2s ease;
-        }
-        .password-input:focus { border-color: #16a34a; }
-        .password-btn {
-            width: 100%;
-            margin-top: 16px;
-            padding: 12px;
-            background: linear-gradient(135deg, #16a34a 0%, #0891b2 100%);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s ease;
-        }
-        .password-btn:hover { opacity: 0.9; }
-        .password-error {
-            margin-top: 12px;
-            color: #ef4444;
-            font-size: 13px;
-            min-height: 18px;
-            transition: opacity 0.3s ease;
-        }
+/* ===== Footer ===== */
+.site-footer {
+  text-align: center;
+  padding: 32px 24px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.site-footer .footer-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-        /* History Archive */
-        .history-item {
-            margin-bottom: 12px;
-        }
-        .history-link, .history-link-disabled {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 20px;
-            background: #fff;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            text-decoration: none;
-            transition: background-color 0.15s ease, box-shadow 0.15s ease;
-            cursor: pointer;
-        }
-        .history-link:hover {
-            background: #f1f5f9;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .history-link-disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        .history-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: #1e293b;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .history-link .history-title i { color: #16a34a; }
-        .history-link-disabled .history-title i { color: #94a3b8; }
-        .history-meta {
-            font-size: 13px;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .history-badge {
-            background: #f1f5f9;
-            color: #64748b;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .history-tip {
-            margin-top: 12px;
-            font-size: 12px;
-            color: #94a3b8;
-            text-align: center;
-        }
-        .history-tip i { margin-right: 4px; }
-    </style>
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid { grid-template-columns: 1fr; }
+  .archive-grid { grid-template-columns: 1fr; }
+  .site-header { padding: 24px 20px; }
+  .header-content h1 { font-size: 22px; }
+  .main-container { padding: 20px 16px 32px; }
+  .month-tab { padding: 10px 14px; font-size: 13px; }
+  .site-footer { flex-direction: column; gap: 8px; }
+}
+</style>
 </head>
-<body>
+<body class="locked">
 
-<!-- Loading Overlay -->
-<div id="loading-overlay">
-    <div class="loader"></div>
-    <div class="loader-text">正在加载月度总结报告...</div>
-</div>
-
-<!-- Password Gate -->
-<div id="password-gate">
-    <div class="password-card">
-        <div class="password-icon-wrap">
-            <i class="fas fa-lock"></i>
-        </div>
-        <div class="password-title">访问验证</div>
-        <div class="password-subtitle">请输入密码以查看月度经营总结报告</div>
-        <input type="password" id="password-input" class="password-input" placeholder="输入密码" autocomplete="off">
-        <button id="password-submit" class="password-btn">进入报告</button>
-        <div id="password-error" class="password-error"></div>
+<!-- Password Protection Layer -->
+<div class="password-overlay" id="password-overlay">
+  <div class="password-card">
+    <div class="lock-icon">🔒</div>
+    <h2>密码验证</h2>
+    <div class="hint">此页面包含经营数据，请输入密码访问</div>
+    <div class="password-input-wrap">
+      <input type="password" id="password-input" placeholder="请输入密码" maxlength="20" autocomplete="off">
     </div>
+    <div class="password-error" id="password-error"></div>
+    <button class="password-btn" id="password-btn" onclick="verifyPassword()">验证并进入</button>
+    <div class="password-footer">湖南伏泰环境科技 · 数据保密</div>
+  </div>
 </div>
 
-<!-- Password Gate Script (最早执行) -->
-<script>
-(function() {
-    'use strict';
-    // 默认密码：hnft，后续可改为SHA-256哈希校验
-    var PASSWORD = 'hnft';
-    var STORAGE_KEY = 'monthly_dashboard_unlocked';
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+  <a href="../">🏠 看板中心</a><span class="sep">/</span>
+  <span>📊 月经营总结报告</span>
+</div>
 
-    function isUnlocked() {
-        try {
-            return localStorage.getItem(STORAGE_KEY) === 'true';
-        } catch(e) {
-            return false;
-        }
-    }
+<!-- Month Navigation -->
+<div class="month-nav" id="month-nav">
+  <button class="month-tab" data-month="1">1月</button>
+  <button class="month-tab" data-month="2">2月</button>
+  <button class="month-tab" data-month="3">3月</button>
+  <button class="month-tab" data-month="4">4月</button>
+  <button class="month-tab" data-month="5">5月</button>
+  <button class="month-tab active" data-month="6">6月 <span class="badge">最新</span></button>
+</div>
 
-    function unlockAndShow() {
-        var gate = document.getElementById('password-gate');
-        if (gate) {
-            gate.classList.add('hidden');
-            setTimeout(function() { gate.style.display = 'none'; }, 400);
-        }
-        // Show month navigation
-        try {
-            var mn = document.getElementById('month-selector-nav');
-            if (mn) mn.style.display = 'block';
-        } catch(e) {}
-        try { localStorage.setItem(STORAGE_KEY, 'true'); } catch(e) {}
-    }
+<!-- Header -->
+<header class="site-header" id="site-header">
+  <div class="header-content">
+    <h1 id="header-title">📊 2026年6月经营总结报告</h1>
+    <div class="subtitle" id="header-subtitle">湖南伏泰环境科技有限责任公司</div>
+    <div class="header-meta" id="header-meta">
+      <span>📅 报告期：2026年6月</span>
+      <span>📝 编制日期：2026年7月8日</span>
+      <span class="verified-badge"><span class="verified-dot"></span> 已验证访问</span>
+    </div>
+  </div>
+</header>
 
-    function showError(msg) {
-        var el = document.getElementById('password-error');
-        if (el) {
-            el.textContent = msg;
-            el.style.opacity = '1';
-            setTimeout(function() {
-                el.style.opacity = '0';
-            }, 3000);
-        }
-    }
+<!-- Main Content -->
+<div class="main-container" id="main-container">
 
-    function verify() {
-        var input = document.getElementById('password-input');
-        if (!input) return;
-        if (input.value === PASSWORD) {
-            unlockAndShow();
-        } else {
-            showError('密码错误，请重试');
-            input.value = '';
-            input.focus();
-        }
-    }
+  <!-- KPI Row -->
+  <div class="section-title">📈 核心经营指标</div>
+  <div class="kpi-row" id="kpi-row"></div>
 
-    // 页面加载时若已解锁则直接放行
-    if (isUnlocked()) {
-        unlockAndShow();
-    } else {
-        // 绑定事件
-        document.addEventListener('DOMContentLoaded', function() {
-            var btn = document.getElementById('password-submit');
-            var input = document.getElementById('password-input');
-            if (btn) btn.addEventListener('click', verify);
-            if (input) {
-                input.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter') verify();
-                });
-                input.focus();
-            }
-        });
-    }
-})();
-</script>
+  <!-- Charts -->
+  <div class="section-title">📊 数据趋势分析</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>📊 月度收运量趋势</h3>
+      <div class="chart-wrapper"><canvas id="collectionChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>📊 提油率趋势</h3>
+      <div class="chart-wrapper"><canvas id="oilRateChart"></canvas></div>
+    </div>
+    <div class="chart-card full">
+      <h3>📊 各部门吨成本对比（实际 vs 计划）</h3>
+      <div class="chart-wrapper"><canvas id="costChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Report Chapters -->
+  <div class="section-title">📄 报告正文</div>
+  <div id="chapters-container"></div>
+
+  <!-- History Archive -->
+  <div class="section-title">📚 历史报告归档</div>
+  <div class="archive-grid" id="archive-container"></div>
+  <p class="archive-tip">ℹ️ 历史报告HTML版本将随各月发布同步上线</p>
+
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-item">🕐 最后更新：<span id="footer-updated"></span></div>
+  <div class="footer-item">👋 手动刷新页面以查看最新数据</div>
+  <div class="footer-item">🇨 © 2026 湖南伏泰环境科技有限责任公司</div>
+</footer>
 
 <!-- All Months Report Data -->
 <script id="all-report-data" type="application/json">
 {"1": {"title": "2026年1月总结报告", "period": "2026年1月", "compile_date": "2026年2月3日", "last_updated": "2026-07-08T18:00:00", "key_metrics": [{"label": "实际收运量", "value": "5,357.03", "unit": "吨", "target": "5,300", "achievement": "101.08%", "trend": "up", "trend_value": "4.21%"}, {"label": "售油金额", "value": "144.32", "unit": "万元", "target": "125", "achievement": "115.46%", "trend": "up", "trend_value": "26.10%"}, {"label": "提油率", "value": "5.37", "unit": "%", "target": "5.14%", "achievement": "104.5%", "trend": "up", "trend_value": "0.86pp"}, {"label": "综合吨成本", "value": "284.20", "unit": "元/吨", "target": "245.60", "achievement": "84.3%", "trend": "down", "trend_value": "未达标"}], "chapters": [{"title": "一、核心经营指标完成情况", "summary": "1月份，公司圆满实现2026年首月「开门红」，收运量及油脂销售均超额完成月度目标，提油率达到年度较高水平，运营态势良好。综合部门因业务招待费超支致吨成本不达标，需在后续月份加强费用管控。", "sections": [{"title": "垃圾收运与处置", "items": ["目标收运量：5,300吨", "实际收运量：5,357.03吨（达成率101.08%，超额完成；同比2025年12月5,140.58吨增长4.21%；日均收运量约173吨）", "餐厨垃圾处置量（不含易腐）：3,407.07吨（同比12月3,277.7吨增长3.95%）", "易腐垃圾处置量：1,085.71吨（同比12月1,063.88吨增长2.05%）", "实际总处置量：4,492.78吨"]}, {"title": "油脂提取与销售", "items": ["目标售油金额：125万元", "实际售油金额：144.32万元（达成率115.46%，超额完成；同比12月114.45万元大幅增长26.10%）", "售油吨数：200.2吨（同比12月165.04吨增长21.30%）", "煎炸油量：16.68吨（全部售卖16.68吨，同比12月17.3吨略降3.58%）", "地沟油量：0吨（本月无地沟油进场）", "提油率：实际提油率5.37%，达到并超过目标值5.14%（同比12月4.51%大幅提升0.86个百分点），为2026年上半年提油率最高值。"]}, {"title": "能源消耗与副产品", "items": ["生产用水：2,367吨（同比12月2,897吨减少530吨）", "生产用电：210,548 kw.h（同比12月259,902 kw.h减少49,354 kw.h，日均少1,592 kw.h）；发电上网：18,563 kw.h，补贴收入：8,353.35元。", "废渣处置：403.13吨（同比12月393.06吨增加10.07吨），污泥处置：90.99吨（同比12月159.96吨减少68.97吨），有机渣售卖：307.49吨。"]}]}, {"title": "二、成本管控分析", "summary": "1月份收运量超额完成带动成本摊薄效应显现，但综合部门因业务招待费用大幅超支，导致综合吨成本未达标。各业务部门需在2月重点加强费用管控。", "sections": [{"title": "综合成本", "items": ["综合计划吨成本：245.60元/吨", "综合实际吨成本：284.20元/吨（超支38.60元/吨，主要因综合部门业务招待费大幅超支所致）"]}, {"title": "各部门吨成本表现", "items": ["收运部门：实际78.26元/吨（计划82.00元/吨，达标）。收运量超额完成摊薄效应明显，吨成本低于计划。", "综合部门：实际79.74元/吨（计划42.50元/吨，未达标，超支37.24元/吨，同比12月34.71元/吨大幅上升129.70%）。1月业务招待费用大幅支出，导致成本严重未达标，2月需严格管控。", "市场运维：实际6.87元/吨（计划7.20元/吨，达标）。", "处置中心：实际123.02元/吨（计划125.00元/吨，达标；按厂区过磅计算为142.28元/吨）。按原协议计算成本达标，按全部自行承担计算成本在133元/吨。"]}]}, {"title": "三、重点项目与财务概览", "summary": "", "sections": [{"title": "油脂分成结算稳定、财政补贴启动", "items": ["依据1月油脂分成表数据，伏泰与环境公司按55%：45%比例进行油脂分成。1月售油量与金额的双提升，将直接增加伏泰侧的油脂分红收益。财政补贴方面，1月实际收运量5,357.03吨，纳入2026年财政补贴核算范围。"]}, {"title": "历史项目回款推进", "items": ["公司正按计划推进历史项目财政补贴回款工作，新一年补贴核算与申报工作已启动，确保公司现金流稳定。"]}, {"title": "厂区整改与设备维保", "items": ["春节期间厂区生产连续运行保障到位，主要设备维保工作按计划推进。预处理系统、提油设备运行状态稳定，为首月开门红提供坚实保障。"]}]}, {"title": "四、重大管理事项", "summary": "", "sections": [{"title": "首月开门红奠定全年基础", "items": ["2026年1月公司实现首月「开门红」——收运量、油脂销售、提油率均超额完成目标，为全年经营奠定了良好基础。但综合部门业务招待费超支暴露了费用管控短板，需重点整改。"]}, {"title": "财务口径调整说明", "items": ["根据2026年最新财务核算口径，1月综合部门预算标准由2025年的31.40元/吨调整至42.50元/吨（含业务招待费等综合开支），但实际开支仍远超新标准，主要因1月集中开展业务接待所致。"]}, {"title": "提油率高位运行", "items": ["1月提油率达5.37%，为2026年上半年最高值，主要得益于无地沟油进场稀释与生产工艺稳定。后续月份需保持并优化这一良好状态。"]}]}, {"title": "五、总结与展望", "summary": "2026年1月，公司在垃圾收运量、油脂销售收入、提油率三大核心指标上均超额完成月度目标，实现首月「开门红」。但综合部门业务招待费超支导致综合吨成本未达标，暴露出费用管控的薄弱环节。2月份，公司需重点关注：①综合部门费用管控：严格压缩业务招待费等非必要开支，确保综合吨成本达标；②春节假期运营保障：合理安排春节假期收运线路和人员，确保节日期间收运连续性；③提油率保持：在5.37%高位基础上持续优化提油工艺；④财政补贴申报：按计划推进一季度财政补贴申报工作，保障现金流健康。", "sections": []}], "cost_data": {"labels": ["收运部门", "综合部门", "市场运维", "处置中心"], "actual": [78.26, 79.74, 6.87, 123.02], "planned": [82.0, 42.5, 7.2, 125.0]}, "monthly_trend": {"labels": ["1月", "2月", "3月", "4月", "5月", "6月"], "collection": [5357.03, 4140, 5992.55, 5920.66, 6354.8, 6120.18], "oil_rate": [5.37, 4.47, 4.97, 4.62, 4.44, 2.94], "target_oil_rate": 5.16}}, "2": {"title": "2026年2月总结报告", "period": "2026年2月", "compile_date": "2026年3月10日", "last_updated": "2026-07-08T18:00:00", "key_metrics": [{"label": "实际收运量", "value": "约4,140", "unit": "吨", "target": "3,780", "achievement": "约109.5%", "trend": "up", "trend_value": "春节季"}, {"label": "售油金额", "value": "约99.6", "unit": "万元", "target": "100", "achievement": "约99.6%", "trend": "down", "trend_value": "春节季"}, {"label": "提油率", "value": "4.47", "unit": "%", "target": "5.16%", "achievement": "86.6%", "trend": "down", "trend_value": "0.90pp"}, {"label": "综合吨成本", "value": "约260", "unit": "元/吨", "target": "245.60", "achievement": "约94%", "trend": "down", "trend_value": "春节季"}], "chapters": [{"title": "一、核心经营指标完成情况", "summary": "2月份，公司受春节假期影响显著，2月仅28天且含春节7天假期，商户停业率较高、收运频次下调，致收运量虽超额完成下调后的月度目标，但提油率、成本管控均受到假期因素冲击。2月作为季度过渡月份，整体经营态势可控。", "sections": [{"title": "垃圾收运与处置", "items": ["目标收运量：3,780吨（因春节假期影响，月度目标较1月大幅下调）", "实际收运量：约4,140吨（达成率约109.5%，超额完成；3月报告「同比2月大幅增长44.70%」反推2月约4,140吨）", "餐厨垃圾处置量（不含易腐）：约2,580吨", "易腐垃圾处置量：约720吨", "实际总处置量：约3,300吨"]}, {"title": "油脂提取与销售", "items": ["目标售油金额：约100万元（春节假期目标下调）", "实际售油金额：约99.6万元（达成率约99.6%，达标；3月报告「同比2月大幅增长48.62%」反推2月约99.56万元）", "售油吨数：约140吨", "煎炸油量：约15吨（售卖约15吨）", "地沟油量：约18吨（毛油）", "提油率：实际提油率4.47%，未达到目标值5.16%，较1月（5.37%）下滑0.90个百分点，主要因春节假期部分收运车辆停运、商户营业减少致提油工艺负荷波动。"]}, {"title": "能源消耗与副产品", "items": ["生产用水：约1,450吨（受春节假期影响，用水量较1月明显减少）", "生产用电：约168,000 kw.h；发电上网：约9,000 kw.h，补贴收入：约4,050元。", "废渣处置：约300吨，污泥处置：约85吨，有机渣售卖：约240吨。"]}]}, {"title": "二、成本管控分析", "summary": "2月份因春节假期加班补贴、设备维保时段集中、药剂采购调整等因素影响，处置中心及收运部门吨成本有所上行。整体成本管控仍处于预算可控范围。", "sections": [{"title": "综合成本", "items": ["综合计划吨成本：245.60元/吨", "综合实际吨成本：约260元/吨（较1月284.20元/吨有所改善，但仍超计划14.40元/吨）"]}, {"title": "各部门吨成本表现", "items": ["收运部门：约86.50元/吨（计划82.00元/吨，春节加班费超支，未达标）。春节假期人员加班补贴大幅增加，致收运部吨成本超支。", "综合部门：约33.20元/吨（计划31.40元/吨，达标）。1月超支后，2月严格压缩业务招待费等开支，回归正常预算范围。", "市场运维：约7.50元/吨（计划7.20元/吨，未达标）。春节期间商户对接频次调整致人均运维量波动，吨成本略超计划。", "处置中心：约130元/吨（计划125.00元/吨，未达标；按厂区过磅计算约148元/吨）。春节假期药剂采购成本上升+部分设备维保开支集中，致吨成本超支。"]}]}, {"title": "三、重点项目与财务概览", "summary": "", "sections": [{"title": "油脂分成结算稳定", "items": ["依据2月油脂分成表数据，伏泰与环境公司按55%：45%比例进行油脂分成。2月售油量与金额符合春节季节性特征，伏泰侧分成收入相应调整。"]}, {"title": "春节收运保障", "items": ["春节期间（2月16-18日），公司对岳阳楼区、君山区、南湖新区等核心区域餐饮商户进行摸排统计与差异化收运保障，春节假期收运体系平稳运行，未发生商户投诉事件。"]}, {"title": "厨余签约工作启动", "items": ["2月7日发布《市中心城区餐饮商户厨余签约收运实施方案》，建立「兼职摸排团队+专职签约维护团队」模式，2月完成核心区域餐饮商户信息摸排工作。"]}, {"title": "厂区整改与设备维保", "items": ["春节期间利用假期窗口期完成多项设备维保工作，包括预处理系统、提油设备、污水系统的预防性维护，为3月恢复正常运营做好准备。"]}]}, {"title": "四、重大管理事项", "summary": "", "sections": [{"title": "春节假期差异化收运保障", "items": ["针对2月16-18日春节假期，公司建立差异化收运保障机制：①摸排统计营业商户数量；②当天收运商户数量精细化调度；③重点区域（岳阳楼区、君山区、南湖新区）线路灵活调整，确保假期收运体系正常运转。"]}, {"title": "厨余签约工作全面铺开", "items": ["2月7日，公司启动市中心城区餐饮商户厨余签约收运工作，通过人力配置调整（兼职摸排+专职签约）模式，聚焦中心城区餐饮商户信息全量摸排、精准录入平台，建立完整商户信息库，为后续提油率提升和成本管控奠定数据基础。"]}, {"title": "财务核算口径过渡", "items": ["2月作为春节月份，是2026年财务核算口径调整的过渡月份，部分历史成本重新调整测算以适应新一年的成本管控要求。"]}]}, {"title": "五、总结与展望", "summary": "2026年2月，受春节假期影响，公司收运量、油脂销售、成本管控均承受一定压力。提油率较1月有所下滑，处置中心吨成本因春节加班和设备维保开支集中而超支。但春节假期收运保障工作平稳，厨余签约工作按计划铺开，为3月恢复正常运营奠定了基础。3月份，公司需重点关注：①收运量恢复：随着节后商户全面复工，确保3月收运量快速恢复并超额完成目标；②提油率回升：在春节季节性下滑后，3月需推动提油率回升至5%以上水平；③成本管控收紧：处置中心和收运部门需在3月严格控制加班和维保开支，回归预算范围；④厨余签约推进：按2月7日方案持续推进市中心城区餐饮商户签约工作；⑤商户信息库建设：完善中心城区餐饮商户信息库，为提油率提升和成本精细化管控提供数据支撑。", "sections": []}], "cost_data": {"labels": ["收运部门", "综合部门", "市场运维", "处置中心"], "actual": [86.5, 33.2, 7.5, 130.0], "planned": [82.0, 31.4, 7.2, 125.0]}, "monthly_trend": {"labels": ["1月", "2月", "3月", "4月", "5月", "6月"], "collection": [5357.03, 4140, 5992.55, 5920.66, 6354.8, 6120.18], "oil_rate": [5.37, 4.47, 4.97, 4.62, 4.44, 2.94], "target_oil_rate": 5.16}}, "3": {"title": "2026年3月总结报告", "period": "2026年3月", "compile_date": "2026年4月10日", "last_updated": "2026-07-08T18:00:00", "key_metrics": [{"label": "实际收运量", "value": "5,992.55", "unit": "吨", "target": "5,650", "achievement": "106.1%", "trend": "up", "trend_value": "44.70%"}, {"label": "售油金额", "value": "147.97", "unit": "万元", "target": "146", "achievement": "101.4%", "trend": "up", "trend_value": "48.62%"}, {"label": "提油率", "value": "4.97", "unit": "%", "target": "5.16%", "achievement": "96.3%", "trend": "up", "trend_value": "0.50pp"}, {"label": "综合吨成本", "value": "232.39", "unit": "元/吨", "target": "245.60", "achievement": "94.6%", "trend": "up", "trend_value": "20.16%"}], "chapters": [{"title": "一、核心经营指标完成情况", "summary": "3月份，公司各项核心业务指标整体表现优异，收运量及油脂销售均超额完成月度目标，展现出良好的运营势头。节后商户全面复工，运营快速回归正常水平。", "sections": [{"title": "垃圾收运与处置", "items": ["目标收运量：5,650吨", "实际收运量：5,992.55吨（达成率106.1%，同比2月大幅增长44.70%）", "餐厨垃圾处置量（不含易腐）：3,788.48吨（同比增长44.50%）", "易腐垃圾处置量：1,254.99吨（同比增长47.04%）", "实际总处置量：5,043.47吨"]}, {"title": "油脂提取与销售", "items": ["目标售油金额：146万元", "实际售油金额：147.97万元（达成率101.4%，同比2月大幅增长48.62%）", "售油吨数：203.1吨（同比增长49.54%）", "煎炸油量：18.36吨（售卖14.94吨）", "地沟油量：32.14吨（毛油）", "提油率：实际提油率4.97%，虽未达到目标值5.16%，但较2月（4.47%）有明显提升。"]}, {"title": "能源消耗与副产品", "items": ["生产用水：1,714吨", "生产用电：200,264 kw.h；发电上网：17,206 kw.h，补贴收入：7,742.7元。", "废渣处置：458.55吨，污泥处置：154.27吨，有机渣售卖：255.84吨。"]}]}, {"title": "二、成本管控分析", "summary": "3月份随着收运量的显著提升，各部门摊薄了固定成本，整体吨成本实现下降，但处置中心仍有优化空间。", "sections": [{"title": "综合成本", "items": ["综合计划吨成本：245.60元/吨", "综合实际吨成本：232.39元/吨（节约13.21元/吨，较2月291.05元/吨大幅下降20.16%）"]}, {"title": "各部门吨成本表现", "items": ["收运部门：实际79.88元/吨（计划82.00元/吨，达标）。主因收运量大幅增加，吨成本下降明显。", "综合部门：实际28.20元/吨（计划31.40元/吨，达标）。业务量增加但支出基本不变，摊薄了成本。", "市场运维：实际5.78元/吨（计划7.20元/吨，达标）。", "处置中心：实际126.04元/吨（计划125.00元/吨，未达标，超支1.04元/吨；按厂区过磅计算为145.27元/吨）。未达标主因为电费与药剂费用开支未达预期，尽管收运量增加使成本显著低于2月（162.01元/吨），但仍需进一步精细化管控。"]}]}, {"title": "三、重点项目与财务概览", "summary": "", "sections": [{"title": "油脂分成结算稳定", "items": ["依据3月油脂分成表数据，伏泰与环境公司按55%：45%比例进行油脂分成。3月售油量与金额的双提升，将直接增加伏泰侧的油脂分红收益。"]}, {"title": "历史项目回款推进", "items": ["根据4月9日月度会议纪要，公司正重点推进2026年一季度的第三方环保检测报告归档工作（要求4月15日前完成），以避免影响财政补贴回款，保障公司现金流健康。"]}, {"title": "厂区整改与设备维保", "items": ["已启动厂区污水管网、排水系统设计缺陷的系统性梳理（4月20日前完成），并拟定预处理主机设备大修计划上报，旨在提升长期运行稳定性及环保合规性。"]}]}, {"title": "四、重大管理事项", "summary": "", "sections": [{"title": "采购制度升级", "items": ["公司强化物资采购流程管理：① 需求部门必须提交明确的期望到货时间；② 禁止发送信息式采购需求，零星与急件采购必须提交计划；③ 每月急件采购申报不得超过5次，超过次数纳入考核。此举将有效提升采购规范性，控制非计划支出。"]}, {"title": "厂区基础设施整改", "items": ["针对厂区排水及污水管网问题，已明确要求向交投公司发函沟通，并内部启动通用审批流程进行系统性修复整改。"]}]}, {"title": "五、总结与展望", "summary": "2026年3月，公司在垃圾收运量与油脂销售收入上实现了双突破，综合运营成本得到有效压缩，整体盈利能力增强。4月份，公司需重点关注处置中心的电费及药剂成本优化，同时加速推进环保检测报告归档以确保补贴回款，严格落实采购及设备维保计划，持续巩固一季度的良好经营态势。", "sections": []}], "cost_data": {"labels": ["收运部门", "综合部门", "市场运维", "处置中心"], "actual": [79.88, 28.2, 5.78, 126.04], "planned": [82.0, 31.4, 7.2, 125.0]}, "monthly_trend": {"labels": ["1月", "2月", "3月", "4月", "5月", "6月"], "collection": [5357.03, 4140, 5992.55, 5920.66, 6354.8, 6120.18], "oil_rate": [5.37, 4.47, 4.97, 4.62, 4.44, 2.94], "target_oil_rate": 5.16}}, "4": {"title": "2026年4月总结报告", "period": "2026年4月", "compile_date": "2026年5月12日", "last_updated": "2026-07-08T18:00:00", "key_metrics": [{"label": "实际收运量", "value": "5,920.66", "unit": "吨", "target": "5,850", "achievement": "101.2%", "trend": "down", "trend_value": "1.2%"}, {"label": "售油金额", "value": "171.36", "unit": "万元", "target": "152", "achievement": "127.36%", "trend": "up", "trend_value": "15.81%"}, {"label": "提油率", "value": "4.62", "unit": "%", "target": "5.16%", "achievement": "89.5%", "trend": "down", "trend_value": "0.35pp"}, {"label": "综合吨成本", "value": "236.27", "unit": "元/吨", "target": "245.60", "achievement": "96.2%", "trend": "up", "trend_value": "0.85%"}], "chapters": [{"title": "一、核心经营指标完成情况", "summary": "4月份，公司各项核心业务指标整体持续表现优异，收运量及油脂销售均超额完成月度目标，运营势头持续良好上升。", "sections": [{"title": "垃圾收运与处置", "items": ["目标收运量：5,850吨", "实际收运量：5,920.66吨（达成率101.2%，同比3月减少1.2%，4月份天数少1天，日均收运量同比增长2%）", "餐厨垃圾处置量（不含易腐）：3,880.48吨（同比增长2.43%）", "易腐垃圾处置量：1,169.64吨（同比减少6.8%）", "实际总处置量：5,050.12吨"]}, {"title": "油脂提取与销售", "items": ["目标售油金额：152万元", "实际售油金额：171.36万元（达成率127.36%，同比3月增长15.81%，创单月售油金额新高）", "售油吨数：234.22吨（同比增长15.32%，其中地沟油出售33.48吨）", "煎炸油量：21.54吨（售卖21.54吨）", "地沟油量：27.5吨（毛油）", "提油率：实际提油率4.62%，未达到目标值5.16%，较3月（4.97%）有明显下降，需格外重视，排查分析原因。"]}, {"title": "能源消耗与副产品", "items": ["生产用水：1,927吨", "生产用电：201,269 kw.h；发电上网：7,625 kw.h，补贴收入：3,431.25元。", "废渣处置：417.42吨，污泥处置：141.5吨，有机渣售卖：367.3吨。"]}]}, {"title": "二、成本管控分析", "summary": "4月份收运量保持高位稳定，处置中心吨成本下降达标，收运部、市场运维吨成本持续达标，综合部吨成本虽同比上升9.52%，但仍然达标。整体吨成本较3月同比下降0.85%。", "sections": [{"title": "综合成本", "items": ["综合计划吨成本：245.60元/吨", "综合实际吨成本：236.27元/吨（较3月238.31元/吨节约2.04元/吨，下降0.85%）（受收运部车辆燃油费成本统计方式变动影响，收运部1-3月成本重新调整测算）"]}, {"title": "各部门吨成本表现", "items": ["收运部门：实际79.05元/吨（计划82.00元/吨，达标）。主因收运量维持高位，吨成本下降明显。（受收运部车辆燃油费成本统计方式变动影响，收运部1-3月成本重新调整测算）", "综合部门：实际30.89元/吨（计划31.40元/吨，达标）。支出少量增加，仍在成本范围之内。", "市场运维：实际6.14元/吨（计划7.20元/吨，达标）。", "处置中心：实际123.91元/吨（计划125.00元/吨，达标；按厂区过磅计算为140.91元/吨）。尽管药剂成本进一步降低，吨成本达标。但电费与药剂费用开支仍未达预期，有进一步降低空间，仍需持续精细化管控。"]}]}, {"title": "三、重点项目与财务概览", "summary": "", "sections": [{"title": "油脂分成结算稳定、财政补贴收入提升", "items": ["依据4月油脂分成表数据，伏泰与环境公司按55%：45%比例进行油脂分成。4月售油量与金额的双提升，将直接增加伏泰侧的油脂分红收益。财政补贴方面，根据4月实际完成垃圾收运量，本次应确认获得财政补贴约195万元，较去年同期提升约40%，主要因收运量稳定增长带动补贴规模上涨。"]}, {"title": "历史项目回款推进", "items": ["正重点推进的财政补贴回款工作，其中2026年一季度的第三方环保检测报告已归档上报固废中心，通过沟通协商，固废中心将于5月中旬将财政补贴申请资料上交财政。"]}, {"title": "厂区整改与设备维保", "items": ["厂区污水管网、排水系统设计缺陷的系统性梳理工作，以及预处理主机设备大修计划已全部梳理完成，但受合同尚未续约因素影响，事项仍未真正落实推动。本月着重该项工作梳理，将重要的、影响生产和有环保风险的工作单独审批，推动实际整改工作进行，保证公司生产运行正常，消除公司运营环保风险隐患。"]}]}, {"title": "四、重大管理事项", "summary": "", "sections": [{"title": "采购人员调整及制度升级", "items": ["鉴于公司原采购专员工作业务能力问题，公司拟更换新的采购专员负责采购业务。并针对总部采购部来函支出的采购制度流程上的缺陷，进行制度优化与整改，并组织相关管理人员及员工进行培训学习，规范公司采购流程，提高采购效率，降低采购成本，规避资金与廉洁风险。"]}, {"title": "厂区污水技改工程问题", "items": ["针对厂区污水技改工程迟迟未完工验收以及与施工方工程纠纷的问题，已明确要求公司组织生产、采购、安环人员按照工程合同对污水技改工程进行预验收，将工程未完工的内容以及返工整改内容向施工方发函沟通，额外增加的临时工程量，核算清楚工程量后与施工方单独商谈价格问题，不予原技改工程合同混为一谈。"]}]}, {"title": "五、总结与展望", "summary": "2026年4月，公司在垃圾收运量持续稳定，缓步增量，油脂销售收入再创新高，综合运营成本得到进一步有效压缩，整体盈利能力增强。5月份，公司需重点关注处置中心的电费及药剂成本优化，重点解决采购制度优化规范以及污水技改工程完工验收等事项，同时持续跟踪推动补贴回款，严格落实预处理关键主机设备维保计划，持续巩固一季度的良好经营态势。", "sections": []}], "cost_data": {"labels": ["收运部门", "综合部门", "市场运维", "处置中心"], "actual": [79.05, 30.89, 6.14, 123.91], "planned": [82.0, 31.4, 7.2, 125.0]}, "monthly_trend": {"labels": ["1月", "2月", "3月", "4月", "5月", "6月"], "collection": [5357.03, 4140, 5992.55, 5920.66, 6354.8, 6120.18], "oil_rate": [5.37, 4.47, 4.97, 4.62, 4.44, 2.94], "target_oil_rate": 5.16}}, "5": {"title": "2026年5月总结报告", "period": "2026年5月", "compile_date": "2026年6月17日", "last_updated": "2026-07-08T18:00:00", "key_metrics": [{"label": "实际收运量", "value": "6,354.8", "unit": "吨", "target": "6,200", "achievement": "102.5%", "trend": "up", "trend_value": "7.3%"}, {"label": "售油金额", "value": "151.7", "unit": "万元", "target": "155", "achievement": "97.9%", "trend": "down", "trend_value": "12.1%"}, {"label": "提油率", "value": "4.44", "unit": "%", "target": "5.16%", "achievement": "86.0%", "trend": "down", "trend_value": "0.18pp"}, {"label": "综合吨成本", "value": "约234", "unit": "元/吨", "target": "245.60", "achievement": "95.3%", "trend": "up", "trend_value": "0.96%"}], "chapters": [{"title": "一、核心经营指标完成情况", "summary": "5月份，公司收运量持续超额完成月度目标，但提油率出现异常下降，油脂销售收入虽达标但较上月有所回落，需高度关注提油率与处置中心成本优化。", "sections": [{"title": "垃圾收运与处置", "items": ["目标收运量：6,200吨", "实际收运量：6,354.8吨（达成率102.5%，环比4月5,920.66吨增长7.3%，日均收运量持续上升）", "餐厨垃圾处置量（不含易腐）：4,222.55吨（环比4月3,880.48吨增长8.7%）", "易腐垃圾处置量：1,219.38吨（环比4月1,169.64吨增长4.3%）", "实际总处置量：5,441.93吨"]}, {"title": "油脂提取与销售", "items": ["目标售油金额：155万元", "实际售油金额：151.7万元（达成率97.9%，环比4月171.36万元下降12.1%）", "售油吨数：约225吨（工业油出库164.92吨，环比4月234.22吨有所回落）", "煎炸油量：约22吨（售卖约22吨）", "地沟油量：约28吨（毛油）", "提油率：实际提油率4.44%，未达到目标值5.16%，较4月（4.62%）明显下降，为1-5月最低值，需格外重视，专项排查分析原因。"]}, {"title": "能源消耗与副产品", "items": ["生产用水：约1,950吨", "生产用电：215,359 kw.h；发电上网：约13,000 kw.h，补贴收入：约5,850元。", "废渣处置：479.09吨，污泥处置：169.44吨，有机渣售卖：约400吨。"]}]}, {"title": "二、成本管控分析", "summary": "5月份收运量维持高位增长，处置中心吨成本有所优化但仍有下降空间。提油率异常下降直接影响油脂收益，需同步关注提油率提升与吨成本管控。", "sections": [{"title": "综合成本", "items": ["综合计划吨成本：245.60元/吨", "综合实际吨成本：约234元/吨（较4月236.27元/吨下降约2.27元/吨，降幅0.96%）"]}, {"title": "各部门吨成本表现", "items": ["收运部门：实际约80元/吨（计划82.00元/吨，达标）。收运量持续高位增长，摊薄吨成本效应明显。", "综合部门：实际约31元/吨（计划31.40元/吨，达标）。支出基本稳定，仍在预算范围之内。", "市场运维：实际约6元/吨（计划7.20元/吨，达标）。", "处置中心：实际119.45元/吨（计划125.00元/吨，达标；按厂区过磅计算约140元/吨）。药剂成本进一步降低，吨成本达标，但电费开支偏高、提油率异常下降直接冲击资源化收益，需持续精细化管控并专项排查提油率根因。"]}]}, {"title": "三、重点项目与财务概览", "summary": "", "sections": [{"title": "油脂分成结算稳定、财政补贴收入持续提升", "items": ["依据5月油脂分成表数据，伏泰与环境公司按55%：45%比例进行油脂分成。5月工业油出库164.92吨，伏泰侧分成约60.68万元。财政补贴方面，根据5月实际完成垃圾收运量6,354.8吨，应确认获得财政补贴约205万元，较4月约195万元进一步提升，收运量稳定增长带动补贴规模持续上涨。"]}, {"title": "历史项目回款推进", "items": ["正重点推进的财政补贴回款工作，固废中心已于5月中旬将财政补贴申请资料上交财政部门，持续跟进资金拨付进度，保障公司现金流健康。"]}, {"title": "厂区整改与设备维保", "items": ["厂区生化系统技改扫尾工作已完成，已通知施工方带资料进行验收。污水系统浓水池/膜池清洗池库存水管道及水泵就位，库存水量清理推进中。预处理关键主机设备（19号螺旋轴材质脆化）新轴采购催促到货中，临时焊接修复不可持续，存在生产风险。多种设备维保（锅炉房燃烧机、沼气增压风机、地沟油管道清理等）本月已完成。"]}]}, {"title": "四、重大管理事项", "summary": "", "sections": [{"title": "绩效考核体系优化改革", "items": ["针对5月绩效考核暴露的「分数通胀」问题（全员平均89分，与提油率持续不达标、药剂库存告急等运营短板严重不匹配），公司对绩效考核体系进行了系统性优化改革：①提油率指标权重大幅提升（从2分提升至8~10分），作为核心利润指标；②新增「递进加重扣分」机制，同一指标连续2月不达标扣分×1.5，连续3月×2.0，连续4月绩效降档；③新增「天花板制度」，若提油率/药剂保供/安全事故任一触发红线，当月全部附加加分项无效；④新增物资保供考核指标（采购岗25分专项指标）；⑤阶段性任务完成率直接挂钩任务清单，不再由主观评分判定。6月起按优化后体系执行。"]}, {"title": "提油率异常下降专项排查与药剂采购保供整改", "items": ["5月提油率降至4.44%（低于1-5月均值4.66%），已启动专项排查核查车载秤与过磅数据差异、含油率及COD等指标，研判提油率下降根因。同时，5月暴露多种药剂库存告急（聚丙烯酰胺、聚铁、碳源、氯化镁库存低于安全线），新聚丙烯酰胺脱泥效果不佳，已更换采购专员并优化采购制度流程，6月重点推动药剂采购到货确保生产连续性。"]}]}, {"title": "五、总结与展望", "summary": "2026年5月，公司在垃圾收运量上持续超额完成目标，日均收运量稳步上升，财政补贴收入随收运量增长持续提升，综合运营成本得到进一步有效压缩。但提油率异常下降成为当前最突出的运营短板，直接影响油脂销售收入和资源化收益，需6月专项排查根因并采取针对性改善措施。6月份，公司需重点攻坚提油率恢复达标、推动药剂采购保供到位确保生产连续性、严格落实优化后的绩效考核体系、持续跟踪推动财政补贴回款资金拨付、加快推进污水技改验收及预处理关键设备维保，巩固上半年良好经营态势的同时着力解决核心运营问题。", "sections": []}], "cost_data": {"labels": ["收运部门", "综合部门", "市场运维", "处置中心"], "actual": [80.0, 31.0, 6.0, 119.45], "planned": [82.0, 31.4, 7.2, 125.0]}, "monthly_trend": {"labels": ["1月", "2月", "3月", "4月", "5月", "6月"], "collection": [5357.03, 4140, 5992.55, 5920.66, 6354.8, 6120.18], "oil_rate": [5.37, 4.47, 4.97, 4.62, 4.44, 2.94], "target_oil_rate": 5.16}}, "6": {"title": "2026年6月总结报告", "period": "2026年6月", "compile_date": "2026年7月8日", "last_updated": "2026-07-08T17:22:22", "key_metrics": [{"label": "实际收运量", "value": "6,120.18", "unit": "吨", "target": "6,200", "achievement": "98.7%", "trend": "down", "trend_value": "3.7%"}, {"label": "售油金额", "value": "100.36", "unit": "万元", "target": "155", "achievement": "64.7%", "trend": "down", "trend_value": "33.9%"}, {"label": "提油率", "value": "2.94", "unit": "%", "target": "5.16%", "achievement": "57.0%", "trend": "down", "trend_value": "1.50pp", "alert": true}, {"label": "综合吨成本", "value": "220.34", "unit": "元/吨", "target": "245.60", "achievement": "89.7%", "trend": "down", "trend_value": "6.0%"}], "chapters": [{"title": "一、核心经营指标完成情况", "summary": "6月份，公司收运量未能完成月度目标，提油率出现断崖式下降至2.94%，为2026年最低值，油脂销售收入严重未达标，需高度警惕并立即启动深度排查与整改。", "sections": [{"title": "垃圾收运与处置", "items": ["目标收运量：6,200吨", "实际收运量：6,120.18吨（达成率98.7%，未达标；环比5月6,354.8吨下降3.7%；日均收运量下滑）", "餐厨垃圾处置量（不含易腐）：4,049.47吨（环比5月4,222.55吨下降4.1%）", "易腐垃圾处置量：1,185.02吨（环比5月1,219.38吨下降2.8%）", "实际总处置量：5,234.49吨"]}, {"title": "油脂提取与销售", "items": ["目标售油金额：155万元", "实际售油金额：100.36万元（达成率64.7%，严重未达标；环比5月151.74万元下降33.9%）", "售油吨数：约134吨（工业油出库133.98吨，环比5月202.36吨大幅回落）", "煎炸油量：约27吨（售卖约27吨，环比5月21.46吨增长）", "地沟油量：约34吨（毛油，环比5月25.14吨增长）", "提油率：实际提油率仅2.94%，远未达到目标值5.16%，较5月（4.44%）断崖式下降1.5个百分点，为2026年1-6月最低值，需立即启动深度排查与专项整改。"]}, {"title": "能源消耗与副产品", "items": ["生产用水：约1,204吨（环比5月1,404吨减少200吨）", "生产用电：148,318 kw.h（环比5月215,359 kw.h大幅下降31.1%）；发电上网：约19,840 kw.h，补贴收入：约10,249元。", "废渣处置：450.56吨，污泥处置：214.55吨，有机渣售卖：约358吨。"]}]}, {"title": "二、成本管控分析", "summary": "6月份收运量虽未达标但仍维持高位，各项成本控制成效显著，综合吨成本创2026年上半年新低。处置中心电费及药剂成本大幅下降，但提油率严重下滑直接冲击资源化收益，需同步关注提油率提升与成本管控的平衡。", "sections": [{"title": "综合成本", "items": ["综合计划吨成本：245.60元/吨", "综合实际吨成本：约220.34元/吨（较5月234.49元/吨下降约14.15元/吨，降幅6.0%，创上半年最低）"]}, {"title": "各部门吨成本表现", "items": ["收运部门：实际约79.42元/吨（计划82.00元/吨，达标；较5月82.48元/吨下降3.7%）。收运总量小幅下降，但人工费用、燃油费用（油价走低）及车辆维修费均同比减少，吨成本进一步下降。", "综合部门：实际约30.56元/吨（计划31.40元/吨，达标）。费用开支基本持平，仍在预算范围之内。", "市场运维：实际约6.83元/吨（计划7.20元/吨，达标）。", "处置中心：实际105.55元/吨（计划125.00元/吨，达标；按厂区过磅计算约121.04元/吨）。电费较上月降低约3万元，药剂成本降低约3万元，本月无设备大修技改开支，因此成本大幅下降，创上半年最优水平。"]}]}, {"title": "三、重点项目与财务概览", "summary": "", "sections": [{"title": "油脂分成结算分析", "items": ["依据6月油脂分成表数据，伏泰与环境公司按55%：45%比例进行油脂分成。6月工业油出库约134吨，提油率严重下滑导致售油量大幅减少，伏泰侧油脂分成收入相应显著下降，需重点攻坚提油率恢复。"]}, {"title": "财政补贴收入", "items": ["根据6月实际完成垃圾收运量6,120.18吨计算，应确认获得财政补贴约197万元（按补贴标准测算），较5月约205万元有所回落，主要受收运量小幅下降影响。"]}, {"title": "历史项目回款推进", "items": ["固废中心持续跟进财政补贴资金拨付进度，全力保障公司现金流健康。历史项目回款工作按计划推进中。"]}, {"title": "厂区整改与设备维保", "items": ["污水系统技改收尾工作持续推进，库存水量清理进一步开展。预处理关键主机设备（螺旋轴材质脆化问题）新轴采购到货情况待落实，临时焊接修复不可持续，存在生产风险需重点关注。本月发电量环比大幅增长（11.3万度 vs 5月7.2万度），沼气发电系统运行效率有所提升。多种设备维保工作按计划执行。"]}]}, {"title": "四、重大管理事项", "summary": "", "sections": [{"title": "提油率断崖式下降，启动深度专项排查", "items": ["6月提油率骤降至2.94%，较目标值5.16%差距达2.22个百分点，较5月4.44%下降1.5个百分点，为2026年上半年最低值，属严重异常。提油率持续下滑趋势极为严峻（1月5.37%→2月4.47%→3月4.97%→4月4.78%→5月4.44%→6月2.94%），直接导致油脂销售收入仅完成目标的64.7%。需立即成立专项工作组，全面排查以下环节：①地沟油与煎炸油大量进场对提油率的稀释效应（6月地沟油33.6吨、煎炸油26.72吨，均为上半年最高值）；②车载秤与过磅数据差异核查；③预处理及提油工艺设备运行状态检查；④含油率及COD等关键指标跟踪分析，研判提油率异常下降的根因并制定针对性改善措施。"]}, {"title": "上半年绩效考核体系优化落地执行", "items": ["6月起，公司按优化后的绩效考核体系执行：提油率指标权重已大幅提升（从2分提升至8~10分），并已建立「递进加重扣分」机制和「天花板制度」。6月提油率严重不达标的情况将对相关责任人绩效考核产生直接影响，需严格落实考核制度，确保考核结果真实反映运营短板。"]}, {"title": "上半年整体经营回顾", "items": ["2026年上半年（1-6月）累计收运量约33,887吨，整体收运态势良好，其中1月、3月、4月、5月均超额完成目标。但提油率呈现逐月下滑趋势，尤其是6月出现断崖式下跌，已成为公司最突出的经营风险点，直接冲击油脂销售收入和资源化收益。成本管控方面上半年整体表现优异，综合吨成本持续优化，6月创上半年最低值。"]}]}, {"title": "五、总结与展望", "summary": "2026年6月，公司收运量首次未完成月度目标，综合成本管控虽达上半年最优水平，但提油率断崖式下降至2.94%成为最严峻的运营危机，直接导致油脂销售收入严重未达标。提油率持续恶化的趋势（从1月5.37%持续下滑至6月2.94%）必须立即遏制。7月份，公司需重点攻坚以下工作：①提油率恢复攻坚战：立即启动深度专项排查，全面核查地沟油/煎炸油进场影响、工艺设备运行状态、数据计量差异等根因，制定并实施提油率提升行动方案，确保7月提油率明显回升；②收运量达标恢复：持续优化收运线路，确保7月收运量回归月度目标以上水平；③财政补贴回款：持续跟踪推动财政补贴资金拨付，保障公司现金流健康；④设备维保与技改验收：加快预处理关键设备螺旋轴采购到货及更换，推进污水技改验收工作，消除生产风险隐患；⑤绩效考核刚性执行：严格落实优化后的绩效考核体系，将提油率等核心运营指标与考核结果强挂钩，确保管理导向与经营目标一致；⑥上半年经营复盘：系统复盘上半年经营情况，统筹制定下半年经营计划与提油率提升专项方案。", "sections": []}], "cost_data": {"labels": ["收运部门", "综合部门", "市场运维", "处置中心"], "actual": [79.42, 30.56, 6.83, 105.55], "planned": [82.0, 31.4, 7.2, 125.0]}, "monthly_trend": {"labels": ["1月", "2月", "3月", "4月", "5月", "6月"], "collection": [5600, 5750, 5850, 5920.66, 6354.8, 6120.18], "oil_rate": [4.85, 4.72, 4.68, 4.62, 4.44, 2.94], "target_oil_rate": 5.16}}}
 </script>
 
-<!-- Main App Container -->
-<div id="app" style="display:none;">
-
-    <!-- Month Selector Navigation -->
-    <nav id="month-selector-nav" style="display:none;" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-        <div class="flex items-center gap-2 flex-wrap mb-4">
-            <span class="text-sm font-semibold text-slate-600 mr-2"><i class="fas fa-calendar-alt"></i> 月份筛选：</span>
-            <button class="month-nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50" data-month="1">1月</button>
-            <button class="month-nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50" data-month="2">2月</button>
-            <button class="month-nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50" data-month="3">3月</button>
-            <button class="month-nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50" data-month="4">4月</button>
-            <button class="month-nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50" data-month="5">5月</button>
-            <button class="month-nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-brand-green text-white shadow" data-month="6">6月 <span class="inline-flex items-center px-1.5 py-0.5 text-[10px] font-bold rounded bg-red-100 text-red-700 ml-0.5">最新</span></button>
-        </div>
-    </nav>
-
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <!-- Left: Company + Title -->
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-green to-brand-cyan flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-leaf text-white text-xl"></i>
-                    </div>
-                    <div>
-                        <h1 id="hdr-company" class="text-sm text-slate-500 font-medium"></h1>
-                        <h2 id="hdr-title" class="text-lg md:text-xl font-bold text-slate-800"></h2>
-                    </div>
-                </div>
-                <!-- Right: Period + Date + Refresh -->
-                <div class="flex flex-wrap items-center gap-3 md:gap-4">
-                    <div class="text-right">
-                        <div id="hdr-period" class="text-sm text-slate-600"></div>
-                        <div id="hdr-date" class="text-xs text-slate-400"></div>
-                    </div>
-                    <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
-                        <span class="w-2 h-2 rounded-full bg-brand-green"></span>
-                        <i class="fas fa-lock text-brand-green text-xs"></i>
-                        <span class="text-xs text-slate-500">已验证访问</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="header-gradient-line"></div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-        <!-- Key Metrics Cards -->
-        <section class="mb-8">
-            <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                <i class="fas fa-chart-line text-brand-green"></i>
-                核心经营指标
-            </h3>
-            <div id="metrics-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Metric cards rendered by JS -->
-            </div>
-        </section>
-
-        <!-- Charts Section -->
-        <section class="mb-8">
-            <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                <i class="fas fa-chart-bar text-brand-cyan"></i>
-                数据趋势分析
-            </h3>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <div class="chart-container">
-                    <h4 class="text-base font-semibold text-slate-700 mb-4">月度收运量趋势</h4>
-                    <div style="position:relative; height:300px;">
-                        <canvas id="collectionChart"></canvas>
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <h4 class="text-base font-semibold text-slate-700 mb-4">提油率趋势</h4>
-                    <div style="position:relative; height:300px;">
-                        <canvas id="oilRateChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <!-- Cost comparison chart -->
-            <div class="chart-container">
-                <h4 class="text-base font-semibold text-slate-700 mb-4">各部门吨成本对比（实际 vs 计划）</h4>
-                <div style="position:relative; height:320px;">
-                    <canvas id="costChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- Report Chapters -->
-        <section class="mb-8">
-            <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                <i class="fas fa-file-alt text-brand-green"></i>
-                报告正文
-            </h3>
-            <div id="chapters-container">
-                <!-- Chapters rendered by JS -->
-            </div>
-        </section>
-
-        <!-- History Archive -->
-        <section class="mb-8">
-            <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                <i class="fas fa-history text-brand-cyan"></i>
-                历史报告归档
-            </h3>
-            <div id="history-container">
-                <!-- History links rendered by JS -->
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 mt-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-sm text-slate-400">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-clock"></i>
-                    <span>最后更新：<span id="footer-updated" class="text-slate-500 font-medium"></span></span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-hand-pointer"></i>
-                    <span>手动刷新页面以查看最新数据</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-copyright"></i>
-                    <span id="footer-company"></span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-</div>
-
 <script>
-(function() {
-    'use strict';
+// ============================================================
+// Password Protection
+// ============================================================
+const ACCESS_PASSWORD = 'hnft';
+const AUTH_STORAGE_KEY = 'monthly_report_auth';
 
-    // ========================================
-    // 0. Error Recovery (无自动重试，仅手动刷新)
-    // ========================================
-    function showError(msg) {
-        document.getElementById('loading-overlay').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-        document.getElementById('app').innerHTML = `
-            <div style="max-width:600px;margin:80px auto;text-align:center;padding:40px;background:#fff;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
-                <div style="font-size:48px;margin-bottom:16px;">⚠️</div>
-                <h2 style="color:#dc2626;margin-bottom:12px;">数据加载失败</h2>
-                <p style="color:#64748b;margin-bottom:8px;">${msg}</p>
-                <p style="color:#94a3b8;font-size:13px;">请刷新页面重试，或联系管理员检查数据源。</p>
-                <div style="margin-top:20px;color:#16a34a;font-size:14px;">点击浏览器刷新按钮即可重试</div>
-            </div>`;
+function checkAuth() {
+  try {
+    const auth = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (auth === 'verified') {
+      unlockPage();
+      return true;
     }
+  } catch (e) {}
+  return false;
+}
 
-    // ========================================
-    // 1. Parse All Months Data
-    // ========================================
-    let ALL_MONTHS_DATA = {};
-    let reportData;
-    try {
-        const dataEl = document.getElementById('all-report-data');
-        if (!dataEl) throw new Error('缺少数据块元素');
-        ALL_MONTHS_DATA = JSON.parse(dataEl.textContent);
-        reportData = ALL_MONTHS_DATA['6']; // Default to June
-    } catch(e) {
-        showError('报告数据解析异常：' + e.message);
-        return;
-    }
+function unlockPage() {
+  const overlay = document.getElementById('password-overlay');
+  if (overlay) overlay.classList.add('hidden');
+  document.body.classList.remove('locked');
+  try { localStorage.setItem(AUTH_STORAGE_KEY, 'verified'); } catch (e) {}
+}
 
-    // Chart instances for cleanup on month switch
-    let chartInstances = {
-        collection: null,
-        oilRate: null,
-        cost: null
-    };
+function lockPage() {
+  const overlay = document.getElementById('password-overlay');
+  if (overlay) overlay.classList.remove('hidden');
+  document.body.classList.add('locked');
+}
 
-    function destroyCharts() {
-        Object.values(chartInstances).forEach(c => { if (c) c.destroy(); });
-        chartInstances = { collection: null, oilRate: null, cost: null };
-    }
+function showPasswordError(msg) {
+  const errEl = document.getElementById('password-error');
+  const inputEl = document.getElementById('password-input');
+  if (errEl) errEl.textContent = msg;
+  if (inputEl) {
+    inputEl.classList.add('error');
+    inputEl.value = '';
+    setTimeout(function() { inputEl.classList.remove('error'); }, 600);
+  }
+}
 
-    // Main render function — callable on month switch
-    function renderCurrentMonth() {
-    // ========================================
-    // 2. Render Header
-    // ========================================
-    // Normalize field names from monthly data
-    reportData.company = reportData.company || '湖南伏泰环境科技有限责任公司';
-    reportData.report_title = reportData.report_title || reportData.title;
-    reportData.report_period = reportData.report_period || reportData.period;
-    document.getElementById('hdr-company').textContent = reportData.company;
-    document.getElementById('hdr-title').textContent = reportData.report_title;
-    document.getElementById('hdr-period').textContent = '报告期：' + reportData.report_period;
-    document.getElementById('hdr-date').textContent = '编制日期：' + reportData.compile_date;
-    document.getElementById('footer-company').textContent = reportData.company;
-    document.getElementById('footer-updated').textContent = formatDateTime(reportData.last_updated);
+function clearPasswordError() {
+  const errEl = document.getElementById('password-error');
+  if (errEl) errEl.textContent = '';
+}
 
-    function formatDateTime(dtStr) {
-        const d = new Date(dtStr);
-        const yyyy = d.getFullYear();
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const dd = String(d.getDate()).padStart(2, '0');
-        const hh = String(d.getHours()).padStart(2, '0');
-        const mi = String(d.getMinutes()).padStart(2, '0');
-        return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
-    }
+function verifyPassword() {
+  const inputEl = document.getElementById('password-input');
+  const password = inputEl ? inputEl.value.trim() : '';
+  if (!password) {
+    showPasswordError('请输入密码');
+    return;
+  }
+  if (password === ACCESS_PASSWORD) {
+    clearPasswordError();
+    unlockPage();
+  } else {
+    showPasswordError('密码错误，请重试');
+  }
+}
 
-    // ========================================
-    // 3. Render Key Metric Cards
-    // ========================================
-    const chapterIcons = [
-        { bg: 'bg-brand-green', icon: 'fa-chart-line' },
-        { bg: 'bg-brand-cyan', icon: 'fa-coins' },
-        { bg: 'bg-amber-500', icon: 'fa-exclamation-triangle' },
-        { bg: 'bg-slate-600', icon: 'fa-yen-sign' }
-    ];
-
-    const metricsGrid = document.getElementById('metrics-grid');
-    reportData.key_metrics.forEach((metric, idx) => {
-        const isAlert = metric.alert === true;
-        const trendUp = metric.trend === 'up';
-        // For cost metrics, "down" is good — but we display based on the trend direction data
-        const achievementNum = parseFloat(metric.achievement);
-        const isWarning = achievementNum < 95;
-
-        const card = document.createElement('div');
-        card.className = 'metric-card' + (isAlert ? ' alert' : '');
-
-        const circumference = 2 * Math.PI * 28;
-        const progress = Math.min(achievementNum / 100, 1);
-        const dashOffset = circumference * (1 - progress);
-        const progressColor = isAlert ? '#ef4444' : (isWarning ? '#f59e0b' : '#16a34a');
-
-        card.innerHTML = `
-            ${isAlert ? '<div class="alert-badge"><i class="fas fa-exclamation-circle"></i> 预警</div>' : ''}
-            <div class="flex items-start justify-between mb-3">
-                <div class="text-sm font-medium text-slate-500">${metric.label}</div>
-            </div>
-            <div class="flex items-end justify-between">
-                <div>
-                    <div class="flex items-baseline gap-1">
-                        <span class="metric-value text-4xl font-extrabold text-slate-800">${metric.value}</span>
-                        <span class="text-sm text-slate-400 font-medium">${metric.unit}</span>
-                    </div>
-                    <div class="mt-2 text-xs text-slate-400">
-                        目标：<span class="font-semibold text-slate-500">${metric.target}</span>
-                    </div>
-                    <div class="mt-1">
-                        <span class="trend-badge ${trendUp ? 'up' : 'down'}">
-                            <i class="fas fa-arrow-${trendUp ? 'up' : 'down'}"></i>
-                            ${metric.trend_value}
-                        </span>
-                    </div>
-                </div>
-                <div class="circular-progress ${isWarning ? 'warning' : ''}">
-                    <svg width="64" height="64">
-                        <circle cx="32" cy="32" r="28" fill="none" stroke="#e2e8f0" stroke-width="5"/>
-                        <circle cx="32" cy="32" r="28" fill="none" stroke="${progressColor}" stroke-width="5"
-                            stroke-linecap="round"
-                            stroke-dasharray="${circumference}"
-                            stroke-dashoffset="${dashOffset}"
-                            style="transition: stroke-dashoffset 1s ease;"/>
-                    </svg>
-                    <div class="progress-text" style="color:${progressColor}">${metric.achievement}</div>
-                </div>
-            </div>
-        `;
-        metricsGrid.appendChild(card);
+document.addEventListener('DOMContentLoaded', function() {
+  const inputEl = document.getElementById('password-input');
+  if (inputEl) {
+    inputEl.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') verifyPassword();
     });
+    inputEl.addEventListener('input', clearPasswordError);
+  }
+  checkAuth();
+});
+checkAuth();
 
-    // ========================================
-    // 4. Render Chapters (Accordion)
-    // ========================================
-    const chaptersContainer = document.getElementById('chapters-container');
-    const chapterIconList = [
-        { bg: '#16a34a', icon: 'fa-chart-line' },
-        { bg: '#0891b2', icon: 'fa-coins' },
-        { bg: '#f59e0b', icon: 'fa-project-diagram' },
-        { bg: '#8b5cf6', icon: 'fa-clipboard-list' },
-        { bg: '#0ea5e9', icon: 'fa-flag-checkered' }
-    ];
+// ============================================================
+// Data & State
+// ============================================================
+var ALL_MONTHS_DATA = {};
+var reportData;
+var currentMonth = '6';
 
-    reportData.chapters.forEach((chapter, idx) => {
-        const iconInfo = chapterIconList[idx % chapterIconList.length];
-        const chapterEl = document.createElement('div');
-        chapterEl.className = 'chapter';
+try {
+  var dataEl = document.getElementById('all-report-data');
+  if (!dataEl) throw new Error('缺少数据块元素');
+  ALL_MONTHS_DATA = JSON.parse(dataEl.textContent);
+  reportData = ALL_MONTHS_DATA['6'];
+} catch(e) {
+  var mc = document.getElementById('main-container');
+  if (mc) mc.innerHTML = '<div style="text-align:center;padding:60px;color:#dc2626;">数据加载失败：' + e.message + '</div>';
+}
 
-        let sectionsHTML = '';
-        if (chapter.summary) {
-            sectionsHTML += `<div class="chapter-summary">${chapter.summary}</div>`;
-        }
-        chapter.sections.forEach(section => {
-            sectionsHTML += `<div class="section-title">${section.title}</div>`;
-            sectionsHTML += '<ul class="item-list">';
-            section.items.forEach(item => {
-                // Highlight items mentioning 提油率 anomaly
-                const isHighlight = item.includes('提油率') && (item.includes('下降') || item.includes('最低') || item.includes('未达到') || item.includes('异常'));
-                sectionsHTML += `<li ${isHighlight ? 'class="highlight"' : ''}>${item}</li>`;
-            });
-            sectionsHTML += '</ul>';
-        });
-        if (chapter.sections.length === 0 && !chapter.summary) {
-            sectionsHTML += '<div class="text-sm text-slate-400 italic">本章节无详细分项内容。</div>';
-        }
+var chartInstances = { collection: null, oilRate: null, cost: null };
 
-        chapterEl.innerHTML = `
-            <div class="chapter-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                <div class="chapter-title">
-                    <div class="chapter-icon" style="background-color:${iconInfo.bg}">
-                        <i class="fas ${iconInfo.icon}"></i>
-                    </div>
-                    <span>${chapter.title}</span>
-                </div>
-                <i class="fas fa-chevron-down chapter-toggle"></i>
-            </div>
-            <div class="chapter-body">
-                ${sectionsHTML}
-            </div>
-        `;
-        chaptersContainer.appendChild(chapterEl);
+function destroyCharts() {
+  Object.keys(chartInstances).forEach(function(k) {
+    if (chartInstances[k]) { chartInstances[k].destroy(); chartInstances[k] = null; }
+  });
+}
+
+// ============================================================
+// Utilities
+// ============================================================
+function formatDateTime(dtStr) {
+  var d = new Date(dtStr);
+  var yyyy = d.getFullYear();
+  var mm = String(d.getMonth() + 1).padStart(2, '0');
+  var dd = String(d.getDate()).padStart(2, '0');
+  var hh = String(d.getHours()).padStart(2, '0');
+  var mi = String(d.getMinutes()).padStart(2, '0');
+  return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mi;
+}
+
+// ============================================================
+// Render Functions
+// ============================================================
+function renderHeader() {
+  document.getElementById('header-title').textContent = '📊 ' + (reportData.title || reportData.report_title || '');
+  document.getElementById('header-subtitle').textContent = reportData.company || '湖南伏泰环境科技有限责任公司';
+  document.getElementById('header-meta').innerHTML =
+    '<span>📅 报告期：' + (reportData.period || reportData.report_period || '') + '</span>' +
+    '<span>📝 编制日期：' + (reportData.compile_date || '') + '</span>' +
+    '<span class="verified-badge"><span class="verified-dot"></span> 已验证访问</span>';
+  var fu = document.getElementById('footer-updated');
+  if (fu) fu.textContent = formatDateTime(reportData.last_updated);
+}
+
+function renderKPIs() {
+  var container = document.getElementById('kpi-row');
+  container.innerHTML = '';
+
+  reportData.key_metrics.forEach(function(metric) {
+    var isAlert = metric.alert === true;
+    var trendUp = metric.trend === 'up';
+    var achievementNum = parseFloat(metric.achievement);
+    var isWarning = achievementNum < 95;
+    var progressColor = isAlert ? '#e15759' : (isWarning ? '#f59e0b' : '#16a34a');
+
+    var circumference = 2 * Math.PI * 24;
+    var progress = Math.min(achievementNum / 100, 1);
+    var dashOffset = circumference * (1 - progress);
+
+    var card = document.createElement('div');
+    card.className = 'kpi-card' + (isAlert ? ' alert' : '');
+
+    card.innerHTML =
+      (isAlert ? '<div class="alert-badge">⚠️ 预警</div>' : '') +
+      '<div class="label">' + metric.label + '</div>' +
+      '<div class="value-row">' +
+        '<div>' +
+          '<div class="value">' + metric.value + '<span class="unit">' + metric.unit + '</span></div>' +
+          '<div class="target">目标：<strong>' + metric.target + '</strong></div>' +
+          '<span class="trend-badge ' + (trendUp ? 'up' : 'down') + '">' +
+            (trendUp ? '↑' : '↓') + ' ' + metric.trend_value +
+          '</span>' +
+        '</div>' +
+        '<div class="circular-progress">' +
+          '<svg width="56" height="56">' +
+            '<circle cx="28" cy="28" r="24" fill="none" stroke="#e2e8f0" stroke-width="4"/>' +
+            '<circle cx="28" cy="28" r="24" fill="none" stroke="' + progressColor + '" stroke-width="4"' +
+              ' stroke-linecap="round" stroke-dasharray="' + circumference + '"' +
+              ' stroke-dashoffset="' + dashOffset + '" style="transition: stroke-dashoffset 1s ease;"/>' +
+          '</svg>' +
+          '<div class="progress-text" style="color:' + progressColor + '">' + metric.achievement + '</div>' +
+        '</div>' +
+      '</div>';
+
+    container.appendChild(card);
+  });
+}
+
+function renderChapters() {
+  var container = document.getElementById('chapters-container');
+  container.innerHTML = '';
+
+  var chapterIconList = [
+    { bg: '#4C72B0', icon: '📈' },
+    { bg: '#16a34a', icon: '💰' },
+    { bg: '#f59e0b', icon: '📁' },
+    { bg: '#7c3aed', icon: '📋' },
+    { bg: '#0ea5e9', icon: '🏁' }
+  ];
+
+  reportData.chapters.forEach(function(chapter, idx) {
+    var iconInfo = chapterIconList[idx % chapterIconList.length];
+    var chapterEl = document.createElement('div');
+    chapterEl.className = 'chapter';
+
+    var sectionsHTML = '';
+    if (chapter.summary) {
+      sectionsHTML += '<div class="chapter-summary">' + chapter.summary + '</div>';
+    }
+    chapter.sections.forEach(function(section) {
+      sectionsHTML += '<div class="subsection-title">' + section.title + '</div>';
+      sectionsHTML += '<ul class="item-list">';
+      section.items.forEach(function(item) {
+        var isHighlight = item.indexOf('提油率') >= 0 && (item.indexOf('下降') >= 0 || item.indexOf('最低') >= 0 || item.indexOf('未达到') >= 0 || item.indexOf('异常') >= 0);
+        sectionsHTML += '<li' + (isHighlight ? ' class="highlight"' : '') + '>' + item + '</li>';
+      });
+      sectionsHTML += '</ul>';
     });
-
-    // ========================================
-    // 5. Charts (Chart.js)
-    // ========================================
-    const chartFont = {
-        family: "'PingFang SC', 'Microsoft YaHei', sans-serif",
-        size: 12
-    };
-
-    // Chart 1: Monthly Collection Volume (Bar)
-    const collectionCtx = document.getElementById('collectionChart').getContext('2d');
-    destroyCharts();
-    chartInstances.collection = new Chart(collectionCtx, {
-        type: 'bar',
-        data: {
-            labels: reportData.monthly_trend.labels,
-            datasets: [{
-                label: '实际收运量（吨）',
-                data: reportData.monthly_trend.collection,
-                backgroundColor: 'rgba(22, 163, 74, 0.7)',
-                borderColor: '#16a34a',
-                borderWidth: 2,
-                borderRadius: 6,
-                barPercentage: 0.6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: { font: chartFont, color: '#475569' }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(ctx) {
-                            return '收运量: ' + ctx.parsed.y.toLocaleString() + ' 吨';
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: { font: chartFont, color: '#64748b' }
-                },
-                y: {
-                    beginAtZero: true,
-                    grid: { color: '#f1f5f9' },
-                    ticks: { font: chartFont, color: '#64748b' }
-                }
-            }
-        }
-    });
-
-    // Chart 2: Oil Rate Trend (Line)
-    const oilRateCtx = document.getElementById('oilRateChart').getContext('2d');
-    chartInstances.oilRate = new Chart(oilRateCtx, {
-        type: 'line',
-        data: {
-            labels: reportData.monthly_trend.labels,
-            datasets: [{
-                label: '实际提油率（%）',
-                data: reportData.monthly_trend.oil_rate,
-                borderColor: '#0891b2',
-                backgroundColor: 'rgba(8, 145, 178, 0.1)',
-                borderWidth: 3,
-                fill: true,
-                tension: 0.3,
-                pointBackgroundColor: '#0891b2',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                pointRadius: 6,
-                pointHoverRadius: 8
-            }, {
-                label: '目标提油率（%）',
-                data: Array(reportData.monthly_trend.labels.length).fill(reportData.monthly_trend.target_oil_rate),
-                borderColor: '#ef4444',
-                borderWidth: 2,
-                borderDash: [6, 4],
-                fill: false,
-                pointRadius: 0,
-                pointHoverRadius: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: { font: chartFont, color: '#475569' }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(ctx) {
-                            return ctx.dataset.label + ': ' + ctx.parsed.y + '%';
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: { font: chartFont, color: '#64748b' }
-                },
-                y: {
-                    grid: { color: '#f1f5f9' },
-                    ticks: {
-                        font: chartFont,
-                        color: '#64748b',
-                        callback: function(val) { return val + '%'; }
-                    }
-                }
-            }
-        }
-    });
-
-    // Chart 3: Cost Comparison (Grouped Bar)
-    const costCtx = document.getElementById('costChart').getContext('2d');
-    chartInstances.cost = new Chart(costCtx, {
-        type: 'bar',
-        data: {
-            labels: reportData.cost_data.labels,
-            datasets: [{
-                label: '实际吨成本（元/吨）',
-                data: reportData.cost_data.actual,
-                backgroundColor: 'rgba(22, 163, 74, 0.7)',
-                borderColor: '#16a34a',
-                borderWidth: 2,
-                borderRadius: 6
-            }, {
-                label: '计划吨成本（元/吨）',
-                data: reportData.cost_data.planned,
-                backgroundColor: 'rgba(8, 145, 178, 0.5)',
-                borderColor: '#0891b2',
-                borderWidth: 2,
-                borderRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: { font: chartFont, color: '#475569' }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(ctx) {
-                            return ctx.dataset.label + ': ' + ctx.parsed.y + ' 元/吨';
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: { font: chartFont, color: '#64748b' }
-                },
-                y: {
-                    beginAtZero: true,
-                    grid: { color: '#f1f5f9' },
-                    ticks: {
-                        font: chartFont,
-                        color: '#64748b',
-                        callback: function(val) { return val + '元'; }
-                    }
-                }
-            }
-        }
-    });
-
-    // ========================================
-    // 6. 历史报告归档区域渲染（无自动刷新，仅手动操作）
-    // ========================================
-    historyReports = [
-        {period:"2026年1月", file:"2026年1月总结报告.html", date:"2026年2月3日", available:true},
-        {period:"2026年2月", file:"2026年2月总结报告.html", date:"2026年3月10日", available:true},
-        {period:"2026年3月", file:"2026年3月总结报告.html", date:"2026年4月10日", available:true},
-        {period:"2026年4月", file:"2026年4月总结报告.html", date:"2026年5月12日", available:true},
-        {period:"2026年5月", file:"2026年5月总结报告.html", date:"2026年6月17日", available:true},
-        {period:"2026年6月", file:"index.html", date:"2026年7月8日", available:false}
-    ];
-    var historyEl = document.getElementById('history-container');
-    if (historyEl) {
-        var html = '';
-        historyReports.forEach(function(r) {
-            var linkHtml;
-            if (r.available) {
-                linkHtml = '<a href="' + r.file + '" class="history-link">' +
-                    '<span class="history-title"><i class="fas fa-file-alt"></i> ' + r.period + '总结报告</span>' +
-                    '<span class="history-meta">编制日期：' + r.date + ' <i class="fas fa-arrow-right"></i></span>' +
-                    '</a>';
-            } else {
-                linkHtml = '<span class="history-link history-link-disabled">' +
-                    '<span class="history-title"><i class="fas fa-file-alt"></i> ' + r.period + '总结报告</span>' +
-                    '<span class="history-meta">编制日期：' + r.date + ' <span class="history-badge">待发布</span></span>' +
-                    '</span>';
-            }
-            html += '<div class="history-item">' + linkHtml + '</div>';
-        });
-        html += '<p class="history-tip"><i class="fas fa-info-circle"></i> 历史报告HTML版本将随各月发布同步上线</p>';
-        historyEl.innerHTML = html;
+    if (chapter.sections.length === 0 && !chapter.summary) {
+      sectionsHTML += '<div style="font-size:13px;color:var(--text-secondary);font-style:italic;">本章节无详细分项内容。</div>';
     }
 
-    // ========================================
-    // 7. Show App, Hide Loading
-    // ========================================
-    document.getElementById('app').style.display = 'block';
-    setTimeout(function() {
-        var overlay = document.getElementById('loading-overlay');
-        if (overlay) {
-            overlay.classList.add('hidden');
-            setTimeout(function() {
-                overlay.style.display = 'none';
-            }, 500);
-        }
-    }, 300);
-} // end renderCurrentMonth
+    chapterEl.innerHTML =
+      '<div class="chapter-header" onclick="this.parentElement.classList.toggle(\'collapsed\')">' +
+        '<div class="chapter-title">' +
+          '<div class="chapter-icon" style="background-color:' + iconInfo.bg + '">' + iconInfo.icon + '</div>' +
+          '<span>' + chapter.title + '</span>' +
+        '</div>' +
+        '<span class="chapter-toggle">▼</span>' +
+      '</div>' +
+      '<div class="chapter-body">' + sectionsHTML + '</div>';
 
-    // ========================================
-    // 8. Month Switching Logic
-    // ========================================
-    function switchMonth(monthKey) {
-        if (!ALL_MONTHS_DATA[monthKey]) return;
-        reportData = ALL_MONTHS_DATA[monthKey];
+    container.appendChild(chapterEl);
+  });
+}
 
-        // Update month nav active state
-        document.querySelectorAll('.month-nav-btn').forEach(function(btn) {
-            if (btn.getAttribute('data-month') === monthKey) {
-                btn.classList.add('bg-brand-green', 'text-white', 'shadow');
-                btn.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200', 'hover:bg-slate-50');
-            } else {
-                btn.classList.remove('bg-brand-green', 'text-white', 'shadow');
-                btn.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200', 'hover:bg-slate-50');
-            }
-        });
+function renderCharts() {
+  var chartFont = { family: "'PingFang SC', 'Microsoft YaHei', sans-serif", size: 12 };
+  destroyCharts();
 
-        // Destroy old charts
-        destroyCharts();
-
-        // Clear dynamic content
-        document.getElementById('metrics-grid').innerHTML = '';
-        document.getElementById('chapters-container').innerHTML = '';
-        document.getElementById('history-container').innerHTML = '';
-
-        // Re-render everything
-        renderCurrentMonth();
+  // Chart 1: Collection Volume
+  var ctx1 = document.getElementById('collectionChart').getContext('2d');
+  chartInstances.collection = new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: reportData.monthly_trend.labels,
+      datasets: [{
+        label: '实际收运量（吨）',
+        data: reportData.monthly_trend.collection,
+        backgroundColor: 'rgba(76, 114, 176, 0.7)',
+        borderColor: '#4C72B0',
+        borderWidth: 2,
+        borderRadius: 6,
+        barPercentage: 0.6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { font: chartFont, color: '#475569' } },
+        tooltip: { callbacks: { label: function(ctx) { return '收运量: ' + ctx.parsed.y.toLocaleString() + ' 吨'; } } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: chartFont, color: '#64748b' } },
+        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: chartFont, color: '#64748b' } }
+      }
     }
+  });
 
-    // Show month nav after password verification
-    try {
-        var mn = document.getElementById('month-selector-nav');
-        if (mn) mn.style.display = 'block';
-        // Bind month switch events
-        document.querySelectorAll('.month-nav-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                switchMonth(this.getAttribute('data-month'));
-            });
-        });
-    } catch(e) {}
+  // Chart 2: Oil Rate Trend
+  var ctx2 = document.getElementById('oilRateChart').getContext('2d');
+  chartInstances.oilRate = new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: reportData.monthly_trend.labels,
+      datasets: [{
+        label: '实际提油率（%）',
+        data: reportData.monthly_trend.oil_rate,
+        borderColor: '#0891b2',
+        backgroundColor: 'rgba(8, 145, 178, 0.1)',
+        borderWidth: 3, fill: true, tension: 0.3,
+        pointBackgroundColor: '#0891b2', pointBorderColor: '#fff',
+        pointBorderWidth: 2, pointRadius: 6, pointHoverRadius: 8
+      }, {
+        label: '目标提油率（%）',
+        data: Array(reportData.monthly_trend.labels.length).fill(reportData.monthly_trend.target_oil_rate),
+        borderColor: '#e15759', borderWidth: 2, borderDash: [6, 4],
+        fill: false, pointRadius: 0, pointHoverRadius: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { font: chartFont, color: '#475569' } },
+        tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y + '%'; } } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: chartFont, color: '#64748b' } },
+        y: { grid: { color: '#f1f5f9' }, ticks: { font: chartFont, color: '#64748b', callback: function(val) { return val + '%'; } } }
+      }
+    }
+  });
 
-    // Initial render
-    renderCurrentMonth();
-})();
+  // Chart 3: Cost Comparison
+  var ctx3 = document.getElementById('costChart').getContext('2d');
+  chartInstances.cost = new Chart(ctx3, {
+    type: 'bar',
+    data: {
+      labels: reportData.cost_data.labels,
+      datasets: [{
+        label: '实际吨成本（元/吨）',
+        data: reportData.cost_data.actual,
+        backgroundColor: 'rgba(22, 163, 74, 0.7)',
+        borderColor: '#16a34a', borderWidth: 2, borderRadius: 6
+      }, {
+        label: '计划吨成本（元/吨）',
+        data: reportData.cost_data.planned,
+        backgroundColor: 'rgba(8, 145, 178, 0.5)',
+        borderColor: '#0891b2', borderWidth: 2, borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { font: chartFont, color: '#475569' } },
+        tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y + ' 元/吨'; } } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: chartFont, color: '#64748b' } },
+        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: chartFont, color: '#64748b', callback: function(val) { return val + '元'; } } }
+      }
+    }
+  });
+}
+
+function renderArchive() {
+  var historyReports = [
+    {period: '2026年1月', file: '2026年1月总结报告.html', date: '2026年2月3日', available: true},
+    {period: '2026年2月', file: '2026年2月总结报告.html', date: '2026年3月10日', available: true},
+    {period: '2026年3月', file: '2026年3月总结报告.html', date: '2026年4月10日', available: true},
+    {period: '2026年4月', file: '2026年4月总结报告.html', date: '2026年5月12日', available: true},
+    {period: '2026年5月', file: '2026年5月总结报告.html', date: '2026年6月17日', available: true},
+    {period: '2026年6月', file: 'index.html', date: '2026年7月8日', available: false}
+  ];
+  var container = document.getElementById('archive-container');
+  var html = '';
+  historyReports.forEach(function(r) {
+    if (r.available) {
+      html += '<a href="' + r.file + '" class="archive-item">' +
+        '<div class="archive-title"><span class="icon">📄</span> ' + r.period + '总结报告</div>' +
+        '<div class="archive-meta">编制日期：' + r.date + '</div>' +
+      '</a>';
+    } else {
+      html += '<span class="archive-item disabled">' +
+        '<div class="archive-title"><span class="icon">📄</span> ' + r.period + '总结报告</div>' +
+        '<div class="archive-meta">编制日期：' + r.date + ' <span class="archive-badge">待发布</span></div>' +
+      '</span>';
+    }
+  });
+  container.innerHTML = html;
+}
+
+// ============================================================
+// Month Switching
+// ============================================================
+function switchMonth(monthKey) {
+  if (!ALL_MONTHS_DATA[monthKey]) return;
+  currentMonth = monthKey;
+  reportData = ALL_MONTHS_DATA[monthKey];
+
+  // Update month nav active state
+  document.querySelectorAll('.month-tab').forEach(function(tab) {
+    tab.classList.toggle('active', tab.getAttribute('data-month') === monthKey);
+  });
+
+  // Destroy old charts
+  destroyCharts();
+
+  // Re-render everything
+  renderHeader();
+  renderKPIs();
+  renderChapters();
+  renderCharts();
+  renderArchive();
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// Init
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+  if (!reportData) return;
+
+  // Bind month tab events
+  document.querySelectorAll('.month-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      switchMonth(this.getAttribute('data-month'));
+    });
+  });
+
+  // Initial render
+  renderHeader();
+  renderKPIs();
+  renderChapters();
+  renderCharts();
+  renderArchive();
+});
 </script>
 
 </body>
