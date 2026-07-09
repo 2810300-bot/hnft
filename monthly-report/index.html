@@ -447,6 +447,113 @@ body.locked .site-footer {
   left: 12px;
 }
 
+/* ===== History Archive ===== */
+.archive-section {
+  margin-top: 36px;
+}
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.archive-item {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.archive-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--accent-blue);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.archive-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent-blue);
+}
+.archive-item:hover::before { opacity: 1; }
+.archive-item.active {
+  border-color: var(--accent-blue);
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 60%);
+}
+.archive-item.active::before { opacity: 1; }
+.archive-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.archive-item-month {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.archive-item.active .archive-item-month { color: var(--accent-blue); }
+.archive-item-month .icon { font-size: 18px; }
+.archive-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.archive-status.published {
+  background: #dcfce7;
+  color: #166534;
+}
+.archive-status.current {
+  background: #dbeafe;
+  color: var(--accent-blue);
+}
+.archive-item-date {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.archive-item-hint {
+  font-size: 12px;
+  color: var(--accent-blue);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.archive-item:hover .archive-item-hint,
+.archive-item.active .archive-item-hint {
+  opacity: 1;
+  transform: translateX(0);
+}
+.archive-item.active .archive-item-hint { color: var(--accent-blue); }
+.archive-tip {
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
 /* ===== Footer ===== */
 .site-footer {
   text-align: center;
@@ -470,10 +577,14 @@ body.locked .site-footer {
 @media (max-width: 768px) {
   .kpi-row { grid-template-columns: repeat(2, 1fr); }
   .chart-grid { grid-template-columns: 1fr; }
+  .archive-grid { grid-template-columns: repeat(2, 1fr); }
   .site-header { padding: 24px 20px; }
   .header-content h1 { font-size: 22px; }
   .main-container { padding: 20px 16px 32px; }
   .site-footer { flex-direction: column; gap: 8px; }
+}
+@media (max-width: 480px) {
+  .archive-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -540,6 +651,13 @@ body.locked .site-footer {
   <!-- Report Chapters -->
   <div class="section-title">📄 报告正文</div>
   <div id="chapters-container"></div>
+
+  <!-- History Archive -->
+  <div class="archive-section">
+    <div class="section-title">📚 历史报告归档</div>
+    <div class="archive-grid" id="archive-container"></div>
+    <p class="archive-tip">💡 点击任意月份卡片即可切换至该月详细报告</p>
+  </div>
 
 </div>
 
@@ -630,15 +748,17 @@ document.addEventListener('DOMContentLoaded', function() {
 checkAuth();
 
 // ============================================================
-// Data
+// Data & State
 // ============================================================
+var ALL_MONTHS_DATA = {};
 var reportData;
+var currentMonth = '6';
 
 try {
   var dataEl = document.getElementById('all-report-data');
   if (!dataEl) throw new Error('缺少数据块元素');
-  var allData = JSON.parse(dataEl.textContent);
-  reportData = allData['6'];
+  ALL_MONTHS_DATA = JSON.parse(dataEl.textContent);
+  reportData = ALL_MONTHS_DATA['6'];
 } catch(e) {
   var mc = document.getElementById('main-container');
   if (mc) mc.innerHTML = '<div style="text-align:center;padding:60px;color:#dc2626;">数据加载失败：' + e.message + '</div>';
@@ -871,16 +991,70 @@ function renderCharts() {
 }
 
 // ============================================================
+// Archive Rendering
+// ============================================================
+function renderArchive() {
+  var container = document.getElementById('archive-container');
+  if (!container) return;
+  var html = '';
+  var monthKeys = Object.keys(ALL_MONTHS_DATA).sort(function(a, b) {
+    return parseInt(a) - parseInt(b);
+  });
+  monthKeys.forEach(function(mKey) {
+    var mData = ALL_MONTHS_DATA[mKey];
+    if (!mData) return;
+    var isActive = (mKey === currentMonth);
+    var period = mData.period || ('2026年' + mKey + '月');
+    var compileDate = mData.compile_date || '';
+    html +=
+      '<div class="archive-item' + (isActive ? ' active' : '') + '" onclick="switchMonth(\'' + mKey + '\')">' +
+        '<div class="archive-item-head">' +
+          '<div class="archive-item-month">' +
+            '<span class="icon">' + (isActive ? '📍' : '📄') + '</span> ' + period +
+          '</div>' +
+          '<span class="archive-status ' + (isActive ? 'current' : 'published') + '">' +
+            (isActive ? '当前查看' : '已发布') +
+          '</span>' +
+        '</div>' +
+        '<div class="archive-item-date">🕐 编制日期：' + compileDate + '</div>' +
+        '<div class="archive-item-hint">' +
+          (isActive ? '✓ 正在查看此报告' : '👉 点击查看该月报告 →') +
+        '</div>' +
+      '</div>';
+  });
+  container.innerHTML = html;
+}
+
+// ============================================================
+// Month Switching
+// ============================================================
+function switchMonth(monthKey) {
+  if (!ALL_MONTHS_DATA[monthKey]) return;
+  if (monthKey === currentMonth) return;
+  currentMonth = monthKey;
+  reportData = ALL_MONTHS_DATA[monthKey];
+
+  destroyCharts();
+  renderHeader();
+  renderKPIs();
+  renderChapters();
+  renderCharts();
+  renderArchive();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
 // Init
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
   if (!reportData) return;
 
-  // Initial render
   renderHeader();
   renderKPIs();
   renderChapters();
   renderCharts();
+  renderArchive();
 });
 </script>
 
