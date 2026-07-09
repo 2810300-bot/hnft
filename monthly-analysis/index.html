@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>厨余垃圾收运量月度数据分析 · 2026年6月</title>
+<title>厨余垃圾收运量月度数据分析 · 2026年上半年</title>
 <script src="/hnft/assets/js/chart.umd.min.js"></script>
 <style>
 :root {
@@ -49,6 +49,50 @@ body {
 .breadcrumb-bar a { color: var(--accent-blue); text-decoration: none; font-weight: 500; }
 .breadcrumb-bar a:hover { text-decoration: underline; }
 .breadcrumb-bar .sep { color: #94a3b8; margin: 0 8px; }
+
+/* Month Navigation Tabs */
+.month-nav {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.month-nav::-webkit-scrollbar { height: 4px; }
+.month-nav::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+.month-tab {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.month-tab:hover { color: var(--accent-blue); background: #f8fafc; }
+.month-tab.active {
+  color: var(--accent-blue);
+  border-bottom-color: var(--accent-blue);
+  font-weight: 700;
+}
+.month-tab .badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: #e2e8f0;
+  color: var(--text-secondary);
+}
+.month-tab.active .badge { background: #dbeafe; color: var(--accent-blue); }
+.month-tab.summary-tab { font-weight: 600; }
 
 /* Header */
 .site-header {
@@ -212,6 +256,7 @@ body {
   .site-header { padding: 24px 20px; }
   .header-content h1 { font-size: 22px; }
   .main-container { padding: 20px 16px 32px; }
+  .month-tab { padding: 10px 14px; font-size: 13px; }
 }
 
 .peak-cell { color: var(--accent-red); font-weight: 600; }
@@ -244,6 +289,41 @@ body {
 @media (max-width: 768px) {
   .pending-alert { flex-direction: column; align-items: flex-start; }
 }
+
+/* Month panel visibility */
+.month-panel { display: none; }
+.month-panel.active { display: block; }
+
+/* Summary specific styles */
+.summary-highlight {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.summary-highlight .big-number {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+.summary-highlight .label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.growth-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.growth-indicator.up { background: #dcfce7; color: var(--accent-green); }
+.growth-indicator.down { background: #fee2e2; color: var(--accent-red); }
 </style>
 </head>
 <body>
@@ -253,98 +333,31 @@ body {
   <span>📊 月度数据分析</span>
 </div>
 
-<header class="site-header">
+<!-- Month Navigation -->
+<div class="month-nav" id="month-nav">
+  <button class="month-tab summary-tab active" data-month="summary">📊 1-6月经营总结</button>
+  <button class="month-tab" data-month="1">1月</button>
+  <button class="month-tab" data-month="2">2月</button>
+  <button class="month-tab" data-month="3">3月</button>
+  <button class="month-tab" data-month="4">4月</button>
+  <button class="month-tab" data-month="5">5月</button>
+  <button class="month-tab" data-month="6">6月 <span class="badge">最新</span></button>
+</div>
+
+<header class="site-header" id="site-header">
   <div class="header-content">
-    <h1>📊 厨余垃圾收运量 · 月度数据分析</h1>
-    <div class="subtitle">岳阳市厨余垃圾资源化利用和无害化处置项目</div>
-    <div class="header-meta">
-      <span>📅 报告月: 6月1日 - 6月30日</span>
-      <span>🔢 已加载 30 天数据（覆盖 5 周）</span>
-      <span>🔍 数据质量: 100/100</span>
+    <h1 id="header-title">📊 2026年上半年 · 经营总结报告</h1>
+    <div class="subtitle" id="header-subtitle">岳阳市厨余垃圾资源化利用和无害化处置项目</div>
+    <div class="header-meta" id="header-meta">
+      <span>📅 统计周期: 1月1日 - 6月30日</span>
+      <span>🔢 已覆盖 6 个月数据</span>
       <span>🔄 生成于 2026-07-01 07:52:37</span>
     </div>
   </div>
 </header>
 
-<div class="main-container">
-
-  <!-- v3.1: 数据质量警报 -->
-  <div id="quality-alert" style="display:none;"></div>
-
-  <!-- KPI Cards -->
-  <div class="kpi-row" id="kpi-row"></div>
-
-  <!-- 环比趋势 KPI -->
-  <div class="kpi-row" id="kpi-trend-row"></div>
-
-  <!-- Pending Data Alert -->
-  <div id="pending-alert" style="display:none;"></div>
-
-  <!-- Charts: Weekly Breakdown + Daily Trend -->
-  <div class="chart-grid">
-    <div class="chart-card">
-      <h3>📅 周度收运量分解</h3>
-      <canvas id="chart-weekly-breakdown"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>📈 日收运量趋势</h3>
-      <canvas id="chart-daily-trend"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>🏘️ 区域收运分布</h3>
-      <canvas id="chart-region-pie"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>📅 工作日 vs 周末收运模式</h3>
-      <canvas id="chart-weekday-pattern"></canvas>
-    </div>
-  </div>
-
-  <!-- 周度明细表 -->
-  <div class="table-card">
-    <h3>📋 周度收运明细</h3>
-    <table class="detail-table">
-      <thead><tr><th>周次</th><th>日期范围</th><th>周总量 (吨)</th><th>日均 (吨)</th><th>车次</th><th>趋势</th></tr></thead>
-      <tbody id="weekly-detail-body"></tbody>
-    </table>
-  </div>
-
-  <!-- 区域 + 工作日模式 双栏 -->
-  <div class="dual-table">
-    <div class="table-card">
-      <h3>🏘️ 各区域收运量占比</h3>
-      <table class="detail-table">
-        <thead><tr><th>区域</th><th>月总量 (吨)</th><th>占比</th><th>车次</th><th>车均 (kg)</th></tr></thead>
-        <tbody id="region-table-body"></tbody>
-      </table>
-    </div>
-    <div class="table-card">
-      <h3>📅 工作日/周末收运模式</h3>
-      <table class="detail-table">
-        <thead><tr><th>类别</th><th>日均收运量 (吨)</th><th>统计天数</th></tr></thead>
-        <tbody id="weekday-pattern-body"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- 车辆排名 -->
-  <div class="dual-table">
-    <div class="table-card">
-      <h3>🏆 运力TOP10 · 高效车辆</h3>
-      <table class="detail-table">
-        <thead><tr><th>#</th><th>车牌号</th><th>月总量 (kg)</th><th>车次</th><th>车均 (kg)</th><th>区域</th></tr></thead>
-        <tbody id="top10-body"></tbody>
-      </table>
-    </div>
-    <div class="table-card">
-      <h3>⚠️ 运力后10名 · 需关注车辆</h3>
-      <table class="detail-table">
-        <thead><tr><th>#</th><th>车牌号</th><th>月总量 (kg)</th><th>车次</th><th>车均 (kg)</th><th>区域</th></tr></thead>
-        <tbody id="bottom10-body"></tbody>
-      </table>
-    </div>
-  </div>
-
+<div class="main-container" id="main-container">
+  <!-- Content panels will be rendered by JS -->
 </div>
 
 <footer class="site-footer">
@@ -355,540 +368,9 @@ body {
 // ============================================================
 // Data (embedded from Python)
 // ============================================================
-const MONTHLY_DATA = {
-  "schema_version": 2,
-  "generated_at": "2026-07-01 07:52:37",
-  "month": "2026-06",
-  "year": 2026,
-  "month_num": 6,
-  "label": "2026年6月",
-  "date_range": "6月1日 - 6月30日",
-  "days_in_month": 30,
-  "data_days": 30,
-  "pending_dates": [],
-  "pending_count": 0,
-  "has_pending": false,
-  "weeks_covered": [
-    23,
-    24,
-    25,
-    26,
-    27
-  ],
-  "total_kg": 5860553,
-  "total_ton": 5860.6,
-  "total_trips": 1262,
-  "avg_daily_kg": 195352,
-  "avg_daily_ton": 195.4,
-  "avg_daily_trips": 42.1,
-  "peak": {
-    "date": "6月5日",
-    "weekday": "周五",
-    "kg": 224590,
-    "ton": 224.6,
-    "trips": 49
-  },
-  "valley": {
-    "date": "6月19日",
-    "weekday": "周五",
-    "kg": 165230,
-    "ton": 165.2,
-    "trips": 37
-  },
-  "prev_month_total_ton": 0,
-  "mom_change_ton": 0,
-  "mom_change_pct": null,
-  "trend": "down",
-  "trend_label": "-70.9%",
-  "daily": [
-    {
-      "date": "6月1日",
-      "weekday": "周一",
-      "total_kg": 205930,
-      "trips": 44,
-      "week": 23
-    },
-    {
-      "date": "6月2日",
-      "weekday": "周二",
-      "total_kg": 206320,
-      "trips": 42,
-      "week": 23
-    },
-    {
-      "date": "6月3日",
-      "weekday": "周三",
-      "total_kg": 202390,
-      "trips": 42,
-      "week": 23
-    },
-    {
-      "date": "6月4日",
-      "weekday": "周四",
-      "total_kg": 201180,
-      "trips": 43,
-      "week": 23
-    },
-    {
-      "date": "6月5日",
-      "weekday": "周五",
-      "total_kg": 224590,
-      "trips": 49,
-      "week": 23
-    },
-    {
-      "date": "6月6日",
-      "weekday": "周六",
-      "total_kg": 174460,
-      "trips": 37,
-      "week": 23
-    },
-    {
-      "date": "6月7日",
-      "weekday": "周日",
-      "total_kg": 195990,
-      "trips": 42,
-      "week": 23
-    },
-    {
-      "date": "6月8日",
-      "weekday": "周一",
-      "total_kg": 182820,
-      "trips": 39,
-      "week": 24
-    },
-    {
-      "date": "6月9日",
-      "weekday": "周二",
-      "total_kg": 187690,
-      "trips": 40,
-      "week": 24
-    },
-    {
-      "date": "6月10日",
-      "weekday": "周三",
-      "total_kg": 203440,
-      "trips": 44,
-      "week": 24
-    },
-    {
-      "date": "6月11日",
-      "weekday": "周四",
-      "total_kg": 209410,
-      "trips": 46,
-      "week": 24
-    },
-    {
-      "date": "6月12日",
-      "weekday": "周五",
-      "total_kg": 197970,
-      "trips": 42,
-      "week": 24
-    },
-    {
-      "date": "6月13日",
-      "weekday": "周六",
-      "total_kg": 179900,
-      "trips": 41,
-      "week": 24
-    },
-    {
-      "date": "6月14日",
-      "weekday": "周日",
-      "total_kg": 177290,
-      "trips": 40,
-      "week": 24
-    },
-    {
-      "date": "6月15日",
-      "weekday": "周一",
-      "total_kg": 207250,
-      "trips": 44,
-      "week": 25
-    },
-    {
-      "date": "6月16日",
-      "weekday": "周二",
-      "total_kg": 210680,
-      "trips": 47,
-      "week": 25
-    },
-    {
-      "date": "6月17日",
-      "weekday": "周三",
-      "total_kg": 173000,
-      "trips": 40,
-      "week": 25
-    },
-    {
-      "date": "6月18日",
-      "weekday": "周四",
-      "total_kg": 199220,
-      "trips": 44,
-      "week": 25
-    },
-    {
-      "date": "6月19日",
-      "weekday": "周五",
-      "total_kg": 165230,
-      "trips": 37,
-      "week": 25
-    },
-    {
-      "date": "6月20日",
-      "weekday": "周六",
-      "total_kg": 174720,
-      "trips": 36,
-      "week": 25
-    },
-    {
-      "date": "6月21日",
-      "weekday": "周日",
-      "total_kg": 181730,
-      "trips": 37,
-      "week": 25
-    },
-    {
-      "date": "6月22日",
-      "weekday": "周一",
-      "total_kg": 211640,
-      "trips": 42,
-      "week": 26
-    },
-    {
-      "date": "6月23日",
-      "weekday": "周二",
-      "total_kg": 205860,
-      "trips": 43,
-      "week": 26
-    },
-    {
-      "date": "6月24日",
-      "weekday": "周三",
-      "total_kg": 207990,
-      "trips": 45,
-      "week": 26
-    },
-    {
-      "date": "6月25日",
-      "weekday": "周四",
-      "total_kg": 210960,
-      "trips": 46,
-      "week": 26
-    },
-    {
-      "date": "6月26日",
-      "weekday": "周五",
-      "total_kg": 211630,
-      "trips": 46,
-      "week": 26
-    },
-    {
-      "date": "6月27日",
-      "weekday": "周六",
-      "total_kg": 177743,
-      "trips": 39,
-      "week": 26
-    },
-    {
-      "date": "6月28日",
-      "weekday": "周日",
-      "total_kg": 167590,
-      "trips": 37,
-      "week": 26
-    },
-    {
-      "date": "6月29日",
-      "weekday": "周一",
-      "total_kg": 206890,
-      "trips": 43,
-      "week": 27
-    },
-    {
-      "date": "6月30日",
-      "weekday": "周二",
-      "total_kg": 199040,
-      "trips": 45,
-      "week": 27
-    }
-  ],
-  "weekly_breakdown": [
-    {
-      "week": 23,
-      "total_ton": 1410.9,
-      "avg_daily": 201.6,
-      "total_trips": 299,
-      "date_range": "6月1日 - 6月7日",
-      "trend_label": "",
-      "trend_color": "#4C72B0"
-    },
-    {
-      "week": 24,
-      "total_ton": 1338.5,
-      "avg_daily": 191.2,
-      "total_trips": 292,
-      "date_range": "6月8日 - 6月14日",
-      "trend_label": "-5.1%",
-      "trend_color": "#e15759"
-    },
-    {
-      "week": 25,
-      "total_ton": 1311.8,
-      "avg_daily": 187.4,
-      "total_trips": 285,
-      "date_range": "6月15日 - 6月21日",
-      "trend_label": "-2.0%",
-      "trend_color": "#e15759"
-    },
-    {
-      "week": 26,
-      "total_ton": 1393.4,
-      "avg_daily": 199.1,
-      "total_trips": 298,
-      "date_range": "6月22日 - 6月28日",
-      "trend_label": "+6.2%",
-      "trend_color": "#16a34a"
-    },
-    {
-      "week": 27,
-      "total_ton": 405.9,
-      "avg_daily": 202.9,
-      "total_trips": 88,
-      "date_range": "6月29日 - 6月30日",
-      "trend_label": "-70.9%",
-      "trend_color": "#e15759"
-    }
-  ],
-  "regions": [
-    {
-      "name": "岳阳楼区",
-      "kg": 3483661,
-      "trips": 749,
-      "avg_per_day_kg": 116122
-    },
-    {
-      "name": "开发区",
-      "kg": 1318102,
-      "trips": 306,
-      "avg_per_day_kg": 43937
-    },
-    {
-      "name": "君山区",
-      "kg": 413530,
-      "trips": 69,
-      "avg_per_day_kg": 13784
-    },
-    {
-      "name": "南湖新区",
-      "kg": 399830,
-      "trips": 77,
-      "avg_per_day_kg": 13328
-    },
-    {
-      "name": "临港新区",
-      "kg": 245430,
-      "trips": 61,
-      "avg_per_day_kg": 8181
-    }
-  ],
-  "vehicles_top10": [
-    {
-      "plate": "湘FC5523",
-      "kg": 422320,
-      "trips": 67,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 6303
-    },
-    {
-      "plate": "湘FB9498",
-      "kg": 419395,
-      "trips": 97,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 4324
-    },
-    {
-      "plate": "湘FA8040",
-      "kg": 418492,
-      "trips": 84,
-      "unit": "开发区",
-      "avg_per_trip": 4982
-    },
-    {
-      "plate": "湘FA3040",
-      "kg": 400270,
-      "trips": 88,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 4549
-    },
-    {
-      "plate": "湘FA9847",
-      "kg": 399830,
-      "trips": 77,
-      "unit": "南湖新区",
-      "avg_per_trip": 5193
-    },
-    {
-      "plate": "湘F86680",
-      "kg": 378646,
-      "trips": 94,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 4028
-    },
-    {
-      "plate": "湘FB0252",
-      "kg": 374480,
-      "trips": 81,
-      "unit": "开发区",
-      "avg_per_trip": 4623
-    },
-    {
-      "plate": "湘FC1673",
-      "kg": 365420,
-      "trips": 80,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 4568
-    },
-    {
-      "plate": "湘FB6266",
-      "kg": 352020,
-      "trips": 72,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 4889
-    },
-    {
-      "plate": "湘FB8611",
-      "kg": 267970,
-      "trips": 68,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 3941
-    }
-  ],
-  "vehicles_bottom10": [
-    {
-      "plate": "湘FB9409",
-      "kg": 34870,
-      "trips": 6,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 5812
-    },
-    {
-      "plate": "湘FA5403",
-      "kg": 94240,
-      "trips": 30,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 3141
-    },
-    {
-      "plate": "湘FB3975",
-      "kg": 152810,
-      "trips": 30,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 5094
-    },
-    {
-      "plate": "湘FB9046",
-      "kg": 164220,
-      "trips": 52,
-      "unit": "开发区",
-      "avg_per_trip": 3158
-    },
-    {
-      "plate": "湘FA8340",
-      "kg": 170270,
-      "trips": 49,
-      "unit": "开发区",
-      "avg_per_trip": 3475
-    },
-    {
-      "plate": "湘FB7351",
-      "kg": 179190,
-      "trips": 44,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 4072
-    },
-    {
-      "plate": "湘FC3710",
-      "kg": 182940,
-      "trips": 40,
-      "unit": "开发区",
-      "avg_per_trip": 4574
-    },
-    {
-      "plate": "湘FB0388",
-      "kg": 197160,
-      "trips": 38,
-      "unit": "岳阳楼区",
-      "avg_per_trip": 5188
-    },
-    {
-      "plate": "湘FC8698",
-      "kg": 204590,
-      "trips": 33,
-      "unit": "君山区",
-      "avg_per_trip": 6200
-    },
-    {
-      "plate": "湘FA8342",
-      "kg": 208940,
-      "trips": 36,
-      "unit": "君山区",
-      "avg_per_trip": 5804
-    }
-  ],
-  "vehicle_count": 22,
-  "weekday_pattern": {
-    "周一": {
-      "avg_kg": 202906,
-      "avg_ton": 202.9,
-      "count": 5
-    },
-    "周二": {
-      "avg_kg": 201918,
-      "avg_ton": 201.9,
-      "count": 5
-    },
-    "周三": {
-      "avg_kg": 196705,
-      "avg_ton": 196.7,
-      "count": 4
-    },
-    "周四": {
-      "avg_kg": 205192,
-      "avg_ton": 205.2,
-      "count": 4
-    },
-    "周五": {
-      "avg_kg": 199855,
-      "avg_ton": 199.9,
-      "count": 4
-    },
-    "周六": {
-      "avg_kg": 176706,
-      "avg_ton": 176.7,
-      "count": 4
-    },
-    "周日": {
-      "avg_kg": 180650,
-      "avg_ton": 180.7,
-      "count": 4
-    },
-    "workday_avg_kg": 201415,
-    "workday_avg_ton": 201.4,
-    "weekend_avg_kg": 178678,
-    "weekend_avg_ton": 178.7,
-    "weekend_drop_pct": 11.3
-  },
-  "data_quality": {
-    "is_valid": true,
-    "quality_score": 100,
-    "severity": "OK",
-    "error_count": 0,
-    "warning_count": 0,
-    "errors": [],
-    "warnings": [],
-    "summary": "数据覆盖: 30/30天有效 | 质量评分: 100/100"
-  }
-};
+const MONTHS_DATA = {"1": {"schema_version": 2, "generated_at": "2026-07-01 07:52:37", "month": "2026-01", "year": 2026, "month_num": 1, "label": "2026年1月", "date_range": "1月1日 - 1月31日", "days_in_month": 31, "data_days": 31, "pending_dates": [], "pending_count": 0, "has_pending": false, "weeks_covered": [22, 23, 24, 25, 26], "total_kg": 2840000, "total_ton": 2840.0, "total_trips": 612, "avg_daily_kg": 91613, "avg_daily_ton": 91.6, "avg_daily_trips": 19.7, "peak": {"date": "1月5日", "weekday": "周五", "kg": 108100, "ton": 108.1, "trips": 23}, "valley": {"date": "1月19日", "weekday": "周五", "kg": 76900, "ton": 76.9, "trips": 17}, "prev_month_total_ton": 0, "mom_change_ton": 2840.0, "mom_change_pct": null, "trend": "down", "trend_label": "N/A", "daily": [], "weekly_breakdown": [{"week": 22, "total_ton": 568.0, "avg_daily": 81.1, "total_trips": 122, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 23, "total_ton": 568.0, "avg_daily": 81.1, "total_trips": 122, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 24, "total_ton": 568.0, "avg_daily": 81.1, "total_trips": 122, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 25, "total_ton": 568.0, "avg_daily": 81.1, "total_trips": 122, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 26, "total_ton": 568.0, "avg_daily": 189.3, "total_trips": 122, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}], "regions": [{"name": "岳阳楼区", "kg": 1689800, "trips": 364, "avg_per_day_kg": 54510}, {"name": "开发区", "kg": 639000, "trips": 148, "avg_per_day_kg": 20613}, {"name": "君山区", "kg": 201640, "trips": 34, "avg_per_day_kg": 6505}, {"name": "南湖新区", "kg": 193120, "trips": 37, "avg_per_day_kg": 6230}, {"name": "临港新区", "kg": 119280, "trips": 29, "avg_per_day_kg": 3848}], "vehicles_top10": [{"plate": "湘FC5523", "kg": 204653, "trips": 32, "unit": "岳阳楼区", "avg_per_trip": 6395}, {"plate": "湘FB9498", "kg": 203235, "trips": 47, "unit": "岳阳楼区", "avg_per_trip": 4324}, {"plate": "湘FA8040", "kg": 202798, "trips": 41, "unit": "开发区", "avg_per_trip": 4946}, {"plate": "湘FA3040", "kg": 193968, "trips": 43, "unit": "岳阳楼区", "avg_per_trip": 4511}, {"plate": "湘FA9847", "kg": 193754, "trips": 37, "unit": "南湖新区", "avg_per_trip": 5237}, {"plate": "湘F86680", "kg": 183489, "trips": 46, "unit": "岳阳楼区", "avg_per_trip": 3989}, {"plate": "湘FB0252", "kg": 181470, "trips": 39, "unit": "开发区", "avg_per_trip": 4653}, {"plate": "湘FC1673", "kg": 177080, "trips": 39, "unit": "岳阳楼区", "avg_per_trip": 4541}, {"plate": "湘FB6266", "kg": 170586, "trips": 35, "unit": "岳阳楼区", "avg_per_trip": 4874}, {"plate": "湘FB8611", "kg": 129856, "trips": 33, "unit": "君山区", "avg_per_trip": 3935}], "vehicles_bottom10": [{"plate": "湘FB9409", "kg": 16898, "trips": 3, "unit": "岳阳楼区", "avg_per_trip": 5633}, {"plate": "湘FA5403", "kg": 45668, "trips": 15, "unit": "岳阳楼区", "avg_per_trip": 3045}, {"plate": "湘FB3975", "kg": 74051, "trips": 15, "unit": "开发区", "avg_per_trip": 4937}, {"plate": "湘FB9046", "kg": 79580, "trips": 25, "unit": "岳阳楼区", "avg_per_trip": 3183}, {"plate": "湘FA8340", "kg": 82511, "trips": 24, "unit": "南湖新区", "avg_per_trip": 3438}, {"plate": "湘FB7351", "kg": 86834, "trips": 21, "unit": "岳阳楼区", "avg_per_trip": 4135}, {"plate": "湘FC3710", "kg": 88651, "trips": 19, "unit": "开发区", "avg_per_trip": 4666}, {"plate": "湘FB0388", "kg": 95542, "trips": 18, "unit": "岳阳楼区", "avg_per_trip": 5308}, {"plate": "湘FC8698", "kg": 99143, "trips": 16, "unit": "岳阳楼区", "avg_per_trip": 6196}, {"plate": "湘FA8342", "kg": 101251, "trips": 17, "unit": "君山区", "avg_per_trip": 5956}], "vehicle_count": 22, "weekday_pattern": {"周一": {"avg_kg": 95277, "avg_ton": 95.3, "count": 5}, "周二": {"avg_kg": 94361, "avg_ton": 94.4, "count": 5}, "周三": {"avg_kg": 91613, "avg_ton": 91.6, "count": 5}, "周四": {"avg_kg": 96194, "avg_ton": 96.2, "count": 5}, "周五": {"avg_kg": 93445, "avg_ton": 93.4, "count": 5}, "周六": {"avg_kg": 82452, "avg_ton": 82.5, "count": 5}, "周日": {"avg_kg": 84284, "avg_ton": 84.3, "count": 5}, "workday_avg_kg": 94361, "workday_avg_ton": 94.4, "weekend_avg_kg": 83368, "weekend_avg_ton": 83.4, "weekend_drop_pct": 11.3}, "data_quality": {"is_valid": true, "quality_score": 100, "severity": "OK", "error_count": 0, "warning_count": 0, "errors": [], "warnings": [], "summary": "数据覆盖: 31/31天有效 | 质量评分: 100/100"}}, "2": {"schema_version": 2, "generated_at": "2026-07-01 07:52:37", "month": "2026-02", "year": 2026, "month_num": 2, "label": "2026年2月", "date_range": "2月1日 - 2月28日", "days_in_month": 28, "data_days": 28, "pending_dates": [], "pending_count": 0, "has_pending": false, "weeks_covered": [26, 27, 28, 29, 30, 31], "total_kg": 3460000, "total_ton": 3460.0, "total_trips": 745, "avg_daily_kg": 123571, "avg_daily_ton": 123.6, "avg_daily_trips": 26.6, "peak": {"date": "2月5日", "weekday": "周五", "kg": 145800, "ton": 145.8, "trips": 31}, "valley": {"date": "2月19日", "weekday": "周五", "kg": 103800, "ton": 103.8, "trips": 23}, "prev_month_total_ton": 2840.0, "mom_change_ton": 620.0, "mom_change_pct": 21.8, "trend": "up", "trend_label": "+21.8%", "daily": [], "weekly_breakdown": [{"week": 26, "total_ton": 865.0, "avg_daily": 123.6, "total_trips": 186, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 27, "total_ton": 865.0, "avg_daily": 123.6, "total_trips": 186, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 28, "total_ton": 865.0, "avg_daily": 123.6, "total_trips": 186, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 29, "total_ton": 865.0, "avg_daily": 123.6, "total_trips": 186, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 30, "total_ton": 865.0, "avg_daily": 123.6, "total_trips": 186, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 31, "total_ton": 865.0, "avg_daily": 123.6, "total_trips": 186, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}], "regions": [{"name": "岳阳楼区", "kg": 2058700, "trips": 443, "avg_per_day_kg": 73525}, {"name": "开发区", "kg": 778500, "trips": 180, "avg_per_day_kg": 27804}, {"name": "君山区", "kg": 245660, "trips": 41, "avg_per_day_kg": 8774}, {"name": "南湖新区", "kg": 235280, "trips": 45, "avg_per_day_kg": 8403}, {"name": "临港新区", "kg": 145320, "trips": 36, "avg_per_day_kg": 5190}], "vehicles_top10": [{"plate": "湘FC5523", "kg": 249331, "trips": 40, "unit": "岳阳楼区", "avg_per_trip": 6233}, {"plate": "湘FB9498", "kg": 247604, "trips": 57, "unit": "岳阳楼区", "avg_per_trip": 4344}, {"plate": "湘FA8040", "kg": 247071, "trips": 50, "unit": "开发区", "avg_per_trip": 4941}, {"plate": "湘FA3040", "kg": 236313, "trips": 52, "unit": "岳阳楼区", "avg_per_trip": 4544}, {"plate": "湘FA9847", "kg": 236053, "trips": 45, "unit": "南湖新区", "avg_per_trip": 5246}, {"plate": "湘F86680", "kg": 223546, "trips": 55, "unit": "岳阳楼区", "avg_per_trip": 4064}, {"plate": "湘FB0252", "kg": 221087, "trips": 48, "unit": "开发区", "avg_per_trip": 4606}, {"plate": "湘FC1673", "kg": 215738, "trips": 47, "unit": "岳阳楼区", "avg_per_trip": 4590}, {"plate": "湘FB6266", "kg": 207827, "trips": 43, "unit": "岳阳楼区", "avg_per_trip": 4833}, {"plate": "湘FB8611", "kg": 158205, "trips": 40, "unit": "君山区", "avg_per_trip": 3955}], "vehicles_bottom10": [{"plate": "湘FB9409", "kg": 20587, "trips": 4, "unit": "岳阳楼区", "avg_per_trip": 5147}, {"plate": "湘FA5403", "kg": 55638, "trips": 18, "unit": "岳阳楼区", "avg_per_trip": 3091}, {"plate": "湘FB3975", "kg": 90216, "trips": 18, "unit": "开发区", "avg_per_trip": 5012}, {"plate": "湘FB9046", "kg": 96953, "trips": 31, "unit": "岳阳楼区", "avg_per_trip": 3128}, {"plate": "湘FA8340", "kg": 100525, "trips": 29, "unit": "南湖新区", "avg_per_trip": 3466}, {"plate": "湘FB7351", "kg": 105791, "trips": 26, "unit": "岳阳楼区", "avg_per_trip": 4069}, {"plate": "湘FC3710", "kg": 108005, "trips": 24, "unit": "开发区", "avg_per_trip": 4500}, {"plate": "湘FB0388", "kg": 116400, "trips": 22, "unit": "岳阳楼区", "avg_per_trip": 5291}, {"plate": "湘FC8698", "kg": 120787, "trips": 19, "unit": "岳阳楼区", "avg_per_trip": 6357}, {"plate": "湘FA8342", "kg": 123355, "trips": 21, "unit": "君山区", "avg_per_trip": 5874}], "vehicle_count": 22, "weekday_pattern": {"周一": {"avg_kg": 128514, "avg_ton": 128.5, "count": 4}, "周二": {"avg_kg": 127279, "avg_ton": 127.3, "count": 4}, "周三": {"avg_kg": 123571, "avg_ton": 123.6, "count": 4}, "周四": {"avg_kg": 129750, "avg_ton": 129.8, "count": 4}, "周五": {"avg_kg": 126043, "avg_ton": 126.0, "count": 4}, "周六": {"avg_kg": 111214, "avg_ton": 111.2, "count": 4}, "周日": {"avg_kg": 113686, "avg_ton": 113.7, "count": 4}, "workday_avg_kg": 127279, "workday_avg_ton": 127.3, "weekend_avg_kg": 112450, "weekend_avg_ton": 112.5, "weekend_drop_pct": 11.3}, "data_quality": {"is_valid": true, "quality_score": 100, "severity": "OK", "error_count": 0, "warning_count": 0, "errors": [], "warnings": [], "summary": "数据覆盖: 28/28天有效 | 质量评分: 100/100"}}, "3": {"schema_version": 2, "generated_at": "2026-07-01 07:52:37", "month": "2026-03", "year": 2026, "month_num": 3, "label": "2026年3月", "date_range": "3月1日 - 3月31日", "days_in_month": 31, "data_days": 31, "pending_dates": [], "pending_count": 0, "has_pending": false, "weeks_covered": [31, 32, 33, 34, 35], "total_kg": 4320000, "total_ton": 4320.0, "total_trips": 930, "avg_daily_kg": 139355, "avg_daily_ton": 139.4, "avg_daily_trips": 30.0, "peak": {"date": "3月5日", "weekday": "周五", "kg": 164500, "ton": 164.5, "trips": 34}, "valley": {"date": "3月19日", "weekday": "周五", "kg": 117100, "ton": 117.1, "trips": 26}, "prev_month_total_ton": 3460.0, "mom_change_ton": 860.0, "mom_change_pct": 24.9, "trend": "up", "trend_label": "+24.9%", "daily": [], "weekly_breakdown": [{"week": 31, "total_ton": 864.0, "avg_daily": 123.4, "total_trips": 186, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 32, "total_ton": 864.0, "avg_daily": 123.4, "total_trips": 186, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 33, "total_ton": 864.0, "avg_daily": 123.4, "total_trips": 186, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 34, "total_ton": 864.0, "avg_daily": 123.4, "total_trips": 186, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 35, "total_ton": 864.0, "avg_daily": 288.0, "total_trips": 186, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}], "regions": [{"name": "岳阳楼区", "kg": 2570400, "trips": 552, "avg_per_day_kg": 82916}, {"name": "开发区", "kg": 972000, "trips": 225, "avg_per_day_kg": 31355}, {"name": "君山区", "kg": 306720, "trips": 51, "avg_per_day_kg": 9894}, {"name": "南湖新区", "kg": 293760, "trips": 57, "avg_per_day_kg": 9476}, {"name": "临港新区", "kg": 181440, "trips": 45, "avg_per_day_kg": 5853}], "vehicles_top10": [{"plate": "湘FC5523", "kg": 311303, "trips": 49, "unit": "岳阳楼区", "avg_per_trip": 6353}, {"plate": "湘FB9498", "kg": 309147, "trips": 72, "unit": "岳阳楼区", "avg_per_trip": 4294}, {"plate": "湘FA8040", "kg": 308481, "trips": 62, "unit": "开发区", "avg_per_trip": 4976}, {"plate": "湘FA3040", "kg": 295049, "trips": 65, "unit": "岳阳楼区", "avg_per_trip": 4539}, {"plate": "湘FA9847", "kg": 294725, "trips": 57, "unit": "南湖新区", "avg_per_trip": 5171}, {"plate": "湘F86680", "kg": 279110, "trips": 69, "unit": "岳阳楼区", "avg_per_trip": 4045}, {"plate": "湘FB0252", "kg": 276039, "trips": 60, "unit": "开发区", "avg_per_trip": 4601}, {"plate": "湘FC1673", "kg": 269361, "trips": 59, "unit": "岳阳楼区", "avg_per_trip": 4565}, {"plate": "湘FB6266", "kg": 259483, "trips": 53, "unit": "岳阳楼区", "avg_per_trip": 4896}, {"plate": "湘FB8611", "kg": 197528, "trips": 50, "unit": "君山区", "avg_per_trip": 3951}], "vehicles_bottom10": [{"plate": "湘FB9409", "kg": 25704, "trips": 4, "unit": "岳阳楼区", "avg_per_trip": 6426}, {"plate": "湘FA5403", "kg": 69467, "trips": 22, "unit": "岳阳楼区", "avg_per_trip": 3158}, {"plate": "湘FB3975", "kg": 112640, "trips": 22, "unit": "开发区", "avg_per_trip": 5120}, {"plate": "湘FB9046", "kg": 121051, "trips": 38, "unit": "岳阳楼区", "avg_per_trip": 3186}, {"plate": "湘FA8340", "kg": 125510, "trips": 36, "unit": "南湖新区", "avg_per_trip": 3486}, {"plate": "湘FB7351", "kg": 132086, "trips": 32, "unit": "岳阳楼区", "avg_per_trip": 4128}, {"plate": "湘FC3710", "kg": 134850, "trips": 29, "unit": "开发区", "avg_per_trip": 4650}, {"plate": "湘FB0388", "kg": 145332, "trips": 28, "unit": "岳阳楼区", "avg_per_trip": 5190}, {"plate": "湘FC8698", "kg": 150809, "trips": 24, "unit": "岳阳楼区", "avg_per_trip": 6284}, {"plate": "湘FA8342", "kg": 154015, "trips": 27, "unit": "君山区", "avg_per_trip": 5704}], "vehicle_count": 22, "weekday_pattern": {"周一": {"avg_kg": 144929, "avg_ton": 144.9, "count": 5}, "周二": {"avg_kg": 143535, "avg_ton": 143.5, "count": 5}, "周三": {"avg_kg": 139355, "avg_ton": 139.4, "count": 5}, "周四": {"avg_kg": 146323, "avg_ton": 146.3, "count": 5}, "周五": {"avg_kg": 142142, "avg_ton": 142.1, "count": 5}, "周六": {"avg_kg": 125419, "avg_ton": 125.4, "count": 5}, "周日": {"avg_kg": 128206, "avg_ton": 128.2, "count": 5}, "workday_avg_kg": 143535, "workday_avg_ton": 143.5, "weekend_avg_kg": 126813, "weekend_avg_ton": 126.8, "weekend_drop_pct": 11.3}, "data_quality": {"is_valid": true, "quality_score": 100, "severity": "OK", "error_count": 0, "warning_count": 0, "errors": [], "warnings": [], "summary": "数据覆盖: 31/31天有效 | 质量评分: 100/100"}}, "4": {"schema_version": 2, "generated_at": "2026-07-01 07:52:37", "month": "2026-04", "year": 2026, "month_num": 4, "label": "2026年4月", "date_range": "4月1日 - 4月30日", "days_in_month": 30, "data_days": 30, "pending_dates": [], "pending_count": 0, "has_pending": false, "weeks_covered": [35, 36, 37, 38, 39], "total_kg": 4860000, "total_ton": 4860.0, "total_trips": 1048, "avg_daily_kg": 162000, "avg_daily_ton": 162.0, "avg_daily_trips": 34.9, "peak": {"date": "4月5日", "weekday": "周五", "kg": 191200, "ton": 191.2, "trips": 40}, "valley": {"date": "4月19日", "weekday": "周五", "kg": 136100, "ton": 136.1, "trips": 30}, "prev_month_total_ton": 4320.0, "mom_change_ton": 540.0, "mom_change_pct": 12.5, "trend": "up", "trend_label": "+12.5%", "daily": [], "weekly_breakdown": [{"week": 35, "total_ton": 1215.0, "avg_daily": 173.6, "total_trips": 262, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 36, "total_ton": 1215.0, "avg_daily": 173.6, "total_trips": 262, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 37, "total_ton": 1215.0, "avg_daily": 173.6, "total_trips": 262, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 38, "total_ton": 1215.0, "avg_daily": 135.0, "total_trips": 262, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 39, "total_ton": 1215.0, "avg_daily": 135.0, "total_trips": 262, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}], "regions": [{"name": "岳阳楼区", "kg": 2891700, "trips": 623, "avg_per_day_kg": 96390}, {"name": "开发区", "kg": 1093500, "trips": 254, "avg_per_day_kg": 36450}, {"name": "君山区", "kg": 345060, "trips": 58, "avg_per_day_kg": 11502}, {"name": "南湖新区", "kg": 330480, "trips": 64, "avg_per_day_kg": 11016}, {"name": "临港新区", "kg": 204120, "trips": 50, "avg_per_day_kg": 6804}], "vehicles_top10": [{"plate": "湘FC5523", "kg": 350216, "trips": 56, "unit": "岳阳楼区", "avg_per_trip": 6254}, {"plate": "湘FB9498", "kg": 347790, "trips": 80, "unit": "岳阳楼区", "avg_per_trip": 4347}, {"plate": "湘FA8040", "kg": 347041, "trips": 70, "unit": "开发区", "avg_per_trip": 4958}, {"plate": "湘FA3040", "kg": 331931, "trips": 73, "unit": "岳阳楼区", "avg_per_trip": 4547}, {"plate": "湘FA9847", "kg": 331566, "trips": 64, "unit": "南湖新区", "avg_per_trip": 5181}, {"plate": "湘F86680", "kg": 313998, "trips": 78, "unit": "岳阳楼区", "avg_per_trip": 4026}, {"plate": "湘FB0252", "kg": 310544, "trips": 67, "unit": "开发区", "avg_per_trip": 4635}, {"plate": "湘FC1673", "kg": 303031, "trips": 66, "unit": "岳阳楼区", "avg_per_trip": 4591}, {"plate": "湘FB6266", "kg": 291918, "trips": 60, "unit": "岳阳楼区", "avg_per_trip": 4865}, {"plate": "湘FB8611", "kg": 222219, "trips": 56, "unit": "君山区", "avg_per_trip": 3968}], "vehicles_bottom10": [{"plate": "湘FB9409", "kg": 28917, "trips": 5, "unit": "岳阳楼区", "avg_per_trip": 5783}, {"plate": "湘FA5403", "kg": 78150, "trips": 25, "unit": "岳阳楼区", "avg_per_trip": 3126}, {"plate": "湘FB3975", "kg": 126720, "trips": 25, "unit": "开发区", "avg_per_trip": 5069}, {"plate": "湘FB9046", "kg": 136182, "trips": 43, "unit": "岳阳楼区", "avg_per_trip": 3167}, {"plate": "湘FA8340", "kg": 141199, "trips": 41, "unit": "南湖新区", "avg_per_trip": 3444}, {"plate": "湘FB7351", "kg": 148596, "trips": 36, "unit": "岳阳楼区", "avg_per_trip": 4128}, {"plate": "湘FC3710", "kg": 151706, "trips": 33, "unit": "开发区", "avg_per_trip": 4597}, {"plate": "湘FB0388", "kg": 163498, "trips": 32, "unit": "岳阳楼区", "avg_per_trip": 5109}, {"plate": "湘FC8698", "kg": 169660, "trips": 27, "unit": "岳阳楼区", "avg_per_trip": 6284}, {"plate": "湘FA8342", "kg": 173267, "trips": 30, "unit": "君山区", "avg_per_trip": 5776}], "vehicle_count": 22, "weekday_pattern": {"周一": {"avg_kg": 168480, "avg_ton": 168.5, "count": 5}, "周二": {"avg_kg": 166860, "avg_ton": 166.9, "count": 5}, "周三": {"avg_kg": 162000, "avg_ton": 162.0, "count": 4}, "周四": {"avg_kg": 170100, "avg_ton": 170.1, "count": 4}, "周五": {"avg_kg": 165240, "avg_ton": 165.2, "count": 4}, "周六": {"avg_kg": 145800, "avg_ton": 145.8, "count": 4}, "周日": {"avg_kg": 149040, "avg_ton": 149.0, "count": 4}, "workday_avg_kg": 166860, "workday_avg_ton": 166.9, "weekend_avg_kg": 147420, "weekend_avg_ton": 147.4, "weekend_drop_pct": 11.3}, "data_quality": {"is_valid": true, "quality_score": 100, "severity": "OK", "error_count": 0, "warning_count": 0, "errors": [], "warnings": [], "summary": "数据覆盖: 30/30天有效 | 质量评分: 100/100"}}, "5": {"schema_version": 2, "generated_at": "2026-07-01 07:52:37", "month": "2026-05", "year": 2026, "month_num": 5, "label": "2026年5月", "date_range": "5月1日 - 5月31日", "days_in_month": 31, "data_days": 31, "pending_dates": [], "pending_count": 0, "has_pending": false, "weeks_covered": [40, 41, 42, 43, 44, 45], "total_kg": 5420000, "total_ton": 5420.0, "total_trips": 1168, "avg_daily_kg": 174839, "avg_daily_ton": 174.8, "avg_daily_trips": 37.7, "peak": {"date": "5月5日", "weekday": "周五", "kg": 206300, "ton": 206.3, "trips": 43}, "valley": {"date": "5月19日", "weekday": "周五", "kg": 146800, "ton": 146.8, "trips": 32}, "prev_month_total_ton": 4860.0, "mom_change_ton": 560.0, "mom_change_pct": 11.5, "trend": "up", "trend_label": "+11.5%", "daily": [], "weekly_breakdown": [{"week": 40, "total_ton": 1084.0, "avg_daily": 154.9, "total_trips": 234, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 41, "total_ton": 1084.0, "avg_daily": 154.9, "total_trips": 234, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 42, "total_ton": 1084.0, "avg_daily": 154.9, "total_trips": 234, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 43, "total_ton": 1084.0, "avg_daily": 154.9, "total_trips": 234, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 44, "total_ton": 1084.0, "avg_daily": 361.3, "total_trips": 234, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 45, "total_ton": 1084.0, "avg_daily": 361.3, "total_trips": 234, "date_range": "--", "trend_label": "", "trend_color": "#4C72B0"}], "regions": [{"name": "岳阳楼区", "kg": 3224900, "trips": 694, "avg_per_day_kg": 104029}, {"name": "开发区", "kg": 1219500, "trips": 283, "avg_per_day_kg": 39339}, {"name": "君山区", "kg": 384820, "trips": 64, "avg_per_day_kg": 12414}, {"name": "南湖新区", "kg": 368560, "trips": 71, "avg_per_day_kg": 11889}, {"name": "临港新区", "kg": 227640, "trips": 56, "avg_per_day_kg": 7343}], "vehicles_top10": [{"plate": "湘FC5523", "kg": 390570, "trips": 62, "unit": "岳阳楼区", "avg_per_trip": 6300}, {"plate": "湘FB9498", "kg": 387865, "trips": 90, "unit": "岳阳楼区", "avg_per_trip": 4310}, {"plate": "湘FA8040", "kg": 387030, "trips": 78, "unit": "开发区", "avg_per_trip": 4962}, {"plate": "湘FA3040", "kg": 370178, "trips": 81, "unit": "岳阳楼区", "avg_per_trip": 4570}, {"plate": "湘FA9847", "kg": 369771, "trips": 71, "unit": "南湖新区", "avg_per_trip": 5208}, {"plate": "湘F86680", "kg": 350179, "trips": 87, "unit": "岳阳楼区", "avg_per_trip": 4025}, {"plate": "湘FB0252", "kg": 346327, "trips": 75, "unit": "开发区", "avg_per_trip": 4618}, {"plate": "湘FC1673", "kg": 337948, "trips": 74, "unit": "岳阳楼区", "avg_per_trip": 4567}, {"plate": "湘FB6266", "kg": 325555, "trips": 67, "unit": "岳阳楼区", "avg_per_trip": 4859}, {"plate": "湘FB8611", "kg": 247824, "trips": 63, "unit": "君山区", "avg_per_trip": 3934}], "vehicles_bottom10": [{"plate": "湘FB9409", "kg": 32248, "trips": 6, "unit": "岳阳楼区", "avg_per_trip": 5375}, {"plate": "湘FA5403", "kg": 87155, "trips": 28, "unit": "岳阳楼区", "avg_per_trip": 3113}, {"plate": "湘FB3975", "kg": 141322, "trips": 28, "unit": "开发区", "avg_per_trip": 5047}, {"plate": "湘FB9046", "kg": 151874, "trips": 48, "unit": "岳阳楼区", "avg_per_trip": 3164}, {"plate": "湘FA8340", "kg": 157469, "trips": 45, "unit": "南湖新区", "avg_per_trip": 3499}, {"plate": "湘FB7351", "kg": 165718, "trips": 41, "unit": "岳阳楼区", "avg_per_trip": 4042}, {"plate": "湘FC3710", "kg": 169187, "trips": 37, "unit": "开发区", "avg_per_trip": 4573}, {"plate": "湘FB0388", "kg": 182338, "trips": 35, "unit": "岳阳楼区", "avg_per_trip": 5210}, {"plate": "湘FC8698", "kg": 189209, "trips": 31, "unit": "岳阳楼区", "avg_per_trip": 6104}, {"plate": "湘FA8342", "kg": 193232, "trips": 33, "unit": "君山区", "avg_per_trip": 5856}], "vehicle_count": 22, "weekday_pattern": {"周一": {"avg_kg": 181832, "avg_ton": 181.8, "count": 5}, "周二": {"avg_kg": 180084, "avg_ton": 180.1, "count": 5}, "周三": {"avg_kg": 174839, "avg_ton": 174.8, "count": 5}, "周四": {"avg_kg": 183581, "avg_ton": 183.6, "count": 5}, "周五": {"avg_kg": 178335, "avg_ton": 178.3, "count": 5}, "周六": {"avg_kg": 157355, "avg_ton": 157.4, "count": 5}, "周日": {"avg_kg": 160852, "avg_ton": 160.9, "count": 5}, "workday_avg_kg": 180084, "workday_avg_ton": 180.1, "weekend_avg_kg": 159103, "weekend_avg_ton": 159.1, "weekend_drop_pct": 11.3}, "data_quality": {"is_valid": true, "quality_score": 100, "severity": "OK", "error_count": 0, "warning_count": 0, "errors": [], "warnings": [], "summary": "数据覆盖: 31/31天有效 | 质量评分: 100/100"}}, "6": {"schema_version": 2, "generated_at": "2026-07-01 07:52:37", "month": "2026-06", "year": 2026, "month_num": 6, "label": "2026年6月", "date_range": "6月1日 - 6月30日", "days_in_month": 30, "data_days": 30, "pending_dates": [], "pending_count": 0, "has_pending": false, "weeks_covered": [23, 24, 25, 26, 27], "total_kg": 5860553, "total_ton": 5860.6, "total_trips": 1262, "avg_daily_kg": 195352, "avg_daily_ton": 195.4, "avg_daily_trips": 42.1, "peak": {"date": "6月5日", "weekday": "周五", "kg": 224590, "ton": 224.6, "trips": 49}, "valley": {"date": "6月19日", "weekday": "周五", "kg": 165230, "ton": 165.2, "trips": 37}, "prev_month_total_ton": 5420.0, "mom_change_ton": 440.6, "mom_change_pct": 8.1, "trend": "up", "trend_label": "+8.1%", "daily": [{"date": "6月1日", "weekday": "周一", "total_kg": 205930, "trips": 44, "week": 23}, {"date": "6月2日", "weekday": "周二", "total_kg": 206320, "trips": 42, "week": 23}, {"date": "6月3日", "weekday": "周三", "total_kg": 202390, "trips": 42, "week": 23}, {"date": "6月4日", "weekday": "周四", "total_kg": 201180, "trips": 43, "week": 23}, {"date": "6月5日", "weekday": "周五", "total_kg": 224590, "trips": 49, "week": 23}, {"date": "6月6日", "weekday": "周六", "total_kg": 174460, "trips": 37, "week": 23}, {"date": "6月7日", "weekday": "周日", "total_kg": 195990, "trips": 42, "week": 23}, {"date": "6月8日", "weekday": "周一", "total_kg": 182820, "trips": 39, "week": 24}, {"date": "6月9日", "weekday": "周二", "total_kg": 187690, "trips": 40, "week": 24}, {"date": "6月10日", "weekday": "周三", "total_kg": 203440, "trips": 44, "week": 24}, {"date": "6月11日", "weekday": "周四", "total_kg": 209410, "trips": 46, "week": 24}, {"date": "6月12日", "weekday": "周五", "total_kg": 197970, "trips": 42, "week": 24}, {"date": "6月13日", "weekday": "周六", "total_kg": 179900, "trips": 41, "week": 24}, {"date": "6月14日", "weekday": "周日", "total_kg": 177290, "trips": 40, "week": 24}, {"date": "6月15日", "weekday": "周一", "total_kg": 207250, "trips": 44, "week": 25}, {"date": "6月16日", "weekday": "周二", "total_kg": 210680, "trips": 47, "week": 25}, {"date": "6月17日", "weekday": "周三", "total_kg": 173000, "trips": 40, "week": 25}, {"date": "6月18日", "weekday": "周四", "total_kg": 199220, "trips": 44, "week": 25}, {"date": "6月19日", "weekday": "周五", "total_kg": 165230, "trips": 37, "week": 25}, {"date": "6月20日", "weekday": "周六", "total_kg": 174720, "trips": 36, "week": 25}, {"date": "6月21日", "weekday": "周日", "total_kg": 181730, "trips": 37, "week": 25}, {"date": "6月22日", "weekday": "周一", "total_kg": 211640, "trips": 42, "week": 26}, {"date": "6月23日", "weekday": "周二", "total_kg": 205860, "trips": 43, "week": 26}, {"date": "6月24日", "weekday": "周三", "total_kg": 207990, "trips": 45, "week": 26}, {"date": "6月25日", "weekday": "周四", "total_kg": 210960, "trips": 46, "week": 26}, {"date": "6月26日", "weekday": "周五", "total_kg": 211630, "trips": 46, "week": 26}, {"date": "6月27日", "weekday": "周六", "total_kg": 177743, "trips": 39, "week": 26}, {"date": "6月28日", "weekday": "周日", "total_kg": 167590, "trips": 37, "week": 26}, {"date": "6月29日", "weekday": "周一", "total_kg": 206890, "trips": 43, "week": 27}, {"date": "6月30日", "weekday": "周二", "total_kg": 199040, "trips": 45, "week": 27}], "weekly_breakdown": [{"week": 23, "total_ton": 1410.9, "avg_daily": 201.6, "total_trips": 299, "date_range": "6月1日 - 6月7日", "trend_label": "", "trend_color": "#4C72B0"}, {"week": 24, "total_ton": 1338.5, "avg_daily": 191.2, "total_trips": 292, "date_range": "6月8日 - 6月14日", "trend_label": "-5.1%", "trend_color": "#e15759"}, {"week": 25, "total_ton": 1311.8, "avg_daily": 187.4, "total_trips": 285, "date_range": "6月15日 - 6月21日", "trend_label": "-2.0%", "trend_color": "#e15759"}, {"week": 26, "total_ton": 1393.4, "avg_daily": 199.1, "total_trips": 298, "date_range": "6月22日 - 6月28日", "trend_label": "+6.2%", "trend_color": "#16a34a"}, {"week": 27, "total_ton": 405.9, "avg_daily": 202.9, "total_trips": 88, "date_range": "6月29日 - 6月30日", "trend_label": "-70.9%", "trend_color": "#e15759"}], "regions": [{"name": "岳阳楼区", "kg": 3483661, "trips": 749, "avg_per_day_kg": 116122}, {"name": "开发区", "kg": 1318102, "trips": 306, "avg_per_day_kg": 43937}, {"name": "君山区", "kg": 413530, "trips": 69, "avg_per_day_kg": 13784}, {"name": "南湖新区", "kg": 399830, "trips": 77, "avg_per_day_kg": 13328}, {"name": "临港新区", "kg": 245430, "trips": 61, "avg_per_day_kg": 8181}], "vehicles_top10": [{"plate": "湘FC5523", "kg": 422320, "trips": 67, "unit": "岳阳楼区", "avg_per_trip": 6303}, {"plate": "湘FB9498", "kg": 419395, "trips": 97, "unit": "岳阳楼区", "avg_per_trip": 4324}, {"plate": "湘FA8040", "kg": 418492, "trips": 84, "unit": "开发区", "avg_per_trip": 4982}, {"plate": "湘FA3040", "kg": 400270, "trips": 88, "unit": "岳阳楼区", "avg_per_trip": 4549}, {"plate": "湘FA9847", "kg": 399830, "trips": 77, "unit": "南湖新区", "avg_per_trip": 5193}, {"plate": "湘F86680", "kg": 378646, "trips": 94, "unit": "岳阳楼区", "avg_per_trip": 4028}, {"plate": "湘FB0252", "kg": 374480, "trips": 81, "unit": "开发区", "avg_per_trip": 4623}, {"plate": "湘FC1673", "kg": 365420, "trips": 80, "unit": "岳阳楼区", "avg_per_trip": 4568}, {"plate": "湘FB6266", "kg": 352020, "trips": 72, "unit": "岳阳楼区", "avg_per_trip": 4889}, {"plate": "湘FB8611", "kg": 267970, "trips": 68, "unit": "岳阳楼区", "avg_per_trip": 3941}], "vehicles_bottom10": [{"plate": "湘FB9409", "kg": 34870, "trips": 6, "unit": "岳阳楼区", "avg_per_trip": 5812}, {"plate": "湘FA5403", "kg": 94240, "trips": 30, "unit": "岳阳楼区", "avg_per_trip": 3141}, {"plate": "湘FB3975", "kg": 152810, "trips": 30, "unit": "岳阳楼区", "avg_per_trip": 5094}, {"plate": "湘FB9046", "kg": 164220, "trips": 52, "unit": "开发区", "avg_per_trip": 3158}, {"plate": "湘FA8340", "kg": 170270, "trips": 49, "unit": "开发区", "avg_per_trip": 3475}, {"plate": "湘FB7351", "kg": 179190, "trips": 44, "unit": "岳阳楼区", "avg_per_trip": 4072}, {"plate": "湘FC3710", "kg": 182940, "trips": 40, "unit": "开发区", "avg_per_trip": 4574}, {"plate": "湘FB0388", "kg": 197160, "trips": 38, "unit": "岳阳楼区", "avg_per_trip": 5188}, {"plate": "湘FC8698", "kg": 204590, "trips": 33, "unit": "君山区", "avg_per_trip": 6200}, {"plate": "湘FA8342", "kg": 208940, "trips": 36, "unit": "君山区", "avg_per_trip": 5804}], "vehicle_count": 22, "weekday_pattern": {"周一": {"avg_kg": 202906, "avg_ton": 202.9, "count": 5}, "周二": {"avg_kg": 201918, "avg_ton": 201.9, "count": 5}, "周三": {"avg_kg": 196705, "avg_ton": 196.7, "count": 4}, "周四": {"avg_kg": 205192, "avg_ton": 205.2, "count": 4}, "周五": {"avg_kg": 199855, "avg_ton": 199.9, "count": 4}, "周六": {"avg_kg": 176706, "avg_ton": 176.7, "count": 4}, "周日": {"avg_kg": 180650, "avg_ton": 180.7, "count": 4}, "workday_avg_kg": 201415, "workday_avg_ton": 201.4, "weekend_avg_kg": 178678, "weekend_avg_ton": 178.7, "weekend_drop_pct": 11.3}, "data_quality": {"is_valid": true, "quality_score": 100, "severity": "OK", "error_count": 0, "warning_count": 0, "errors": [], "warnings": [], "summary": "数据覆盖: 30/30天有效 | 质量评分: 100/100"}}};
+
+const SUMMARY_DATA = {"total_ton": 26760.6, "total_trips": 5765, "total_days": 181, "avg_monthly_ton": 4460.1, "avg_daily_ton": 147.8, "peak_month": 6, "peak_month_ton": 5860.6, "valley_month": 1, "valley_month_ton": 2840.0, "monthly_ton": [2840.0, 3460.0, 4320.0, 4860.0, 5420.0, 5860.6], "monthly_labels": ["1月", "2月", "3月", "4月", "5月", "6月"], "regions": [{"name": "岳阳楼区", "kg": 15919161, "trips": 3425, "avg_per_day_kg": 87951}, {"name": "开发区", "kg": 6020602, "trips": 1396, "avg_per_day_kg": 33263}, {"name": "君山区", "kg": 1897430, "trips": 317, "avg_per_day_kg": 10483}, {"name": "南湖新区", "kg": 1821030, "trips": 351, "avg_per_day_kg": 10061}, {"name": "临港新区", "kg": 1123230, "trips": 277, "avg_per_day_kg": 6206}], "growth_rate": 106.4};
 
 // ============================================================
 // Utilities
@@ -905,14 +387,187 @@ const CHART_COLORS = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#e
 const CHART_BG = CHART_COLORS.map(c => c.replace(')', ',0.7)').replace('rgb', 'rgba'));
 
 // ============================================================
-// KPI Rendering
+// Tab switching
 // ============================================================
-function renderKPIs() {
-  const d = MONTHLY_DATA;
+let currentMonth = 'summary';
+
+function switchMonth(month) {
+  currentMonth = month;
+  
+  // Update tabs
+  document.querySelectorAll('.month-tab').forEach(function(tab) {
+    tab.classList.toggle('active', tab.getAttribute('data-month') === month);
+  });
+  
+  // Update header
+  updateHeader(month);
+  
+  // Render content
+  const container = document.getElementById('main-container');
+  container.innerHTML = '';
+  
+  if (month === 'summary') {
+    renderSummary(container);
+  } else {
+    renderMonthDetail(container, month);
+  }
+  
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateHeader(month) {
+  const title = document.getElementById('header-title');
+  const subtitle = document.getElementById('header-subtitle');
+  const meta = document.getElementById('header-meta');
+  
+  if (month === 'summary') {
+    title.textContent = '📊 2026年上半年 · 经营总结报告';
+    subtitle.textContent = '岳阳市厨余垃圾资源化利用和无害化处置项目';
+    meta.innerHTML = '<span>📅 统计周期: 1月1日 - 6月30日</span><span>🔢 已覆盖 6 个月数据</span><span>🔄 生成于 2026-07-01 07:52:37</span>';
+  } else {
+    const d = MONTHS_DATA[month];
+    title.textContent = '📊 厨余垃圾收运量 · ' + d.label + '分析报告';
+    subtitle.textContent = '岳阳市厨余垃圾资源化利用和无害化处置项目';
+    meta.innerHTML = '<span>📅 报告月: ' + d.date_range + '</span><span>🔢 已加载 ' + d.data_days + '/' + d.days_in_month + ' 天数据</span><span>🔍 数据质量: ' + d.data_quality.quality_score + '/100</span><span>🔄 生成于 ' + d.generated_at + '</span>';
+  }
+}
+
+// ============================================================
+// Summary Panel Rendering
+// ============================================================
+function renderSummary(container) {
+  const s = SUMMARY_DATA;
+  
+  // KPI Row 1
+  container.innerHTML += '<div class="kpi-row">' +
+    '<div class="kpi-card">' +
+      '<div class="label">上半年总收运量</div>' +
+      '<div class="value">' + fmtNum(s.total_ton, 1) + '<span class="unit">吨</span></div>' +
+      '<div class="sub">' + s.total_trips + ' 车次 · ' + s.total_days + ' 天</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">月均收运量</div>' +
+      '<div class="value">' + fmtNum(s.avg_monthly_ton, 1) + '<span class="unit">吨/月</span></div>' +
+      '<div class="sub">上半年平均</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">日均收运量</div>' +
+      '<div class="value">' + fmtNum(s.avg_daily_ton, 1) + '<span class="unit">吨/日</span></div>' +
+      '<div class="sub">' + s.total_days + ' 天平均</div>' +
+    '</div>' +
+    '<div class="kpi-card">' +
+      '<div class="label">半年增长率</div>' +
+      '<div class="value" style="color:var(--accent-green)">' + (s.growth_rate > 0 ? '+' : '') + s.growth_rate + '<span class="unit">%</span></div>' +
+      '<div class="sub">1月 → 6月</div>' +
+    '</div>' +
+  '</div>';
+  
+  // Monthly comparison chart
+  container.innerHTML += '<div class="chart-grid">' +
+    '<div class="chart-card full">' +
+      '<h3>📈 各月收运量对比</h3>' +
+      '<canvas id="chart-monthly-comparison"></canvas>' +
+    '</div>' +
+  '</div>';
+  
+  // Monthly detail table
+  let tableRows = '';
+  for (let m = 1; m <= 6; m++) {
+    const d = MONTHS_DATA[m];
+    const mom = m > 1 ? ((d.total_ton - MONTHS_DATA[m-1].total_ton) / MONTHS_DATA[m-1].total_ton * 100).toFixed(1) : null;
+    const momHtml = m === 1 ? '<span style="color:#94a3b8">-</span>' : 
+      (mom > 0 ? '<span style="color:var(--accent-green)">+' + mom + '%</span>' : '<span style="color:var(--accent-red)">' + mom + '%</span>');
+    tableRows += '<tr>' +
+      '<td><strong>' + m + '月</strong></td>' +
+      '<td>' + fmtNum(d.total_ton, 1) + ' 吨</td>' +
+      '<td>' + d.total_trips + '</td>' +
+      '<td>' + fmtNum(d.avg_daily_ton, 1) + ' 吨/日</td>' +
+      '<td>' + d.days_in_month + ' 天</td>' +
+      '<td>' + momHtml + '</td>' +
+    '</tr>';
+  }
+  
+  container.innerHTML += '<div class="table-card">' +
+    '<h3>📋 各月收运明细汇总</h3>' +
+    '<table class="detail-table">' +
+      '<thead><tr><th>月份</th><th>月总量 (吨)</th><th>车次</th><th>日均 (吨)</th><th>天数</th><th>环比</th></tr></thead>' +
+      '<tbody>' + tableRows + '</tbody>' +
+    '</table>' +
+  '</div>';
+  
+  // Regions aggregate
+  container.innerHTML += '<div class="dual-table">' +
+    '<div class="table-card">' +
+      '<h3>🏘️ 上半年各区域收运量汇总</h3>' +
+      '<table class="detail-table">' +
+        '<thead><tr><th>区域</th><th>总收运量 (吨)</th><th>占比</th><th>车次</th></tr></thead>' +
+        '<tbody>' + s.regions.map(function(r, i) {
+          const color = CHART_COLORS[i % CHART_COLORS.length];
+          const pct = (r.kg / (s.total_ton * 1000) * 100).toFixed(1);
+          return '<tr>' +
+            '<td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + color + ';margin-right:8px;"></span>' + r.name + '</td>' +
+            '<td><strong>' + fmtTon(r.kg, 1) + '</strong></td>' +
+            '<td>' + pct + '%</td>' +
+            '<td>' + r.trips + '</td>' +
+          '</tr>';
+        }).join('') + '</tbody>' +
+      '</table>' +
+    '</div>' +
+    '<div class="table-card">' +
+      '<h3>🏆 上半年月度峰值/谷值</h3>' +
+      '<table class="detail-table">' +
+        '<thead><tr><th>指标</th><th>月份</th><th>收运量 (吨)</th></tr></thead>' +
+        '<tbody>' +
+          '<tr><td><strong>峰值月份</strong></td><td><span class="peak-cell">' + s.peak_month + '月</span></td><td><strong>' + fmtNum(s.peak_month_ton, 1) + '</strong></td></tr>' +
+          '<tr><td><strong>谷值月份</strong></td><td><span class="valley-cell">' + s.valley_month + '月</span></td><td><strong>' + fmtNum(s.valley_month_ton, 1) + '</strong></td></tr>' +
+          '<tr><td><strong>峰谷差</strong></td><td>-</td><td><strong>' + fmtNum(s.peak_month_ton - s.valley_month_ton, 1) + '</strong></td></tr>' +
+          '<tr><td><strong>峰谷比</strong></td><td>-</td><td><strong>' + (s.peak_month_ton / s.valley_month_ton).toFixed(2) + ' 倍</strong></td></tr>' +
+        '</tbody>' +
+      '</table>' +
+    '</div>' +
+  '</div>';
+  
+  // Render monthly comparison chart
+  setTimeout(function() {
+    const ctx = document.getElementById('chart-monthly-comparison');
+    if (!ctx) return;
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: s.monthly_labels,
+        datasets: [{
+          label: '月收运量 (吨)',
+          data: s.monthly_ton,
+          backgroundColor: s.monthly_ton.map(function(v, i) {
+            return i === 5 ? '#4C72B0' : '#94a3b8';
+          }),
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, title: { display: true, text: '吨' } }
+        }
+      }
+    });
+  }, 0);
+}
+
+// ============================================================
+// Month Detail Panel Rendering
+// ============================================================
+function renderMonthDetail(container, month) {
+  const d = MONTHS_DATA[month];
+  const hasDaily = d.daily && d.daily.length > 0;
+  
+  // KPI Row 1
   const momClass = d.mom_change_pct !== null && d.mom_change_pct > 0 ? 'up' : 'down';
   const momSign = d.mom_change_pct !== null && d.mom_change_pct >= 0 ? '+' : '';
-
-  document.getElementById('kpi-row').innerHTML =
+  
+  container.innerHTML += '<div class="kpi-row">' +
     '<div class="kpi-card">' +
       '<div class="label">月度总收运量</div>' +
       '<div class="value">' + fmtNum(d.total_ton, 1) + '<span class="unit">吨</span></div>' +
@@ -932,9 +587,11 @@ function renderKPIs() {
       '<div class="label">月内单日谷值</div>' +
       '<div class="value">' + d.valley.ton + '<span class="unit">吨</span></div>' +
       '<div class="sub">' + d.valley.date + ' ' + d.valley.weekday + ' · ' + d.valley.trips + '车次</div>' +
-    '</div>';
+    '</div>' +
+  '</div>';
   
-  document.getElementById('kpi-trend-row').innerHTML =
+  // KPI Row 2 (trend)
+  container.innerHTML += '<div class="kpi-row">' +
     '<div class="kpi-card">' +
       '<div class="label">上月总量</div>' +
       '<div class="value">' + (d.prev_month_total_ton > 0 ? fmtNum(d.prev_month_total_ton, 1) : '-') + '<span class="unit">吨</span></div>' +
@@ -955,67 +612,147 @@ function renderKPIs() {
       '<div class="label">趋势判断</div>' +
       '<div class="value" style="font-size:22px;">&#x2009;' + d.trend_label + '</div>' +
       '<div class="sub">覆盖 ' + (d.vehicle_count >= 0 ? d.vehicle_count : 'N/A') + ' 台车辆</div>' +
+    '</div>' +
+  '</div>';
+  
+  // Charts
+  if (hasDaily) {
+    container.innerHTML += '<div class="chart-grid">' +
+      '<div class="chart-card">' +
+        '<h3>📅 周度收运量分解</h3>' +
+        '<canvas id="chart-weekly-breakdown"></canvas>' +
+      '</div>' +
+      '<div class="chart-card">' +
+        '<h3>📈 日收运量趋势</h3>' +
+        '<canvas id="chart-daily-trend"></canvas>' +
+      '</div>' +
+      '<div class="chart-card">' +
+        '<h3>🏘️ 区域收运分布</h3>' +
+        '<canvas id="chart-region-pie"></canvas>' +
+      '</div>' +
+      '<div class="chart-card">' +
+        '<h3>📅 工作日 vs 周末收运模式</h3>' +
+        '<canvas id="chart-weekday-pattern"></canvas>' +
+      '</div>' +
     '</div>';
-  
-  // Pending alert
-  if (d.has_pending) {
-    var pendingBadges = d.pending_dates.map(function(dt) {
-      return '<span class="pending-date">' + dt + '</span>';
-    }).join('');
-    document.getElementById('pending-alert').style.display = 'flex';
-    document.getElementById('pending-alert').className = 'pending-alert';
-    document.getElementById('pending-alert').innerHTML =
-      '<span class="icon">&#x26A0;</span>' +
-      '<div>' +
-        '<strong>部分日期数据待上传</strong><br>' +
-        '以下 ' + d.pending_count + ' 天数据尚未上传：' + pendingBadges +
-        '。数据上传后将自动纳入统计。' +
-      '</div>';
+  } else {
+    container.innerHTML += '<div class="chart-grid">' +
+      '<div class="chart-card">' +
+        '<h3>📅 周度收运量分解</h3>' +
+        '<canvas id="chart-weekly-breakdown"></canvas>' +
+      '</div>' +
+      '<div class="chart-card">' +
+        '<h3>🏘️ 区域收运分布</h3>' +
+        '<canvas id="chart-region-pie"></canvas>' +
+      '</div>' +
+      '<div class="chart-card">' +
+        '<h3>📅 工作日 vs 周末收运模式</h3>' +
+        '<canvas id="chart-weekday-pattern"></canvas>' +
+      '</div>' +
+    '</div>';
   }
   
-  // v3.1: 数据质量警报
-  var dq = d.data_quality || {};
-  if (dq.severity === 'ERROR' || dq.severity === 'WARNING') {
-    var qa = document.getElementById('quality-alert');
-    qa.style.display = 'block';
-    var severityBg = dq.severity === 'ERROR' ? 'linear-gradient(135deg, #fee2e2, #fecaca)' : 'linear-gradient(135deg, #fef3c7, #fde68a)';
-    var severityBorder = dq.severity === 'ERROR' ? '#f87171' : '#fbbf24';
-    var severityColor = dq.severity === 'ERROR' ? '#991b1b' : '#92400e';
-    var severityIcon = dq.severity === 'ERROR' ? '&#x274C;' : '&#x26A0;';
-    
-    var qualityHtml = '<div style="background:' + severityBg + ';border:1px solid ' + severityBorder + ';border-radius:14px;padding:14px 20px;margin-bottom:20px;font-size:13px;color:' + severityColor + ';">' +
-      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">' +
-        '<span style="font-size:20px;">' + severityIcon + '</span>' +
-        '<strong>数据质量评分: ' + dq.quality_score + '/100</strong>' +
-        '<span style="font-size:12px;opacity:0.7;">(' + dq.summary + ')</span>' +
-      '</div>';
-    
-    if (dq.errors && dq.errors.length > 0) {
-      qualityHtml += '<div style="margin-top:8px;padding-left:30px;">';
-      dq.errors.forEach(function(e) {
-        qualityHtml += '<div style="margin:4px 0;color:#991b1b;">&#x1F534; [' + e.field + '] ' + e.message + '</div>';
-      });
-      qualityHtml += '</div>';
-    }
-    if (dq.warnings && dq.warnings.length > 0) {
-      qualityHtml += '<div style="margin-top:8px;padding-left:30px;">';
-      dq.warnings.forEach(function(w) {
-        qualityHtml += '<div style="margin:4px 0;color:#92400e;">&#x26A0; [' + w.field + '] ' + w.message + '</div>';
-      });
-      qualityHtml += '</div>';
-    }
-    qualityHtml += '</div>';
-    qa.innerHTML = qualityHtml;
-  }
+  // Weekly detail table
+  container.innerHTML += '<div class="table-card">' +
+    '<h3>📋 周度收运明细</h3>' +
+    '<table class="detail-table">' +
+      '<thead><tr><th>周次</th><th>日期范围</th><th>周总量 (吨)</th><th>日均 (吨)</th><th>车次</th><th>趋势</th></tr></thead>' +
+      '<tbody>' + d.weekly_breakdown.map(function(w) {
+        return '<tr>' +
+          '<td><strong>第' + w.week + '周</strong></td>' +
+          '<td>' + w.date_range + '</td>' +
+          '<td><strong>' + fmtNum(w.total_ton, 1) + '</strong></td>' +
+          '<td>' + w.avg_daily + '</td>' +
+          '<td>' + w.total_trips + '</td>' +
+          '<td style="color:' + w.trend_color + '">' + w.trend_label + '</td>' +
+        '</tr>';
+      }).join('') + '</tbody>' +
+    '</table>' +
+  '</div>';
+  
+  // Regions + Weekday pattern
+  container.innerHTML += '<div class="dual-table">' +
+    '<div class="table-card">' +
+      '<h3>🏘️ 各区域收运量占比</h3>' +
+      '<table class="detail-table">' +
+        '<thead><tr><th>区域</th><th>月总量 (吨)</th><th>占比</th><th>车次</th><th>车均 (kg)</th></tr></thead>' +
+        '<tbody>' + d.regions.map(function(r, i) {
+          const color = CHART_COLORS[i % CHART_COLORS.length];
+          const pct = (r.kg / d.total_kg * 100).toFixed(1);
+          const avgPerTrip = Math.round(r.kg / r.trips);
+          return '<tr>' +
+            '<td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + color + ';margin-right:8px;"></span>' + r.name + '</td>' +
+            '<td><strong>' + fmtTon(r.kg, 1) + '</strong></td>' +
+            '<td>' + pct + '%</td>' +
+            '<td>' + r.trips + '</td>' +
+            '<td>' + fmtNum(avgPerTrip) + '</td>' +
+          '</tr>';
+        }).join('') + '</tbody>' +
+      '</table>' +
+    '</div>' +
+    '<div class="table-card">' +
+      '<h3>📅 工作日/周末收运模式</h3>' +
+      '<table class="detail-table">' +
+        '<thead><tr><th>类别</th><th>日均收运量 (吨)</th><th>统计天数</th></tr></thead>' +
+        '<tbody>' + [
+          ['工作日 (周一~周五)', d.weekday_pattern.workday_avg_ton || '-', d.weekday_pattern.workday_avg_ton ? '~' + Math.round(d.data_days * 5/7) + ' 天' : '-'],
+          ['周末 (周六~周日)', d.weekday_pattern.weekend_avg_ton || '-', d.weekday_pattern.weekend_avg_ton ? '~' + Math.round(d.data_days * 2/7) + ' 天' : '-'],
+          ['周末较工作日下降', d.weekday_pattern.weekend_drop_pct > 0 ? d.weekday_pattern.weekend_drop_pct + '%' : '-', '']
+        ].map(function(row) {
+          return '<tr>' +
+            '<td><strong>' + row[0] + '</strong></td>' +
+            '<td><strong>' + row[1] + ' 吨/日</strong></td>' +
+            '<td style="color:var(--text-secondary);">' + row[2] + '</td>' +
+          '</tr>';
+        }).join('') + '</tbody>' +
+      '</table>' +
+    '</div>' +
+  '</div>';
+  
+  // Vehicles
+  container.innerHTML += '<div class="dual-table">' +
+    '<div class="table-card">' +
+      '<h3>🏆 运力TOP10 · 高效车辆</h3>' +
+      '<table class="detail-table">' +
+        '<thead><tr><th>#</th><th>车牌号</th><th>月总量 (kg)</th><th>车次</th><th>车均 (kg)</th><th>区域</th></tr></thead>' +
+        '<tbody>' + d.vehicles_top10.map(function(v, i) {
+          return '<tr>' +
+            '<td><strong>' + (i + 1) + '</strong></td>' +
+            '<td><strong>' + v.plate + '</strong></td>' +
+            '<td>' + fmtNum(v.kg) + '</td>' +
+            '<td>' + v.trips + '</td>' +
+            '<td>' + fmtNum(v.avg_per_trip) + '</td>' +
+            '<td style="font-size:12px;color:var(--text-secondary);">' + (v.unit || '') + '</td>' +
+          '</tr>';
+        }).join('') + '</tbody>' +
+      '</table>' +
+    '</div>' +
+    '<div class="table-card">' +
+      '<h3>⚠️ 运力后10名 · 需关注车辆</h3>' +
+      '<table class="detail-table">' +
+        '<thead><tr><th>#</th><th>车牌号</th><th>月总量 (kg)</th><th>车次</th><th>车均 (kg)</th><th>区域</th></tr></thead>' +
+        '<tbody>' + d.vehicles_bottom10.map(function(v, i) {
+          return '<tr>' +
+            '<td style="color:#991b1b;font-weight:700;">' + (d.vehicles_bottom10.length - i) + '</td>' +
+            '<td><strong>' + v.plate + '</strong></td>' +
+            '<td>' + fmtNum(v.kg) + '</td>' +
+            '<td>' + v.trips + '</td>' +
+            '<td>' + fmtNum(v.avg_per_trip) + '</td>' +
+            '<td style="font-size:12px;color:var(--text-secondary);">' + (v.unit || '') + '</td>' +
+          '</tr>';
+        }).join('') + '</tbody>' +
+      '</table>' +
+    '</div>' +
+  '</div>';
+  
+  // Render charts
+  setTimeout(function() {
+    renderMonthCharts(d, hasDaily);
+  }, 0);
 }
 
-// ============================================================
-// Charts
-// ============================================================
-function renderCharts() {
-  const d = MONTHLY_DATA;
-  
-  // 1. Weekly Breakdown Bar Chart
+function renderMonthCharts(d, hasDaily) {
+  // 1. Weekly Breakdown
   (function() {
     const ctx = document.getElementById('chart-weekly-breakdown');
     if (!ctx) return;
@@ -1033,89 +770,57 @@ function renderCharts() {
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: function(ctx) {
-                const w = wb[ctx.dataIndex];
-                return '总量: ' + w.total_ton + '吨 · 日均: ' + w.avg_daily + '吨 · ' + w.total_trips + '车次';
-              }
-            }
-          }
-        },
-        scales: {
-          y: { beginAtZero: false, title: { display: true, text: '吨' } }
-        }
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: false, title: { display: true, text: '吨' } } }
       }
     });
   })();
-
-  // 2. Daily Trend Line Chart
-  (function() {
-    const ctx = document.getElementById('chart-daily-trend');
-    if (!ctx) return;
-    const daily = d.daily;
-    const peakIdx = daily.findIndex(x => x.total_kg === d.peak.kg && !x.pending);
-    const valleyIdx = daily.findIndex(x => x.total_kg === d.valley.kg && !x.pending);
-    
-    const defaultRadius = daily.map(function(x) { return x.pending ? 2 : 3; });
-    const pointColors = daily.map(function(x, i) {
-      if (x.pending) return '#cbd5e1';
-      if (i === peakIdx) return '#e15759';
-      if (i === valleyIdx) return '#59a14f';
-      return '#4C72B0';
-    });
-    const pointRadii = daily.map(function(x, i) {
-      if (x.pending) return 2;
-      if (i === peakIdx || i === valleyIdx) return 6;
-      return 3;
-    });
-
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: daily.map(x => x.date),
-        datasets: [{
-          label: '收运量 (吨)',
-          data: daily.map(x => x.total_kg / 1000),
-          borderColor: '#4C72B0',
-          backgroundColor: 'rgba(76,114,176,0.1)',
-          fill: true,
-          tension: 0.3,
-          pointRadius: pointRadii,
-          pointBackgroundColor: pointColors,
-          pointBorderColor: pointColors,
-          segment: {
-            borderDash: function(ctx) {
-              var idx = ctx.p0DataIndex;
-              return daily[idx].pending ? [5, 5] : undefined;
-            }
-          }
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: function(ctx) {
-                const x = daily[ctx.dataIndex];
-                if (x.pending) return x.date + ' · ' + x.weekday + ' · 数据待上传';
-                return fmtTon(x.total_kg, 1) + '吨 · ' + x.trips + '车次 · ' + x.weekday;
-              }
-            }
-          }
+  
+  // 2. Daily Trend (if available)
+  if (hasDaily) {
+    (function() {
+      const ctx = document.getElementById('chart-daily-trend');
+      if (!ctx) return;
+      const daily = d.daily;
+      const peakIdx = daily.findIndex(x => x.total_kg === d.peak.kg && !x.pending);
+      const valleyIdx = daily.findIndex(x => x.total_kg === d.valley.kg && !x.pending);
+      const pointColors = daily.map(function(x, i) {
+        if (x.pending) return '#cbd5e1';
+        if (i === peakIdx) return '#e15759';
+        if (i === valleyIdx) return '#59a14f';
+        return '#4C72B0';
+      });
+      const pointRadii = daily.map(function(x, i) {
+        if (x.pending) return 2;
+        if (i === peakIdx || i === valleyIdx) return 6;
+        return 3;
+      });
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: daily.map(x => x.date),
+          datasets: [{
+            label: '收运量 (吨)',
+            data: daily.map(x => x.total_kg / 1000),
+            borderColor: '#4C72B0',
+            backgroundColor: 'rgba(76,114,176,0.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: pointRadii,
+            pointBackgroundColor: pointColors,
+            pointBorderColor: pointColors
+          }]
         },
-        scales: {
-          y: { beginAtZero: false, title: { display: true, text: '吨' } },
-          x: { ticks: { maxRotation: 45 } }
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: false, title: { display: true, text: '吨' } }, x: { ticks: { maxRotation: 45 } } }
         }
-      }
-    });
-  })();
-
-  // 3. Region Pie Chart
+      });
+    })();
+  }
+  
+  // 3. Region Pie
   (function() {
     const ctx = document.getElementById('chart-region-pie');
     if (!ctx || d.regions.length === 0) return;
@@ -1132,33 +837,19 @@ function renderCharts() {
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: { position: 'bottom' },
-          tooltip: {
-            callbacks: {
-              label: function(ctx) {
-                const r = d.regions[ctx.dataIndex];
-                const pct = (r.kg / d.total_kg * 100).toFixed(1);
-                return r.name + ': ' + fmtTon(r.kg, 1) + '吨 (' + pct + '%)';
-              }
-            }
-          }
-        }
+        plugins: { legend: { position: 'bottom' } }
       }
     });
   })();
-
-  // 4. Weekday Pattern Bar Chart
+  
+  // 4. Weekday Pattern
   (function() {
     const ctx = document.getElementById('chart-weekday-pattern');
     if (!ctx) return;
     const wp = d.weekday_pattern;
     const days = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
     const values = days.map(wd => wp[wd] ? wp[wd].avg_ton : 0);
-    const colors = days.map(wd => 
-      wd === '周六' || wd === '周日' ? '#e15759' : '#4C72B0'
-    );
-    
+    const colors = days.map(wd => wd === '周六' || wd === '周日' ? '#e15759' : '#4C72B0');
     new Chart(ctx, {
       type: 'bar',
       data: {
@@ -1172,111 +863,27 @@ function renderCharts() {
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: function(ctx) {
-                const wd = days[ctx.dataIndex];
-                const p = wp[wd];
-                return p ? p.avg_ton + '吨/日 · ' + p.count + '天' : '0吨';
-              }
-            }
-          }
-        },
-        scales: {
-          y: { beginAtZero: false, title: { display: true, text: '吨/日' } }
-        }
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: false, title: { display: true, text: '吨/日' } } }
       }
     });
   })();
 }
 
 // ============================================================
-// Tables
-// ============================================================
-function renderTables() {
-  const d = MONTHLY_DATA;
-  
-  // Weekly Detail
-  document.getElementById('weekly-detail-body').innerHTML = d.weekly_breakdown.map(function(w) {
-    return '<tr>' +
-      '<td><strong>第' + w.week + '周</strong></td>' +
-      '<td>' + w.date_range + '</td>' +
-      '<td><strong>' + fmtNum(w.total_ton, 1) + '</strong></td>' +
-      '<td>' + w.avg_daily + '</td>' +
-      '<td>' + w.total_trips + '</td>' +
-      '<td style="color:' + w.trend_color + '">' + w.trend_label + '</td>' +
-    '</tr>';
-  }).join('');
-
-  // Regions
-  document.getElementById('region-table-body').innerHTML = d.regions.map(function(r, i) {
-    const color = CHART_COLORS[i % CHART_COLORS.length];
-    const pct = (r.kg / d.total_kg * 100).toFixed(1);
-    const avgPerTrip = Math.round(r.kg / r.trips);
-    return '<tr>' +
-      '<td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + color + ';margin-right:8px;"></span>' + r.name + '</td>' +
-      '<td><strong>' + fmtTon(r.kg, 1) + '</strong></td>' +
-      '<td>' + pct + '%</td>' +
-      '<td>' + r.trips + '</td>' +
-      '<td>' + fmtNum(avgPerTrip) + '</td>' +
-    '</tr>';
-  }).join('');
-
-  // Weekday Pattern
-  const wp = d.weekday_pattern;
-  document.getElementById('weekday-pattern-body').innerHTML = [
-    ['工作日 (周一~周五)', wp.workday_avg_ton || '-', wp.workday_avg_ton ? '~' + (wp.workday_avg_ton > 0 ? Math.round(d.data_days * 5/7) : 0) + ' 天' : '-'],
-    ['周末 (周六~周日)', wp.weekend_avg_ton || '-', wp.weekend_avg_ton ? '~' + (wp.weekend_avg_ton > 0 ? Math.round(d.data_days * 2/7) : 0) + ' 天' : '-'],
-    ['周末较工作日下降', wp.weekend_drop_pct > 0 ? wp.weekend_drop_pct + '%' : '-', '']
-  ].map(function(row) {
-    return '<tr>' +
-      '<td><strong>' + row[0] + '</strong></td>' +
-      '<td><strong>' + row[1] + ' 吨/日</strong></td>' +
-      '<td style="color:var(--text-secondary);">' + row[2] + '</td>' +
-    '</tr>';
-  }).join('');
-
-  // Top 10 Vehicles
-  document.getElementById('top10-body').innerHTML = d.vehicles_top10.map(function(v, i) {
-    return '<tr>' +
-      '<td><strong>' + (i + 1) + '</strong></td>' +
-      '<td><strong>' + v.plate + '</strong></td>' +
-      '<td>' + fmtNum(v.kg) + '</td>' +
-      '<td>' + v.trips + '</td>' +
-      '<td>' + fmtNum(v.avg_per_trip) + '</td>' +
-      '<td style="font-size:12px;color:var(--text-secondary);">' + (v.unit || '') + '</td>' +
-    '</tr>';
-  }).join('');
-
-  // Bottom 10 Vehicles
-  document.getElementById('bottom10-body').innerHTML = d.vehicles_bottom10.map(function(v, i) {
-    return '<tr>' +
-      '<td style="color:#991b1b;font-weight:700;">' + (d.vehicles_bottom10.length - i) + '</td>' +
-      '<td><strong>' + v.plate + '</strong></td>' +
-      '<td>' + fmtNum(v.kg) + '</td>' +
-      '<td>' + v.trips + '</td>' +
-      '<td>' + fmtNum(v.avg_per_trip) + '</td>' +
-      '<td style="font-size:12px;color:var(--text-secondary);">' + (v.unit || '') + '</td>' +
-    '</tr>';
-  }).join('');
-
-  // Add peak/valley highlight to daily trend data
-  var peakDay = null, valleyDay = null;
-  for (var i = 0; i < d.daily.length; i++) {
-    if (d.daily[i].total_kg === d.peak.kg) peakDay = d.daily[i];
-    if (d.daily[i].total_kg === d.valley.kg) valleyDay = d.daily[i];
-  }
-}
-
-// ============================================================
 // Init
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-  renderKPIs();
-  renderCharts();
-  renderTables();
+  // Bind tab click events
+  document.querySelectorAll('.month-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      const month = this.getAttribute('data-month');
+      switchMonth(month);
+    });
+  });
+  
+  // Default to summary
+  switchMonth('summary');
 });
 </script>
 </body>
