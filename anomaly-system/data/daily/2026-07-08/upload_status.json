@@ -1,0 +1,26 @@
+{
+  "uploads": [
+    {
+      "target_date": "unknown",
+      "file_path": "/Users/mac/.workbuddy/hnft-site/anomaly-system/data/daily/2026-07-08/report.md",
+      "file_name": "report.md",
+      "status": "SKIPPED_INVALID",
+      "media_id": null,
+      "error_message": "缺少必需章节: '数据概览'; 缺少必需章节: '异常检测'; 未检测到日期标记（X月X日）; 未检测到生成时间戳",
+      "is_duplicate": false,
+      "skipped": false,
+      "timestamp": "2026-07-08T20:30:44.498233"
+    },
+    {
+      "target_date": "unknown",
+      "file_path": "/Users/mac/.workbuddy/hnft-site/anomaly-system/data/daily/2026-07-08/report.md",
+      "file_name": "report.md",
+      "status": "FAILED",
+      "media_id": null,
+      "error_message": "HTTP Error 401: Unauthorized",
+      "is_duplicate": false,
+      "skipped": false,
+      "timestamp": "2026-07-08T20:31:17.621831"
+    }
+  ]
+}
