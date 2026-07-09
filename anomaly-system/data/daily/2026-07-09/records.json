@@ -1,17 +1,17 @@
 {
   "date": "2026-07-09",
-  "generated_at": "2026-07-03T11:25:52+08:00",
+  "generated_at": "2026-07-09T20:25:51+08:00",
   "records": [
     {
       "merchant_id": "M004",
       "merchant_name": "云溪学校食堂",
       "collection_date": "2026-07-09",
       "actual_weight_kg": 0,
-      "baseline_weight_kg": 56.0,
+      "baseline_weight_kg": 62.9,
       "deviation_pct": -100.0,
       "deviation_level": "severe",
       "deviation_direction": "偏低",
-      "baseline_confidence": "low",
+      "baseline_confidence": "medium",
       "scale_id": "SCALE-04",
       "vehicle_id": "",
       "collection_time": "",
