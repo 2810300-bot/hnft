@@ -1,0 +1,104 @@
+[
+  {
+    "time": "2026-07-10T14:22:10",
+    "result": "sync_failed",
+    "stage": "未知阶段",
+    "notify_ok": true,
+    "notify_res": "ok"
+  },
+  {
+    "time": "2026-07-10T14:22:10",
+    "result": "sync_failed",
+    "stage": "获取 IMA 文件列表",
+    "notify_ok": true,
+    "notify_res": "ok"
+  },
+  {
+    "time": "2026-07-10T14:22:10",
+    "result": "sync_failed",
+    "stage": "未知阶段",
+    "notify_ok": true,
+    "notify_res": "ok"
+  },
+  {
+    "time": "2026-07-10T14:22:10",
+    "result": "notify_skipped_no_webhook",
+    "sync_rc": 1,
+    "changes": 2
+  },
+  {
+    "time": "2026-07-10T14:22:56",
+    "result": "ok",
+    "changes": 2,
+    "removed": 0,
+    "notify_ok": true,
+    "notify_res": "ok"
+  },
+  {
+    "time": "2026-07-10T14:22:56",
+    "result": "sync_failed",
+    "stage": "获取 IMA 文件列表",
+    "notify_ok": true,
+    "notify_res": "ok"
+  },
+  {
+    "time": "2026-07-10T14:22:56",
+    "result": "sync_failed",
+    "stage": "未知阶段",
+    "notify_ok": true,
+    "notify_res": "ok"
+  },
+  {
+    "time": "2026-07-10T14:22:56",
+    "result": "notify_skipped_no_webhook",
+    "sync_rc": 0,
+    "changes": 2
+  },
+  {
+    "time": "2026-07-10T14:23:15",
+    "result": "ok",
+    "changes": 2,
+    "removed": 0,
+    "notify_ok": true,
+    "notify_res": "ok"
+  },
+  {
+    "time": "2026-07-10T14:23:15",
+    "result": "sync_failed",
+    "stage": "获取 IMA 文件列表",
+    "notify_ok": true,
+    "notify_res": "ok"
+  },
+  {
+    "time": "2026-07-10T14:23:15",
+    "result": "ok",
+    "changes": 0,
+    "removed": 0,
+    "notify_ok": true,
+    "notify_res": "ok"
+  },
+  {
+    "time": "2026-07-10T14:23:15",
+    "result": "notify_skipped_no_webhook",
+    "sync_rc": 0,
+    "changes": 2
+  },
+  {
+    "time": "2026-07-10T14:36:32",
+    "result": "sync_failed",
+    "stage": "获取 IMA 文件列表",
+    "notify_ok": false,
+    "notify_res": {
+      "errcode": 300005,
+      "errmsg": "token is not exist"
+    }
+  },
+  {
+    "time": "2026-07-10T15:16:41",
+    "result": "ok",
+    "changes": 2,
+    "removed": 0,
+    "notify_ok": true,
+    "notify_res": "ok"
+  }
+]
