@@ -70,6 +70,69 @@ fi
 
 echo "  目标: ${REPO_URL%%@*}@github.com/...（token 已隐藏）"
 
+# ------------------------------------------------------------
+# 代理探测：git 的 http.proxy 可能指向一个未运行的端口（如 7891）。
+# 自动探测「正在监听」的代理并改用，避免部署因死代理而失败。
+# ------------------------------------------------------------
+# 检查 host:port 是否可连通
+port_listen() {
+    local hp="$1"
+    [ -z "$hp" ] && return 1
+    local host port
+    host=$(echo "$hp" | cut -d: -f1)
+    port=$(echo "$hp" | cut -d: -f2)
+    [ -z "$host" ] && return 1
+    [ -z "$port" ] && return 1
+    (exec 3<>/dev/tcp/$host/$port) 2>/dev/null
+}
+
+# 返回环境中第一个「正在监听」的代理（http://host:port 形式）
+env_live_proxy() {
+    for envvar in HTTPS_PROXY https_proxy HTTP_PROXY http_proxy; do
+        local val="${!envvar:-}"
+        [ -z "$val" ] && continue
+        local hp
+        hp=$(echo "$val" | sed -E 's#^[a-zA-Z]+://##; s#/.*##; s#\?.*##')
+        if port_listen "$hp"; then
+            echo "http://$hp"
+            return 0
+        fi
+    done
+    return 1
+}
+
+GIT_PROXY=$(git config --get http.proxy 2>/dev/null || true)
+GIT_PROXY_HOSTPORT=$(echo "$GIT_PROXY" | sed -E 's#^[a-zA-Z]+://##; s#/.*##')
+
+# 选定最终代理 PROXY_URL（http://host:port）或空串（直连）
+PROXY_URL=""
+if [ -n "$GIT_PROXY" ] && port_listen "$GIT_PROXY_HOSTPORT"; then
+    echo "   🔎 git 代理可用: $GIT_PROXY_HOSTPORT（沿用）"
+elif PROXY_URL=$(env_live_proxy); then
+    echo "   🔎 git 代理不可用（${GIT_PROXY_HOSTPORT:-无}），改用环境代理: ${PROXY_URL#*//}"
+else
+    echo "   🔎 未发现可用代理，git 将尝试直连"
+fi
+
+# 生成 git 命令代理前缀；同时导出给 REST API 的 Python（urllib 读 HTTPS_PROXY）
+if [ -n "$PROXY_URL" ]; then
+    EFF_PROXY_PREFIX="GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.proxy GIT_CONFIG_VALUE_0=$PROXY_URL"
+    export HTTPS_PROXY="$PROXY_URL"
+    export HTTP_PROXY="$PROXY_URL"
+else
+    # 清空 git 代理，退回系统默认/直连（env 中可能仍有可用代理）
+    EFF_PROXY_PREFIX="GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.proxy GIT_CONFIG_VALUE_0="
+fi
+
+# 统一走代理前缀执行 git 网络命令的封装
+git_run() {
+    if [ -n "$EFF_PROXY_PREFIX" ]; then
+        eval "$EFF_PROXY_PREFIX" git "$@"
+    else
+        git "$@"
+    fi
+}
+
 # 检查变更
 CHANGES=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
 if [ "$CHANGES" -eq 0 ]; then
@@ -93,27 +156,35 @@ git commit -m "$COMMIT_MSG" || { echo "⚠️ 无内容可提交"; exit 0; }
 
 # 同步远程最新代码（此时工作区干净，rebase 不会冲突）
 echo "📥 同步远程最新代码..."
-git fetch origin "$BRANCH" 2>/dev/null && git rebase origin/"$BRANCH" 2>/dev/null || echo "   (远程仓库尚不存在或无法访问，使用本地版本)"
+git_run fetch origin "$BRANCH" 2>/dev/null && git_run rebase origin/"$BRANCH" 2>/dev/null || echo "   (远程仓库尚不存在或无法访问，使用本地版本)"
 
-# 推送到 GitHub Pages
+# 推送到 GitHub Pages（已自动选用可用代理；非快进自动 rebase 重试）
 echo "🚀 推送到 GitHub Pages (git push)..."
-MAX_RETRIES=2
+MAX_RETRIES=3
 RETRY_COUNT=0
 PUSH_OK=false
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-    if git push origin "$BRANCH" 2>&1; then
+    OUT=$(git_run push origin "$BRANCH" 2>&1)
+    PUSH_RC=$?
+    if [ $PUSH_RC -eq 0 ]; then
+        echo "$OUT"
         echo ""
         echo "✅ git push 部署成功！"
         echo "   🌐 https://${OWNER}.github.io/${REPO}/"
         PUSH_OK=true
         break
-    else
-        RETRY_COUNT=$((RETRY_COUNT + 1))
-        if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
-            echo "   ⚠️ 推送失败，${RETRY_COUNT}/${MAX_RETRIES} 次重试，等待 5 秒..."
-            sleep 5
-        fi
     fi
+    echo "$OUT"
+    # 非快进：先同步远程再试（避免死代理之外的常见失败）
+    if echo "$OUT" | grep -qiE "non-fast-forward|rejected|fetch first"; then
+        echo "   ↳ 检测到非快进，拉取并 rebase 远程后重试..."
+        git_run fetch origin "$BRANCH" 2>/dev/null
+        git_run rebase "origin/$BRANCH" 2>/dev/null || git_run rebase --abort 2>/dev/null
+    else
+        echo "   ⚠️ 推送失败，等待 5 秒后重试..."
+        sleep 5
+    fi
+    RETRY_COUNT=$((RETRY_COUNT + 1))
 done
 
 # 若 git push 全部失败，回退到 GitHub REST API 逐文件推送
