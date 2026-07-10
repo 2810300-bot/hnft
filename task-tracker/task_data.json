@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "last_updated": "2026-07-07T12:28:18+08:00",
+  "last_updated": "2026-07-10T08:05:58+08:00",
   "source": "IMA知识库 > 岳阳市厨余垃圾资源化利用和无害化处理项目 > 待办事项跟踪",
   "source_folder_id": "folder_7475472996785309",
-  "source_file": "工作任务事项清单表（6月25日更新）.xls",
+  "source_file": "工作任务事项清单表（7月9日更新）.xls",
   "stats": {
-    "total": 25,
-    "completed": 12,
-    "in_progress": 3,
-    "pending": 0,
-    "overdue": 10
+    "total": 33,
+    "completed": 17,
+    "in_progress": 10,
+    "pending": 2,
+    "overdue": 4
   },
   "tasks": [
     {
@@ -74,7 +74,7 @@
     {
       "id": "t05",
       "category": "临时重点工作",
-      "content": "生产现场进行“5S”管理整顿，拟写详细的“5S”整顿整改方案，按照方案推进相关整改事项。5月31日前拟写好整改方案并讨论通过。",
+      "content": "生产现场进行\"5S\"管理整顿，拟写详细的\"5S\"整顿整改方案，按照方案推进相关整改事项。5月31日前拟写好整改方案并讨论通过。",
       "responsible": [
         "龙冠学",
         "吴胡兵",
@@ -84,8 +84,8 @@
       "status": "overdue",
       "completed_date": "",
       "priority": "critical",
-      "notes": "已对厂区进行“5S”整顿整改专项检查，正在将检查问题整理拟写整改方案",
-      "overdue_since": "2026-07-07"
+      "notes": "优化整改方案中",
+      "overdue_since": "2026-07-10"
     },
     {
       "id": "t06",
@@ -165,11 +165,10 @@
         "李真"
       ],
       "deadline": "2026-06-10",
-      "status": "overdue",
-      "completed_date": "",
+      "status": "completed",
+      "completed_date": "2026-06-10",
       "priority": "high",
-      "notes": "已对初稿进行讨论，根据会议意见进行修改中",
-      "overdue_since": "2026-07-07"
+      "notes": "选择试点区域开展工作"
     },
     {
       "id": "t12",
@@ -193,11 +192,10 @@
         "李慧"
       ],
       "deadline": "2026-06-30",
-      "status": "overdue",
-      "completed_date": "",
+      "status": "completed",
+      "completed_date": "2026-06-30",
       "priority": "high",
-      "notes": "",
-      "overdue_since": "2026-07-07"
+      "notes": ""
     },
     {
       "id": "t14",
@@ -239,7 +237,7 @@
       "completed_date": "",
       "priority": "medium",
       "notes": "",
-      "overdue_since": "2026-07-07"
+      "overdue_since": "2026-07-10"
     },
     {
       "id": "t17",
@@ -250,11 +248,10 @@
         "施洪彬"
       ],
       "deadline": "2026-06-30",
-      "status": "overdue",
-      "completed_date": "",
+      "status": "completed",
+      "completed_date": "2026-06-30",
       "priority": "critical",
-      "notes": "",
-      "overdue_since": "2026-07-07"
+      "notes": ""
     },
     {
       "id": "t18",
@@ -269,7 +266,7 @@
       "completed_date": "",
       "priority": "critical",
       "notes": "",
-      "overdue_since": "2026-07-07"
+      "overdue_since": "2026-07-10"
     },
     {
       "id": "t19",
@@ -287,21 +284,6 @@
       "notes": ""
     },
     {
-      "id": "t20",
-      "category": "临时重点工作",
-      "content": "优化调整管理人员绩效考核内容，考核内容需更贴近工作内容和收运生产情况。",
-      "responsible": [
-        "龙冠学",
-        "李莉"
-      ],
-      "deadline": "2026-06-30",
-      "status": "overdue",
-      "completed_date": "",
-      "priority": "medium",
-      "notes": "",
-      "overdue_since": "2026-07-07"
-    },
-    {
       "id": "t21",
       "category": "临时重点工作",
       "content": "厂区涉及到环保方面的整改工程，包括厌氧罐区污水管网改造、锅炉冷却池修复、建筑物雨水管道疏通更换等采购进度需加快推进。",
@@ -309,11 +291,10 @@
         "鲁文辉"
       ],
       "deadline": "2026-06-30",
-      "status": "overdue",
-      "completed_date": "",
+      "status": "completed",
+      "completed_date": "2026-06-30",
       "priority": "high",
-      "notes": "",
-      "overdue_since": "2026-07-07"
+      "notes": ""
     },
     {
       "id": "t22",
@@ -327,7 +308,7 @@
       "completed_date": "",
       "priority": "high",
       "notes": "",
-      "overdue_since": "2026-07-07"
+      "overdue_since": "2026-07-10"
     },
     {
       "id": "t23",
@@ -338,11 +319,136 @@
         "吴胡兵"
       ],
       "deadline": "2026-06-30",
-      "status": "overdue",
+      "status": "completed",
+      "completed_date": "2026-06-30",
+      "priority": "high",
+      "notes": ""
+    },
+    {
+      "id": "t23",
+      "category": "临时重点工作",
+      "content": "收运部在1个月内完成所有收运数据夯实，要求司机严格执行打卡、扫码、称重制度，7月底前完成未安装车载秤车辆的认殳备安装。",
+      "responsible": [
+        "李慧",
+        "鲁文辉"
+      ],
+      "deadline": "2026-07-31",
+      "status": "in_progress",
       "completed_date": "",
       "priority": "high",
-      "notes": "",
-      "overdue_since": "2026-07-07"
+      "notes": ""
+    },
+    {
+      "id": "t24",
+      "category": "临时重点工作",
+      "content": "PMO部每日导出收运原始数据，标注异常点位并反馈给收运部与运维部，联合核实原因并解决。",
+      "responsible": [
+        "龙冠学"
+      ],
+      "deadline": "2026-07-17",
+      "status": "in_progress",
+      "completed_date": "",
+      "priority": "medium",
+      "notes": "后续常态化开展"
+    },
+    {
+      "id": "r25",
+      "category": "常态化工作",
+      "content": "油脂销售建立油罐液位定期汇报机制(每2天一次)，提前筹划月度销售，确保现金流稳定。",
+      "responsible": [
+        "鲁文辉",
+        "施洪彬"
+      ],
+      "deadline": "2026-07-17",
+      "status": "in_progress",
+      "completed_date": "",
+      "priority": "medium",
+      "notes": ""
+    },
+    {
+      "id": "t26",
+      "category": "临时重点工作",
+      "content": "运维部7月11日前完成2000家商户的餐厨规格与收运量预估统计，7月26日前完成基础网格划分。",
+      "responsible": [
+        "李真"
+      ],
+      "deadline": "2026-07-26",
+      "status": "in_progress",
+      "completed_date": "",
+      "priority": "medium",
+      "notes": ""
+    },
+    {
+      "id": "t27",
+      "category": "临时重点工作",
+      "content": "生产部7月内完成库存水量清理、二线三相离心机维修、技改工程启动、专利资料整理等工作。",
+      "responsible": [
+        "施洪彬",
+        "苏铮铮",
+        "鲁文辉"
+      ],
+      "deadline": "2026-07-31",
+      "status": "in_progress",
+      "completed_date": "",
+      "priority": "medium",
+      "notes": ""
+    },
+    {
+      "id": "t28",
+      "category": "临时重点工作",
+      "content": "收运部加大易腐垃圾成本优化力度，7月份按4:1比例调整送至锦能的处置量，采购推进易腐垃圾合同续签，明确未续签的结算时限。财务部督促跟踪。",
+      "responsible": [
+        "李慧",
+        "鲁文辉",
+        "李洁"
+      ],
+      "deadline": "2026-07-31",
+      "status": "in_progress",
+      "completed_date": "",
+      "priority": "high",
+      "notes": ""
+    },
+    {
+      "id": "t29",
+      "category": "临时重点工作",
+      "content": "综合部与PMO部重新讨论并调整绩效考核指标，7月底前完成方案优化。",
+      "responsible": [
+        "李莉",
+        "龙冠学"
+      ],
+      "deadline": "2026-07-31",
+      "status": "in_progress",
+      "completed_date": "",
+      "priority": "high",
+      "notes": ""
+    },
+    {
+      "id": "t30",
+      "category": "临时重点工作",
+      "content": "收运、市场运维与PMO联合排查系统数据匹配异常原因，7月中旬前提交排查报告。",
+      "responsible": [
+        "龙冠学",
+        "李真",
+        "李慧"
+      ],
+      "deadline": "2026-07-17",
+      "status": "in_progress",
+      "completed_date": "",
+      "priority": "medium",
+      "notes": ""
+    },
+    {
+      "id": "r31",
+      "category": "常态化工作",
+      "content": "将数据核查、油脂销售进度纳入每周周会议程，定期复盘工作进展。",
+      "responsible": [
+        "龙冠学"
+      ],
+      "deadline": "2026-07-14",
+      "status": "in_progress",
+      "completed_date": "",
+      "priority": "high",
+      "notes": "后续常态化开展"
     },
     {
       "id": "r01",
@@ -352,7 +458,8 @@
         "李慧"
       ],
       "deadline": "",
-      "status": "in_progress",
+      "status": "pending",
+      "completed_date": "",
       "priority": "high",
       "notes": ""
     },
@@ -364,35 +471,36 @@
         "颜一亩"
       ],
       "deadline": "",
-      "status": "in_progress",
+      "status": "pending",
+      "completed_date": "",
       "priority": "critical",
       "notes": ""
     }
   ],
   "persons": [
     {
-      "name": "施洪彬",
-      "dept": "生产部",
-      "task_count": 8
-    },
-    {
       "name": "龙冠学",
       "dept": "PMO部",
-      "task_count": 8
+      "task_count": 11
+    },
+    {
+      "name": "施洪彬",
+      "dept": "生产部",
+      "task_count": 10
     },
     {
       "name": "李慧",
       "dept": "收运部",
-      "task_count": 7
-    },
-    {
-      "name": "李莉",
-      "dept": "综合管理部",
-      "task_count": 6
+      "task_count": 10
     },
     {
       "name": "鲁文辉",
       "dept": "采购部",
+      "task_count": 10
+    },
+    {
+      "name": "李莉",
+      "dept": "综合管理部",
       "task_count": 6
     },
     {
@@ -403,12 +511,12 @@
     {
       "name": "苏铮铮",
       "dept": "生产部",
-      "task_count": 3
+      "task_count": 4
     },
     {
       "name": "李真",
       "dept": "运维业务部",
-      "task_count": 2
+      "task_count": 4
     },
     {
       "name": "卢梁",
@@ -418,6 +526,11 @@
     {
       "name": "葛红兵",
       "dept": "运维业务部",
+      "task_count": 1
+    },
+    {
+      "name": "李洁",
+      "dept": "未知",
       "task_count": 1
     },
     {
