@@ -1,0 +1,127 @@
+{
+  "dingtalk": {
+    "channel": "group_robot",
+    "group_webhook": "https://oapi.dingtalk.com/robot/send?access_token=REPLACE_WITH_YOUR_TOKEN",
+    "secret": "REPLACE_WITH_YOUR_SIGN_SECRET",
+    "openapi": {
+      "app_key": "",
+      "app_secret": "",
+      "agent_id": 0
+    }
+  },
+  "task_tracker_url": "https://2810300-bot.github.io/hnft/task-tracker/",
+  "rules": {
+    "deadline_warning_days": 3,
+    "max_notify_per_run": 20,
+    "notify_on": {
+      "assigned": true,
+      "status_change": true,
+      "deadline_approaching": true,
+      "overdue": true,
+      "completed": true
+    }
+  },
+  "roles": {
+    "responsible": {
+      "label": "责任人",
+      "receive": [
+        "assigned",
+        "deadline_approaching",
+        "overdue"
+      ],
+      "at_mention": true
+    },
+    "supervisor": {
+      "label": "主管",
+      "receive": [
+        "status_change",
+        "overdue",
+        "completed"
+      ],
+      "at_mention": false
+    },
+    "gm": {
+      "label": "总经理",
+      "receive": [
+        "overdue",
+        "completed"
+      ],
+      "at_mention": false
+    }
+  },
+  "people": {
+    "施洪彬": {
+      "mobile": "13900000001",
+      "role": "supervisor",
+      "notify": true
+    },
+    "苏铮铮": {
+      "mobile": "13700000002",
+      "role": "responsible",
+      "notify": true
+    },
+    "吴胡兵": {
+      "mobile": "13700000003",
+      "role": "responsible",
+      "notify": true
+    },
+    "李慧": {
+      "mobile": "13700000004",
+      "role": "responsible",
+      "notify": true
+    },
+    "龙冠学": {
+      "mobile": "13700000005",
+      "role": "responsible",
+      "notify": true
+    },
+    "李莉": {
+      "mobile": "13xxxxxxxxx",
+      "role": "responsible",
+      "notify": true
+    },
+    "卢梁": {
+      "mobile": "13xxxxxxxxx",
+      "role": "responsible",
+      "notify": true
+    },
+    "鲁文辉": {
+      "mobile": "13xxxxxxxxx",
+      "role": "responsible",
+      "notify": true
+    },
+    "葛红兵": {
+      "mobile": "13xxxxxxxxx",
+      "role": "responsible",
+      "notify": true
+    },
+    "李真": {
+      "mobile": "13xxxxxxxxx",
+      "role": "responsible",
+      "notify": true
+    },
+    "李洁": {
+      "mobile": "13xxxxxxxxx",
+      "role": "responsible",
+      "notify": true
+    },
+    "颜一亩": {
+      "mobile": "13800000000",
+      "role": "gm",
+      "notify": true
+    }
+  },
+  "supervisor_of": {
+    "苏铮铮": "施洪彬",
+    "吴胡兵": "施洪彬",
+    "李慧": "施洪彬",
+    "龙冠学": "施洪彬",
+    "李莉": "施洪彬",
+    "卢梁": "施洪彬",
+    "鲁文辉": "施洪彬",
+    "葛红兵": "施洪彬",
+    "李真": "施洪彬",
+    "李洁": "施洪彬",
+    "颜一亩": "施洪彬"
+  }
+}
