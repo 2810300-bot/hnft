@@ -1,0 +1,15 @@
+{
+  "uploads": [
+    {
+      "target_date": "unknown",
+      "file_path": "/Users/mac/.workbuddy/hnft-site/anomaly-system/data/daily/2026-07-09/report.md",
+      "file_name": "report.md",
+      "status": "FAILED",
+      "media_id": null,
+      "error_message": "HTTP Error 401: Unauthorized",
+      "is_duplicate": false,
+      "skipped": false,
+      "timestamp": "2026-07-09T20:28:34.142007"
+    }
+  ]
+}
