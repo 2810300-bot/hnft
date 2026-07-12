@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>电子老板 | 岳阳餐厨项目</title>
+<style>
+  :root {
+    --bg: #0b0f19;
+    --bg-card: #111827;
+    --bg-elevated: #1f2937;
+    --border: #374151;
+    --text: #e5e7eb;
+    --text-dim: #9ca3af;
+    --text-muted: #6b7280;
+    --green: #22c55e;
+    --green-dim: #16a34a;
+    --red: #ef4444;
+    --red-dim: #dc2626;
+    --orange: #f97316;
+    --orange-dim: #ea580c;
+    --yellow: #eab308;
+    --blue: #3b82f6;
+    --blue-dim: #2563eb;
+    --cyan: #06b6d4;
+    --purple: #a855f7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+    padding: 16px 20px 12px;
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .header h1 { font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+  .header .sub { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+  .header-right { text-align: right; }
+  .header .time { font-size: 12px; color: var(--text-muted); }
+  .header .refresh-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; color: var(--text-dim); cursor: pointer;
+    padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border);
+    background: transparent; margin-top: 4px; transition: all 0.2s;
+  }
+  .header .refresh-btn:hover { background: var(--bg-elevated); color: var(--text); }
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+    display: inline-block; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* Alert banner */
+  .alert-banner {
+    padding: 10px 20px; font-size: 13px; font-weight: 500;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .alert-banner.p0 { background: rgba(239,68,68,0.15); border-left: 3px solid var(--red); color: #fca5a5; }
+  .alert-banner.p1 { background: rgba(249,115,22,0.15); border-left: 3px solid var(--orange); color: #fdba74; }
+  .alert-banner .alert-count { background: var(--red); color: white; padding: 1px 7px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+  .alert-banner .alert-link { margin-left: auto; font-size: 12px; color: var(--text-dim); cursor: pointer; }
+
+  /* Section */
+  .section { padding: 16px 20px; }
+  .section-title {
+    font-size: 14px; font-weight: 600; color: var(--text-dim);
+    margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+  }
+  .section-title .dot { width: 4px; height: 14px; border-radius: 2px; background: var(--blue); }
+
+  /* KPI Cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .kpi-card {
+    background: var(--bg-card); border-radius: 12px;
+    padding: 14px 12px; border: 1px solid var(--border);
+    transition: transform 0.2s, border-color 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .kpi-card:hover { transform: translateY(-2px); border-color: #4b5563; }
+  .kpi-card .kpi-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .kpi-card .kpi-value { font-size: 22px; font-weight: 700; line-height: 1.2; }
+  .kpi-card .kpi-unit { font-size: 12px; font-weight: 400; color: var(--text-dim); }
+  .kpi-card .kpi-change {
+    font-size: 11px; margin-top: 4px; font-weight: 500;
+    display: flex; align-items: center; gap: 3px;
+  }
+  .kpi-change.up { color: var(--green); }
+  .kpi-change.down { color: var(--red); }
+  .kpi-change.neutral { color: var(--text-muted); }
+  .kpi-card .kpi-bar {
+    position: absolute; bottom: 0; left: 0; height: 3px; border-radius: 0 0 0 12px;
+  }
+  .kpi-card .kpi-target { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+  .kpi-card.alert { border-color: rgba(239,68,68,0.4); }
+  .kpi-card.alert .kpi-value { color: var(--red); }
+  .kpi-card.warn { border-color: rgba(234,179,8,0.4); }
+  .kpi-card.warn .kpi-value { color: var(--yellow); }
+  .kpi-card.ok .kpi-value { color: var(--green); }
+  .kpi-card.info .kpi-value { color: var(--blue); }
+  .kpi-card.money .kpi-value { color: var(--orange); }
+
+  /* Chart area */
+  .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .chart-card {
+    background: var(--bg-card); border-radius: 12px;
+    padding: 14px; border: 1px solid var(--border);
+  }
+  .chart-card h4 { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+  .trend-svg { width: 100%; height: 100px; }
+  .bar-chart { display: flex; flex-direction: column; gap: 6px; }
+  .bar-item { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+  .bar-item .bar-name { width: 48px; color: var(--text-dim); flex-shrink: 0; }
+  .bar-item .bar-track { flex: 1; height: 16px; background: var(--bg-elevated); border-radius: 4px; overflow: hidden; position: relative; }
+  .bar-item .bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .bar-item .bar-val { width: 40px; text-align: right; color: var(--text-dim); flex-shrink: 0; }
+
+  /* List cards */
+  .list-card {
+    background: var(--bg-card); border-radius: 12px;
+    border: 1px solid var(--border); overflow: hidden;
+  }
+  .list-card .list-header {
+    padding: 12px 16px; font-size: 13px; font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .list-card .list-header .count { background: var(--red); color: white; padding: 1px 8px; border-radius: 10px; font-size: 11px; }
+  .list-card .list-item {
+    padding: 10px 16px; font-size: 12px;
+    border-bottom: 1px solid rgba(55,65,81,0.5);
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+  }
+  .list-card .list-item:last-child { border-bottom: none; }
+  .list-card .item-title { color: var(--text); font-weight: 500; }
+  .list-card .item-meta { color: var(--text-muted); font-size: 11px; margin-top: 2px; }
+  .list-card .item-tag {
+    display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600;
+  }
+  .item-tag.severe { background: rgba(239,68,68,0.2); color: #fca5a5; }
+  .item-tag.moderate { background: rgba(249,115,22,0.2); color: #fdba74; }
+  .item-tag.overdue { background: rgba(239,68,68,0.2); color: #fca5a5; }
+  .item-tag.progress { background: rgba(59,130,246,0.2); color: #93c5fd; }
+
+  /* Pipeline */
+  .pipeline-card { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); }
+  .pipeline-card .ph { padding: 12px 16px; font-size: 13px; font-weight: 600; border-bottom: 1px solid var(--border); }
+  .pipeline-item { padding: 10px 16px; border-bottom: 1px solid rgba(55,65,81,0.5); }
+  .pipeline-item:last-child { border-bottom: none; }
+  .pipeline-item .pt { font-size: 12px; font-weight: 500; color: var(--text); }
+  .pipeline-item .pm { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .pipeline-progress { display: flex; gap: 4px; margin-top: 6px; }
+  .pipeline-progress .pp { height: 4px; flex: 1; border-radius: 2px; background: var(--bg-elevated); }
+  .pipeline-progress .pp.done { background: var(--green); }
+  .pipeline-progress .pp.doing { background: var(--blue); }
+  .pipeline-progress .pp.todo { background: var(--bg-elevated); }
+
+  /* Nav */
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--bg-card); border-top: 1px solid var(--border);
+    display: flex; justify-content: space-around; padding: 8px 0 12px;
+    z-index: 100;
+  }
+  .nav-item { text-align: center; text-decoration: none; color: var(--text-muted); font-size: 10px; }
+  .nav-item .ni { font-size: 20px; display: block; margin-bottom: 2px; }
+  .nav-item.active { color: var(--blue); }
+  .nav-item:hover { color: var(--text); }
+
+  /* Bottom padding for nav */
+  .bottom-pad { height: 70px; }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .chart-row { grid-template-columns: 1fr; }
+    .header h1 { font-size: 16px; }
+  }
+  @media (min-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+    .chart-row { grid-template-columns: 1fr 1fr; }
+    body { max-width: 768px; margin: 0 auto; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>电子老板</h1>
+      <div class="sub">岳阳餐厨垃圾项目 · 实时驾驶舱</div>
+    </div>
+    <div class="header-right">
+      <div class="time" id="current-time">--</div>
+      <button class="refresh-btn" onclick="location.reload()">
+        <span class="live-dot"></span> 刷新
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Alert Banner -->
+<div class="alert-banner p0">
+  <span>⚠</span>
+  <span>5条异常工单待处理，4项任务已逾期</span>
+  <span class="alert-count">9</span>
+  <span class="alert-link" onclick="document.getElementById('alerts').scrollIntoView({behavior:'smooth'})">查看详情 &rarr;</span>
+</div>
+
+<!-- KPI Cards -->
+<div class="section" style="padding-top:12px">
+  <div class="section-title"><span class="dot"></span>今日核心指标</div>
+  <div class="kpi-grid">
+    <div class="kpi-card info">
+      <div class="kpi-label">今日收运量</div>
+      <div class="kpi-value">186.2<span class="kpi-unit">吨</span></div>
+      <div class="kpi-change up">↑ 12.3% 较昨日</div>
+      <div class="kpi-target">目标 200吨 | 达成 93%</div>
+      <div class="kpi-bar" style="width:93%;background:var(--blue-dim)"></div>
+    </div>
+    <div class="kpi-card info">
+      <div class="kpi-label">本周累计</div>
+      <div class="kpi-value">1,303<span class="kpi-unit">吨</span></div>
+      <div class="kpi-change up">↑ 8.7% 较上周</div>
+      <div class="kpi-target">目标 1,400吨 | 达成 93%</div>
+      <div class="kpi-bar" style="width:93%;background:var(--blue-dim)"></div>
+    </div>
+    <div class="kpi-card warn">
+      <div class="kpi-label">提油率</div>
+      <div class="kpi-value">5.23<span class="kpi-unit">%</span></div>
+      <div class="kpi-change down">↓ 0.07% 距目标</div>
+      <div class="kpi-target">目标 5.3% | 差距 0.07%</div>
+      <div class="kpi-bar" style="width:98%;background:var(--yellow)"></div>
+    </div>
+    <div class="kpi-card alert">
+      <div class="kpi-label">异常工单</div>
+      <div class="kpi-value">5<span class="kpi-unit">待处理</span></div>
+      <div class="kpi-change down">3处理中 · 3已闭环</div>
+      <div class="kpi-target">严重2 · 中度3</div>
+      <div class="kpi-bar" style="width:100%;background:var(--red)"></div>
+    </div>
+    <div class="kpi-card alert">
+      <div class="kpi-label">逾期任务</div>
+      <div class="kpi-value">4<span class="kpi-unit">项</span></div>
+      <div class="kpi-change down">需督办</div>
+      <div class="kpi-target">5S管理/司机SOP/技改/采购</div>
+      <div class="kpi-bar" style="width:100%;background:var(--red)"></div>
+    </div>
+    <div class="kpi-card money">
+      <div class="kpi-label">应收账款</div>
+      <div class="kpi-value">2,160<span class="kpi-unit">万</span></div>
+      <div class="kpi-change neutral">-- 待回款</div>
+      <div class="kpi-target">项目补贴+其他回款</div>
+      <div class="kpi-bar" style="width:85%;background:var(--orange-dim)"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="section" style="padding-top:0">
+  <div class="chart-row">
+    <div class="chart-card">
+      <h4>7日收运量趋势</h4>
+      <svg class="trend-svg" viewBox="0 0 280 100" preserveAspectRatio="none">
+        <!-- grid -->
+        <line x1="0" y1="25" x2="280" y2="25" stroke="#374151" stroke-width="0.3" stroke-dasharray="2,2"/>
+        <line x1="0" y1="50" x2="280" y2="50" stroke="#374151" stroke-width="0.3" stroke-dasharray="2,2"/>
+        <line x1="0" y1="75" x2="280" y2="75" stroke="#374151" stroke-width="0.3" stroke-dasharray="2,2"/>
+        <!-- area -->
+        <polygon points="0,70 40,60 80,68 120,45 160,55 200,50 240,42 280,40 280,95 0,95" fill="rgba(59,130,246,0.1)"/>
+        <!-- line -->
+        <polyline points="0,70 40,60 80,68 120,45 160,55 200,50 240,42 280,40" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- points -->
+        <circle cx="0" cy="70" r="3" fill="#3b82f6"/><circle cx="40" cy="60" r="3" fill="#3b82f6"/>
+        <circle cx="80" cy="68" r="3" fill="#3b82f6"/><circle cx="120" cy="45" r="3" fill="#3b82f6"/>
+        <circle cx="160" cy="55" r="3" fill="#3b82f6"/><circle cx="200" cy="50" r="3" fill="#3b82f6"/>
+        <circle cx="240" cy="42" r="3" fill="#3b82f6"/><circle cx="280" cy="40" r="4" fill="#22c55e" stroke="#0b0f19" stroke-width="2"/>
+        <!-- labels -->
+        <text x="0" y="95" font-size="8" fill="#6b7280">07-06</text>
+        <text x="80" y="95" font-size="8" fill="#6b7280">07-08</text>
+        <text x="160" y="95" font-size="8" fill="#6b7280">07-10</text>
+        <text x="240" y="95" font-size="8" fill="#6b7280">07-12</text>
+        <text x="264" y="35" font-size="9" fill="#22c55e" font-weight="600">186t</text>
+      </svg>
+    </div>
+    <div class="chart-card">
+      <h4>区域分布</h4>
+      <div class="bar-chart">
+        <div class="bar-item">
+          <span class="bar-name">岳阳楼区</span>
+          <div class="bar-track"><div class="bar-fill" style="width:85%;background:#3b82f6"></div></div>
+          <span class="bar-val">85t</span>
+        </div>
+        <div class="bar-item">
+          <span class="bar-name">开发区</span>
+          <div class="bar-track"><div class="bar-fill" style="width:45%;background:#06b6d4"></div></div>
+          <span class="bar-val">45t</span>
+        </div>
+        <div class="bar-item">
+          <span class="bar-name">君山区</span>
+          <div class="bar-track"><div class="bar-fill" style="width:30%;background:#22c55e"></div></div>
+          <span class="bar-val">30t</span>
+        </div>
+        <div class="bar-item">
+          <span class="bar-name">临港新区</span>
+          <div class="bar-track"><div class="bar-fill" style="width:15%;background:#f59e0b"></div></div>
+          <span class="bar-val">15t</span>
+        </div>
+        <div class="bar-item">
+          <span class="bar-name">南湖新区</span>
+          <div class="bar-track"><div class="bar-fill" style="width:11%;background:#a855f7"></div></div>
+          <span class="bar-val">11t</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Alerts Section -->
+<div id="alerts" class="section" style="padding-top:0">
+  <div class="chart-row">
+    <!-- Work Orders -->
+    <div class="list-card">
+      <div class="list-header">
+        <span>异常工单</span>
+        <span class="count">5</span>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="item-title">云溪学校食堂 · 当日未收运</div>
+          <div class="item-meta">临港新区 | 卢梁 | 07-04</div>
+        </div>
+        <span class="item-tag severe">严重</span>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="item-title">巴陵食府 · 偏低53.3%</div>
+          <div class="item-meta">岳阳楼区 | 李慧 | 07-07</div>
+        </div>
+        <span class="item-tag severe">严重</span>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="item-title">南湖灶台故事 · 偏高56.1%</div>
+          <div class="item-meta">南湖新区 | 龙冠学 | 07-09</div>
+        </div>
+        <span class="item-tag severe">严重</span>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="item-title">开发区职工食堂 · 偏低49.1%</div>
+          <div class="item-meta">开发区 | 李真 | 07-09</div>
+        </div>
+        <span class="item-tag moderate">中度</span>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="item-title">君山宾馆 · 偏高45.8%</div>
+          <div class="item-meta">君山区 | 葛红兵 | 07-09</div>
+        </div>
+        <span class="item-tag moderate">中度</span>
+      </div>
+    </div>
+
+    <!-- Overdue Tasks -->
+    <div class="list-card">
+      <div class="list-header">
+        <span>逾期任务</span>
+        <span class="count">4</span>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="item-title">生产现场"5S"管理整顿</div>
+          <div class="item-meta">龙冠学/吴胡兵/施洪彬 | 截止5-31</div>
+        </div>
+        <span class="item-tag overdue">逾期42天</span>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="item-title">收运司机违章SOP</div>
+          <div class="item-meta">吴胡兵/李慧 | 截止6-30</div>
+        </div>
+        <span class="item-tag overdue">逾期12天</span>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="item-title">预处理技改工程</div>
+          <div class="item-meta">鲁文辉/施洪彬 | 截止6-30</div>
+        </div>
+        <span class="item-tag overdue">逾期12天</span>
+      </div>
+      <div class="list-item">
+        <div>
+          <div class="item-title">采购历史遗留处理</div>
+          <div class="item-meta">鲁文辉 | 截止6-30</div>
+        </div>
+        <span class="item-tag overdue">逾期12天</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pipeline -->
+<div class="section" style="padding-top:0">
+  <div class="section-title"><span class="dot" style="background:var(--purple)"></span>7月关键专项进展</div>
+  <div class="pipeline-card">
+    <div class="ph">下半年四大目标追踪</div>
+    <div class="pipeline-item">
+      <div class="pt">提油率提升至5.3%</div>
+      <div class="pm">当前5.23% | 差距0.07% | 7月启动技改</div>
+      <div class="pipeline-progress">
+        <div class="pp done"></div><div class="pp done"></div><div class="pp done"></div>
+        <div class="pp doing"></div><div class="pp todo"></div><div class="pp todo"></div>
+      </div>
+    </div>
+    <div class="pipeline-item">
+      <div class="pt">全年收运7万吨</div>
+      <div class="pm">上半年33,940吨 | 达成48.5% | 下半年需36,060吨</div>
+      <div class="pipeline-progress">
+        <div class="pp done"></div><div class="pp done"></div><div class="pp done"></div>
+        <div class="pp done"></div><div class="pp done"></div><div class="pp todo"></div>
+      </div>
+    </div>
+    <div class="pipeline-item">
+      <div class="pt">吨处置成本控制在130元</div>
+      <div class="pm">当前129元/吨 | 已达标 | 碳源减少38.5%</div>
+      <div class="pipeline-progress">
+        <div class="pp done"></div><div class="pp done"></div><div class="pp done"></div>
+        <div class="pp done"></div><div class="pp done"></div><div class="pp done"></div>
+      </div>
+    </div>
+    <div class="pipeline-item">
+      <div class="pt">12月完成技改验收</div>
+      <div class="pm">预处理技改 | 厌氧罐管网 | 锅炉冷却池</div>
+      <div class="pipeline-progress">
+        <div class="pp done"></div><div class="pp doing"></div><div class="pp todo"></div>
+        <div class="pp todo"></div><div class="pp todo"></div><div class="pp todo"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-pad"></div>
+<nav class="nav-bar">
+  <a href="../" class="nav-item">
+    <span class="ni">&#x1F3E0;</span>
+    <span>首页</span>
+  </a>
+  <a href="../daily-dashboard/" class="nav-item">
+    <span class="ni">&#x1F4CA;</span>
+    <span>收运</span>
+  </a>
+  <a href="../anomaly-system/" class="nav-item">
+    <span class="ni">&#x1F6A8;</span>
+    <span>异常</span>
+  </a>
+  <a href="../task-tracker/" class="nav-item">
+    <span class="ni">&#x1F4CB;</span>
+    <span>任务</span>
+  </a>
+  <a href="../contract-system/" class="nav-item">
+    <span class="ni">&#x1F4DD;</span>
+    <span>合同</span>
+  </a>
+</nav>
+
+<script>
+  // 实时时钟
+  function updateTime() {
+    const now = new Date();
+    document.getElementById('current-time').textContent = now.toLocaleString('zh-CN', {
+      month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false
+    });
+  }
+  updateTime();
+  setInterval(updateTime, 60000);
+
+  // 页面自动刷新（30分钟）
+  setTimeout(function() { location.reload(); }, 30 * 60 * 1000);
+
+  // KPI进度条动画
+  document.querySelectorAll('.kpi-bar').forEach(function(bar) {
+    var w = bar.style.width;
+    bar.style.width = '0';
+    setTimeout(function() { bar.style.width = w; bar.style.transition = 'width 1s ease'; }, 100);
+  });
+
+  // 区域分布条形动画
+  document.querySelectorAll('.bar-fill').forEach(function(bar) {
+    var w = bar.style.width;
+    bar.style.width = '0';
+    setTimeout(function() { bar.style.width = w; bar.style.transition = 'width 1.2s ease'; }, 300);
+  });
+</script>
+</body>
+</html>
