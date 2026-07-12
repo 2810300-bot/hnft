@@ -1,0 +1,17 @@
+{
+  "date": "2026-07-12",
+  "generated_at": "2026-07-12T20:25:00+08:00",
+  "summary": {
+    "total_merchants": 0,
+    "merchants_with_data": 0,
+    "anomaly_count": 0,
+    "severity_distribution": {
+      "severe": 0,
+      "moderate": 0,
+      "minor": 0,
+      "normal": 0
+    }
+  },
+  "anomalies": [],
+  "note": "今日蓝牙称数据未导入，无异常分析候选"
+}
