@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>周报驾驶舱</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8B%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E" />
+  <!-- ECharts 5 (self-hosted) -->
+  <script src="../assets/js/echarts.min.js"></script>
   <style>
     :root {
       --bg: #0f172a;
@@ -19,6 +21,8 @@
       --red: #ef4444;
       --purple: #a78bfa;
       --gradient-1: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+      --gradient-2: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+      --gradient-3: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
       --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,7 +33,7 @@
       min-height: 100vh;
       line-height: 1.6;
     }
-    .app { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    .app { max-width: 1400px; margin: 0 auto; padding: 24px; }
 
     /* Breadcrumb */
     .breadcrumb-bar {
@@ -50,17 +54,77 @@
     .header h1 { font-size: 24px; font-weight: 700; }
     .header .sub { font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 4px; }
     .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 13px; }
-    .refresh-badge {
-      font-size: 13px; color: rgba(255,255,255,0.9); display: inline-flex; align-items: center; gap: 6px;
+    .refresh-badge { font-size: 13px; color: rgba(255,255,255,0.9); display: inline-flex; align-items: center; gap: 6px; }
+    .next-update-badge { font-size: 12px; color: rgba(255,255,255,0.6); display: inline-flex; align-items: center; gap: 6px; }
+    .pulse { width: 8px; height: 8px; border-radius: 50%; background: #4ade80;
+      box-shadow: 0 0 0 0 rgba(74,222,128,0.7); animation: pulse 1.6s infinite; }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+      100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
     }
 
-    /* Generic section box */
+    /* Week selector */
+    .week-selector-bar {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+      font-size: 13px; color: var(--text-dim);
+    }
+    .week-selector-bar select {
+      padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px;
+      background: var(--bg-card); color: var(--text); font-size: 13px; cursor: pointer;
+    }
+    .week-selector-bar select:hover { border-color: var(--primary); }
+
+    /* PAT warning banner */
+    .pat-warning {
+      display: none; align-items: center; gap: 10px;
+      background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px;
+    }
+    .pat-warning.show { display: flex; }
+    .pat-warning .icon { font-size: 20px; }
+    .pat-warning .text { color: #fbbf24; flex: 1; }
+    .pat-warning .text strong { color: #fcd34d; }
+
+    /* KPI grid */
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px; margin-bottom: 24px;
+    }
+    .kpi {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px; position: relative; overflow: hidden; transition: transform .2s;
+    }
+    .kpi:hover { transform: translateY(-2px); }
+    .kpi::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .kpi.blue::before { background: var(--gradient-1); }
+    .kpi.green::before { background: var(--gradient-3); }
+    .kpi.orange::before { background: var(--gradient-2); }
+    .kpi.purple::before { background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%); }
+    .kpi .label { font-size: 13px; color: var(--text-dim); }
+    .kpi .value { font-size: 30px; font-weight: 700; margin-top: 6px; line-height: 1.1; }
+    .kpi .unit { font-size: 14px; color: var(--text-dim); margin-left: 4px; }
+    .kpi .delta { font-size: 12px; margin-top: 8px; display: inline-block; padding: 2px 8px; border-radius: 6px; }
+    .delta.up { color: #4ade80; background: rgba(74,222,128,0.12); }
+    .delta.down { color: #f87171; background: rgba(248,113,113,0.12); }
+    .delta.neutral { color: var(--text-dim); background: rgba(148,163,184,0.12); }
+    .kpi .remark { font-size: 11px; color: #94a3b8; margin-top: 6px; font-style: italic; }
+    .kpi.no-data .value { color: var(--text-dim); font-size: 20px; }
+
+    /* Charts grid */
+    .grid { display: grid; gap: 16px; margin-bottom: 24px; }
+    .grid.cols-2 { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
     .card {
       background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
-      padding: 20px; box-shadow: var(--shadow); margin-bottom: 24px;
+      padding: 20px; box-shadow: var(--shadow);
     }
     .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
     .card .desc { font-size: 12px; color: var(--text-dim); margin-bottom: 12px; }
+    .chart { width: 100%; height: 320px; }
+    .chart.small { height: 260px; }
+    .chart-error { text-align: center; padding: 40px 20px; color: var(--text-dim); font-size: 13px; }
+    .chart-error .icon { font-size: 32px; margin-bottom: 8px; }
 
     /* Section divider */
     .section-header-bar {
@@ -90,7 +154,7 @@
     .empty-missing h3 { font-size: 16px; color: #4ade80; margin-top: 8px; }
     .empty-missing p { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
 
-    /* Member report cards (pure text) */
+    /* Member report cards */
     .member-grid {
       display: grid; grid-template-columns: repeat(2, 1fr);
       gap: 14px; margin-bottom: 16px;
@@ -104,9 +168,7 @@
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
     }
-    .member-card-name {
-      font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;
-    }
+    .member-card-name { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
     .member-avatar {
       width: 34px; height: 34px; border-radius: 50%;
       background: linear-gradient(135deg, #6366f1, #818cf8);
@@ -123,20 +185,12 @@
     .risk-dot.med { background: #f59e0b; }
     .risk-dot.low { background: #22c55e; }
     .member-section { margin-top: 10px; }
-    .member-section-title {
-      font-size: 12px; font-weight: 700;
-      letter-spacing: 0.5px; margin-bottom: 6px;
-    }
+    .member-section-title { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; }
     .member-section-title.completed { color: #4ade80; }
     .member-section-title.plans { color: #38bdf8; }
     .member-section-title.issues { color: #fbbf24; }
-    .member-section ul {
-      list-style: none; padding-left: 0; margin: 0;
-    }
-    .member-section li {
-      font-size: 13px; padding: 3px 0 3px 16px; position: relative;
-      color: var(--text); line-height: 1.6;
-    }
+    .member-section ul { list-style: none; padding-left: 0; margin: 0; }
+    .member-section li { font-size: 13px; padding: 3px 0 3px 16px; position: relative; color: var(--text); line-height: 1.6; }
     .member-section li::before { content: "•"; position: absolute; left: 4px; }
     .member-section.completed li::before { color: #4ade80; }
     .member-section.plans li::before { color: #38bdf8; }
@@ -166,7 +220,23 @@
     .pagination-bar .page-btn:disabled { opacity: .35; cursor: not-allowed; }
     .pagination-bar .page-info { font-size: 12px; color: var(--text-dim); padding: 0 8px; }
 
+    /* Loading */
     .loading-placeholder { text-align: center; padding: 40px 20px; color: var(--text-dim); }
+    .loading-placeholder .spinner {
+      display: inline-block; width: 28px; height: 28px; border: 3px solid var(--border);
+      border-top-color: var(--primary); border-radius: 50%; animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Error toast */
+    .error-toast {
+      display: none; position: fixed; top: 0; left: 0; right: 0;
+      background: #ef4444; color: #fff; padding: 12px 20px; z-index: 9999;
+      font-size: 13px; box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    .error-toast.show { display: block; }
+    .error-toast .close-btn { float: right; cursor: pointer; opacity: 0.8; }
+    .error-toast .close-btn:hover { opacity: 1; }
 
     /* Footer */
     .footer { text-align: center; font-size: 12px; color: var(--text-dim); padding: 20px 0; }
@@ -176,11 +246,20 @@
       .app { padding: 12px; }
       .header { padding: 16px; }
       .header h1 { font-size: 18px; }
+      .kpi .value { font-size: 24px; }
+      .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
       .member-grid { grid-template-columns: 1fr; }
+      .chart { height: 260px; }
     }
   </style>
 </head>
 <body>
+  <!-- Error toast -->
+  <div class="error-toast" id="error-toast">
+    <span id="error-toast-text"></span>
+    <span class="close-btn" onclick="document.getElementById('error-toast').classList.remove('show')">&times;</span>
+  </div>
+
   <!-- Breadcrumb -->
   <div class="breadcrumb-bar">
     <div>
@@ -194,17 +273,69 @@
     <!-- Header -->
     <div class="header">
       <div>
-        <h1 id="company-name">📋 周报驾驶舱</h1>
+        <h1 id="company-name">📊 周报驾驶舱</h1>
         <div class="sub">岳阳市厨余垃圾资源化利用和无害化处置项目</div>
         <div class="sub" id="report-period">报告周期：加载中…</div>
       </div>
       <div class="header-right">
-        <span class="refresh-badge">🕒 数据更新：<span id="generated-at">加载中…</span></span>
+        <span class="refresh-badge"><span class="pulse"></span>数据更新：<span id="generated-at">加载中…</span></span>
+        <span class="next-update-badge">下次更新：<span id="next-update">计算中…</span></span>
       </div>
     </div>
 
-    <!-- 周报未提交人员追踪 -->
-    <div class="card" id="missing-section">
+    <!-- PAT warning banner -->
+    <div class="pat-warning" id="pat-warning">
+      <span class="icon">⚠️</span>
+      <span class="text"><strong>PAT 授权过期</strong>：本周周报因钉钉 PAT 授权过期无法自动读取正文，以下显示的是最近可用周次的数据。请在钉钉完成 PAT 授权后重新执行自动化任务以获取最新数据。</span>
+    </div>
+
+    <!-- Week selector -->
+    <div class="week-selector-bar">
+      <span>📅 选择周次：</span>
+      <select id="week-selector" onchange="switchWeek()"></select>
+      <span id="week-status" style="color: var(--text-dim);"></span>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-grid" id="kpi-grid">
+      <div class="loading-placeholder"><div class="spinner"></div><p style="margin-top:12px;">加载 KPI 数据...</p></div>
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>餐厨收运量进度</h3>
+        <div class="desc">月累计 vs 目标（6140 吨）</div>
+        <div id="chart-collection" class="chart"></div>
+      </div>
+      <div class="card">
+        <h3>岳阳楼区专项进度</h3>
+        <div class="desc">摸排 / 新签转化 / 有效收运 三阶段</div>
+        <div id="chart-loulei" class="chart"></div>
+      </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="grid cols-3">
+      <div class="card">
+        <h3>油脂业务</h3>
+        <div class="desc">地沟油 / 煎炸油 完成率</div>
+        <div id="chart-oil" class="chart small"></div>
+      </div>
+      <div class="card">
+        <h3>本周新签转化</h3>
+        <div class="desc">本周 vs 月累计 vs 目标</div>
+        <div id="chart-sign" class="chart small"></div>
+      </div>
+      <div class="card">
+        <h3>周报提交趋势</h3>
+        <div class="desc">近 4 周提交率变化</div>
+        <div id="chart-submission" class="chart small"></div>
+      </div>
+    </div>
+
+    <!-- Missing persons tracking -->
+    <div class="card" id="missing-section" style="margin-top: 24px;">
       <div class="missing-header">
         <h2>📋 周报未提交人员追踪</h2>
         <div class="missing-tools">
@@ -214,17 +345,17 @@
       <div id="missing-content"><div style="text-align:center;padding:20px;color:var(--text-dim);">加载提交数据中...</div></div>
     </div>
 
-    <!-- 周报摘要（纯文字报告内容） -->
+    <!-- Member report cards -->
     <div class="section-header-bar">
       <h2>👥 周报摘要</h2>
       <div class="section-stats" id="member-stats">加载中…</div>
     </div>
     <div id="member-grid-container">
-      <div class="loading-placeholder">加载成员周报数据...</div>
+      <div class="loading-placeholder"><div class="spinner"></div><p style="margin-top:12px;">加载成员周报数据...</p></div>
     </div>
     <div class="pagination-bar" id="member-pagination"></div>
 
-    <!-- 下周重点关注 -->
+    <!-- Next focus -->
     <div class="card">
       <h3>🎯 下周重点关注</h3>
       <div class="desc">按优先级排序</div>
@@ -237,43 +368,84 @@
   </div>
 
   <script>
-    // ---- Data loading ----
-    let cache = null;
-    let weeklyCache = null;
-    let reportDateRange = "";
-    const REMOTE_URL = "https://2810300-bot.github.io/hnft/weekly-report/dashboard_data.json";
-    const WEEKLY_URL = "https://2810300-bot.github.io/hnft/weekly-report/weekly_data.json";
+    // ===== Global State =====
+    var cache = null;
+    var weeklyCache = null;
+    var charts = {};
+    var reportDateRange = "";
+    var selectedWeekIndex = 0;
 
+    // ===== Data URLs =====
+    var REMOTE_BASE = "https://2810300-bot.github.io/hnft/weekly-report";
+    var REMOTE_URL = REMOTE_BASE + "/dashboard_data.json";
+    var WEEKLY_URL = REMOTE_BASE + "/weekly_data.json";
+
+    // ===== Utility =====
+    function fmtNum(n, d) {
+      d = d || 0;
+      if (n === null || n === undefined || n === "" || (typeof n === "number" && isNaN(n))) return "—";
+      return Number(n).toLocaleString("zh-CN", { maximumFractionDigits: d });
+    }
+    function fmtPct(n) {
+      if (n === null || n === undefined || n === "" || isNaN(Number(n))) return "—";
+      return Number(n).toFixed(2) + "%";
+    }
+    function setText(id, txt) { var el = document.getElementById(id); if (el) el.textContent = txt; }
+    function showError(msg) {
+      var toast = document.getElementById("error-toast");
+      var text = document.getElementById("error-toast-text");
+      if (toast && text) { text.textContent = msg; toast.classList.add("show"); }
+      console.error("[Dashboard Error]", msg);
+    }
+
+    // ===== PAT Failure Detection =====
+    function isPATFailed(report) {
+      if (!report || !report.persons || report.persons.length === 0) return false;
+      var patCount = 0;
+      report.persons.forEach(function(p) {
+        if (p.work && p.work.indexOf("PAT授权失败") !== -1) patCount++;
+      });
+      return patCount >= report.persons.length * 0.8;
+    }
+
+    function hasValidKPI(k) {
+      if (!k) return false;
+      return k.monthly_target_tons > 0 || k.weekly_collection_tons > 0 || k.monthly_cumulative_tons > 0;
+    }
+
+    // ===== Data Loading =====
     async function fetchData() {
+      // Try remote first
       try {
-        const res = await fetch(`${REMOTE_URL}?ts=${Date.now()}`);
-        if (res.ok) return res.json();
+        var res = await fetch(REMOTE_URL + "?ts=" + Date.now(), { cache: "no-cache" });
+        if (res.ok) return await res.json();
+        console.warn("Remote dashboard_data.json returned " + res.status);
       } catch (e) {
-        console.warn("GitHub Pages 不可用，回退到本地数据", e);
+        console.warn("GitHub Pages 不可用，尝试本地数据", e);
       }
-      const res = await fetch(`data.json?ts=${Date.now()}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return res.json();
+      // Fallback: correct filename
+      try {
+        var res2 = await fetch("dashboard_data.json?ts=" + Date.now(), { cache: "no-cache" });
+        if (res2.ok) return await res2.json();
+      } catch (e2) {
+        console.warn("本地 dashboard_data.json 也不可用", e2);
+      }
+      throw new Error("无法加载 dashboard_data.json（远程和本地均失败）");
     }
 
     async function fetchWeeklyData() {
       try {
-        const res = await fetch(`${WEEKLY_URL}?ts=${Date.now()}`);
-        if (res.ok) return res.json();
+        var res = await fetch(WEEKLY_URL + "?ts=" + Date.now(), { cache: "no-cache" });
+        if (res.ok) return await res.json();
       } catch (e) { console.warn("weekly_data.json 远程获取失败", e); }
       try {
-        const res = await fetch(`weekly_data.json?ts=${Date.now()}`);
-        if (res.ok) return res.json();
-      } catch (e) { console.warn("weekly_data.json 本地也不可用", e); }
+        var res2 = await fetch("weekly_data.json?ts=" + Date.now(), { cache: "no-cache" });
+        if (res2.ok) return await res2.json();
+      } catch (e2) { console.warn("weekly_data.json 本地也不可用", e2); }
       return null;
     }
 
-    function fmtNum(n, d=0) {
-      if (n === null || n === undefined) return "-";
-      return Number(n).toLocaleString("zh-CN", { maximumFractionDigits: d });
-    }
-
-    // 计算自然周（周一至周日）
+    // ===== Date Utils =====
     function computeNaturalWeek(dateStr) {
       var d = dateStr ? new Date(dateStr) : new Date();
       if (isNaN(d.getTime())) { d = new Date(); }
@@ -286,37 +458,287 @@
       return fmt(monday) + ' — ' + fmt(sunday);
     }
 
-    function setText(id, txt) { const el = document.getElementById(id); if (el) el.textContent = txt; }
+    function computeReportWeekRange(dateStr) {
+      var d = dateStr ? new Date(dateStr) : new Date();
+      if (isNaN(d.getTime())) { d = new Date(); }
+      var thursday = new Date(d);
+      var day = thursday.getDay();
+      var daysSinceThursday = (day + 3) % 7;
+      thursday.setDate(thursday.getDate() - daysSinceThursday);
+      var friday = new Date(thursday);
+      friday.setDate(thursday.getDate() - 6);
+      function fmt(dt) { return (dt.getMonth()+1) + '月' + dt.getDate() + '日'; }
+      return fmt(friday) + '—' + fmt(thursday);
+    }
 
+    // ===== Header Rendering =====
     function renderHeader(meta) {
-      setText("company-name", "📋 周报驾驶舱");
-      setText("report-period", "报告周期：" + computeNaturalWeek(meta.generated_at));
-      setText("generated-at", (meta.generated_at || "").replace(/\s*（.*$/, "").split(" ")[0]);
-    }
-
-    // ---- 下周重点关注 ----
-    function renderNextFocus(d) {
-      if (!d.next_focus || d.next_focus.length === 0) {
-        document.getElementById("next-focus").innerHTML = '<div style="color:var(--text-dim);font-size:13px;">本周无重点关注事项</div>';
-        return;
+      try {
+        setText("company-name", "📊 周报驾驶舱");
+        setText("report-period", "报告周期：" + computeNaturalWeek(meta.generated_at));
+        setText("generated-at", (meta.generated_at || "").replace(/\s*（.*$/, "").split(" ")[0]);
+        reportDateRange = computeReportWeekRange(meta.generated_at);
+      } catch (e) {
+        console.error("renderHeader failed", e);
       }
-      const html = `
-        <ol class="next-focus-list">
-          ${d.next_focus.map(n => `<li><span class="badge ${n.priority <= 2 ? 'high' : (n.priority <= 4 ? 'med' : 'low')}" style="margin-right:8px">P${n.priority}</span>${n.text}</li>`).join("")}
-        </ol>
-      `;
-      document.getElementById("next-focus").innerHTML = html;
     }
 
-    // ---- Member Cards (纯文字周报摘要，双列网格 + 分页) ----
+    // ===== KPI Rendering =====
+    function renderKPI(k) {
+      try {
+        var grid = document.getElementById("kpi-grid");
+        if (!k || !hasValidKPI(k)) {
+          grid.innerHTML = cardsHtml([
+            { cls: "blue no-data", label: "本周收运量", value: "数据暂无", delta: "PAT授权失败或数据未生成", deltaCls: "neutral" },
+            { cls: "green no-data", label: "月累计 / 目标", value: "数据暂无", delta: "等待数据更新", deltaCls: "neutral" },
+            { cls: "orange no-data", label: "本周新签转化", value: "数据暂无", delta: "等待数据更新", deltaCls: "neutral" },
+            { cls: "purple no-data", label: "岳阳楼区专项", value: "数据暂无", delta: "等待数据更新", deltaCls: "neutral" }
+          ]);
+          return;
+        }
+        var cards = [
+          { cls: "blue", label: "本周收运量", value: fmtNum(k.weekly_collection_tons, 2), unit: "吨",
+            delta: k.weekly_decline_tons === 0 ? "周环比：持平" : (k.weekly_decline_tons > 0 ? "+" : "") + k.weekly_decline_tons + " 吨 周环比",
+            deltaCls: k.weekly_decline_tons === 0 ? "neutral" : (k.weekly_decline_tons > 0 ? "up" : "down"),
+            remark: "数据范围：" + (reportDateRange || "上周五至本周四") },
+          { cls: "green", label: "月累计 / 目标", value: fmtNum(k.monthly_cumulative_tons), unit: "/" + fmtNum(k.monthly_target_tons) + " 吨",
+            delta: "完成率 " + fmtPct(k.monthly_completion_rate), deltaCls: "up" },
+          { cls: "orange", label: "本周新签转化", value: fmtNum(k.new_signed_this_week), unit: "家",
+            delta: "月累计 " + k.new_signed_month + " 家 (完成率 " + k.new_signed_completion_rate + "%)", deltaCls: "up" },
+          { cls: "purple", label: "岳阳楼区专项", value: fmtPct(k.loulei_investigation_rate), unit: "摸排",
+            delta: "新签转化 " + fmtPct(k.loulei_conversion_rate) + " · 有效收运 " + fmtPct(k.loulei_active_rate), deltaCls: "up" }
+        ];
+        grid.innerHTML = cardsHtml(cards);
+      } catch (e) {
+        console.error("renderKPI failed", e);
+        document.getElementById("kpi-grid").innerHTML = '<div class="chart-error"><div class="icon">⚠️</div>KPI 数据渲染失败</div>';
+      }
+    }
+
+    function cardsHtml(cards) {
+      return cards.map(function(c) {
+        return '<div class="kpi ' + c.cls + '">'
+          + '<div class="label">' + c.label + '</div>'
+          + '<div class="value">' + c.value + (c.unit ? '<span class="unit">' + c.unit + '</span>' : '') + '</div>'
+          + '<div class="delta ' + (c.deltaCls || "neutral") + '">' + c.delta + '</div>'
+          + (c.remark ? '<div class="remark">' + c.remark + '</div>' : '')
+          + '</div>';
+      }).join("");
+    }
+
+    // ===== Chart Rendering =====
+    var baseChart = {
+      textStyle: { color: "#e2e8f0", fontFamily: "PingFang SC, Microsoft YaHei, sans-serif" },
+      grid: { left: 50, right: 24, top: 36, bottom: 40, containLabel: true },
+      tooltip: { backgroundColor: "rgba(15,23,42,0.92)", borderColor: "#334155", textStyle: { color: "#e2e8f0" } }
+    };
+
+    function safeInitChart(domId) {
+      var dom = document.getElementById(domId);
+      if (!dom) return null;
+      if (typeof echarts === "undefined") {
+        dom.innerHTML = '<div class="chart-error"><div class="icon">⚠️</div>ECharts 库未加载</div>';
+        return null;
+      }
+      return echarts.init(dom);
+    }
+
+    function renderCollectionChart(k) {
+      try {
+        var chart = safeInitChart("chart-collection");
+        if (!chart) return;
+        charts.collection = chart;
+        chart.setOption(Object.assign({}, baseChart, {
+          title: { text: fmtNum(k.monthly_cumulative_tons, 2) + " / " + fmtNum(k.monthly_target_tons) + " 吨",
+            left: "right", textStyle: { fontSize: 14, color: "#94a3b8" } },
+          xAxis: {
+            type: "category",
+            data: [k.monthly_cutoff_date ? ("截止" + k.monthly_cutoff_date + " 累计") : "月累计", "月目标", "差额 (待冲)"],
+            axisLine: { lineStyle: { color: "#334155" } },
+            axisLabel: { color: "#94a3b8", fontSize: 11 }
+          },
+          yAxis: { type: "value", name: "吨", axisLine: { lineStyle: { color: "#334155" } },
+            splitLine: { lineStyle: { color: "#273449" } }, axisLabel: { color: "#94a3b8" } },
+          series: [{
+            type: "bar",
+            data: [
+              { value: k.monthly_cumulative_tons || 0, itemStyle: { color: "#22c55e" } },
+              { value: k.monthly_target_tons || 0, itemStyle: { color: "#38bdf8" } },
+              { value: Math.max(0, (k.monthly_target_tons || 0) - (k.monthly_cumulative_tons || 0)), itemStyle: { color: "#f59e0b" } }
+            ],
+            barWidth: 60,
+            label: { show: true, position: "top", color: "#e2e8f0",
+              formatter: function(p) { var v = p.value; return (v % 1 === 0 ? v : v.toFixed(2)) + " 吨"; } }
+          }]
+        }));
+      } catch (e) { console.error("renderCollectionChart failed", e); showChartError("chart-collection", "收运量图表渲染失败"); }
+    }
+
+    function renderLouleiChart(k) {
+      try {
+        var chart = safeInitChart("chart-loulei");
+        if (!chart) return;
+        charts.loulei = chart;
+        chart.setOption(Object.assign({}, baseChart, {
+          tooltip: Object.assign({}, baseChart.tooltip, { trigger: "item" }),
+          legend: { bottom: 0, textStyle: { color: "#94a3b8" } },
+          series: [{
+            type: "pie",
+            radius: ["45%", "70%"],
+            center: ["50%", "45%"],
+            avoidLabelOverlap: true,
+            label: { color: "#e2e8f0", formatter: "{b}\n{c} 家 ({d}%)" },
+            data: [
+              { value: k.loulei_investigated || 0, name: "已摸排", itemStyle: { color: "#38bdf8" } },
+              { value: k.loulei_signed || 0, name: "新签/转化", itemStyle: { color: "#22c55e" } },
+              { value: k.loulei_active || 0, name: "有效收运", itemStyle: { color: "#a78bfa" } }
+            ]
+          }]
+        }));
+      } catch (e) { console.error("renderLouleiChart failed", e); showChartError("chart-loulei", "楼区专项图表渲染失败"); }
+    }
+
+    function renderOilChart(k) {
+      try {
+        var chart = safeInitChart("chart-oil");
+        if (!chart) return;
+        charts.oil = chart;
+        var maxSales = Math.max(50, (k.oil_sales_tons || 0) * 1.2);
+        chart.setOption(Object.assign({}, baseChart, {
+          radar: {
+            indicator: [
+              { name: "地沟油完成率", max: 120 },
+              { name: "煎炸油完成率", max: 120 },
+              { name: "本周外售", max: maxSales }
+            ],
+            center: ["50%", "55%"],
+            radius: 90,
+            splitLine: { lineStyle: { color: "#334155" } },
+            splitArea: { areaStyle: { color: ["rgba(56,189,248,0.04)", "rgba(56,189,248,0.01)"] } },
+            axisLine: { lineStyle: { color: "#334155" } },
+            name: { textStyle: { color: "#94a3b8", fontSize: 11 } }
+          },
+          tooltip: Object.assign({}, baseChart.tooltip),
+          series: [{
+            type: "radar",
+            data: [{
+              value: [k.trench_oil_rate || 0, k.fry_oil_rate || 0, k.oil_sales_tons || 0],
+              name: "油脂业务",
+              areaStyle: { color: "rgba(56,189,248,0.35)" },
+              lineStyle: { color: "#38bdf8", width: 2 },
+              itemStyle: { color: "#38bdf8" }
+            }]
+          }]
+        }));
+      } catch (e) { console.error("renderOilChart failed", e); showChartError("chart-oil", "油脂图表渲染失败"); }
+    }
+
+    function renderSignChart(k) {
+      try {
+        var chart = safeInitChart("chart-sign");
+        if (!chart) return;
+        charts.sign = chart;
+        chart.setOption(Object.assign({}, baseChart, {
+          tooltip: Object.assign({}, baseChart.tooltip, { trigger: "axis" }),
+          xAxis: { type: "category", data: ["本周", "月累计", "月目标(按周x4)"],
+            axisLine: { lineStyle: { color: "#334155" } }, axisLabel: { color: "#94a3b8" } },
+          yAxis: { type: "value", name: "家", axisLine: { lineStyle: { color: "#334155" } },
+            splitLine: { lineStyle: { color: "#273449" } }, axisLabel: { color: "#94a3b8" } },
+          series: [{
+            type: "bar",
+            data: [
+              { value: k.new_signed_this_week || 0, itemStyle: { color: "#22c55e" } },
+              { value: k.new_signed_month || 0, itemStyle: { color: "#38bdf8" } },
+              { value: 96, itemStyle: { color: "#f59e0b" } }
+            ],
+            barWidth: 50,
+            label: { show: true, position: "top", color: "#e2e8f0", formatter: "{c} 家" }
+          }]
+        }));
+      } catch (e) { console.error("renderSignChart failed", e); showChartError("chart-sign", "新签转化图表渲染失败"); }
+    }
+
+    function renderSubmissionChart(wData) {
+      try {
+        var chart = safeInitChart("chart-submission");
+        if (!chart) return;
+        charts.submission = chart;
+        var reports = (wData && wData.reports) || [];
+        var weeks = reports.slice().reverse();
+        var weekLabels = weeks.map(function(r) { return r.week_label || ""; });
+        var submittedCounts = weeks.map(function(r) { return (r.persons || []).length; });
+        var expectedCounts = weeks.map(function(r) { return r.expected_count || (wData.roster || []).length || r.submitted_count || 0; });
+        var rates = weeks.map(function(r, i) {
+          var exp = expectedCounts[i];
+          return exp > 0 ? Math.round(submittedCounts[i] / exp * 100) : 0;
+        });
+
+        chart.setOption(Object.assign({}, baseChart, {
+          tooltip: Object.assign({}, baseChart.tooltip, { trigger: "axis" }),
+          legend: { bottom: 0, textStyle: { color: "#94a3b8" }, data: ["提交率%"] },
+          xAxis: { type: "category", data: weekLabels,
+            axisLine: { lineStyle: { color: "#334155" } },
+            axisLabel: { color: "#94a3b8", fontSize: 10, interval: 0 } },
+          yAxis: [
+            { type: "value", name: "提交率%", min: 0, max: 105,
+              axisLine: { lineStyle: { color: "#334155" } },
+              splitLine: { lineStyle: { color: "#273449" } },
+              axisLabel: { color: "#94a3b8", formatter: "{value}%" } }
+          ],
+          series: [{
+            name: "提交率%",
+            type: "line",
+            data: rates,
+            smooth: true,
+            lineStyle: { color: "#38bdf8", width: 3 },
+            itemStyle: { color: "#38bdf8" },
+            areaStyle: { color: "rgba(56,189,248,0.15)" },
+            label: { show: true, position: "top", color: "#e2e8f0", formatter: "{c}%" }
+          }]
+        }));
+      } catch (e) { console.error("renderSubmissionChart failed", e); showChartError("chart-submission", "提交趋势图表渲染失败"); }
+    }
+
+    function showChartError(domId, msg) {
+      var dom = document.getElementById(domId);
+      if (dom) dom.innerHTML = '<div class="chart-error"><div class="icon">⚠️</div>' + msg + '</div>';
+    }
+
+    // ===== Next Focus =====
+    function renderNextFocus(d) {
+      try {
+        var el = document.getElementById("next-focus");
+        if (!d || !d.next_focus || d.next_focus.length === 0 ||
+            (d.next_focus.length === 1 && d.next_focus[0].text === "—")) {
+          el.innerHTML = '<div style="color:var(--text-dim);font-size:13px;">本周无重点关注事项</div>';
+          return;
+        }
+        var html = '<ol class="next-focus-list">';
+        d.next_focus.forEach(function(n) {
+          var cls = n.priority <= 2 ? "high" : (n.priority <= 4 ? "med" : "low");
+          if (n.text === "—") return;
+          html += '<li><span class="badge ' + cls + '" style="margin-right:8px">P' + n.priority + '</span>' + n.text + '</li>';
+        });
+        html += '</ol>';
+        if (html === '<ol class="next-focus-list"></ol>') {
+          el.innerHTML = '<div style="color:var(--text-dim);font-size:13px;">本周无重点关注事项</div>';
+          return;
+        }
+        el.innerHTML = html;
+      } catch (e) { console.error("renderNextFocus failed", e); }
+    }
+
+    // ===== Member Cards =====
     var memberPageState = { current: 1, perPage: 10, allCards: [], filteredCards: [] };
 
-    function buildMemberCards(wData) {
+    function buildMemberCards(wData, weekIdx) {
       var persons = [];
-      if (wData && wData.reports && wData.reports.length > 0) {
-        var latestReport = wData.reports[0];
-        if (latestReport.persons) {
-          persons = latestReport.persons.map(function(p) {
+      var reports = (wData && wData.reports) || [];
+      var idx = (weekIdx !== undefined && weekIdx !== null) ? weekIdx : 0;
+      if (reports.length > idx) {
+        var report = reports[idx];
+        if (report.persons) {
+          persons = report.persons.map(function(p) {
             return {
               name: p.name,
               dept: p.dept,
@@ -325,7 +747,6 @@
               plan: p.plan || ""
             };
           });
-          // 调整顺序：施洪彬、李慧排到最前
           var priorityNames = ["施洪彬", "李慧"];
           persons.sort(function(a, b) {
             var aIdx = priorityNames.indexOf(a.name);
@@ -337,7 +758,6 @@
           });
         }
       }
-      // Fallback: use dashboard_data.json departments
       if (persons.length === 0 && cache && cache.departments) {
         persons = cache.departments.map(function(dep) {
           return {
@@ -353,16 +773,16 @@
     }
 
     function parseRiskLevel(issuesText) {
-      if (!issuesText) return "low";
+      if (!issuesText || issuesText === "—") return "low";
       var highKw = ["紧急", "严重", "停滞", "阻碍", "超标", "故障", "无法", "急需", "风险", "逾期"];
-      var medKw = ["缓慢", "延迟", "不足", "下降", "需跟进", "待解决", "缺少", "不足"];
+      var medKw = ["缓慢", "延迟", "不足", "下降", "需跟进", "待解决", "缺少"];
       for (var i = 0; i < highKw.length; i++) { if (issuesText.indexOf(highKw[i]) !== -1) return "high"; }
       for (var j = 0; j < medKw.length; j++) { if (issuesText.indexOf(medKw[j]) !== -1) return "med"; }
       return "low";
     }
 
     function splitItems(text) {
-      if (!text) return [];
+      if (!text || text === "—") return [];
       return text.split(/[；;。\n]+/).filter(function(s) { return s.trim().length > 0; }).map(function(s) { return s.trim(); });
     }
 
@@ -389,6 +809,7 @@
 
     function renderPagination(total, current, perPage) {
       var bar = document.getElementById("member-pagination");
+      if (!bar) return;
       if (total <= perPage) { bar.innerHTML = ""; return; }
       var totalPages = Math.ceil(total / perPage);
       var html = '';
@@ -422,26 +843,31 @@
       renderPagination(total, page, memberPageState.perPage);
     }
 
-    function renderMemberCards(wData) {
-      var allCards = buildMemberCards(wData);
-      memberPageState.allCards = allCards;
-      memberPageState.filteredCards = allCards;
-      memberPageState.current = 1;
+    function renderMemberCards(wData, weekIdx) {
+      try {
+        var allCards = buildMemberCards(wData, weekIdx);
+        memberPageState.allCards = allCards;
+        memberPageState.filteredCards = allCards;
+        memberPageState.current = 1;
 
-      var deptSet = {};
-      allCards.forEach(function(c) { deptSet[c.dept] = true; });
-      var totalDepts = Object.keys(deptSet).length;
-      document.getElementById("member-stats").innerHTML = '共 <span>' + allCards.length + '</span> 人 · <span>' + totalDepts + '</span> 个部门';
+        var deptSet = {};
+        allCards.forEach(function(c) { deptSet[c.dept] = true; });
+        var totalDepts = Object.keys(deptSet).length;
+        document.getElementById("member-stats").innerHTML = '共 <span>' + allCards.length + '</span> 人 · <span>' + totalDepts + '</span> 个部门';
 
-      if (allCards.length === 0) {
-        document.getElementById("member-grid-container").innerHTML = '<div class="empty-missing"><div class="icon">📭</div><h3>暂无成员数据</h3><p>请等待本周周报生成后刷新</p></div>';
-        document.getElementById("member-pagination").innerHTML = "";
-        return;
+        if (allCards.length === 0) {
+          document.getElementById("member-grid-container").innerHTML = '<div class="empty-missing"><div class="icon">📭</div><h3>暂无成员数据</h3><p>请等待本周周报生成后刷新</p></div>';
+          document.getElementById("member-pagination").innerHTML = "";
+          return;
+        }
+        goToPage(1);
+      } catch (e) {
+        console.error("renderMemberCards failed", e);
+        document.getElementById("member-grid-container").innerHTML = '<div class="chart-error"><div class="icon">⚠️</div>成员卡片渲染失败</div>';
       }
-      goToPage(1);
     }
 
-    // ---- 未提交人员统计 (来自 weekly_data.json) ----
+    // ===== Missing Persons =====
     function computeMissing(report, roster) {
       var submitted = (report.persons || []).map(function(p) { return p.name; });
       var missing = [];
@@ -453,40 +879,45 @@
       return missing;
     }
 
-    function renderMissing() {
-      var container = document.getElementById("missing-content");
-      if (!weeklyCache) {
-        container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-dim);">提交数据暂不可用</div>';
-        return;
+    function renderMissing(weekIdx) {
+      try {
+        var container = document.getElementById("missing-content");
+        if (!weeklyCache) {
+          container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-dim);">提交数据暂不可用</div>';
+          return;
+        }
+        var reports = weeklyCache.reports || [];
+        var idx = (weekIdx !== undefined && weekIdx !== null) ? weekIdx : 0;
+        var latest = reports[idx] || {};
+        var roster = weeklyCache.roster || [];
+        var missingList = latest.missing_persons || [];
+
+        var deptFilter = document.getElementById("dept-filter");
+        var depts = [];
+        roster.forEach(function(p) { if (depts.indexOf(p.dept) === -1) depts.push(p.dept); });
+        deptFilter.innerHTML = '<option value="all">全部部门 (' + depts.length + ')</option>' + depts.map(function(d) { return '<option value="' + d + '">' + d + '</option>'; }).join("");
+
+        if (missingList.length === 0) {
+          container.innerHTML = '<div class="empty-missing"><div class="icon">✅</div><h3>本周全员已提交</h3><p>所有 ' + roster.length + ' 位成员均已提交本周周报</p></div>';
+          return;
+        }
+
+        var html = '<table class="missing-table"><thead><tr><th>#</th><th>姓名</th><th>部门</th></tr></thead><tbody>';
+        missingList.forEach(function(m, i) {
+          var lastName = m.name.charAt(m.name.length - 1);
+          html += '<tr class="missing-row" data-dept="' + m.dept + '">';
+          html += '<td style="color:var(--text-dim);">' + (i+1) + '</td>';
+          html += '<td><span class="person-badge"><span class="person-avatar">' + lastName + '</span>' + m.name + '</span></td>';
+          html += '<td><span class="dept-tag-light">' + m.dept + '</span></td>';
+          html += '</tr>';
+        });
+        html += '</tbody></table>';
+        html += '<div class="missing-summary">本周共 <strong style="color:#f87171;">' + missingList.length + '</strong> 人未提交周报（应提交 ' + roster.length + ' 人）</div>';
+        container.innerHTML = html;
+      } catch (e) {
+        console.error("renderMissing failed", e);
+        document.getElementById("missing-content").innerHTML = '<div class="chart-error"><div class="icon">⚠️</div>未提交人员渲染失败</div>';
       }
-      var reports = weeklyCache.reports || [];
-      var latest = reports[0] || {};
-      var roster = weeklyCache.roster || [];
-      var missingList = latest.missing_persons || [];
-
-      // Populate dept filter
-      var deptFilter = document.getElementById("dept-filter");
-      var depts = [];
-      roster.forEach(function(p) { if (depts.indexOf(p.dept) === -1) depts.push(p.dept); });
-      deptFilter.innerHTML = '<option value="all">全部部门 (' + depts.length + ')</option>' + depts.map(function(d) { return '<option value="' + d + '">' + d + '</option>'; }).join("");
-
-      if (missingList.length === 0) {
-        container.innerHTML = '<div class="empty-missing"><div class="icon">✅</div><h3>本周全员已提交</h3><p>所有 ' + roster.length + ' 位成员均已提交本周周报</p></div>';
-        return;
-      }
-
-      var html = '<table class="missing-table"><thead><tr><th>#</th><th>姓名</th><th>部门</th></tr></thead><tbody>';
-      missingList.forEach(function(m, i) {
-        var lastName = m.name.charAt(m.name.length - 1);
-        html += '<tr class="missing-row" data-dept="' + m.dept + '">';
-        html += '<td style="color:var(--text-dim);">' + (i+1) + '</td>';
-        html += '<td><span class="person-badge"><span class="person-avatar">' + lastName + '</span>' + m.name + '</span></td>';
-        html += '<td><span class="dept-tag-light">' + m.dept + '</span></td>';
-        html += '</tr>';
-      });
-      html += '</tbody></table>';
-      html += '<div class="missing-summary">本周共 <strong style="color:#f87171;">' + missingList.length + '</strong> 人未提交周报（应提交 ' + roster.length + ' 人）</div>';
-      container.innerHTML = html;
     }
 
     function filterMissing() {
@@ -496,34 +927,163 @@
       });
     }
 
-    // ---- Boot ----
-    async function refresh() {
+    // ===== Week Selector =====
+    function buildWeekSelector(wData) {
       try {
-        const data = await fetchData();
-        cache = data;
-        renderHeader(data.meta);
-        renderNextFocus(data);
-        // Fetch submission data
-        const wData = await fetchWeeklyData();
-        if (wData) {
-          weeklyCache = wData;
-          if (!weeklyCache.roster) weeklyCache.roster = [];
-          weeklyCache.reports.forEach(function(r) {
-            if (!r.submitted_count) r.submitted_count = (r.persons || []).length;
-            if (!r.expected_count) r.expected_count = weeklyCache.roster.length || r.submitted_count;
-            if (!r.missing_persons) r.missing_persons = computeMissing(r, weeklyCache.roster);
-          });
-          renderMissing();
-          renderMemberCards(wData);
-        } else {
-          renderMemberCards(null);
+        var selector = document.getElementById("week-selector");
+        if (!wData || !wData.reports || wData.reports.length === 0) {
+          selector.innerHTML = '<option value="0">无可用周次</option>';
+          return;
         }
-      } catch (e) {
-        console.error("刷新失败", e);
-        setText("generated-at", "加载失败：" + (e.message || e));
+        var options = wData.reports.map(function(r, i) {
+          var label = r.week_label || ("第" + (i+1) + "周");
+          var patTag = isPATFailed(r) ? " ⚠️(PAT失败)" : "";
+          return '<option value="' + i + '">' + label + patTag + '</option>';
+        }).join("");
+        selector.innerHTML = options;
+      } catch (e) { console.error("buildWeekSelector failed", e); }
+    }
+
+    function switchWeek() {
+      var selector = document.getElementById("week-selector");
+      selectedWeekIndex = parseInt(selector.value) || 0;
+      var statusEl = document.getElementById("week-status");
+
+      var report = (weeklyCache && weeklyCache.reports) ? weeklyCache.reports[selectedWeekIndex] : null;
+      if (report && isPATFailed(report)) {
+        statusEl.innerHTML = '⚠️ <span style="color:#fbbf24;">本周数据因 PAT 授权失败不可用</span>';
+      } else {
+        statusEl.innerHTML = '';
+      }
+
+      // Re-render sections with selected week
+      renderMissing(selectedWeekIndex);
+      renderMemberCards(weeklyCache, selectedWeekIndex);
+    }
+
+    // ===== PAT Warning =====
+    function checkPATWarning(wData) {
+      var warning = document.getElementById("pat-warning");
+      if (!wData || !wData.reports || wData.reports.length === 0) {
+        warning.classList.remove("show");
+        return;
+      }
+      var latest = wData.reports[0];
+      if (isPATFailed(latest)) {
+        warning.classList.add("show");
+        // Auto-switch to first non-PAT-failed week
+        for (var i = 1; i < wData.reports.length; i++) {
+          if (!isPATFailed(wData.reports[i])) {
+            selectedWeekIndex = i;
+            var selector = document.getElementById("week-selector");
+            if (selector) selector.value = i;
+            switchWeek();
+            return;
+          }
+        }
+      } else {
+        warning.classList.remove("show");
       }
     }
 
+    // ===== Main Refresh =====
+    async function refresh() {
+      try {
+        // 1. Load dashboard_data.json
+        var data;
+        try {
+          data = await fetchData();
+        } catch (e) {
+          showError("数据加载失败：" + (e.message || e) + "（请检查网络连接或稍后重试）");
+          document.getElementById("kpi-grid").innerHTML = '<div class="chart-error"><div class="icon">📡</div>无法连接到数据源<br><span style="font-size:11px;">请检查网络后刷新页面</span></div>';
+          return;
+        }
+        cache = data;
+
+        // 2. Render header
+        renderHeader(data.meta);
+
+        // 3. Render KPI (with validation)
+        renderKPI(data.kpi);
+
+        // 4. Render charts (each in try-catch)
+        if (hasValidKPI(data.kpi)) {
+          renderCollectionChart(data.kpi);
+          renderLouleiChart(data.kpi);
+          renderOilChart(data.kpi);
+          renderSignChart(data.kpi);
+        } else {
+          ["chart-collection", "chart-loulei", "chart-oil", "chart-sign"].forEach(function(id) {
+            showChartError(id, "KPI 数据暂无（PAT授权失败或未生成）");
+          });
+        }
+
+        // 5. Render next focus
+        renderNextFocus(data);
+
+        // 6. Load weekly_data.json
+        var wData = await fetchWeeklyData();
+        if (wData) {
+          weeklyCache = wData;
+          if (!weeklyCache.roster) weeklyCache.roster = [];
+          // Safe iteration with null check
+          if (weeklyCache.reports && weeklyCache.reports.length > 0) {
+            weeklyCache.reports.forEach(function(r) {
+              if (!r.submitted_count) r.submitted_count = (r.persons || []).length;
+              if (!r.expected_count) r.expected_count = weeklyCache.roster.length || r.submitted_count;
+              if (!r.missing_persons) r.missing_persons = computeMissing(r, weeklyCache.roster);
+            });
+          }
+
+          // Build week selector
+          buildWeekSelector(wData);
+
+          // Check PAT failure and auto-switch if needed
+          checkPATWarning(wData);
+
+          // Render submission trend chart
+          renderSubmissionChart(wData);
+
+          // Render sections (use selectedWeekIndex, may have been set by checkPATWarning)
+          renderMissing(selectedWeekIndex);
+          renderMemberCards(wData, selectedWeekIndex);
+        } else {
+          console.warn("weekly_data.json 不可用，使用 dashboard_data.json 回退");
+          renderMemberCards(null, 0);
+          showChartError("chart-submission", "提交数据暂不可用");
+          document.getElementById("missing-content").innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-dim);">提交数据暂不可用</div>';
+        }
+      } catch (e) {
+        console.error("refresh failed", e);
+        showError("页面加载错误：" + (e.message || e) + "（请按 Cmd+Shift+R 强制刷新）");
+      }
+    }
+
+    // ===== Window Resize =====
+    window.addEventListener("resize", function() {
+      if (typeof charts !== "undefined") {
+        Object.keys(charts).forEach(function(key) {
+          if (charts[key]) {
+            try { charts[key].resize(); } catch (e) { /* ignore */ }
+          }
+        });
+      }
+    });
+
+    // ===== Next Update Calculator =====
+    (function updateNext() {
+      var now = new Date();
+      var n = new Date(now);
+      var d = n.getDay();
+      var diff = (6 - d + 7) % 7;
+      n.setDate(n.getDate() + (diff === 0 && now.getHours() >= 18 ? 7 : diff));
+      n.setHours(18, 0, 0, 0);
+      var el = document.getElementById("next-update");
+      if (el) el.textContent = n.toLocaleString("zh-CN", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false });
+      setTimeout(updateNext, 3600000);
+    })();
+
+    // ===== Boot =====
     refresh();
   </script>
 </body>
