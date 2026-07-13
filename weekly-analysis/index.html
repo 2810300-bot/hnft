@@ -49,13 +49,6 @@ body {
 .breadcrumb-bar a { color: var(--accent-blue); text-decoration: none; font-weight: 500; }
 .breadcrumb-bar a:hover { text-decoration: underline; }
 .breadcrumb-bar .sep { color: #94a3b8; margin: 0 8px; }
-.btn-export {
-  background: var(--accent-blue); color: #fff; border: none;
-  padding: 6px 16px; border-radius: 6px; font-size: 12px; cursor: pointer;
-  font-weight: 500; transition: opacity 0.2s;
-}
-.btn-export:hover { opacity: 0.9; }
-
 /* Header */
 .site-header {
   background: linear-gradient(135deg, var(--header-bg), var(--header-bg2));
@@ -414,11 +407,6 @@ body {
   .card-summary { padding: 0 16px 12px; }
   .card-body { padding: 12px 16px 20px; }
 }
-@media print {
-  .card-body { display: block !important; }
-  .week-card { break-inside: avoid; border: 1px solid #ccc; }
-  .site-header { background: #333 !important; -webkit-print-color-adjust: exact; }
-}
 </style>
 </head>
 <body>
@@ -428,10 +416,6 @@ body {
     <a href="../">🏠 看板中心</a>
     <span class="sep">/</span>
     <span>厨余垃圾收运量周数据分析</span>
-  </div>
-  <div style="display:flex;gap:8px;">
-    <button class="btn-export" onclick="exportCSV()" title="导出 CSV">📥 导出 CSV</button>
-    <button class="btn-export" onclick="window.print()" title="打印报告">🖨️ 打印</button>
   </div>
 </div>
 
@@ -1164,48 +1148,6 @@ function renderAlertBanner(latestWeek) {
     list.innerHTML = items.map(function(i) { return '<li>' + i + '</li>'; }).join('');
     banner.classList.add('visible');
   }
-}
-
-// ---- CSV Export ----
-function exportCSV() {
-  if (allWeeks.length === 0) {
-    alert('暂无数据可导出');
-    return;
-  }
-
-  var headers = ['周次', '日期范围', '周收运量(吨)', '日均收运量(吨)', '车次', '车辆数', '环比变化率(%)', '趋势', '峰值日期', '峰值(吨)', '谷值日期', '谷值(吨)', '异常总数', '中危', '低危', '数据缺失天数', '总结'];
-  var rows = allWeeks.map(function(w) {
-    return [
-      '第' + w.week + '周',
-      w.date_range || '',
-      w.total_ton || 0,
-      w.avg_daily_ton || 0,
-      w.total_trips || 0,
-      w.vehicle_count || 0,
-      w.change_pct !== null && w.change_pct !== undefined ? w.change_pct : '',
-      w.trend_label || '',
-      (w.peak || {}).date || '',
-      (w.peak || {}).ton || 0,
-      (w.valley || {}).date || '',
-      (w.valley || {}).ton || 0,
-      w.anomalies_total || 0,
-      w.anomalies_medium || 0,
-      w.anomalies_low || 0,
-      (w.missing_days || []).length,
-      '"' + (w.summary || '').replace(/"/g, '""') + '"'
-    ];
-  });
-
-  var csvContent = '\uFEFF' + headers.join(',') + '\n' + rows.map(function(r) { return r.join(','); }).join('\n');
-  var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = '厨余收运周数据汇总_' + new Date().toISOString().slice(0, 10) + '.csv';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
 }
 
 // ---- Main init ----
