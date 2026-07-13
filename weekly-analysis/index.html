@@ -580,45 +580,36 @@ async function loadWeekData(weekNum) {
 
 // ---- Render monthly KPI ----
 function renderMonthlyKPI(weeks) {
-  var totalTrips = weeks.reduce(function(s, w) { return s + (w.total_trips || 0); }, 0);
-  var totalDays = weeks.reduce(function(s, w) { return s + (w.days_with_data || w.days || 7); }, 0);
-
-  // 日均收运量基于全部数据完整统计
-  var totalTon = weeks.reduce(function(s, w) { return s + (w.total_ton || 0); }, 0);
-  var avgDaily = totalDays > 0 ? totalTon / totalDays : 0;
-
-  var peaks = weeks.map(function(w) { return (w.peak || {}).ton || 0; }).filter(Boolean);
-  var valleys = weeks.map(function(w) { return (w.valley || {}).ton || 0; }).filter(Boolean);
-  var maxPeak = peaks.length > 0 ? Math.max.apply(null, peaks) : 0;
-  var minValley = valleys.length > 0 ? Math.min.apply(null, valleys) : 0;
-
   var latestWeek = weeks[0] || {};
+
   var latestTrend = latestWeek.trend_label || '-';
   var latestChange = latestWeek.change_pct;
   var changeSign = latestChange !== null && latestChange !== undefined
     ? (latestChange > 0 ? '+' : '') + fmtPct(latestChange)
     : '基线';
 
-  // 上周收运量 — 取最新完整周数据
-  var targetWeek = weeks[0] || {};
-  var targetDateRange = targetWeek.date_range || '';
-  var isoDates = '';
-  if (targetWeek.date_start && targetWeek.date_end) {
-    isoDates = targetWeek.date_start + ' 至 ' + targetWeek.date_end;
-  } else {
-    isoDates = targetDateRange;
+  // 最新周日期范围
+  var dateDisplay = latestWeek.date_range || '';
+  if (latestWeek.date_start && latestWeek.date_end) {
+    dateDisplay = latestWeek.date_range || (latestWeek.date_start + ' 至 ' + latestWeek.date_end);
   }
+
+  // 最新周峰值/谷值（值与日期来自同一数据源，确保匹配）
+  var peakTon = (latestWeek.peak || {}).ton || 0;
+  var peakDate = (latestWeek.peak || {}).date || '-';
+  var valleyTon = (latestWeek.valley || {}).ton || 0;
+  var valleyDate = (latestWeek.valley || {}).date || '-';
 
   document.getElementById('monthly-kpi').innerHTML =
     '<div class="kpi-card">' +
-      '<div class="label">上周收运量</div>' +
-      '<div class="value">' + fmtNum(targetWeek.total_ton || 0, 1) + '<span class="unit">吨</span></div>' +
-      '<div class="sub">📅 ' + isoDates + '</div>' +
+      '<div class="label">最新周收运量</div>' +
+      '<div class="value">' + fmtNum(latestWeek.total_ton || 0, 1) + '<span class="unit">吨</span></div>' +
+      '<div class="sub">📅 ' + dateDisplay + '</div>' +
     '</div>' +
     '<div class="kpi-card">' +
       '<div class="label">日均收运量</div>' +
-      '<div class="value">' + fmtNum(avgDaily, 1) + '<span class="unit">吨/日</span></div>' +
-      '<div class="sub">全部' + weeks.length + '周数据 · ' + totalTrips + ' 车次 · ' + totalDays + ' 天</div>' +
+      '<div class="value">' + fmtNum(latestWeek.avg_daily_ton || 0, 1) + '<span class="unit">吨/日</span></div>' +
+      '<div class="sub">' + (latestWeek.label || '') + ' · ' + (latestWeek.total_trips || 0) + ' 车次 · ' + (latestWeek.days_with_data || 7) + ' 天</div>' +
     '</div>' +
     '<div class="kpi-card">' +
       '<div class="label">最新周趋势</div>' +
@@ -627,8 +618,8 @@ function renderMonthlyKPI(weeks) {
     '</div>' +
     '<div class="kpi-card">' +
       '<div class="label">单日峰值 / 谷值</div>' +
-      '<div class="value">' + fmtNum(maxPeak, 1) + ' / ' + fmtNum(minValley, 1) + '<span class="unit">吨</span></div>' +
-      '<div class="sub">峰值 ' + (latestWeek.peak ? latestWeek.peak.date : '-') + ' · 谷值 ' + (latestWeek.valley ? latestWeek.valley.date : '-') + '</div>' +
+      '<div class="value">' + fmtNum(peakTon, 1) + ' / ' + fmtNum(valleyTon, 1) + '<span class="unit">吨</span></div>' +
+      '<div class="sub">峰值 ' + peakDate + ' · 谷值 ' + valleyDate + '</div>' +
     '</div>';
 }
 
