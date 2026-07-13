@@ -3260,5 +3260,397 @@
       "days_active": 1,
       "daily_avg_kg": 4980
     }
-  ]
+  ],
+  "W28": {
+    "week": 28,
+    "label": "第28周",
+    "vehicle_count": 22,
+    "total_week_kg": 1235670,
+    "total_week_ton": 1235.7,
+    "total_trips": 270,
+    "top10": [
+      {
+        "plate": "湘FB0252",
+        "unit": "开发区餐厨",
+        "total_kg": 115030,
+        "total_trips": 21,
+        "avg_per_trip": 5477,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FA8347",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 112210,
+        "total_trips": 31,
+        "avg_per_trip": 3619,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FA3040",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 102520,
+        "total_trips": 21,
+        "avg_per_trip": 4881,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FC5523",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 92660,
+        "total_trips": 14,
+        "avg_per_trip": 6618,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB8611",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 77340,
+        "total_trips": 20,
+        "avg_per_trip": 3867,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB6266",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 75920,
+        "total_trips": 15,
+        "avg_per_trip": 5061,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FA9847",
+        "unit": "南湖新区餐厨",
+        "total_kg": 75410,
+        "total_trips": 15,
+        "avg_per_trip": 5027,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘F86680",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 72210,
+        "total_trips": 17,
+        "avg_per_trip": 4247,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FC1673",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 65220,
+        "total_trips": 15,
+        "avg_per_trip": 4348,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB9498",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 63080,
+        "total_trips": 14,
+        "avg_per_trip": 4505,
+        "days_active": 7,
+        "attendance": "7/7"
+      }
+    ],
+    "bottom10": [
+      {
+        "plate": "湘FA8040",
+        "unit": "开发区餐厨",
+        "total_kg": 10540,
+        "total_trips": 2,
+        "avg_per_trip": 5270,
+        "days_active": 1,
+        "attendance": "1/7"
+      },
+      {
+        "plate": "湘FB9409",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 11200,
+        "total_trips": 2,
+        "avg_per_trip": 5600,
+        "days_active": 2,
+        "attendance": "2/7"
+      },
+      {
+        "plate": "湘FA5403",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 26360,
+        "total_trips": 7,
+        "avg_per_trip": 3765,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FA8340",
+        "unit": "开发区餐厨",
+        "total_kg": 27250,
+        "total_trips": 8,
+        "avg_per_trip": 3406,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB7351",
+        "unit": "开发区餐厨",
+        "total_kg": 27570,
+        "total_trips": 7,
+        "avg_per_trip": 3938,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FC3710",
+        "unit": "开发区餐厨",
+        "total_kg": 34060,
+        "total_trips": 7,
+        "avg_per_trip": 4865,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB3975",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 34130,
+        "total_trips": 7,
+        "avg_per_trip": 4875,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB9046",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 35180,
+        "total_trips": 11,
+        "avg_per_trip": 3198,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB0388",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 37640,
+        "total_trips": 8,
+        "avg_per_trip": 4705,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FA8342",
+        "unit": "岳阳君山区餐厨",
+        "total_kg": 42780,
+        "total_trips": 7,
+        "avg_per_trip": 6111,
+        "days_active": 5,
+        "attendance": "5/7"
+      }
+    ],
+    "all_vehicles": [
+      {
+        "plate": "湘FB0252",
+        "unit": "开发区餐厨",
+        "total_kg": 115030,
+        "total_trips": 21,
+        "avg_per_trip": 5477,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FA8347",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 112210,
+        "total_trips": 31,
+        "avg_per_trip": 3619,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FA3040",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 102520,
+        "total_trips": 21,
+        "avg_per_trip": 4881,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FC5523",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 92660,
+        "total_trips": 14,
+        "avg_per_trip": 6618,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB8611",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 77340,
+        "total_trips": 20,
+        "avg_per_trip": 3867,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB6266",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 75920,
+        "total_trips": 15,
+        "avg_per_trip": 5061,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FA9847",
+        "unit": "南湖新区餐厨",
+        "total_kg": 75410,
+        "total_trips": 15,
+        "avg_per_trip": 5027,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘F86680",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 72210,
+        "total_trips": 17,
+        "avg_per_trip": 4247,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FC1673",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 65220,
+        "total_trips": 15,
+        "avg_per_trip": 4348,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB9498",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 63080,
+        "total_trips": 14,
+        "avg_per_trip": 4505,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB2060",
+        "unit": "临港新区餐厨",
+        "total_kg": 52570,
+        "total_trips": 14,
+        "avg_per_trip": 3755,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FC8698",
+        "unit": "岳阳君山区餐厨",
+        "total_kg": 44790,
+        "total_trips": 7,
+        "avg_per_trip": 6398,
+        "days_active": 5,
+        "attendance": "5/7"
+      },
+      {
+        "plate": "湘FA8342",
+        "unit": "岳阳君山区餐厨",
+        "total_kg": 42780,
+        "total_trips": 7,
+        "avg_per_trip": 6111,
+        "days_active": 5,
+        "attendance": "5/7"
+      },
+      {
+        "plate": "湘FB0388",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 37640,
+        "total_trips": 8,
+        "avg_per_trip": 4705,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB9046",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 35180,
+        "total_trips": 11,
+        "avg_per_trip": 3198,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB3975",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 34130,
+        "total_trips": 7,
+        "avg_per_trip": 4875,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FC3710",
+        "unit": "开发区餐厨",
+        "total_kg": 34060,
+        "total_trips": 7,
+        "avg_per_trip": 4865,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB7351",
+        "unit": "开发区餐厨",
+        "total_kg": 27570,
+        "total_trips": 7,
+        "avg_per_trip": 3938,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FA8340",
+        "unit": "开发区餐厨",
+        "total_kg": 27250,
+        "total_trips": 8,
+        "avg_per_trip": 3406,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FA5403",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 26360,
+        "total_trips": 7,
+        "avg_per_trip": 3765,
+        "days_active": 7,
+        "attendance": "7/7"
+      },
+      {
+        "plate": "湘FB9409",
+        "unit": "岳阳楼区餐厨",
+        "total_kg": 11200,
+        "total_trips": 2,
+        "avg_per_trip": 5600,
+        "days_active": 2,
+        "attendance": "2/7"
+      },
+      {
+        "plate": "湘FA8040",
+        "unit": "开发区餐厨",
+        "total_kg": 10540,
+        "total_trips": 2,
+        "avg_per_trip": 5270,
+        "days_active": 1,
+        "attendance": "1/7"
+      }
+    ]
+  }
 }

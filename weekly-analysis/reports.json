@@ -1,9 +1,31 @@
 {
-  "updated": "2026-06-29T15:45:00+08:00",
-  "total": 4,
+  "updated": "2026-07-13T09:30:00+08:00",
+  "total": 6,
   "auto_append": true,
   "append_rule": "新周报告按 week_num 倒序插入。仅追加，禁止覆盖/删除已有条目。每周数据存储在独立 JSON 文件 (wXX_data.json) 中，index.html 动态加载。",
   "reports": [
+    {
+      "week": 28,
+      "year": 2026,
+      "label": "第28周 (7月6日-7月12日)",
+      "date_range": "2026-07-06 ~ 2026-07-12",
+      "data_file": "w28_data.json",
+      "url": "https://2810300-bot.github.io/hnft/weekly-analysis/",
+      "size_kb": 11.2,
+      "created": "2026-07-13T09:30:00+08:00",
+      "summary": "环比下降，环比-2.0%，周收运1235.7吨，日均176.5吨。"
+    },
+    {
+      "week": 27,
+      "year": 2026,
+      "label": "第27周 (6月29日-7月5日)",
+      "date_range": "2026-06-29 ~ 2026-07-05",
+      "data_file": "w27_data.json",
+      "url": "https://2810300-bot.github.io/hnft/weekly-analysis/",
+      "size_kb": 117.7,
+      "created": "2026-07-05T12:00:00+08:00",
+      "summary": "收运量1261.0吨；环比-8.7%；⚠️ 7月1日（周三）仅103.7吨，疑似受建党节影响"
+    },
     {
       "week": 26,
       "year": 2026,
