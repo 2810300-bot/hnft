@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>车型运行数据分析 - 花果畈餐厨垃圾收运</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<style>
+:root {
+    --bg-primary: #f5f6fa;
+    --bg-card: #ffffff;
+    --bg-header: #1a1a2e;
+    --bg-header-secondary: #16213e;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --text-on-dark: #e0e0e0;
+    --accent: #4C72B0;
+    --accent2: #DD8452;
+    --accent3: #55A868;
+    --accent4: #C44E52;
+    --accent5: #8172B3;
+    --positive: #28a745;
+    --negative: #dc3545;
+    --warning: #ffc107;
+    --gap: 16px;
+    --radius: 10px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.06);
+    /* 车型配色 */
+    --color-3t: #55A868;
+    --color-5t: #4C72B0;
+    --color-8t: #DD8452;
+    --color-10t: #C44E52;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+.dashboard-container { max-width: 1440px; margin: 0 auto; padding: var(--gap); }
+
+/* Header */
+.dashboard-header {
+    background: linear-gradient(135deg, var(--bg-header), var(--bg-header-secondary));
+    color: var(--text-on-dark);
+    padding: 24px 28px;
+    border-radius: var(--radius);
+    margin-bottom: var(--gap);
+    position: relative;
+    overflow: hidden;
+}
+.dashboard-header::after {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+.header-info h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+.header-info .subtitle { font-size: 13px; color: #aaa; }
+.header-meta { font-size: 12px; color: #999; text-align: right; }
+.header-meta span { display: block; }
+
+/* Notice banner */
+.notice {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: var(--radius);
+    padding: 12px 18px;
+    margin-bottom: var(--gap);
+    font-size: 13px;
+    color: #856404;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.notice .icon { font-size: 18px; flex-shrink: 0; }
+
+/* Filters */
+.filter-bar {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: var(--gap);
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.filter-group { display: flex; align-items: center; gap: 6px; }
+.filter-group label { font-size: 13px; font-weight: 500; color: var(--text-secondary); white-space: nowrap; }
+.filter-group select, .filter-group input {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.filter-group select:focus, .filter-group input:focus { border-color: var(--accent); }
+.filter-group input[type="date"] { width: 140px; }
+.btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #3d5d99; }
+.btn-outline { background: #fff; color: var(--accent); border: 1px solid var(--accent); }
+.btn-outline:hover { background: #f0f4ff; }
+.btn-outline.active { background: var(--accent); color: #fff; }
+.type-filter-btns { display: flex; gap: 4px; }
+
+/* KPI Cards */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--gap);
+    margin-bottom: var(--gap);
+}
+.kpi-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.kpi-card .label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+.kpi-card .value { font-size: 28px; font-weight: 700; }
+.kpi-card .sub { font-size: 12px; color: var(--text-secondary); }
+.kpi-card.accent-3t { border-left: 3px solid var(--color-3t); }
+.kpi-card.accent-3t .value { color: var(--color-3t); }
+.kpi-card.accent-5t { border-left: 3px solid var(--color-5t); }
+.kpi-card.accent-5t .value { color: var(--color-5t); }
+.kpi-card.accent-8t { border-left: 3px solid var(--color-8t); }
+.kpi-card.accent-8t .value { color: var(--color-8t); }
+.kpi-card.accent-all { border-left: 3px solid #333; }
+.kpi-card.accent-all .value { color: #333; }
+
+/* Chart section */
+.chart-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap);
+    margin-bottom: var(--gap);
+}
+.chart-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+}
+.chart-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+.chart-card.full-width { grid-column: 1 / -1; }
+.chart-wrap { position: relative; width: 100%; }
+.chart-wrap canvas { width: 100% !important; }
+
+/* Table section */
+.table-section {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+    margin-bottom: var(--gap);
+}
+.table-section h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.data-table thead th {
+    background: #f8f9fa;
+    padding: 10px 12px;
+    text-align: right;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+}
+.data-table thead th:first-child { text-align: left; }
+.data-table tbody td {
+    padding: 9px 12px;
+    text-align: right;
+    border-bottom: 1px solid #f0f0f0;
+}
+.data-table tbody td:first-child { text-align: left; font-weight: 500; }
+.data-table tbody tr:hover { background: #f8f9ff; }
+.data-table .sub-row td { font-size: 12px; color: var(--text-secondary); background: #fafbfc; }
+.data-table .highlight { font-weight: 600; }
+.type-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.type-3t { background: #e8f5e9; color: var(--color-3t); }
+.type-5t { background: #e3f2fd; color: var(--color-5t); }
+.type-8t { background: #fff3e0; color: var(--color-8t); }
+.type-10t { background: #ffebee; color: var(--color-10t); }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .chart-section { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Footer */
+.page-footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+    padding: 20px 0;
+}
+.page-footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="dashboard-container">
+
+<!-- Header -->
+<div class="dashboard-header">
+    <div class="header-top">
+        <div class="header-info">
+            <h1>车型运行数据分析</h1>
+            <div class="subtitle">花果畈餐厨垃圾收运 · 车型维度车辆运行数据统计</div>
+        </div>
+        <div class="header-meta">
+            <span>数据日期：7月8日 - 7月14日（7天）</span>
+            <span>更新时间：2026-07-15 09:45</span>
+            <span style="margin-top:4px;color:#aaa;">注：车型分类基于单车装载量推断，待校准</span>
+        </div>
+    </div>
+</div>
+
+<!-- Notice -->
+<div class="notice">
+    <span class="icon">&#9888;</span>
+    <span><strong>车型分类为推断值</strong>：当前系统无车型字典数据，以下分类基于各车辆历史单次装载量分布推断（3吨车≈3000kg/趟、5吨车≈4000-5000kg/趟、8吨车≈6000-7000kg/趟），请根据实际车辆登记信息校准后使用。</span>
+</div>
+
+<!-- Filter Bar -->
+<div class="filter-bar" id="filterBar">
+    <div class="filter-group">
+        <label>日期范围</label>
+        <input type="date" id="dateFrom">
+        <span style="font-size:12px;color:#999;">至</span>
+        <input type="date" id="dateTo">
+    </div>
+    <div class="filter-group">
+        <label>显示车型</label>
+        <div class="type-filter-btns" id="typeFilterBtns">
+            <button class="btn btn-outline active" data-type="all">全部</button>
+        </div>
+    </div>
+    <div class="filter-group">
+        <button class="btn btn-primary" onclick="applyFilters()">应用筛选</button>
+        <button class="btn btn-outline" onclick="resetFilters()">重置</button>
+    </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="kpi-grid" id="kpiGrid"></div>
+
+<!-- Charts: Trips + Total Volume -->
+<div class="chart-section">
+    <div class="chart-card">
+        <h3>每日运行车次（按车型）</h3>
+        <div class="chart-wrap"><canvas id="chartTrips"></canvas></div>
+    </div>
+    <div class="chart-card">
+        <h3>每日总收运量（按车型）</h3>
+        <div class="chart-wrap"><canvas id="chartTotalKg"></canvas></div>
+    </div>
+</div>
+
+<!-- Chart: Avg per Trip -->
+<div class="chart-section">
+    <div class="chart-card full-width">
+        <h3>车次与收运量关联分析（组合图）</h3>
+        <div class="chart-wrap"><canvas id="chartCombo"></canvas></div>
+    </div>
+</div>
+
+<!-- Table -->
+<div class="table-section">
+    <h3>车型收运数据明细</h3>
+    <div style="overflow-x:auto;">
+        <table class="data-table" id="dataTable">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="page-footer">
+    湖南伏泰环境科技 · 花果畈餐厨垃圾收运 | <a href="../daily-dashboard/">返回数据看板</a>
+</div>
+</div>
+
+<script src="../assets/js/chart.umd.min.js"></script>
+<script>
+// ============ 嵌入式数据 ============
+const RAW_DATA = {
+  "daily_by_type": {
+    "7月8日":  {"3吨车":{"trips":3,"total_kg":10220,"avg_kg":3406.7},"5吨车":{"trips":29,"total_kg":134900,"avg_kg":4651.7},"8吨车":{"trips":7,"total_kg":29850,"avg_kg":4264.3}},
+    "7月9日":  {"3吨车":{"trips":3,"total_kg":9940,"avg_kg":3313.3},"5吨车":{"trips":29,"total_kg":135480,"avg_kg":4671.7},"8吨车":{"trips":7,"total_kg":28520,"avg_kg":4074.3}},
+    "7月10日": {"3吨车":{"trips":3,"total_kg":10500,"avg_kg":3500},"5吨车":{"trips":30,"total_kg":146110,"avg_kg":4870.3},"8吨车":{"trips":7,"total_kg":29500,"avg_kg":4214.3}},
+    "7月11日": {"3吨车":{"trips":4,"total_kg":11870,"avg_kg":2967.5},"5吨车":{"trips":32,"total_kg":153870,"avg_kg":4808.4},"8吨车":{"trips":7,"total_kg":32350,"avg_kg":4621.4}},
+    "7月12日": {"3吨车":{"trips":5,"total_kg":17250,"avg_kg":3450},"5吨车":{"trips":30,"total_kg":133700,"avg_kg":4456.7},"8吨车":{"trips":3,"total_kg":19830,"avg_kg":6610}},
+    "7月13日": {"3吨车":{"trips":3,"total_kg":9690,"avg_kg":3230},"5吨车":{"trips":32,"total_kg":149260,"avg_kg":4664.4},"8吨车":{"trips":3,"total_kg":19790,"avg_kg":6596.7}},
+    "7月14日": {"3吨车":{"trips":3,"total_kg":9600,"avg_kg":3200},"5吨车":{"trips":31,"total_kg":133430,"avg_kg":4304.2},"8吨车":{"trips":3,"total_kg":20320,"avg_kg":6773.3}}
+  },
+  "vehicle_details": {
+    "3吨车": {
+      "湘FB9046":{"unit":"岳阳楼区餐厨","total_trips":10,"total_kg":31910,"avg_kg":3191},
+      "湘FA8340":{"unit":"开发区餐厨","total_trips":7,"total_kg":21700,"avg_kg":3100},
+      "湘FA5403":{"unit":"岳阳楼区餐厨","total_trips":7,"total_kg":25460,"avg_kg":3637.1}
+    },
+    "5吨车": {
+      "湘FC5523":{"unit":"岳阳楼区餐厨","total_trips":14,"total_kg":93200,"avg_kg":6657.1},
+      "湘FB0252":{"unit":"开发区餐厨","total_trips":21,"total_kg":114720,"avg_kg":5462.9},
+      "湘FA9847":{"unit":"南湖新区餐厨","total_trips":12,"total_kg":60760,"avg_kg":5063.3},
+      "湘FB6266":{"unit":"岳阳楼区餐厨","total_trips":15,"total_kg":73410,"avg_kg":4894},
+      "湘FC3710":{"unit":"开发区餐厨","total_trips":7,"total_kg":33480,"avg_kg":4782.9},
+      "湘FB3975":{"unit":"岳阳楼区餐厨","total_trips":7,"total_kg":33630,"avg_kg":4804.3},
+      "湘FB0388":{"unit":"岳阳楼区餐厨","total_trips":8,"total_kg":38040,"avg_kg":4755},
+      "湘FA8040":{"unit":"开发区餐厨","total_trips":12,"total_kg":56900,"avg_kg":4741.7},
+      "湘FA3040":{"unit":"岳阳楼区餐厨","total_trips":21,"total_kg":96490,"avg_kg":4594.8},
+      "湘F86680":{"unit":"岳阳楼区餐厨","total_trips":18,"total_kg":81200,"avg_kg":4511.1},
+      "湘FB9498":{"unit":"岳阳楼区餐厨","total_trips":18,"total_kg":77330,"avg_kg":4296.1},
+      "湘FC1673":{"unit":"岳阳楼区餐厨","total_trips":14,"total_kg":56300,"avg_kg":4021.4},
+      "湘FB8611":{"unit":"岳阳楼区餐厨","total_trips":24,"total_kg":90400,"avg_kg":3766.7},
+      "湘FB2060":{"unit":"临港新区餐厨","total_trips":14,"total_kg":51520,"avg_kg":3680},
+      "湘FB7351":{"unit":"开发区餐厨","total_trips":7,"total_kg":23680,"avg_kg":3382.9},
+      "湘FB9409":{"unit":"岳阳楼区餐厨","total_trips":1,"total_kg":5690,"avg_kg":5690}
+    },
+    "8吨车": {
+      "湘FC8698":{"unit":"岳阳君山区餐厨","total_trips":8,"total_kg":52230,"avg_kg":6528.8},
+      "湘FA8342":{"unit":"岳阳君山区餐厨","total_trips":6,"total_kg":36900,"avg_kg":6150},
+      "湘FA8347":{"unit":"岳阳楼区餐厨","total_trips":23,"total_kg":91030,"avg_kg":3957.8}
+    }
+  },
+  "_meta": {
+    "date_range": "7月8日 ~ 7月14日",
+    "days": 7,
+    "total_records": 274
+  }
+};
+
+// ============ 状态 ============
+const TYPE_ORDER = ["3吨车", "5吨车", "8吨车"];
+const TYPE_COLORS = {"3吨车": "#55A868", "5吨车": "#4C72B0", "8吨车": "#DD8452", "10吨车": "#C44E52"};
+let selectedTypes = ["3吨车", "5吨车", "8吨车"];
+let allDates = Object.keys(RAW_DATA.daily_by_type).sort();
+let chartInstances = {};
+
+// ============ 初始化 ============
+document.addEventListener("DOMContentLoaded", () => {
+    setupFilters();
+    applyFilters();
+});
+
+function setupFilters() {
+    const dateFrom = document.getElementById("dateFrom");
+    const dateTo = document.getElementById("dateTo");
+    dateFrom.value = "2026-07-08";
+    dateTo.value = "2026-07-14";
+
+    const typeBtns = document.getElementById("typeFilterBtns");
+    TYPE_ORDER.forEach(t => {
+        const btn = document.createElement("button");
+        btn.className = "btn btn-outline active";
+        btn.dataset.type = t;
+        btn.textContent = t;
+        btn.onclick = () => toggleType(t, btn);
+        typeBtns.appendChild(btn);
+    });
+}
+
+function toggleType(type, btn) {
+    if (type === "all") return;
+    btn.classList.toggle("active");
+    selectedTypes = Array.from(document.querySelectorAll("#typeFilterBtns .btn-outline.active"))
+        .map(b => b.dataset.type)
+        .filter(t => t !== "all");
+    updateAllBtn();
+}
+
+function updateAllBtn() {
+    const allBtn = document.querySelector("#typeFilterBtns button[data-type='all']");
+    if (allBtn) {
+        allBtn.classList.toggle("active", selectedTypes.length === TYPE_ORDER.length);
+    }
+}
+
+function applyFilters() {
+    const dateFrom = document.getElementById("dateFrom").value;
+    const dateTo = document.getElementById("dateTo").value;
+    
+    // Map dates
+    const dateMap = {
+        "2026-07-08": "7月8日", "2026-07-09": "7月9日", "2026-07-10": "7月10日",
+        "2026-07-11": "7月11日", "2026-07-12": "7月12日", "2026-07-13": "7月13日",
+        "2026-07-14": "7月14日"
+    };
+    
+    const startD = dateMap[dateFrom] || "7月8日";
+    const endD = dateMap[dateTo] || "7月14日";
+    
+    const startIdx = allDates.indexOf(startD);
+    const endIdx = allDates.indexOf(endD);
+    const filteredDates = allDates.slice(
+        startIdx >= 0 ? startIdx : 0,
+        endIdx >= 0 ? endIdx + 1 : allDates.length
+    );
+    
+    // Aggregate data
+    const aggData = aggregateData(filteredDates, selectedTypes);
+    
+    updateKPIs(aggData);
+    updateCharts(filteredDates, aggData);
+    updateTable(filteredDates, aggData);
+    updateAllBtn();
+}
+
+function resetFilters() {
+    document.getElementById("dateFrom").value = "2026-07-08";
+    document.getElementById("dateTo").value = "2026-07-14";
+    document.querySelectorAll("#typeFilterBtns .btn-outline").forEach(b => b.classList.add("active"));
+    selectedTypes = [...TYPE_ORDER];
+    applyFilters();
+}
+
+function aggregateData(dates, types) {
+    const result = { byType: {}, totalTrips: 0, totalKg: 0, dailyTotal: {} };
+    types.forEach(t => { result.byType[t] = { trips: 0, total_kg: 0 }; });
+    
+    dates.forEach(d => {
+        const day = RAW_DATA.daily_by_type[d];
+        if (!day) return;
+        let dayTrips = 0, dayKg = 0;
+        types.forEach(t => {
+            if (day[t]) {
+                result.byType[t].trips += day[t].trips;
+                result.byType[t].total_kg += day[t].total_kg;
+                dayTrips += day[t].trips;
+                dayKg += day[t].total_kg;
+            }
+        });
+        result.totalTrips += dayTrips;
+        result.totalKg += dayKg;
+        result.dailyTotal[d] = { trips: dayTrips, total_kg: dayKg };
+    });
+    
+    types.forEach(t => {
+        if (result.byType[t].trips > 0) {
+            result.byType[t].avg_kg = result.byType[t].total_kg / result.byType[t].trips;
+        }
+    });
+    
+    result.avgKg = result.totalTrips > 0 ? result.totalKg / result.totalTrips : 0;
+    return result;
+}
+
+// ============ KPI Cards ============
+function updateKPIs(agg) {
+    const grid = document.getElementById("kpiGrid");
+    let html = `
+    <div class="kpi-card accent-all">
+        <div class="label">总车次</div>
+        <div class="value">${agg.totalTrips}</div>
+        <div class="sub">7天累计</div>
+    </div>
+    <div class="kpi-card accent-all">
+        <div class="label">总收运量</div>
+        <div class="value">${(agg.totalKg / 1000).toFixed(1)}<span style="font-size:16px;font-weight:400;"> 吨</span></div>
+        <div class="sub">7天累计</div>
+    </div>
+    <div class="kpi-card accent-all">
+        <div class="label">日均车次</div>
+        <div class="value">${(agg.totalTrips / 7).toFixed(1)}</div>
+        <div class="sub">次/天</div>
+    </div>
+    <div class="kpi-card accent-all">
+        <div class="label">日均收运量</div>
+        <div class="value">${(agg.totalKg / 7 / 1000).toFixed(1)}<span style="font-size:16px;font-weight:400;"> 吨</span></div>
+        <div class="sub">吨/天</div>
+    </div>`;
+    
+    const typeAccents = {"3吨车": "accent-3t", "5吨车": "accent-5t", "8吨车": "accent-8t"};
+    selectedTypes.forEach(t => {
+        const bt = agg.byType[t];
+        if (bt && bt.trips > 0) {
+            html += `
+            <div class="kpi-card ${typeAccents[t] || ''}">
+                <div class="label">${t} · 车次</div>
+                <div class="value">${bt.trips}</div>
+                <div class="sub">占总量 ${(bt.trips/agg.totalTrips*100).toFixed(0)}%</div>
+            </div>
+            <div class="kpi-card ${typeAccents[t] || ''}">
+                <div class="label">${t} · 均次收运</div>
+                <div class="value">${(bt.avg_kg || 0).toFixed(0)}<span style="font-size:14px;font-weight:400;"> kg</span></div>
+                <div class="sub">单次均值</div>
+            </div>`;
+        }
+    });
+    
+    grid.innerHTML = html;
+}
+
+// ============ Charts ============
+function destroyCharts() {
+    Object.values(chartInstances).forEach(c => c.destroy());
+    chartInstances = {};
+}
+
+function updateCharts(dates, agg) {
+    destroyCharts();
+    
+    if (dates.length === 0 || selectedTypes.length === 0) return;
+    
+    const types = selectedTypes;
+    const colors = types.map(t => TYPE_COLORS[t] || "#999");
+    
+    // Chart 1: Daily trips (stacked bar)
+    const ctx1 = document.getElementById("chartTrips").getContext("2d");
+    const datasets1 = types.map((t, i) => ({
+        label: t,
+        data: dates.map(d => (RAW_DATA.daily_by_type[d] && RAW_DATA.daily_by_type[d][t]) ? RAW_DATA.daily_by_type[d][t].trips : 0),
+        backgroundColor: colors[i],
+        borderColor: colors[i],
+        borderWidth: 0,
+        borderRadius: 4,
+    }));
+    chartInstances.trips = new Chart(ctx1, {
+        type: "bar",
+        data: { labels: dates, datasets: datasets1 },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: "bottom" }, tooltip: { mode: "index", intersect: false } },
+            scales: {
+                x: { stacked: true, grid: { display: false } },
+                y: { stacked: true, title: { display: true, text: "车次数" }, beginAtZero: true }
+            },
+            onClick: (e) => { /* drill-down placeholder */ }
+        }
+    });
+    
+    // Chart 2: Daily total kg (stacked bar)
+    const ctx2 = document.getElementById("chartTotalKg").getContext("2d");
+    const datasets2 = types.map((t, i) => ({
+        label: t,
+        data: dates.map(d => (RAW_DATA.daily_by_type[d] && RAW_DATA.daily_by_type[d][t]) ? RAW_DATA.daily_by_type[d][t].total_kg : 0),
+        backgroundColor: colors[i],
+        borderColor: colors[i],
+        borderWidth: 0,
+        borderRadius: 4,
+    }));
+    chartInstances.totalKg = new Chart(ctx2, {
+        type: "bar",
+        data: { labels: dates, datasets: datasets2 },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: "bottom" }, tooltip: { mode: "index", intersect: false } },
+            scales: {
+                x: { stacked: true, grid: { display: false } },
+                y: { stacked: true, title: { display: true, text: "收运量 (kg)" }, beginAtZero: true }
+            }
+        }
+    });
+    
+    // Chart 3: Combo - bar(trips) + line(avg kg)
+    const ctx3 = document.getElementById("chartCombo").getContext("2d");
+    const barDatasets = types.map((t, i) => ({
+        label: `${t} 车次`,
+        data: dates.map(d => (RAW_DATA.daily_by_type[d] && RAW_DATA.daily_by_type[d][t]) ? RAW_DATA.daily_by_type[d][t].trips : 0),
+        backgroundColor: colors[i] + "99",
+        borderColor: colors[i],
+        borderWidth: 1,
+        borderRadius: 3,
+        type: "bar",
+        yAxisID: "y",
+    }));
+    const lineDatasets = types.map((t, i) => ({
+        label: `${t} 均次(kg)`,
+        data: dates.map(d => (RAW_DATA.daily_by_type[d] && RAW_DATA.daily_by_type[d][t]) ? RAW_DATA.daily_by_type[d][t].avg_kg : null),
+        borderColor: colors[i],
+        backgroundColor: colors[i],
+        borderWidth: 2.5,
+        borderDash: [],
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        type: "line",
+        yAxisID: "y1",
+        tension: 0.3,
+    }));
+    chartInstances.combo = new Chart(ctx3, {
+        data: { labels: dates, datasets: [...barDatasets, ...lineDatasets] },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: "bottom" }, tooltip: { mode: "index", intersect: false } },
+            scales: {
+                x: { grid: { display: false } },
+                y: { type: "linear", position: "left", title: { display: true, text: "车次数 (柱状)" }, beginAtZero: true, grid: { color: "#e0e0e0" } },
+                y1: { type: "linear", position: "right", title: { display: true, text: "均次收运 kg (折线)" }, beginAtZero: false, grid: { display: false }, min: 2000 }
+            }
+        }
+    });
+    
+    // Set chart heights
+    document.querySelectorAll(".chart-wrap").forEach(el => { el.style.height = "320px"; });
+}
+
+// ============ Table ============
+function updateTable(dates, agg) {
+    const thead = document.querySelector("#dataTable thead");
+    const tbody = document.querySelector("#dataTable tbody");
+    
+    // Header
+    let headHtml = "<tr><th>车型/指标</th>";
+    dates.forEach(d => headHtml += `<th>${d}</th>`);
+    headHtml += "<th>合计</th><th>日均</th></tr>";
+    thead.innerHTML = headHtml;
+    
+    // Body
+    let bodyHtml = "";
+    const nd = dates.length;
+    
+    // Header row: 总车次
+    bodyHtml += `<tr style="background:#f8f9fa;font-weight:600;">
+        <td>📊 每日总车次</td>`;
+    dates.forEach(d => bodyHtml += `<td>${agg.dailyTotal[d] ? agg.dailyTotal[d].trips : 0}</td>`);
+    bodyHtml += `<td class="highlight">${agg.totalTrips}</td>`;
+    bodyHtml += `<td>${(agg.totalTrips / nd).toFixed(1)}</td></tr>`;
+    
+    // Header row: 总收运量
+    bodyHtml += `<tr style="background:#f8f9fa;font-weight:600;">
+        <td>📊 每日收运量 (kg)</td>`;
+    dates.forEach(d => bodyHtml += `<td>${agg.dailyTotal[d] ? agg.dailyTotal[d].total_kg.toLocaleString() : 0}</td>`);
+    bodyHtml += `<td class="highlight">${agg.totalKg.toLocaleString()}</td>`;
+    bodyHtml += `<td>${(agg.totalKg / nd).toFixed(0)}</td></tr>`;
+    
+    // Per type rows
+    const typeIcons = {"3吨车": "🚛", "5吨车": "🚚", "8吨车": "🚛"};
+    selectedTypes.forEach(t => {
+        const bt = agg.byType[t];
+        if (!bt || bt.trips === 0) return;
+        const icon = typeIcons[t] || "🔹";
+        
+        // Type header row
+        bodyHtml += `<tr style="background:#eef2ff;font-weight:600;">
+            <td><span class="type-badge type-${t.replace('吨车','')}t">${icon} ${t}</span></td>`;
+        dates.forEach(d => {
+            const day = RAW_DATA.daily_by_type[d];
+            const td = day && day[t] ? day[t] : null;
+            bodyHtml += `<td>${td ? td.trips : "-"}</td>`;
+        });
+        bodyHtml += `<td class="highlight">${bt.trips}</td>`;
+        bodyHtml += `<td>${(bt.trips / nd).toFixed(1)}</td></tr>`;
+        
+        // Sub-rows: total_kg, avg_kg
+        bodyHtml += `<tr class="sub-row">
+            <td>&nbsp;&nbsp;└ 收运量 (kg)</td>`;
+        dates.forEach(d => {
+            const day = RAW_DATA.daily_by_type[d];
+            bodyHtml += `<td>${day && day[t] ? day[t].total_kg.toLocaleString() : "-"}</td>`;
+        });
+        bodyHtml += `<td>${bt.total_kg.toLocaleString()}</td>`;
+        bodyHtml += `<td>${(bt.total_kg / nd).toFixed(0)}</td></tr>`;
+        
+        bodyHtml += `<tr class="sub-row">
+            <td>&nbsp;&nbsp;└ 均次收运 (kg)</td>`;
+        dates.forEach(d => {
+            const day = RAW_DATA.daily_by_type[d];
+            bodyHtml += `<td>${day && day[t] ? day[t].avg_kg.toFixed(1) : "-"}</td>`;
+        });
+        bodyHtml += `<td>${(bt.avg_kg || 0).toFixed(1)}</td>`;
+        bodyHtml += `<td>-</td></tr>`;
+    });
+    
+    // Vehicle detail rows (expandable toggle)
+    bodyHtml += `<tr><td colspan="${nd + 3}" style="padding:8px;text-align:center;">
+        <button class="btn btn-outline" onclick="toggleVehicleDetail()" id="btnVehicleDetail">展开车辆明细 ▼</button>
+    </td></tr>`;
+    
+    tbody.innerHTML = bodyHtml;
+}
+
+let vehicleDetailVisible = false;
+function toggleVehicleDetail() {
+    vehicleDetailVisible = !vehicleDetailVisible;
+    const btn = document.getElementById("btnVehicleDetail");
+    const tbody = document.querySelector("#dataTable tbody");
+    const nd = allDates.filter(d => {
+        const df = document.getElementById("dateFrom").value;
+        const dt = document.getElementById("dateTo").value;
+        const dateMap = {"2026-07-08":"7月8日","2026-07-09":"7月9日","2026-07-10":"7月10日","2026-07-11":"7月11日","2026-07-12":"7月12日","2026-07-13":"7月13日","2026-07-14":"7月14日"};
+        const sd = dateMap[df] || "7月8日", ed = dateMap[dt] || "7月14日";
+        const si = allDates.indexOf(sd), ei = allDates.indexOf(ed);
+        return allDates.indexOf(d) >= (si>=0?si:0) && allDates.indexOf(d) <= (ei>=0?ei:allDates.length-1);
+    }).length;
+    
+    if (vehicleDetailVisible) {
+        btn.textContent = "收起车辆明细 ▲";
+        let detailHtml = "";
+        selectedTypes.forEach(t => {
+            const vehicles = RAW_DATA.vehicle_details[t];
+            if (!vehicles) return;
+            const typeIcons = {"3吨车": "🚛", "5吨车": "🚚", "8吨车": "🚛"};
+            const sorted = Object.entries(vehicles).sort((a, b) => b[1].total_kg - a[1].total_kg);
+            sorted.forEach(([plate, info]) => {
+                detailHtml += `<tr class="sub-row" style="background:#fafbfc;">
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;<span class="type-badge type-${t.replace('吨车','')}t">${typeIcons[t]||''} ${t}</span> ${plate} <span style="color:#999;font-size:11px;">${info.unit}</span></td>`;
+                // Per-day vehicle data is not broken down by day in this prototype
+                // Show aggregated summary
+                for (let i = 0; i < nd; i++) detailHtml += `<td>-</td>`;
+                detailHtml += `<td>${info.total_trips}次 / ${info.total_kg.toLocaleString()}kg</td>`;
+                detailHtml += `<td>${info.avg_kg.toFixed(0)}kg/次</td></tr>`;
+            });
+        });
+        
+        // Remove existing vehicle rows if any
+        const existingRows = tbody.querySelectorAll("tr.vehicle-detail");
+        existingRows.forEach(r => r.remove());
+        
+        // Insert after the toggle button row
+        const toggleRow = tbody.lastElementChild;
+        toggleRow.insertAdjacentHTML("beforebegin", detailHtml);
+        // Mark new rows
+        tbody.querySelectorAll("tr.sub-row[style]").forEach(r => {
+            if (r.querySelector(".type-badge")) r.classList.add("vehicle-detail");
+        });
+    } else {
+        btn.textContent = "展开车辆明细 ▼";
+        tbody.querySelectorAll("tr.vehicle-detail").forEach(r => r.remove());
+    }
+}
+</script>
+</body>
+</html>
