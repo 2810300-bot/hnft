@@ -386,8 +386,31 @@ const RAW_DATA = {
 const TYPE_ORDER = ["3吨车", "5吨车", "8吨车"];
 const TYPE_COLORS = {"3吨车": "#55A868", "5吨车": "#4C72B0", "8吨车": "#DD8452", "10吨车": "#C44E52"};
 let selectedTypes = ["3吨车", "5吨车", "8吨车"];
-let allDates = Object.keys(RAW_DATA.daily_by_type).sort();
 let chartInstances = {};
+
+// 日期工具：将 "7月8日" 转为数值 708 用于排序和比较
+function dateToNum(d) {
+    const m = d.match(/(\d+)月(\d+)日/);
+    return m ? parseInt(m[1]) * 100 + parseInt(m[2]) : 0;
+}
+function numToDate(n) {
+    return Math.floor(n / 100) + "月" + (n % 100) + "日";
+}
+// 按数字排序日期
+let allDates = Object.keys(RAW_DATA.daily_by_type).sort((a, b) => dateToNum(a) - dateToNum(b));
+
+// 从数据中自动构建 ISO → 中文日期映射（避免硬编码）
+function buildDateMap() {
+    const map = {};
+    allDates.forEach(d => {
+        const n = dateToNum(d);  // e.g. 708
+        const m = Math.floor(n / 100);
+        const day = n % 100;
+        const iso = "2026-" + String(m).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+        map[iso] = d;
+    });
+    return map;
+}
 
 // ============ 初始化 ============
 document.addEventListener("DOMContentLoaded", () => {
@@ -398,8 +421,36 @@ document.addEventListener("DOMContentLoaded", () => {
 function setupFilters() {
     const dateFrom = document.getElementById("dateFrom");
     const dateTo = document.getElementById("dateTo");
-    dateFrom.value = "2026-07-08";
-    dateTo.value = "2026-07-14";
+    // 用数据实际日期范围（而非硬编码）
+    const firstDate = allDates[0] || "7月8日";
+    const lastDate = allDates[allDates.length - 1] || "7月14日";
+    const fm = firstDate.match(/(\d+)月(\d+)日/);
+    const lm = lastDate.match(/(\d+)月(\d+)日/);
+    if (fm) dateFrom.value = "2026-" + String(fm[1]).padStart(2, "0") + "-" + String(fm[2]).padStart(2, "0");
+    if (lm) dateTo.value = "2026-" + String(lm[1]).padStart(2, "0") + "-" + String(lm[2]).padStart(2, "0");
+
+    // "全部"按钮点击：全选或全不选
+    const allBtn = document.querySelector("#typeFilterBtns button[data-type='all']");
+    if (allBtn) {
+        allBtn.onclick = function() {
+            const allActive = selectedTypes.length === TYPE_ORDER.length;
+            if (allActive) {
+                // 当前全选 → 全部取消
+                document.querySelectorAll("#typeFilterBtns .btn-outline").forEach(b => {
+                    if (b.dataset.type !== "all") b.classList.remove("active");
+                });
+                selectedTypes = [];
+            } else {
+                // 不全选 → 全部选中
+                document.querySelectorAll("#typeFilterBtns .btn-outline").forEach(b => {
+                    if (b.dataset.type !== "all") b.classList.add("active");
+                });
+                selectedTypes = [...TYPE_ORDER];
+            }
+            updateAllBtn();
+            applyFilters();
+        };
+    }
 
     const typeBtns = document.getElementById("typeFilterBtns");
     TYPE_ORDER.forEach(t => {
@@ -419,6 +470,7 @@ function toggleType(type, btn) {
         .map(b => b.dataset.type)
         .filter(t => t !== "all");
     updateAllBtn();
+    applyFilters();  // 立即刷新
 }
 
 function updateAllBtn() {
@@ -432,22 +484,15 @@ function applyFilters() {
     const dateFrom = document.getElementById("dateFrom").value;
     const dateTo = document.getElementById("dateTo").value;
     
-    // Map dates
-    const dateMap = {
-        "2026-07-08": "7月8日", "2026-07-09": "7月9日", "2026-07-10": "7月10日",
-        "2026-07-11": "7月11日", "2026-07-12": "7月12日", "2026-07-13": "7月13日",
-        "2026-07-14": "7月14日"
-    };
+    // 动态构建日期映射，按数字范围过滤（避免硬编码和字符串排序问题）
+    const dateMap = buildDateMap();
+    const fromNum = dateToNum(dateMap[dateFrom] || allDates[0]);
+    const toNum = dateToNum(dateMap[dateTo] || allDates[allDates.length - 1]);
     
-    const startD = dateMap[dateFrom] || "7月8日";
-    const endD = dateMap[dateTo] || "7月14日";
-    
-    const startIdx = allDates.indexOf(startD);
-    const endIdx = allDates.indexOf(endD);
-    const filteredDates = allDates.slice(
-        startIdx >= 0 ? startIdx : 0,
-        endIdx >= 0 ? endIdx + 1 : allDates.length
-    );
+    const filteredDates = allDates.filter(d => {
+        const n = dateToNum(d);
+        return n >= fromNum && n <= toNum;
+    });
     
     // Aggregate data
     const aggData = aggregateData(filteredDates, selectedTypes);
@@ -459,8 +504,12 @@ function applyFilters() {
 }
 
 function resetFilters() {
-    document.getElementById("dateFrom").value = "2026-07-08";
-    document.getElementById("dateTo").value = "2026-07-14";
+    const firstDate = allDates[0] || "7月8日";
+    const lastDate = allDates[allDates.length - 1] || "7月14日";
+    const fm = firstDate.match(/(\d+)月(\d+)日/);
+    const lm = lastDate.match(/(\d+)月(\d+)日/);
+    if (fm) document.getElementById("dateFrom").value = "2026-" + String(fm[1]).padStart(2, "0") + "-" + String(fm[2]).padStart(2, "0");
+    if (lm) document.getElementById("dateTo").value = "2026-" + String(lm[1]).padStart(2, "0") + "-" + String(lm[2]).padStart(2, "0");
     document.querySelectorAll("#typeFilterBtns .btn-outline").forEach(b => b.classList.add("active"));
     selectedTypes = [...TYPE_ORDER];
     applyFilters();
@@ -500,25 +549,26 @@ function aggregateData(dates, types) {
 // ============ KPI Cards ============
 function updateKPIs(agg) {
     const grid = document.getElementById("kpiGrid");
+    const nd = Object.keys(agg.dailyTotal).length || 7;
     let html = `
     <div class="kpi-card accent-all">
         <div class="label">总车次</div>
         <div class="value">${agg.totalTrips}</div>
-        <div class="sub">7天累计</div>
+        <div class="sub">${nd}天累计</div>
     </div>
     <div class="kpi-card accent-all">
         <div class="label">总收运量</div>
         <div class="value">${(agg.totalKg / 1000).toFixed(1)}<span style="font-size:16px;font-weight:400;"> 吨</span></div>
-        <div class="sub">7天累计</div>
+        <div class="sub">${nd}天累计</div>
     </div>
     <div class="kpi-card accent-all">
         <div class="label">日均车次</div>
-        <div class="value">${(agg.totalTrips / 7).toFixed(1)}</div>
+        <div class="value">${(agg.totalTrips / nd).toFixed(1)}</div>
         <div class="sub">次/天</div>
     </div>
     <div class="kpi-card accent-all">
         <div class="label">日均收运量</div>
-        <div class="value">${(agg.totalKg / 7 / 1000).toFixed(1)}<span style="font-size:16px;font-weight:400;"> 吨</span></div>
+        <div class="value">${(agg.totalKg / nd / 1000).toFixed(1)}<span style="font-size:16px;font-weight:400;"> 吨</span></div>
         <div class="sub">吨/天</div>
     </div>`;
     
@@ -662,14 +712,14 @@ function updateTable(dates, agg) {
     
     // Body
     let bodyHtml = "";
-    const nd = dates.length;
+    const nd = dates.length || 1;  // 防止除零
     
     // Header row: 总车次
     bodyHtml += `<tr style="background:#f8f9fa;font-weight:600;">
         <td>📊 每日总车次</td>`;
     dates.forEach(d => bodyHtml += `<td>${agg.dailyTotal[d] ? agg.dailyTotal[d].trips : 0}</td>`);
     bodyHtml += `<td class="highlight">${agg.totalTrips}</td>`;
-    bodyHtml += `<td>${(agg.totalTrips / nd).toFixed(1)}</td></tr>`;
+    bodyHtml += `<td>${nd > 1 ? (agg.totalTrips / nd).toFixed(1) : agg.totalTrips}</td></tr>`;
     
     // Header row: 总收运量
     bodyHtml += `<tr style="background:#f8f9fa;font-weight:600;">
@@ -729,13 +779,16 @@ function toggleVehicleDetail() {
     vehicleDetailVisible = !vehicleDetailVisible;
     const btn = document.getElementById("btnVehicleDetail");
     const tbody = document.querySelector("#dataTable tbody");
+    
+    // 使用当前筛选后的日期范围计算列数
+    const dateMap = buildDateMap();
+    const dateFrom = document.getElementById("dateFrom").value;
+    const dateTo = document.getElementById("dateTo").value;
+    const fromNum = dateToNum(dateMap[dateFrom] || allDates[0]);
+    const toNum = dateToNum(dateMap[dateTo] || allDates[allDates.length - 1]);
     const nd = allDates.filter(d => {
-        const df = document.getElementById("dateFrom").value;
-        const dt = document.getElementById("dateTo").value;
-        const dateMap = {"2026-07-08":"7月8日","2026-07-09":"7月9日","2026-07-10":"7月10日","2026-07-11":"7月11日","2026-07-12":"7月12日","2026-07-13":"7月13日","2026-07-14":"7月14日"};
-        const sd = dateMap[df] || "7月8日", ed = dateMap[dt] || "7月14日";
-        const si = allDates.indexOf(sd), ei = allDates.indexOf(ed);
-        return allDates.indexOf(d) >= (si>=0?si:0) && allDates.indexOf(d) <= (ei>=0?ei:allDates.length-1);
+        const n = dateToNum(d);
+        return n >= fromNum && n <= toNum;
     }).length;
     
     if (vehicleDetailVisible) {
