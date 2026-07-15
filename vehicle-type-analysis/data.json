@@ -261,7 +261,7 @@
     }
   },
   "_meta": {
-    "date_range": "7月10日 ~ 7月9日",
+    "date_range": "7月8日 ~ 7月14日",
     "days": 7,
     "total_records": 274,
     "vehicle_type_map": {
@@ -288,6 +288,6 @@
       "湘FA8342": "8吨车",
       "湘FA8040": "5吨车"
     },
-    "generated_at": "2026-07-15 10:34:51"
+    "generated_at": "2026-07-15 10:38:14"
   }
 }
