@@ -260,8 +260,8 @@ body {
             <div class="subtitle">花果畈餐厨垃圾收运 · 车型维度车辆运行数据统计</div>
         </div>
         <div class="header-meta">
-            <span>数据日期：7月8日 - 7月14日（7天）</span>
-            <span>更新时间：2026-07-15 09:45</span>
+            <span id="dataInfo">数据日期：加载中...</span>
+            <span>刷新时间：<span id="refreshTime">--</span></span>
             <span style="margin-top:4px;color:#aaa;">注：车型分类基于单车装载量推断，待校准</span>
         </div>
     </div>
@@ -334,53 +334,10 @@ body {
 
 <script src="../assets/js/chart.umd.min.js"></script>
 <script>
-// ============ 嵌入式数据 ============
-const RAW_DATA = {
-  "daily_by_type": {
-    "7月8日":  {"3吨车":{"trips":3,"total_kg":10220,"avg_kg":3406.7},"5吨车":{"trips":29,"total_kg":134900,"avg_kg":4651.7},"8吨车":{"trips":7,"total_kg":29850,"avg_kg":4264.3}},
-    "7月9日":  {"3吨车":{"trips":3,"total_kg":9940,"avg_kg":3313.3},"5吨车":{"trips":29,"total_kg":135480,"avg_kg":4671.7},"8吨车":{"trips":7,"total_kg":28520,"avg_kg":4074.3}},
-    "7月10日": {"3吨车":{"trips":3,"total_kg":10500,"avg_kg":3500},"5吨车":{"trips":30,"total_kg":146110,"avg_kg":4870.3},"8吨车":{"trips":7,"total_kg":29500,"avg_kg":4214.3}},
-    "7月11日": {"3吨车":{"trips":4,"total_kg":11870,"avg_kg":2967.5},"5吨车":{"trips":32,"total_kg":153870,"avg_kg":4808.4},"8吨车":{"trips":7,"total_kg":32350,"avg_kg":4621.4}},
-    "7月12日": {"3吨车":{"trips":5,"total_kg":17250,"avg_kg":3450},"5吨车":{"trips":30,"total_kg":133700,"avg_kg":4456.7},"8吨车":{"trips":3,"total_kg":19830,"avg_kg":6610}},
-    "7月13日": {"3吨车":{"trips":3,"total_kg":9690,"avg_kg":3230},"5吨车":{"trips":32,"total_kg":149260,"avg_kg":4664.4},"8吨车":{"trips":3,"total_kg":19790,"avg_kg":6596.7}},
-    "7月14日": {"3吨车":{"trips":3,"total_kg":9600,"avg_kg":3200},"5吨车":{"trips":31,"total_kg":133430,"avg_kg":4304.2},"8吨车":{"trips":3,"total_kg":20320,"avg_kg":6773.3}}
-  },
-  "vehicle_details": {
-    "3吨车": {
-      "湘FB9046":{"unit":"岳阳楼区餐厨","total_trips":10,"total_kg":31910,"avg_kg":3191},
-      "湘FA8340":{"unit":"开发区餐厨","total_trips":7,"total_kg":21700,"avg_kg":3100},
-      "湘FA5403":{"unit":"岳阳楼区餐厨","total_trips":7,"total_kg":25460,"avg_kg":3637.1}
-    },
-    "5吨车": {
-      "湘FC5523":{"unit":"岳阳楼区餐厨","total_trips":14,"total_kg":93200,"avg_kg":6657.1},
-      "湘FB0252":{"unit":"开发区餐厨","total_trips":21,"total_kg":114720,"avg_kg":5462.9},
-      "湘FA9847":{"unit":"南湖新区餐厨","total_trips":12,"total_kg":60760,"avg_kg":5063.3},
-      "湘FB6266":{"unit":"岳阳楼区餐厨","total_trips":15,"total_kg":73410,"avg_kg":4894},
-      "湘FC3710":{"unit":"开发区餐厨","total_trips":7,"total_kg":33480,"avg_kg":4782.9},
-      "湘FB3975":{"unit":"岳阳楼区餐厨","total_trips":7,"total_kg":33630,"avg_kg":4804.3},
-      "湘FB0388":{"unit":"岳阳楼区餐厨","total_trips":8,"total_kg":38040,"avg_kg":4755},
-      "湘FA8040":{"unit":"开发区餐厨","total_trips":12,"total_kg":56900,"avg_kg":4741.7},
-      "湘FA3040":{"unit":"岳阳楼区餐厨","total_trips":21,"total_kg":96490,"avg_kg":4594.8},
-      "湘F86680":{"unit":"岳阳楼区餐厨","total_trips":18,"total_kg":81200,"avg_kg":4511.1},
-      "湘FB9498":{"unit":"岳阳楼区餐厨","total_trips":18,"total_kg":77330,"avg_kg":4296.1},
-      "湘FC1673":{"unit":"岳阳楼区餐厨","total_trips":14,"total_kg":56300,"avg_kg":4021.4},
-      "湘FB8611":{"unit":"岳阳楼区餐厨","total_trips":24,"total_kg":90400,"avg_kg":3766.7},
-      "湘FB2060":{"unit":"临港新区餐厨","total_trips":14,"total_kg":51520,"avg_kg":3680},
-      "湘FB7351":{"unit":"开发区餐厨","total_trips":7,"total_kg":23680,"avg_kg":3382.9},
-      "湘FB9409":{"unit":"岳阳楼区餐厨","total_trips":1,"total_kg":5690,"avg_kg":5690}
-    },
-    "8吨车": {
-      "湘FC8698":{"unit":"岳阳君山区餐厨","total_trips":8,"total_kg":52230,"avg_kg":6528.8},
-      "湘FA8342":{"unit":"岳阳君山区餐厨","total_trips":6,"total_kg":36900,"avg_kg":6150},
-      "湘FA8347":{"unit":"岳阳楼区餐厨","total_trips":23,"total_kg":91030,"avg_kg":3957.8}
-    }
-  },
-  "_meta": {
-    "date_range": "7月8日 ~ 7月14日",
-    "days": 7,
-    "total_records": 274
-  }
-};
+// ============ 数据加载 ============
+// 从独立 data.json 异步加载，支持自动化每日刷新
+let RAW_DATA = null;
+let allDates = [];
 
 // ============ 状态 ============
 const TYPE_ORDER = ["3吨车", "5吨车", "8吨车"];
@@ -396,14 +353,12 @@ function dateToNum(d) {
 function numToDate(n) {
     return Math.floor(n / 100) + "月" + (n % 100) + "日";
 }
-// 按数字排序日期
-let allDates = Object.keys(RAW_DATA.daily_by_type).sort((a, b) => dateToNum(a) - dateToNum(b));
 
 // 从数据中自动构建 ISO → 中文日期映射（避免硬编码）
 function buildDateMap() {
     const map = {};
     allDates.forEach(d => {
-        const n = dateToNum(d);  // e.g. 708
+        const n = dateToNum(d);
         const m = Math.floor(n / 100);
         const day = n % 100;
         const iso = "2026-" + String(m).padStart(2, "0") + "-" + String(day).padStart(2, "0");
@@ -412,11 +367,35 @@ function buildDateMap() {
     return map;
 }
 
+// 加载数据并初始化
+async function loadData() {
+    const kpiGrid = document.getElementById("kpiGrid");
+    kpiGrid.innerHTML = '<div class="kpi-card accent-all"><div class="label">加载中</div><div class="value">⏳</div><div class="sub">正在获取最新数据...</div></div>';
+    
+    try {
+        const resp = await fetch("data.json?_=" + Date.now());
+        if (!resp.ok) throw new Error("HTTP " + resp.status);
+        RAW_DATA = await resp.json();
+        if (!RAW_DATA || !RAW_DATA.daily_by_type || Object.keys(RAW_DATA.daily_by_type).length === 0) {
+            throw new Error("数据为空");
+        }
+        allDates = Object.keys(RAW_DATA.daily_by_type).sort((a, b) => dateToNum(a) - dateToNum(b));
+        setupFilters();
+        applyFilters();
+        // 更新页面头部信息
+        const meta = RAW_DATA._meta || {};
+        const infoBar = document.getElementById("dataInfo");
+        if (infoBar) infoBar.textContent = "数据日期：" + (meta.date_range || "--") + "（" + (meta.days || "?") + "天）";
+        const rt = document.getElementById("refreshTime");
+        if (rt) rt.textContent = meta.generated_at || new Date().toLocaleString("zh-CN");
+    } catch (err) {
+        console.error("数据加载失败:", err);
+        kpiGrid.innerHTML = '<div class="kpi-card accent-all" style="border:2px solid #dc2626;"><div class="label" style="color:#dc2626;">数据加载失败</div><div class="value" style="font-size:18px;">' + err.message + '</div><div class="sub">请检查 data.json 是否可用，或稍后重试</div></div>';
+    }
+}
+
 // ============ 初始化 ============
-document.addEventListener("DOMContentLoaded", () => {
-    setupFilters();
-    applyFilters();
-});
+document.addEventListener("DOMContentLoaded", loadData);
 
 function setupFilters() {
     const dateFrom = document.getElementById("dateFrom");
