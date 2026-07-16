@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>车型校准校验报告</title>
+<style>
+*{box-sizing:border-box;font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;margin:0;padding:0}
+body{background:#f5f7fa;color:#1f2937;padding:24px}
+.card{background:#fff;border-radius:12px;padding:20px 24px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+h1{font-size:22px;margin-bottom:6px}
+h2{font-size:16px;margin:0 0 12px;color:#374151}
+.meta{color:#6b7280;font-size:13px;margin-bottom:4px}
+.kpis{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.kpi{flex:1;min-width:120px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px}
+.kpi .v{font-size:24px;font-weight:700}
+.kpi .l{font-size:12px;color:#6b7280;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border:1px solid #e5e7eb;padding:8px 10px;text-align:left}
+th{background:#f1f5f9;font-weight:600}
+.badge{padding:2px 8px;border-radius:999px;font-size:12px}
+.badge.高{background:#dcfce7;color:#15803d}
+.badge.中{background:#fef9c3;color:#a16207}
+.badge.低{background:#fee2e2;color:#b91c1c}
+.ok{color:#16a34a;font-weight:600}
+</style></head><body>
+<div class="card">
+  <h1>车型校准校验报告</h1>
+  <div class="meta">生成时间：2026-07-16 12:12:00</div>
+  <div class="meta">匹配方法：avg_load（按车辆历史平均载重动态识别车型档位）</div>
+  <div class="kpis">
+    <div class="kpi"><div class="v">22</div><div class="l">车辆总数</div></div>
+    <div class="kpi"><div class="v ok">19</div><div class="l">分类匹配</div></div>
+    <div class="kpi"><div class="v" style="color:#dc2626">3</div><div class="l">需校准项</div></div>
+    <div class="kpi"><div class="v">86.4%</div><div class="l">匹配率</div></div>
+  </div>
+</div>
+<div class="card">
+  <h2>不匹配车型清单（需校准）</h2>
+  <table><thead><tr><th>车牌</th><th>声明车型</th><th>动态识别</th><th>平均载重(kg)</th><th>趟次</th><th>置信度</th><th>建议</th></tr></thead>
+  <tbody><tr><td>湘FC8698</td><td>8吨车</td><td>5吨车</td><td>6223</td><td>50</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「8吨车」校准为「5吨车」</td></tr><tr><td>湘FA8342</td><td>8吨车</td><td>5吨车</td><td>5744</td><td>49</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「8吨车」校准为「5吨车」</td></tr><tr><td>湘FA8347</td><td>8吨车</td><td>5吨车</td><td>4672</td><td>94</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「8吨车」校准为「5吨车」</td></tr></tbody></table>
+</div>
+<div class="card">
+  <h2>车型分布对比（声明 vs 动态识别）</h2>
+  <table><thead><tr><th>车型</th><th>声明数</th><th>动态识别数</th></tr></thead><tbody>
+<tr><td>3吨车</td><td>3</td><td>3</td></tr><tr><td>5吨车</td><td>16</td><td>19</td></tr><tr><td>8吨车</td><td>3</td><td>0</td></tr></tbody></table></div><div class="card">
+  <h2>校准数据模型（载重规格 / 物理参数）</h2>
+  <table><thead><tr><th>车型</th><th>名义载重(kg)</th><th>载重阈值(kg)</th><th>期望平均载重(kg)</th><th>轴距(mm)</th><th>制动</th><th>车身尺寸(mm)</th></tr></thead>
+  <tbody><tr><td>3吨车</td><td>3000</td><td>[0, 3500]</td><td>[2200, 3400]</td><td>[2600, 3300]</td><td>液压鼓式 / ABS=否</td><td>{'length': [4200, 5200], 'width': [1700, 2000], 'height': [1850, 2300]}</td></tr><tr><td>5吨车</td><td>5000</td><td>[3500, 7500]</td><td>[3800, 6500]</td><td>[3300, 4200]</td><td>气压鼓式/盘式 / ABS=是</td><td>{'length': [5200, 6800], 'width': [2000, 2300], 'height': [2200, 2800]}</td></tr><tr><td>8吨车</td><td>8000</td><td>[7500, 12000]</td><td>[6000, 9500]</td><td>[4200, 5200]</td><td>气压盘式 / ABS=是</td><td>{'length': [6800, 8500], 'width': [2300, 2500], 'height': [2600, 3200]}</td></tr></tbody></table>
+</div><div class="card"><div class="meta">数据来源：raw_store 历史存储 · 校验逻辑：vehicle_calibration.py · 配置：vehicle_calibration.json</div></div>
+</body></html>

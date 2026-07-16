@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>车型校准中心 · 伏泰餐厨</title>
+<style>
+* { box-sizing: border-box; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; margin: 0; padding: 0; }
+body { background: #f5f7fa; color: #1f2937; padding: 24px; max-width: 1100px; margin: 0 auto; }
+.card { background: #fff; border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+h1 { font-size: 22px; margin-bottom: 4px; }
+h2 { font-size: 16px; margin: 0 0 14px; color: #374151; border-left: 4px solid #2563eb; padding-left: 10px; }
+.meta { color: #6b7280; font-size: 13px; margin-bottom: 4px; }
+.kpis { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+.kpi { flex: 1; min-width: 120px; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; }
+.kpi .v { font-size: 26px; font-weight: 700; }
+.kpi .l { font-size: 12px; color: #6b7280; margin-top: 4px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+th, td { border: 1px solid #e5e7eb; padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: #f1f5f9; font-weight: 600; }
+.badge { padding: 2px 8px; border-radius: 999px; font-size: 12px; }
+.badge.高 { background: #dcfce7; color: #15803d; }
+.badge.中 { background: #fef9c3; color: #a16207; }
+.badge.低 { background: #fee2e2; color: #b91c1c; }
+.ok { color: #16a34a; font-weight: 600; }
+.warn { color: #dc2626; font-weight: 600; }
+.note { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #92400e; margin-top: 10px; }
+.calc { display: flex; gap: 8px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+.calc input { width: 130px; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; }
+.calc button { padding: 6px 14px; background: #2563eb; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+.result { margin-top: 8px; font-size: 14px; font-weight: 600; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>车型校准中心</h1>
+  <div class="meta">伏泰餐厨车辆运行数据 · 车型校准模型与动态识别校验</div>
+  <div class="meta" id="genTime">加载中…</div>
+</div>
+
+<div class="card">
+  <h2>动态识别计算器</h2>
+  <div class="meta">输入实际/平均载重(kg)，按载重阈值自动归类车型档位</div>
+  <div class="calc">
+    <input id="loadInput" type="number" placeholder="载重 kg" value="4584">
+    <button onclick="classify()">识别车型</button>
+  </div>
+  <div class="result" id="classifyResult"></div>
+</div>
+
+<div class="card">
+  <h2>校准数据模型（三种载重规格）</h2>
+  <div class="meta" id="matchNote"></div>
+  <table id="modelTable">
+    <thead><tr><th>车型</th><th>名义载重(kg)</th><th>载重阈值(kg)</th><th>期望平均载重(kg)</th><th>轴距(mm)</th><th>制动</th><th>车身尺寸(mm) 长×宽×高</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>校验结果（声明车型 vs 动态识别）</h2>
+  <div class="kpis" id="kpis"></div>
+  <h2 style="margin-top:18px">不匹配车型清单（需校准）</h2>
+  <table id="mismatchTable">
+    <thead><tr><th>车牌</th><th>声明车型</th><th>动态识别</th><th>平均载重(kg)</th><th>趟次</th><th>置信度</th><th>建议</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div class="note" id="distNote"></div>
+  <div class="meta" style="margin-top:10px"><a href="calibration_report.html" target="_blank">查看完整静态报告 →</a></div>
+</div>
+
+<script>
+const CONFIG_URL = "vehicle_calibration.json?_=" + Date.now();
+const REPORT_URL = "calibration_report.json?_=" + Date.now();
+
+function fmt(arr) { return Array.isArray(arr) ? arr.join(" ~ ") : JSON.stringify(arr); }
+
+async function init() {
+  let cfg, report;
+  try { cfg = await (await fetch(CONFIG_URL)).json(); } catch(e) { document.getElementById('matchNote').textContent = "配置加载失败: " + e; return; }
+  try { report = await (await fetch(REPORT_URL)).json(); } catch(e) { report = null; }
+
+  // 模型表
+  const tb = document.querySelector("#modelTable tbody");
+  for (const [t, spec] of Object.entries(cfg.vehicle_types)) {
+    const b = spec.body_dimensions_mm, br = spec.braking;
+    tb.insertAdjacentHTML("beforeend", `<tr>
+      <td><b>${t}</b></td><td>${spec.nominal_capacity_kg}</td>
+      <td>${fmt(spec.load_threshold_kg)}</td><td>${fmt(spec.expected_avg_load_kg)}</td>
+      <td>${fmt(spec.wheelbase_mm)}</td>
+      <td>${br.brake_type} / ABS=${br.abs ? "是" : "否"}</td>
+      <td>${b.length[0]}~${b.length[1]} × ${b.width[0]}~${b.width[1]} × ${b.height[0]}~${b.height[1]}</td>
+    </tr>`);
+  }
+  document.getElementById("matchNote").textContent = "匹配方法：" + (cfg.matching_method || "") + " — " + (cfg.matching_note || "");
+
+  if (!report) {
+    document.getElementById("genTime").textContent = "校准报告未生成，请先运行校验";
+    return;
+  }
+  document.getElementById("genTime").textContent = "报告生成时间：" + report.generated_at;
+  const s = report.summary;
+  document.getElementById("kpis").innerHTML = `
+    <div class="kpi"><div class="v">${s.vehicle_count}</div><div class="l">车辆总数</div></div>
+    <div class="kpi"><div class="v ok">${s.match_count}</div><div class="l">分类匹配</div></div>
+    <div class="kpi"><div class="v warn">${s.mismatch_count}</div><div class="l">需校准项</div></div>
+    <div class="kpi"><div class="v">${s.match_rate}%</div><div class="l">匹配率</div></div>`;
+
+  const mt = document.querySelector("#mismatchTable tbody");
+  if (report.mismatches && report.mismatches.length) {
+    for (const r of report.mismatches) {
+      mt.insertAdjacentHTML("beforeend", `<tr>
+        <td>${r.plate}</td><td>${r.declared}</td><td>${r.calibrated}</td>
+        <td>${r.avg_kg.toFixed(0)}</td><td>${r.trips}</td>
+        <td><span class="badge ${r.confidence}">${r.confidence}</span></td>
+        <td>${r.suggestion}</td></tr>`);
+    }
+  } else {
+    mt.insertAdjacentHTML("beforeend", `<tr><td colspan="7" style="text-align:center" class="ok">✅ 无车型不匹配项</td></tr>`);
+  }
+
+  const dd = s.declared_distribution, cd = s.calibrated_distribution;
+  const allt = Object.keys(Object.assign({}, dd, cd)).sort();
+  const rows = allt.map(t => `<tr><td>${t}</td><td>${dd[t]||0}</td><td>${cd[t]||0}</td></tr>`).join("");
+  document.getElementById("distNote").innerHTML =
+    "<b>车型分布对比（声明 vs 动态识别）</b><br><table style='margin-top:6px'><thead><tr><th>车型</th><th>声明数</th><th>动态识别数</th></tr></thead><tbody>" + rows + "</tbody></table>";
+}
+
+function classify() {
+  const load = parseFloat(document.getElementById("loadInput").value);
+  if (isNaN(load)) { document.getElementById("classifyResult").textContent = "请输入有效载重"; return; }
+  fetch(CONFIG_URL).then(r => r.json()).then(cfg => {
+    const ordered = Object.entries(cfg.vehicle_types).sort((a,b)=>a[1].load_threshold_kg[1]-b[1].load_threshold_kg[1]);
+    let chosen = ordered[0][0];
+    for (const [name, spec] of ordered) { if (load <= spec.load_threshold_kg[1]) { chosen = name; break; } }
+    const spec = cfg.vehicle_types[chosen];
+    const inExp = load >= spec.expected_avg_load_kg[0] && load <= spec.expected_avg_load_kg[1];
+    document.getElementById("classifyResult").innerHTML =
+      `载重 <b>${load.toFixed(0)} kg</b> → 归入 <span class="badge 高">${chosen}</span> ` +
+      `(阈值 ${fmt(spec.load_threshold_kg)} kg)${inExp ? " · 位于期望区间" : " · 边界/异常区间，建议复核"}`;
+  });
+}
+
+init();
+</script>
+</body>
+</html>
