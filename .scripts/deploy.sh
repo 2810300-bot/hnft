@@ -133,14 +133,20 @@ git_run() {
     fi
 }
 
-# 检查变更
+# 检查变更：未提交的文件变更 OR 已提交但未推送的 commits
+# （管道脚本可能已 git commit 但 push 失败，此时 working tree 干净但远端未同步）
 CHANGES=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
-if [ "$CHANGES" -eq 0 ]; then
+UNPUSHED=$(git log @{u}..HEAD --oneline 2>/dev/null | wc -l | tr -d ' ')
+if [ "$CHANGES" -eq 0 ] && [ "$UNPUSHED" -eq 0 ]; then
     echo "✅ 无变更，跳过部署"
     exit 0
 fi
 
-echo "📝 检测到 $CHANGES 个文件变更"
+if [ "$UNPUSHED" -gt 0 ]; then
+    echo "📝 检测到 ${UNPUSHED} 个未推送的 commits（working tree 干净）"
+else
+    echo "📝 检测到 $CHANGES 个文件变更"
+fi
 
 if [ "$DRY_RUN" = true ]; then
     echo "🔍 Dry-run 模式 — 变更文件:"
@@ -206,10 +212,19 @@ if [ "$PUSH_OK" != true ]; then
 
     # 获取变更文件列表 — 多策略 fallback
     CHANGED_FILES=""
-    CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+    # 策略1: 已提交但未推送的 commits（管道脚本 commit 后 push 失败的场景）
+    if [ "$UNPUSHED" -gt 0 ]; then
+        # 找出本地比远端多出的所有 commits 涉及的文件
+        CHANGED_FILES=$(git diff --name-only origin/${BRANCH} HEAD 2>/dev/null || echo "")
+    fi
+    # 策略2: 最近一次 commit 的变更文件
+    if [ -z "$CHANGED_FILES" ]; then
+        CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+    fi
     if [ -z "$CHANGED_FILES" ]; then
         CHANGED_FILES=$(git show --name-only --format="" HEAD 2>/dev/null || echo "")
     fi
+    # 策略3: 未提交的变更
     if [ -z "$CHANGED_FILES" ]; then
         CHANGED_FILES=$(git status --porcelain 2>/dev/null | awk '{print $NF}' || echo "")
     fi
