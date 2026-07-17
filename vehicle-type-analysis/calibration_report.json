@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-17 12:23:37",
+  "generated_at": "2026-07-17 12:26:52",
   "matching_method": "weight_rule + load_cross_check",
   "summary": {
     "vehicle_count": 22,
@@ -32,7 +32,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB0388",
@@ -44,7 +44,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FA8040",
@@ -56,7 +56,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「八吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「八吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB3975",
@@ -68,7 +68,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB6266",
@@ -80,7 +80,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB0252",
@@ -92,7 +92,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FC3710",
@@ -104,7 +104,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FA3040",
@@ -116,7 +116,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「八吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「八吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FC1673",
@@ -128,7 +128,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB9498",
@@ -140,7 +140,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘F86680",
@@ -152,7 +152,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB2060",
@@ -164,7 +164,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB7351",
@@ -176,7 +176,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     }
   ],
   "vehicles": [
@@ -238,7 +238,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB0388",
@@ -250,7 +250,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FA8040",
@@ -262,7 +262,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「八吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「八吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB3975",
@@ -274,7 +274,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB6266",
@@ -286,7 +286,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB0252",
@@ -298,7 +298,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FA8347",
@@ -322,7 +322,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FA3040",
@@ -334,7 +334,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「八吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「八吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FC1673",
@@ -346,7 +346,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB9498",
@@ -358,7 +358,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘F86680",
@@ -370,7 +370,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB2060",
@@ -382,7 +382,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB7351",
@@ -394,7 +394,7 @@
       "match": false,
       "confidence": "高",
       "in_expected_band": true,
-      "suggestion": "建议将声明车型由「三吨车型」校准为「五吨车型」"
+      "suggestion": "自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）"
     },
     {
       "plate": "湘FB8611",

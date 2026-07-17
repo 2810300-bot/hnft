@@ -23,23 +23,23 @@ th{background:#f1f5f9;font-weight:600}
 .ok{color:#16a34a;font-weight:600}
 </style></head><body>
 <div class="card">
-  <h1>车型校准校验报告</h1>
-  <div class="meta">生成时间：2026-07-17 12:23:37</div>
-  <div class="meta">匹配方法：weight_rule + load_cross_check（按车辆历史平均载重动态识别车型档位）</div>
+  <h1>载重特征交叉校验报告（对照自重规则）</h1>
+  <div class="meta">生成时间：2026-07-17 12:26:52</div>
+  <div class="meta">校验方法：自重规则为基准 × 平均载重动态识别，交叉核对载重特征（非规则有效性判定）</div>
   <div class="kpis">
     <div class="kpi"><div class="v">22</div><div class="l">车辆总数</div></div>
-    <div class="kpi"><div class="v ok">9</div><div class="l">分类匹配</div></div>
-    <div class="kpi"><div class="v" style="color:#dc2626">13</div><div class="l">需校准项</div></div>
-    <div class="kpi"><div class="v">40.9%</div><div class="l">匹配率</div></div>
+    <div class="kpi"><div class="v ok">9</div><div class="l">载重档一致</div></div>
+    <div class="kpi"><div class="v" style="color:#dc2626">13</div><div class="l">载重特征提示</div></div>
+    <div class="kpi"><div class="v">40.9%</div><div class="l">载重档一致率</div></div>
   </div>
 </div>
 <div class="card">
   <h2>不匹配车型清单（需校准）</h2>
   <table><thead><tr><th>车牌</th><th>声明车型</th><th>动态识别</th><th>平均载重(kg)</th><th>趟次</th><th>置信度</th><th>建议</th></tr></thead>
-  <tbody><tr><td>湘FA9847</td><td>三吨车型</td><td>五吨车型</td><td>5102</td><td>111</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「三吨车型」校准为「五吨车型」</td></tr><tr><td>湘FB0388</td><td>三吨车型</td><td>五吨车型</td><td>5002</td><td>55</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「三吨车型」校准为「五吨车型」</td></tr><tr><td>湘FA8040</td><td>八吨车型</td><td>五吨车型</td><td>4974</td><td>100</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「八吨车型」校准为「五吨车型」</td></tr><tr><td>湘FB3975</td><td>三吨车型</td><td>五吨车型</td><td>4899</td><td>46</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「三吨车型」校准为「五吨车型」</td></tr><tr><td>湘FB6266</td><td>三吨车型</td><td>五吨车型</td><td>4849</td><td>107</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「三吨车型」校准为「五吨车型」</td></tr><tr><td>湘FB0252</td><td>三吨车型</td><td>五吨车型</td><td>4813</td><td>128</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「三吨车型」校准为「五吨车型」</td></tr><tr><td>湘FC3710</td><td>三吨车型</td><td>五吨车型</td><td>4617</td><td>58</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「三吨车型」校准为「五吨车型」</td></tr><tr><td>湘FA3040</td><td>八吨车型</td><td>五吨车型</td><td>4584</td><td>136</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「八吨车型」校准为「五吨车型」</td></tr><tr><td>湘FC1673</td><td>三吨车型</td><td>五吨车型</td><td>4432</td><td>116</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「三吨车型」校准为「五吨车型」</td></tr><tr><td>湘FB9498</td><td>三吨车型</td><td>五吨车型</td><td>4393</td><td>130</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「三吨车型」校准为「五吨车型」</td></tr><tr><td>湘F86680</td><td>三吨车型</td><td>五吨车型</td><td>4083</td><td>132</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「三吨车型」校准为「五吨车型」</td></tr><tr><td>湘FB2060</td><td>三吨车型</td><td>五吨车型</td><td>3956</td><td>93</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「三吨车型」校准为「五吨车型」</td></tr><tr><td>湘FB7351</td><td>三吨车型</td><td>五吨车型</td><td>3946</td><td>61</td><td><span class='badge 高'>高</span></td><td>建议将声明车型由「三吨车型」校准为「五吨车型」</td></tr></tbody></table>
+  <tbody><tr><td>湘FA9847</td><td>三吨车型</td><td>五吨车型</td><td>5102</td><td>111</td><td><span class='badge 高'>高</span></td><td>自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘FB0388</td><td>三吨车型</td><td>五吨车型</td><td>5002</td><td>55</td><td><span class='badge 高'>高</span></td><td>自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘FA8040</td><td>八吨车型</td><td>五吨车型</td><td>4974</td><td>100</td><td><span class='badge 高'>高</span></td><td>自重判定「八吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘FB3975</td><td>三吨车型</td><td>五吨车型</td><td>4899</td><td>46</td><td><span class='badge 高'>高</span></td><td>自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘FB6266</td><td>三吨车型</td><td>五吨车型</td><td>4849</td><td>107</td><td><span class='badge 高'>高</span></td><td>自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘FB0252</td><td>三吨车型</td><td>五吨车型</td><td>4813</td><td>128</td><td><span class='badge 高'>高</span></td><td>自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘FC3710</td><td>三吨车型</td><td>五吨车型</td><td>4617</td><td>58</td><td><span class='badge 高'>高</span></td><td>自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘FA3040</td><td>八吨车型</td><td>五吨车型</td><td>4584</td><td>136</td><td><span class='badge 高'>高</span></td><td>自重判定「八吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘FC1673</td><td>三吨车型</td><td>五吨车型</td><td>4432</td><td>116</td><td><span class='badge 高'>高</span></td><td>自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘FB9498</td><td>三吨车型</td><td>五吨车型</td><td>4393</td><td>130</td><td><span class='badge 高'>高</span></td><td>自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘F86680</td><td>三吨车型</td><td>五吨车型</td><td>4083</td><td>132</td><td><span class='badge 高'>高</span></td><td>自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘FB2060</td><td>三吨车型</td><td>五吨车型</td><td>3956</td><td>93</td><td><span class='badge 高'>高</span></td><td>自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr><tr><td>湘FB7351</td><td>三吨车型</td><td>五吨车型</td><td>3946</td><td>61</td><td><span class='badge 高'>高</span></td><td>自重判定「三吨车型」× 载重识别「五吨车型」：平均载重落入不同档位（载重特征提示）</td></tr></tbody></table>
 </div>
 <div class="card">
-  <h2>车型分布对比（声明 vs 动态识别）</h2>
+  <h2>车型分布对比（自重判定 vs 载重识别）</h2>
   <table><thead><tr><th>车型</th><th>声明数</th><th>动态识别数</th></tr></thead><tbody>
 <tr><td>三吨车型</td><td>14</td><td>3</td></tr><tr><td>五吨车型</td><td>6</td><td>19</td></tr><tr><td>八吨车型</td><td>2</td><td>0</td></tr></tbody></table></div><div class="card">
   <h2>校准数据模型（载重规格 / 物理参数）</h2>
