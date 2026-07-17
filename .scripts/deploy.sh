@@ -182,12 +182,15 @@ else
 fi
 
 # 推送到 GitHub Pages（已自动选用可用代理；非快进自动 rebase 重试）
+# 关键：使用 HEAD:refs/heads/$BRANCH 而非 "$BRANCH"：即使当前处于 detached HEAD
+# （如手动操作后误留游离状态），也能把本次实际 commit 推送到远程分支，
+# 避免"commit 落在游离 HEAD、push 推旧分支导致漏推"的历史故障。
 echo "🚀 推送到 GitHub Pages (git push)..."
 MAX_RETRIES=3
 RETRY_COUNT=0
 PUSH_OK=false
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-    OUT=$(git_run push "$PUSH_URL" "$BRANCH" 2>&1)
+    OUT=$(git_run push "$PUSH_URL" "HEAD:refs/heads/$BRANCH" 2>&1)
     PUSH_RC=$?
     if [ $PUSH_RC -eq 0 ]; then
         echo "$OUT"
