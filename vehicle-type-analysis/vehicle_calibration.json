@@ -1,59 +1,137 @@
 {
-  "_description": "车型校准配置 - 定义3吨/5吨/8吨三种载重规格车辆的校准数据模型。载重阈值用于根据实际收运量动态识别与匹配车型档位；物理参数(轴距/车身尺寸/制动)为车辆登记参考值，待实际车辆档案校准。",
+  "_description": "车型校准配置 - 以自重规则(vehicle_weight)为声明基准；动态识别按历史平均载重(load)交叉校验，标记载重特征与自重车型不符的车辆",
   "_version": 1,
-  "_generated": "2026-07-16",
-  "_status": "ACTIVE - 载重阈值已基于历史装载量分布标定；物理参数为行业标准参考值，待车辆登记档案校准",
-  "matching_method": "avg_load",
-  "matching_note": "动态识别逻辑：按车辆历史平均单次收运量(avg_load)落入的载重阈值区间自动归类车型档位；单趟亦可按实际载重即时识别。阈值边界取中点归并(如 3500kg 归 3吨车，>3500 归 5吨车)。",
+  "_generated": "2026-07-17",
+  "_status": "ACTIVE - 声明基准=自重规则(2026-07-17起)；动态识别=平均载重交叉校验",
+  "matching_method": "weight_rule + load_cross_check",
+  "matching_note": "声明车型由自重规则(4860/4980→三吨车型, 6050→五吨车型, 8260/8360→八吨车型)判定；动态识别按车辆历史平均单次收运量(avg_load)落入载重阈值区间，两者交叉校验以发现载重特征异常车",
   "vehicle_types": {
-    "3吨车": {
+    "三吨车型": {
       "nominal_capacity_kg": 3000,
-      "load_threshold_kg": [0, 3500],
-      "expected_avg_load_kg": [2200, 3400],
-      "wheelbase_mm": [2600, 3300],
-      "body_dimensions_mm": {"length": [4200, 5200], "width": [1700, 2000], "height": [1850, 2300]},
-      "braking": {"brake_type": "液压鼓式", "abs": false, "brake_distance_m_max": 9.5}
+      "load_threshold_kg": [
+        0,
+        3500
+      ],
+      "expected_avg_load_kg": [
+        2200,
+        3400
+      ],
+      "wheelbase_mm": [
+        2600,
+        3300
+      ],
+      "body_dimensions_mm": {
+        "length": [
+          4200,
+          5200
+        ],
+        "width": [
+          1700,
+          2000
+        ],
+        "height": [
+          1850,
+          2300
+        ]
+      },
+      "braking": {
+        "brake_type": "液压鼓式",
+        "abs": false,
+        "brake_distance_m_max": 9.5
+      }
     },
-    "5吨车": {
+    "五吨车型": {
       "nominal_capacity_kg": 5000,
-      "load_threshold_kg": [3500, 7500],
-      "expected_avg_load_kg": [3800, 6500],
-      "wheelbase_mm": [3300, 4200],
-      "body_dimensions_mm": {"length": [5200, 6800], "width": [2000, 2300], "height": [2200, 2800]},
-      "braking": {"brake_type": "气压鼓式/盘式", "abs": true, "brake_distance_m_max": 9.0}
+      "load_threshold_kg": [
+        3500,
+        7500
+      ],
+      "expected_avg_load_kg": [
+        3800,
+        6500
+      ],
+      "wheelbase_mm": [
+        3300,
+        4200
+      ],
+      "body_dimensions_mm": {
+        "length": [
+          5200,
+          6800
+        ],
+        "width": [
+          2000,
+          2300
+        ],
+        "height": [
+          2200,
+          2800
+        ]
+      },
+      "braking": {
+        "brake_type": "气压鼓式/盘式",
+        "abs": true,
+        "brake_distance_m_max": 9.0
+      }
     },
-    "8吨车": {
+    "八吨车型": {
       "nominal_capacity_kg": 8000,
-      "load_threshold_kg": [7500, 12000],
-      "expected_avg_load_kg": [6000, 9500],
-      "wheelbase_mm": [4200, 5200],
-      "body_dimensions_mm": {"length": [6800, 8500], "width": [2300, 2500], "height": [2600, 3200]},
-      "braking": {"brake_type": "气压盘式", "abs": true, "brake_distance_m_max": 10.0}
+      "load_threshold_kg": [
+        7500,
+        12000
+      ],
+      "expected_avg_load_kg": [
+        6000,
+        9500
+      ],
+      "wheelbase_mm": [
+        4200,
+        5200
+      ],
+      "body_dimensions_mm": {
+        "length": [
+          6800,
+          8500
+        ],
+        "width": [
+          2300,
+          2500
+        ],
+        "height": [
+          2600,
+          3200
+        ]
+      },
+      "braking": {
+        "brake_type": "气压盘式",
+        "abs": true,
+        "brake_distance_m_max": 10.0
+      }
     }
   },
   "declared_vehicle_map": {
-    "湘FA5403": "3吨车",
-    "湘FA8340": "3吨车",
-    "湘FB9046": "3吨车",
-    "湘F86680": "5吨车",
-    "湘FA3040": "5吨车",
-    "湘FA8040": "5吨车",
-    "湘FA9847": "5吨车",
-    "湘FB0252": "5吨车",
-    "湘FB0388": "5吨车",
-    "湘FB2060": "5吨车",
-    "湘FB3975": "5吨车",
-    "湘FB6266": "5吨车",
-    "湘FB7351": "5吨车",
-    "湘FB8611": "5吨车",
-    "湘FB9409": "5吨车",
-    "湘FB9498": "5吨车",
-    "湘FC1673": "5吨车",
-    "湘FC3710": "5吨车",
-    "湘FC5523": "5吨车",
-    "湘FA8342": "8吨车",
-    "湘FA8347": "8吨车",
-    "湘FC8698": "8吨车"
+    "湘FB6266": "三吨车型",
+    "湘FA8040": "八吨车型",
+    "湘FB8611": "五吨车型",
+    "湘FB9498": "三吨车型",
+    "湘FB9046": "三吨车型",
+    "湘FA3040": "八吨车型",
+    "湘FC8698": "五吨车型",
+    "湘FB0252": "三吨车型",
+    "湘F86680": "三吨车型",
+    "湘FB7351": "三吨车型",
+    "湘FA8340": "三吨车型",
+    "湘FC1673": "三吨车型",
+    "湘FC3710": "三吨车型",
+    "湘FC5523": "五吨车型",
+    "湘FB3975": "三吨车型",
+    "湘FA9847": "三吨车型",
+    "湘FB0388": "三吨车型",
+    "湘FB2060": "三吨车型",
+    "湘FA5403": "三吨车型",
+    "湘FA8347": "五吨车型",
+    "湘FA8342": "五吨车型",
+    "湘FB9409": "五吨车型"
   },
   "validation_rules": {
     "high_confidence_band": "avg_load 落在 expected_avg_load_kg 区间内",
