@@ -68,7 +68,7 @@ else
     REPO_URL="https://github.com/${OWNER}/${REPO}.git"
 fi
 
-echo "  目标: ${REPO_URL%%@*}@github.com/...（token 已隐藏）"
+echo "  目标: https://github.com/${OWNER}/${REPO}.git（token 已隐藏）"
 
 # ------------------------------------------------------------
 # 代理探测：git 的 http.proxy 可能指向一个未运行的端口（如 7891）。
@@ -155,14 +155,31 @@ if [ "$DRY_RUN" = true ]; then
     exit 0
 fi
 
-# 先提交本地变更，再同步远程（避免 pull --rebase 因 unstaged 变更而失败）
-echo "📦 提交变更..."
-git add -A
-git commit -m "$COMMIT_MSG" || { echo "⚠️ 无内容可提交"; exit 0; }
-
-# 同步远程最新代码（此时工作区干净，rebase 不会冲突）
+# 先同步远程最新代码（工作区可能干净——管道已 commit 但未 push；也可能有未提交变更）
 echo "📥 同步远程最新代码..."
-git_run fetch origin "$BRANCH" 2>/dev/null && git_run rebase origin/"$BRANCH" 2>/dev/null || echo "   (远程仓库尚不存在或无法访问，使用本地版本)"
+git_run fetch origin "$BRANCH" 2>/dev/null || echo "   (远程不可达，尝试本地版本)"
+git_run rebase origin/"$BRANCH" 2>/dev/null || git_run rebase --abort 2>/dev/null || true
+
+# 提交未暂存变更（仅当有未提交文件时；已 commit 未 push 场景跳过，绝不因"无新内容"而退出）
+CHANGES_NOW=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+if [ "$CHANGES_NOW" -gt 0 ]; then
+    echo "📦 提交变更..."
+    git add -A
+    git commit -m "$COMMIT_MSG" || echo "   (无新内容可提交)"
+fi
+
+# 构造推送 URL：remote 不含 token 时，从配置文件注入（避免 401 后 fallback 空转）
+if git remote get-url origin 2>/dev/null | grep -q '@'; then
+    PUSH_URL="origin"
+else
+    _T="$TOKEN"
+    [ -z "$_T" ] && [ -f "$TOKEN_FILE" ] && _T=$(cat "$TOKEN_FILE")
+    if [ -n "$_T" ]; then
+        PUSH_URL="https://${_T}@github.com/${OWNER}/${REPO}.git"
+    else
+        PUSH_URL="origin"
+    fi
+fi
 
 # 推送到 GitHub Pages（已自动选用可用代理；非快进自动 rebase 重试）
 echo "🚀 推送到 GitHub Pages (git push)..."
@@ -170,7 +187,7 @@ MAX_RETRIES=3
 RETRY_COUNT=0
 PUSH_OK=false
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-    OUT=$(git_run push origin "$BRANCH" 2>&1)
+    OUT=$(git_run push "$PUSH_URL" "$BRANCH" 2>&1)
     PUSH_RC=$?
     if [ $PUSH_RC -eq 0 ]; then
         echo "$OUT"
@@ -198,15 +215,15 @@ if [ "$PUSH_OK" != true ]; then
     echo ""
     echo "   ⚠️ git push 失败，切换到 GitHub REST API 方式..."
 
-    # 提取 token：策略1 从 remote URL 提取 > 策略2 从配置文件读取
-    TOKEN=$(echo "$REPO_URL" | sed -n 's|.*https://\([^@]*\)@github.com.*|\1|p')
-    if [ -n "$TOKEN" ]; then
-        echo "   (从 remote URL 提取 token: ${TOKEN:0:12}...)"
-    elif [ -f "$TOKEN_FILE" ]; then
+    # 提取 token：优先配置文件（remote URL 已不含明文 token）
+    if [ -f "$TOKEN_FILE" ]; then
         TOKEN=$(cat "$TOKEN_FILE")
-        echo "   (从配置文件读取 token: ${TOKEN:0:12}...)"
+        echo "   (已从配置文件加载 token，不打印明文)"
+    elif echo "$REPO_URL" | grep -q '@'; then
+        TOKEN=$(echo "$REPO_URL" | sed -n 's|.*https://\([^@]*\)@github.com.*|\1|p')
+        echo "   (已从 remote URL 加载 token，不打印明文)"
     else
-        echo "   ❌ 无法获取 token（remote URL 无 token，配置文件不存在: $TOKEN_FILE）"
+        echo "   ❌ 无法获取 token（配置文件不存在: $TOKEN_FILE）"
         exit 1
     fi
 
