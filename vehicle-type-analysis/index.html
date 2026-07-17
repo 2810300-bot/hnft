@@ -71,39 +71,60 @@ body {
     position: relative;
     z-index: 1;
 }
-.header-info h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
-.header-info .subtitle { font-size: 13px; color: #aaa; }
-.header-info .project-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
+.header-top h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+.header-meta { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+.header-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
 }
-.header-meta { font-size: 12px; color: #999; text-align: right; }
 
-/* Top nav bar */
-.top-nav {
+/* Breadcrumb */
+.breadcrumb-bar {
+    background: var(--bg-card, #fff);
+    border-bottom: 1px solid var(--border, #e2e8f0);
+    padding: 10px 20px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: var(--gap);
-    padding: 10px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 14px;
+    font-size: 13px;
+    color: #64748b;
 }
-.top-nav a.nav-back {
+.breadcrumb-bar a { color: var(--primary, #4C72B0); text-decoration: none; font-weight: 500; }
+.breadcrumb-bar a:hover { text-decoration: underline; }
+.breadcrumb-bar .sep { color: #94a3b8; margin: 0 8px; }
+.refresh-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 600;
+    background: rgba(255,255,255,0.12);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    white-space: nowrap;
 }
-.top-nav a.nav-back:hover { text-decoration: underline; }
-.header-meta span { display: block; }
+.refresh-dot {
+    width: 8px; height: 8px;
+    background: var(--positive);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+.next-update {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+    white-space: nowrap;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
 
 /* Notice banner */
 .notice {
@@ -283,28 +304,33 @@ body {
 </style>
 </head>
 <body>
-<div class="dashboard-container">
-
-<!-- Top Nav -->
-<nav class="top-nav">
-    <a class="nav-back" href="../daily-dashboard/">← 返回看板中心</a>
-</nav>
-
-<!-- Header -->
-<div class="dashboard-header">
-    <div class="header-top">
-        <div class="header-info">
-            <div class="project-title">岳阳市厨余垃圾资源化利用和无害化处置</div>
-            <h1>车型运行数据分析</h1>
-            <div class="subtitle">花果畈餐厨垃圾收运 · 车型维度车辆运行数据统计</div>
-        </div>
-        <div class="header-meta">
-            <span id="dataInfo">数据日期：加载中...</span>
-            <span>刷新时间：<span id="refreshTime">--</span></span>
-            <span style="margin-top:4px;color:#aaa;">注：车型分类基于车载自重(kg)判定（新规则 2026-07-17 起生效）</span>
-        </div>
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+    <div>
+        <a href="../">🏠 看板中心</a>
+        <span class="sep">/</span>
+        <span>车型运行数据分析</span>
     </div>
 </div>
+
+<div class="dashboard-container">
+
+<!-- Header -->
+<header class="dashboard-header">
+    <div class="header-top">
+        <div>
+            <h1>车型运行数据分析</h1>
+            <div class="header-meta">岳阳市厨余垃圾资源化利用和无害化处置项目（花果畈收运数据）</div>
+        </div>
+        <div class="header-actions">
+            <div class="refresh-badge">
+                <span class="refresh-dot"></span>
+                <span id="dataInfo">数据日期：加载中...</span>
+            </div>
+            <div class="next-update">刷新时间：<span id="refreshTime">--</span></div>
+        </div>
+    </div>
+</header>
 
 <!-- Notice -->
 <div class="notice">
