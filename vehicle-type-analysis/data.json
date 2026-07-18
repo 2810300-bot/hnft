@@ -646,6 +646,23 @@
         "avg_kg": 4770.0
       }
     },
+    "7月18日": {
+      "三吨车型": {
+        "trips": 26,
+        "total_kg": 103010.0,
+        "avg_kg": 3961.9
+      },
+      "五吨车型": {
+        "trips": 12,
+        "total_kg": 56870.0,
+        "avg_kg": 4739.2
+      },
+      "八吨车型": {
+        "trips": 3,
+        "total_kg": 15380.0,
+        "avg_kg": 5126.7
+      }
+    },
     "7月1日": {
       "三吨车型": {
         "trips": 29,
@@ -804,95 +821,95 @@
     "三吨车型": {
       "湘FB6266": {
         "unit": "岳阳楼区餐厨",
-        "total_trips": 110,
-        "total_kg": 533480.0,
-        "avg_kg": 4849.8
+        "total_trips": 113,
+        "total_kg": 547360.0,
+        "avg_kg": 4843.9
       },
       "湘FB9498": {
         "unit": "岳阳楼区餐厨",
-        "total_trips": 133,
-        "total_kg": 586885.0,
-        "avg_kg": 4412.7
+        "total_trips": 137,
+        "total_kg": 605835.0,
+        "avg_kg": 4422.2
       },
       "湘FB9046": {
         "unit": "开发区餐厨",
-        "total_trips": 76,
-        "total_kg": 239820.0,
-        "avg_kg": 3155.5
+        "total_trips": 77,
+        "total_kg": 242600.0,
+        "avg_kg": 3150.6
       },
       "湘FB0252": {
         "unit": "开发区餐厨",
-        "total_trips": 130,
-        "total_kg": 624440.0,
-        "avg_kg": 4803.4
+        "total_trips": 132,
+        "total_kg": 633580.0,
+        "avg_kg": 4799.8
       },
       "湘F86680": {
         "unit": "岳阳楼区餐厨",
-        "total_trips": 134,
-        "total_kg": 546546.0,
-        "avg_kg": 4078.7
+        "total_trips": 137,
+        "total_kg": 556736.0,
+        "avg_kg": 4063.8
       },
       "湘FB7351": {
         "unit": "岳阳楼区餐厨",
-        "total_trips": 62,
-        "total_kg": 243780.0,
-        "avg_kg": 3931.9
+        "total_trips": 63,
+        "total_kg": 245220.0,
+        "avg_kg": 3892.4
       },
       "湘FA8340": {
         "unit": "开发区餐厨",
-        "total_trips": 70,
-        "total_kg": 234050.0,
-        "avg_kg": 3343.6
+        "total_trips": 71,
+        "total_kg": 236660.0,
+        "avg_kg": 3333.2
       },
       "湘FC1673": {
         "unit": "岳阳楼区餐厨",
-        "total_trips": 118,
-        "total_kg": 521550.0,
-        "avg_kg": 4419.9
+        "total_trips": 121,
+        "total_kg": 531860.0,
+        "avg_kg": 4395.5
       },
       "湘FC3710": {
         "unit": "开发区餐厨",
-        "total_trips": 59,
-        "total_kg": 273000.0,
-        "avg_kg": 4627.1
+        "total_trips": 60,
+        "total_kg": 277260.0,
+        "avg_kg": 4621.0
       },
       "湘FB3975": {
         "unit": "岳阳楼区餐厨",
-        "total_trips": 47,
-        "total_kg": 229880.0,
-        "avg_kg": 4891.1
+        "total_trips": 48,
+        "total_kg": 234930.0,
+        "avg_kg": 4894.4
       },
       "湘FA9847": {
         "unit": "南湖新区餐厨",
-        "total_trips": 112,
-        "total_kg": 572260.0,
-        "avg_kg": 5109.5
+        "total_trips": 114,
+        "total_kg": 580350.0,
+        "avg_kg": 5090.8
       },
       "湘FB0388": {
         "unit": "岳阳楼区餐厨",
-        "total_trips": 56,
-        "total_kg": 280170.0,
-        "avg_kg": 5003.0
+        "total_trips": 57,
+        "total_kg": 285790.0,
+        "avg_kg": 5013.9
       },
       "湘FB2060": {
         "unit": "临港新区餐厨",
-        "total_trips": 95,
-        "total_kg": 375950.0,
-        "avg_kg": 3957.4
+        "total_trips": 97,
+        "total_kg": 383050.0,
+        "avg_kg": 3949.0
       },
       "湘FA5403": {
         "unit": "岳阳楼区餐厨",
-        "total_trips": 47,
-        "total_kg": 155510.0,
-        "avg_kg": 3308.7
+        "total_trips": 48,
+        "total_kg": 159100.0,
+        "avg_kg": 3314.6
       }
     },
     "八吨车型": {
       "湘FA8040": {
         "unit": "开发区餐厨",
-        "total_trips": 104,
-        "total_kg": 516492.0,
-        "avg_kg": 4966.3
+        "total_trips": 107,
+        "total_kg": 531872.0,
+        "avg_kg": 4970.8
       },
       "湘FA3040": {
         "unit": "岳阳楼区餐厨",
@@ -904,33 +921,33 @@
     "五吨车型": {
       "湘FB8611": {
         "unit": "岳阳楼区餐厨",
-        "total_trips": 116,
-        "total_kg": 454400.0,
-        "avg_kg": 3917.2
+        "total_trips": 119,
+        "total_kg": 467330.0,
+        "avg_kg": 3927.1
       },
       "湘FC8698": {
         "unit": "岳阳君山区餐厨",
-        "total_trips": 53,
-        "total_kg": 331030.0,
-        "avg_kg": 6245.8
+        "total_trips": 55,
+        "total_kg": 342230.0,
+        "avg_kg": 6222.4
       },
       "湘FC5523": {
         "unit": "岳阳楼区餐厨",
-        "total_trips": 101,
-        "total_kg": 643430.0,
-        "avg_kg": 6370.6
+        "total_trips": 102,
+        "total_kg": 649810.0,
+        "avg_kg": 6370.7
       },
       "湘FA8347": {
         "unit": "岳阳楼区餐厨",
-        "total_trips": 99,
-        "total_kg": 460520.0,
-        "avg_kg": 4651.7
+        "total_trips": 104,
+        "total_kg": 480760.0,
+        "avg_kg": 4622.7
       },
       "湘FA8342": {
         "unit": "岳阳君山区餐厨",
-        "total_trips": 50,
-        "total_kg": 287790.0,
-        "avg_kg": 5755.8
+        "total_trips": 51,
+        "total_kg": 293910.0,
+        "avg_kg": 5762.9
       },
       "湘FB9409": {
         "unit": "岳阳楼区餐厨",
@@ -941,9 +958,9 @@
     }
   },
   "_meta": {
-    "date_range": "6月1日 ~ 7月17日",
-    "days": 47,
-    "total_records": 1917,
+    "date_range": "6月1日 ~ 7月18日",
+    "days": 48,
+    "total_records": 1958,
     "vehicle_type_map": {
       "湘FB6266": "三吨车型",
       "湘FA8040": "八吨车型",
@@ -984,6 +1001,6 @@
       },
       "all_consistent": true
     },
-    "generated_at": "2026-07-18 06:58:10"
+    "generated_at": "2026-07-19 06:55:26"
   }
 }
