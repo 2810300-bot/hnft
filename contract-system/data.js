@@ -451,10 +451,223 @@ const lastScanWarnings = [
   }
 ];
 
+// ========== 自动化运行信息（由引擎自动更新）==========
+const automationRunInfo = {
+  "lastScanTime": "2026-07-20 07:52:27",
+  "scanResult": {
+    "addedCount": 25,
+    "deletedCount": 0,
+    "modifiedCount": 0,
+    "totalItems": 105
+  },
+  "warningSummary": {
+    "urgent": 4,
+    "caution": 0,
+    "notice": 0,
+    "totalWarnings": 4
+  }
+};
+const lastScanWarnings = [
+  {
+    "id": "FT-2026-049",
+    "name": "钉钉商务套件合同（一年）",
+    "party": "钉钉",
+    "endDate": "2026-05-28",
+    "daysLeft": -54,
+    "level": "urgent",
+    "action": "已过期，需立即续签",
+    "amount": 0,
+    "status": "履行中"
+  },
+  {
+    "id": "FT-2026-059",
+    "name": "锦能（易腐）垃圾处置合同（202507-202606）",
+    "party": "岳阳锦能环境绿色能源有限公司",
+    "endDate": "2026-06-30",
+    "daysLeft": -21,
+    "level": "urgent",
+    "action": "已过期，需立即续签",
+    "amount": 0,
+    "status": "履行中"
+  },
+  {
+    "id": "FT-2026-050",
+    "name": "网站信息服务合同（山东隆众）",
+    "party": "山东隆众",
+    "endDate": "2026-07-23",
+    "daysLeft": 2,
+    "level": "urgent",
+    "action": "紧急处理",
+    "amount": 0,
+    "status": "待核实"
+  },
+  {
+    "id": "FT-2026-056",
+    "name": "网站信息服务合同（山东隆众）23.7-26.7",
+    "party": "山东隆众",
+    "endDate": "2026-07-23",
+    "daysLeft": 2,
+    "level": "urgent",
+    "action": "紧急处理",
+    "amount": 0,
+    "status": "待核实"
+  }
+]; // 最多保留20条预警
 const knowledgeBaseChanges = {
-  "added": [],
+  "added": [
+    {
+      "media_id": "pdf_db3923b659ae6643c0c1aef70c1a7e38_62cb96cb7aa4bdaefee243e16b727af67424059205752436",
+      "title": "灯具采购合同-楚才照明260520.pdf",
+      "parent_folder_id": "folder_7474665815554652",
+      "type": "file"
+    },
+    {
+      "media_id": "pdf_db3923b659ae6643c0c1aef70c1a7e38_2bd70c022c2b0810e9cee8fce8c51ae47424059205752436",
+      "title": "化学药剂采购合同（聚丙酰胺）山东麦克斯鑫科260702.pdf",
+      "parent_folder_id": "folder_7474665815552733",
+      "type": "file"
+    },
+    {
+      "media_id": "pdf_db3923b659ae6643c0c1aef70c1a7e38_f152f12eb0e035c19a81d1472279d7637424059205752436",
+      "title": "化学药剂采购合同-万鹏氯化镁、消泡剂260703.pdf",
+      "parent_folder_id": "folder_7474665815552733",
+      "type": "file"
+    },
+    {
+      "media_id": "folder_7474652100181775",
+      "title": "合同管理",
+      "parent_folder_id": "7424059205752436",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "folder_7424268115647945",
+      "title": "重要合同资料",
+      "parent_folder_id": "folder_7424268098892040",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_f843c3dcb010f24b2c6154681506379c7424059205752436",
+      "title": "南湖租赁合同.pdf",
+      "parent_folder_id": "folder_7424268115647945",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_fd23a277c50abc0e1d7eb85df5d590bb7424059205752436",
+      "title": "油脂合同2025.pdf",
+      "parent_folder_id": "folder_7424268124057920",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_4960ac7aa8c78209fe0e578750a474857424059205752436",
+      "title": "4_用电合同.pdf",
+      "parent_folder_id": "folder_7424268115647945",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "markdown_5466ec66752d38169003699aa971cb1e_44fcfcdf90837d2b256c7ee66cede5e47424059205752436",
+      "title": "伏泰合同管理系统搭建方案.md",
+      "parent_folder_id": "7424059205752436",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "markdown_5466ec66752d38169003699aa971cb1e_9420561b268ca7fb6b985a04b65007477424059205752436",
+      "title": "湖南伏泰合同管理台账.md",
+      "parent_folder_id": "7424059205752436",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_4a48258e32200b3e26a72ae1384e1ee97424059205752436",
+      "title": "运营团队服务合同-最终稿.pdf",
+      "parent_folder_id": "folder_7424268115647945",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "word_5466ec66752d38169003699aa971cb1e_907232362765c162871ba510b403f5137424059205752436",
+      "title": "交投污水站产水处置合同.docx",
+      "parent_folder_id": "folder_7424268170174455",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "word_5466ec66752d38169003699aa971cb1e_b1758d0209d2f8e306256f131f87cbd57424059205752436",
+      "title": "交投污水站产水处置合同.docx",
+      "parent_folder_id": "folder_7424268115647945",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_95cbbd494cd423c7dd8478b41bc11b2e7424059205752436",
+      "title": "运营团队服务合同-最终稿(OCR).pdf",
+      "parent_folder_id": "folder_7424268115647945",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "word_5466ec66752d38169003699aa971cb1e_e46fdc4703cd8aa8356133d511206c817424059205752436",
+      "title": "岳阳项目合同待商榷内容1205.docx",
+      "parent_folder_id": "folder_7424268103086526",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_478198a6a1a11863adf5aa3c294ebed37424059205752436",
+      "title": "1.有机渣销售合同2026.pdf",
+      "parent_folder_id": "folder_7449266377225317",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_1aac943bc6b1cdf0ca10dbe44f34284b7424059205752436",
+      "title": "运营团队服务合同-最终稿(OCR)(2).pdf",
+      "parent_folder_id": "folder_7424268115647945",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_76db1378b1ed2a051b4b09c3c76897887424059205752436",
+      "title": "运营团队服务合同-最终稿(OCR)(1).pdf",
+      "parent_folder_id": "folder_7424268115647945",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_8c2ab6c562410f0500e7692ef720a89a7424059205752436",
+      "title": "运营团队服务合同-最终稿(OCR)(3).pdf",
+      "parent_folder_id": "folder_7424268115647945",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "word_5466ec66752d38169003699aa971cb1e_2454601a66b601767374e329c801f1fc7424059205752436",
+      "title": "岳阳市地沟油收运服务采购合同.docx",
+      "parent_folder_id": "folder_7424268103086526",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "word_5466ec66752d38169003699aa971cb1e_08beda9a59b79e7250b17fa89960d3397424059205752436",
+      "title": "岳阳餐厨垃圾项目_合同模式调整建议书.docx",
+      "parent_folder_id": "7424059205752436",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "word_5466ec66752d38169003699aa971cb1e_12dea5128b6b2f3a4ab4aee2f0cf26a17424059205752436",
+      "title": "劳动合同到期不续签通知书（彭美立）.docx",
+      "parent_folder_id": "folder_7449265139906877",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_0fc9e1c4d30dde6d1c580f60166cc2857424059205752436",
+      "title": "浏阳市餐厨垃圾无害化收运处置项目合同.pdf",
+      "parent_folder_id": "folder_7424268115647945",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_4cb730b9cccf0efe5886a393cad1ebf97424059205752436",
+      "title": "【2024-001】B组：收运服务采购合同-岳阳恒振（岳阳市）.pdf",
+      "parent_folder_id": "folder_7424268124057920",
+      "highlight_content": ""
+    },
+    {
+      "media_id": "pdf_5466ec66752d38169003699aa971cb1e_01e7fa607568da53e171ccf16d6b176d7424059205752436",
+      "title": "【24-1203-函30】联络函-恒振（关于油脂回收服务合同到期移交）.pdf",
+      "parent_folder_id": "folder_7424268124057920",
+      "highlight_content": ""
+    }
+  ],
   "deleted": [],
   "modified": [],
-  "total_current": 80,
+  "total_current": 105,
   "total_previous": 80
 };
