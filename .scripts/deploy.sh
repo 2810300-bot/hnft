@@ -172,7 +172,7 @@ fi
 if git remote get-url origin 2>/dev/null | grep -q '@'; then
     PUSH_URL="origin"
 else
-    _T="$TOKEN"
+    _T="${TOKEN:-}"
     [ -z "$_T" ] && [ -f "$TOKEN_FILE" ] && _T=$(cat "$TOKEN_FILE")
     if [ -n "$_T" ]; then
         PUSH_URL="https://${_T}@github.com/${OWNER}/${REPO}.git"
